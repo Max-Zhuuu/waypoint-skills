@@ -29,18 +29,18 @@ If any are missing, tell the user to run `/project-setup` first. Do not proceed 
 
 ## Phase overview
 
-| Phase | Name | Details |
-|-------|------|---------|
+| Phase | Name | File |
+|-------|------|------|
 | 0-1 | Setup | Handled by `/project-setup` |
-| 2 | Documentation sprint | [PHASES.md](PHASES.md) |
-| 3 | Vertical slice | [PHASES.md](PHASES.md) |
-| 4 | Horizontal buildout | [PHASES.md](PHASES.md) |
-| 5 | Integration | [PHASES.md](PHASES.md) |
-| 6a | Functional validation | [PHASES.md](PHASES.md) |
-| 6b | Design pass | [PHASES.md](PHASES.md) |
-| 7 | Cutover | [PHASES.md](PHASES.md) |
+| 2 | Documentation sprint | [02-documentation-sprint.md](02-documentation-sprint.md) |
+| 3 | Vertical slice | [03-vertical-slice.md](03-vertical-slice.md) |
+| 4 | Horizontal buildout | [04-horizontal-buildout.md](04-horizontal-buildout.md) |
+| 5 | Integration | [05-integration.md](05-integration.md) |
+| 6a | Functional validation | [06a-functional-validation.md](06a-functional-validation.md) |
+| 6b | Design pass | [06b-design-pass.md](06b-design-pass.md) |
+| 7 | Cutover | [07-cutover.md](07-cutover.md) |
 
-Read [PHASES.md](PHASES.md) for detailed instructions on the current phase.
+Read only the file for the current phase. Each file contains detailed instructions and gate criteria.
 
 ## Migration-specific scoping (extends Phase 0)
 
