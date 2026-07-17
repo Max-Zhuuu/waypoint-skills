@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says "prototype this", "let me play with it", "try a few designs".
+description: Build a throwaway prototype to flesh out a design before committing to it. Routes between three branches — a runnable terminal app for state/business-logic questions, several radically different UI variations toggleable from one route, or a persistent design panel for exploring visual variants across the whole app. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says "prototype this", "let me play with it", "try a few designs".
 ---
 
 # Prototype
@@ -9,12 +9,13 @@ A prototype is **throwaway code that answers a question**. The question decides 
 
 ## Pick a branch
 
-Identify which question is being answered — from the user's prompt, the surrounding code, or by asking if the user is around:
+Identify which question is being answered - from the user's prompt, the surrounding code, or by asking if the user is around:
 
-- **"Does this logic / state model feel right?"** → [LOGIC.md](LOGIC.md). Build a tiny interactive terminal app that pushes the state machine through cases that are hard to reason about on paper.
-- **"What should this look like?"** → [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+- **"Does this logic / state model feel right?"** - [LOGIC.md](LOGIC.md). Build a tiny interactive terminal app that pushes the state machine through cases that are hard to reason about on paper.
+- **"What should this look like?"** - [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+- **"What should the app feel like?"** - [DESIGN.md](DESIGN.md). Add toggles to a persistent design panel for exploring visual variants (shell themes, tab styles, spacing, color palettes) across the whole app in-situ. Check for an existing DesignPanel first and extend it; create one if it doesn't exist.
 
-The two branches produce very different artifacts — getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module → logic; a page or component → UI) and state the assumption at the top of the prototype.
+The three branches produce very different artifacts - getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module - logic; a single page - UI; cross-app visual treatment - design) and state the assumption at the top of the prototype.
 
 ## Rules that apply to both
 
