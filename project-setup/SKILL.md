@@ -9,6 +9,27 @@ disable-model-invocation: true
 Establishes the foundation every project needs before building starts.
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
+## Orientation (print this on every invocation)
+
+Before doing any work, print a compact orientation block so the user knows what this skill does and how it connects to the family:
+
+```
+/project-setup - You are here. Scoping, architecture, docs structure, CLAUDE.md.
+  Phase 0: Scope grill -> SCOPE.md, DEPENDENCIES.md, ASSUMPTIONS.md, CONTEXT.md
+  Phase 1: Architecture -> ADRs (via /grill-with-docs), spec templates, CLAUDE.md generation
+  Outputs: the foundation that /migrate, /spec, and /reorient build on.
+
+Related skills:
+  /migrate     - Extends this with migration-specific phases (docs sprint, vertical slice,
+                 buildout, integration, parity validation, design pass, cutover)
+  /spec        - Feature-level requirements (invoke anytime during a project's life)
+  /grill-with-docs - Architecture decisions as ADRs, domain term sharpening
+  /reorient    - Strategic checkpoint between phases or when feeling scattered
+  /learn       - Trade-off exploration when multiple approaches exist
+```
+
+Then state which phase you are about to work on and why.
+
 ## How this skill works
 
 1. Detect what already exists (SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree).

@@ -9,6 +9,29 @@ disable-model-invocation: true
 Extends `/project-setup` with migration-specific phases for porting legacy systems.
 Enforces strict phase gates. Refuses to let you skip steps.
 
+## Orientation (print this on every invocation)
+
+Before doing any work, print a compact orientation block:
+
+```
+/migrate - You are here. Migration-specific phases extending /project-setup.
+  Phase 0-1: Foundation       (handled by /project-setup)
+  Phase 2:   Doc sprint       -> spec every entity before coding (02-documentation-sprint.md)
+  Phase 3:   Vertical slice   -> validate architecture with 3 screens (03-vertical-slice.md)
+  Phase 4:   Horizontal build -> port all remaining screens (04-horizontal-buildout.md)
+  Phase 5:   Integration      -> replace mock data with real API (05-integration.md)
+  Phase 6a:  Parity check     -> functional validation, design doesn't matter yet (06a-functional-validation.md)
+  Phase 6b:  Design pass      -> apply visual system + improvements uniformly (06b-design-pass.md)
+  Phase 7:   Cutover          -> ship it (07-cutover.md)
+
+  Key rule: capture UX improvements in docs/improvements/, don't implement until 6a passes.
+  Key rule: no code without a spec. No spec without a logic doc.
+
+Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (strategic checkpoint), /learn (trade-offs)
+```
+
+Then state: current phase, gate status, and any violations detected.
+
 ## Prerequisites
 
 `/project-setup` must have been run first. Check for:

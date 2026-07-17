@@ -100,6 +100,22 @@ Isolated design experimentation is allowed on separate branches (worktree or des
 - Time-boxed: set a limit before starting, stop when it hits
 - Critically questioned: is this for user benefit and grounded in domain truth, or just modern UX cloning that doesn't respect the domain?
 - Captured: if the experiment validates, write it up in `docs/improvements/` before integrating
+- Periodically merge parent branch to keep docs and domain knowledge current on the design branch
+
+### Design Archival
+Before each new design direction, tag the current state:
+```
+git tag design/{nn}-{slug}
+```
+After tagging, add a journal entry in `docs/local/design-journal.md`:
+```
+## {date} - {what you explored}
+### design/{nn}-{slug}
+{One sentence: what this variant does differently}
+{One sentence: why it was chosen or rejected}
+Screenshot: {path or inline}
+```
+Tags are diff-able (`git diff design/01..design/02`), restorable (`git checkout design/01`), and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
 
 ### Agent Coordination
 - Task brief template: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
