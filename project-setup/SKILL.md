@@ -9,33 +9,34 @@ disable-model-invocation: true
 Establishes the foundation every project needs before building starts.
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
-## Orientation (print this on every invocation)
+## On invocation
 
-Before doing any work, print a compact orientation block so the user knows what this skill does and how it connects to the family:
+Check for existing outputs: SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree.
+
+**Starting fresh** (none exist): print this, then start Phase 0.
 
 ```
-/project-setup - You are here. Scoping, architecture, docs structure, CLAUDE.md.
-  Phase 0: Scope grill -> SCOPE.md, DEPENDENCIES.md, ASSUMPTIONS.md, CONTEXT.md
-  Phase 1: Architecture -> ADRs (via /grill-with-docs), spec templates, CLAUDE.md generation
-  Outputs: the foundation that /migrate, /spec, and /reorient build on.
+Setting up project foundation. Two phases:
+  1. Scope grill - what you're building, what you're not, what you need from others
+  2. Architecture & standards - decisions, docs structure, CLAUDE.md
 
-Related skills:
-  /migrate     - Extends this with migration-specific phases (docs sprint, vertical slice,
-                 buildout, integration, parity validation, design pass, cutover)
-  /spec        - Feature-level requirements (invoke anytime during a project's life)
-  /grill-with-docs - Architecture decisions as ADRs, domain term sharpening
-  /reorient    - Strategic checkpoint between phases or when feeling scattered
-  /learn       - Trade-off exploration when multiple approaches exist
+Let's start with scope.
 ```
 
-Then state which phase you are about to work on and why.
+**Resuming** (some exist): list what's done and what's missing, then pick up at the first incomplete phase.
 
-## How this skill works
+```
+Found: {list existing outputs}
+Missing: {list missing outputs}
 
-1. Detect what already exists (SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree).
-2. Skip phases whose outputs already exist - don't re-grill settled decisions.
-3. For missing pieces: run the relevant phase.
-4. Delegates to other skills: `/grill-with-docs` for architecture decisions (ADRs), `/reorient` for strategic checkpoints.
+Picking up at {phase}.
+```
+
+After either block, add one line:
+
+```
+Related: /migrate (porting from existing system), /buildout (greenfield product), /spec (feature specs), /reorient (checkpoint)
+```
 
 ## Phase 0 - Discovery & Scoping
 
