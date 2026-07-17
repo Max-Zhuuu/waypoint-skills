@@ -1,19 +1,20 @@
 ---
 name: learn
-description: Learning-oriented code/UI debugging approach with code previews, trade-off explanations, and a terminology bridge between domain and software concepts. Use when you want to understand why one solution beats another.
+description: Learning-oriented approach to any code task - new features, refactors, fixes, design patterns, architecture choices. Presents meaningfully different options with trade-off explanations and a terminology bridge. Use when you want to understand why one solution beats another.
 ---
 
 # Learn
 
-A structured mini-decision for code changes that surfaces 3 meaningfully different options so the user learns while deciding.
+A structured mini-decision that surfaces 3 meaningfully different approaches so the user learns while deciding.
+Works for any code task: new features, refactors, bug fixes, styling, data modeling, architecture choices, performance work.
 
-## Phase 1 - Scope the edit
+## Phase 1 - Scope the task
 
 1. Read the code the user is pointing at (file + surrounding context).
-2. Identify the specific change needed and the constraints that matter.
+2. Identify what needs to happen and the constraints that matter (performance, consistency with existing patterns, API boundaries, UX requirements).
 3. Grep `CONTEXT.md` for any domain terms relevant to this area.
-4. If the error cannot be pinned down, defer back to the user for additional text or image context.
-5. If the edit is trivial (typo, import reorder, rename), say so and just do it - don't force options on a non-decision.
+4. If the intent is unclear, defer back to the user for additional context.
+5. If the task is trivial (typo, import reorder, rename), say so and just do it - don't force options on a non-decision.
 
 ## Phase 2 - Implementation options
 
@@ -22,12 +23,15 @@ If only 2 meaningfully different approaches exist, present 2 - never invent a fi
 
 Each option must differ in its **most significant dimension** - not syntactic sugar or naming variations, but one of:
 
-- **Algorithm / strategy**: a different way to solve the problem (iterative vs recursive, pull vs push, eager vs lazy, event-driven vs polling)
-- **Query / data access**: a different way to get or structure the data (computed property vs watcher, CSS grid vs flexbox, JOIN vs subquery, ref vs reactive)
-- **Property / API**: a different property, method, or built-in to achieve the effect (`gap` vs `margin`, `transform` vs `top/left`, `filter()` vs `reduce()`, `clamp()` vs media query)
+- **Algorithm / strategy**: a fundamentally different way to solve the problem (iterative vs recursive, pull vs push, eager vs lazy, event-driven vs polling, composition vs inheritance, normalization vs denormalization)
+- **Architecture / pattern**: a different structural approach (component split, state management strategy, data flow direction, API shape, error handling pattern, caching layer)
+- **Implementation / API**: a different tool, property, or built-in to achieve the effect (`gap` vs `margin`, `computed` vs `watch`, `Map` vs plain object, `filter()` vs `reduce()`, middleware vs decorator)
 
-For **CSS** edits specifically, always vary at the property/layout-strategy level.
-CSS has many ways to achieve the same visual result - show the user which properties exist and when each one is the right tool.
+Choose the dimension that teaches the most for the specific task:
+- For **CSS**: vary at the property/layout-strategy level. CSS has many ways to achieve the same visual result - show which properties exist and when each is the right tool.
+- For **data modeling**: vary at the schema/relationship level. Show different ways to represent the same domain concept.
+- For **state management**: vary at the reactivity/flow level. Show where state lives and how it propagates.
+- For **new features**: vary at the architecture level. Show different ways to decompose the feature.
 
 ### Option format
 
