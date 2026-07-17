@@ -38,6 +38,10 @@ Update SCOPE.md. Run `/spec` for new Must items.
 Same process as Phase 3: spec first, build, test, mark complete.
 After each feature: is this ready to ship, or does it need more?
 
+When the user demos the MVP, they're doing exploratory testing (Bach/Bolton) whether they know it or not - unscripted, intent-to-break usage that finds bugs scripted tests miss. Capture what they find: bugs become regression tests, confusion becomes UX fixes, missing features feed back into MoSCoW.
+
+Add smoke tests to CI before shipping. The smoke suite should run in under 30 seconds and catch "the build is fundamentally broken." Everything else can run on a slower cadence.
+
 ## Ship checklist
 
 Lightweight - this isn't enterprise cutover. Scale to the project:

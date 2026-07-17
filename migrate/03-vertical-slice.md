@@ -27,9 +27,11 @@ After all 3:
 If changes needed: update ADRs, update skeleton, re-validate all 3.
 Do NOT proceed with a known-broken pattern.
 
-## Characterization tests
+## Characterization tests (Feathers)
 
-For complex screens, consider characterization tests (golden master approach): capture the legacy system's output for specific inputs, then assert the new system matches. Proves parity without understanding every edge case.
+For complex screens, write characterization tests (golden master approach): capture the legacy system's actual output for a set of inputs, then assert the new system matches. Don't assert what the output *should* be - assert what it *is*. The spec might be incomplete; the golden master isn't. Discrepancies are either bugs in the migration or intentional improvements - categorize each one explicitly.
+
+This is the phase where "legacy code is code without tests" (Feathers) becomes real. Before changing any legacy behavior, lock in the current behavior with a test. Then change. Then verify.
 
 ## Gate
 

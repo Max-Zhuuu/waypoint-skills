@@ -17,6 +17,10 @@ For each screen, source system and target side by side:
 - **Intentional difference** - documented improvement or simplification -> note in spec
 - **Unknown** - can't determine if source behavior is correct -> add to QUESTIONS.md
 
+## Visual regression
+
+For 30+ screens, manual side-by-side comparison doesn't scale. Use visual regression testing: automated screenshot capture at defined viewports, overlaid with pixel-diff highlighting. Catches CSS regressions, layout shifts, and missing elements that unit tests can't see. Run characterization test diffs in parallel - compare legacy output against migrated output for the same inputs. Between the two, most parity gaps surface automatically; manual validation focuses on what automation can't capture (interaction flows, conditional visibility, permission-based behavior).
+
 ## Performance
 
 - Page load times acceptable?

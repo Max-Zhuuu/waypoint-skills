@@ -23,12 +23,20 @@ If something feels wrong, fix it now. Invoke `/grill-with-docs` for any decision
 Invoke `/learn` if you're choosing between approaches and want to understand the trade-offs.
 This is cheaper to fix with 1 feature than with 10.
 
+## Testing the MVP
+
+Follow the testing trophy (Kent C. Dodds), not the testing pyramid. For greenfield products, integration tests give the most confidence per test written. One integration test covering "user creates a vessel, sees it in the list, edits the name" catches more bugs than ten unit tests of individual components.
+
+Write tests the way the user uses the feature. State the hypothesis first: "If the user does X, then Y should happen because Z." Tests without a hypothesis tend to test implementation details that break on refactors instead of behavior that breaks on bugs.
+
+For hobby projects with limited testing time: write one smoke test per feature (does it render without crashing?) and one integration test for the primary workflow. That's enough to catch "I shipped a white screen" without slowing you down.
+
 ## Build remaining Must features
 
 For each Must feature from the MoSCoW list:
 1. Run `/spec` if not already done
 2. Build against the spec
-3. Test it works (manual or automated, your call for hobby projects)
+3. Test: at minimum, smoke + primary workflow integration test
 4. Mark complete in SCOPE.md
 
 Order by dependency chain, then by risk. Build the uncertain ones first.

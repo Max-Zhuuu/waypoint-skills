@@ -17,6 +17,12 @@ Review DEPENDENCIES.md:
 4. Test with real data
 5. Mark `[M]` in inventory
 
+## Contract tests
+
+If frontend and backend teams work on different timelines, write contract tests (Pact-style): the frontend describes what it expects from each endpoint (shape, status codes, edge cases), the backend runs the same contract against its implementation. Both sides verify independently, so a breaking API change is caught before deployment - not during integration. See REFERENCES.md for the full pattern.
+
+At minimum, add smoke tests that hit each real endpoint and verify it returns the expected shape. These catch "the mock worked but the real API returns a different field name" - the most common integration bug.
+
 ## When API doesn't match
 
 1. Check spec: is mock wrong or API wrong?
