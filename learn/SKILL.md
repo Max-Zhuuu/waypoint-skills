@@ -155,6 +155,48 @@ Rules:
 - The user is clearly in a hurry (short prompts, multiple edits in quick succession)
 - The concepts involved are ones the user has demonstrated mastery of in this session
 
+## Phase 6 - Save learning notes (conditional)
+
+If the skill produced substantial output - 3 options with previews, a terms block with 3+ entries, further reading links, or a quiz - save a condensed record to `docs/local/learning/`.
+
+### When to save
+
+Save when Phase 3 (Terms in play) has 3+ entries OR the user completed the quiz.
+Skip when the task was trivial (Phase 1 short-circuited) or the terms block was thin.
+
+### File naming
+
+`{date}-{slug}.md` where slug is a 2-3 word kebab-case topic.
+Example: `2026-07-17-css-grid-gap.md`, `2026-07-17-pinia-store-patterns.md`.
+
+### File structure
+
+```markdown
+# {Topic} - {date}
+
+## Context
+{One sentence: what task triggered this, what file}
+
+## Decision
+{Which option was chosen and why}
+
+## Key concepts
+{Terms in play block, condensed - term: one-line definition}
+
+## Resources
+{Further reading links}
+
+## Quiz results
+{If quiz was taken: questions, answers, any gaps identified. Omit section if no quiz.}
+```
+
+### Rules
+
+- Create the `docs/local/learning/` directory if it does not exist.
+- Do not duplicate: if a file for the same topic already exists from the same day, append to it rather than creating a second file.
+- Keep each file under 40 lines. This is a reference card, not a textbook.
+- These files are gitignored (lives in `docs/local/`). They are personal learning artifacts, not project documentation.
+
 ## Tone
 
 Keep it brisk.
