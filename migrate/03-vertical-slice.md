@@ -23,6 +23,7 @@ After all 3:
 - What worked as designed?
 - What required workarounds?
 - What needs to change before Phase 4?
+- What naming patterns emerged? Update `CONVENTIONS.md` - these 3 screens set the precedent for Phase 4.
 
 If changes needed: update ADRs, update skeleton, re-validate all 3.
 Do NOT proceed with a known-broken pattern.

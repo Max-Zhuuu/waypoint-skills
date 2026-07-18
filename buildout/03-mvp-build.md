@@ -17,7 +17,7 @@ After the vertical slice works:
 - Does the component structure feel right, or are you fighting it?
 - Is state management clear, or is data flowing in confusing ways?
 - Is the data model clean, or are you working around it?
-- Are there patterns emerging that should be documented as conventions?
+- Are there patterns emerging that should be documented as conventions? Update `CONVENTIONS.md` with the naming patterns that emerged (verb prefixes, component suffixes, type naming). These are the patterns the rest of the codebase will follow.
 
 If something feels wrong, fix it now. Invoke `/grill-with-docs` for any decision that deserves an ADR.
 Invoke `/learn` if you're choosing between approaches and want to understand the trade-offs.

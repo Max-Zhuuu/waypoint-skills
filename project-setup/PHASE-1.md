@@ -17,6 +17,31 @@ Decisions to make (adapt to the project):
 7. **Error handling** - user-facing errors, logging, recovery
 8. **Mock data strategy** - structure, location, replacement path to real API
 
+## Naming conventions
+
+Generate a `CONVENTIONS.md` at the repo root. Seed it with framework-level defaults the project inherits (e.g., PascalCase components, `use` prefix for composables, camelCase functions). For migrations, note which legacy naming patterns to mirror and which to deliberately break from.
+
+Keep it short - one line per convention. This file grows during Phase 3 (vertical slice or MVP build) when real patterns emerge from actual code. Example:
+
+```markdown
+# Naming Conventions
+
+## Functions
+- API calls: `fetchX` (not `getX`, `loadX`, `retrieveX`)
+- Event handlers: `onX` in templates, `handleX` in script
+- Boolean returns: `isX`, `hasX`, `canX`
+
+## Components
+- Route views: `XPage` (not `XView`, `XScreen`)
+- Composables: `useX` (returns reactive state), `createX` (returns plain object)
+
+## Types
+- Interfaces: no `I` prefix
+- Enums: PascalCase singular (`Status`, not `Statuses`)
+```
+
+Add one line to the generated CLAUDE.md: `When writing new code or reviewing naming patterns, read CONVENTIONS.md.`
+
 ## UI pattern library
 
 Enumerate the recurring UI patterns the project will use. Each pattern gets:
