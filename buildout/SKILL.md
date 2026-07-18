@@ -10,22 +10,20 @@ Extends `/project-setup` with phases for building something new from scratch.
 Lighter than `/migrate` - no source system, no parity gates, no doc sprint from legacy code.
 Emphasis on validation: are you building the right thing?
 
-## Orientation (print this on every invocation)
+## On invocation
+
+Detect current phase from project state (docs, git history, existing code). Print:
 
 ```
-/buildout - Greenfield product buildout.
-  Phase 0-1: Foundation       (handled by /project-setup)
-  Phase 2:   Discovery        -> validate the idea before building (02-discovery.md)
-  Phase 3:   MVP build        -> smallest thing that proves the concept (03-mvp-build.md)
-  Phase 4:   Iterate & ship   -> expand, polish, launch (04-iterate-and-ship.md)
+Buildout: currently in Phase {N} ({name}).
+  Previous: Phase {N-1} ({name}) - gate passed.
+  Next: Phase {N+1} ({name}) - {what's needed to get there}.
 
-  Key rule: validate before building. Code is the most expensive way to test an idea.
-  Key rule: every feature goes through /spec first. No spec, no build.
-
-Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (strategic checkpoint), /learn (trade-offs)
+Key rules: validate before building. Code is the most expensive way to test an idea. Every feature goes through /spec first.
+Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (checkpoint), /learn (trade-offs)
 ```
 
-Then state: current phase, what's been validated so far, and any open risks.
+Then run enforcement checks and report violations before phase work.
 
 ## Prerequisites
 

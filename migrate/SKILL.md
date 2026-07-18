@@ -9,28 +9,20 @@ disable-model-invocation: true
 Extends `/project-setup` with migration-specific phases for porting legacy systems.
 Enforces strict phase gates. Refuses to let you skip steps.
 
-## Orientation (print this on every invocation)
+## On invocation
 
-Before doing any work, print a compact orientation block:
+Detect current phase from project state (inventory markers, docs, git history). Print:
 
 ```
-/migrate - You are here. Migration-specific phases extending /project-setup.
-  Phase 0-1: Foundation       (handled by /project-setup)
-  Phase 2:   Doc sprint       -> spec every entity before coding (02-documentation-sprint.md)
-  Phase 3:   Vertical slice   -> validate architecture with 3 screens (03-vertical-slice.md)
-  Phase 4:   Horizontal build -> port all remaining screens (04-horizontal-buildout.md)
-  Phase 5:   Integration      -> replace mock data with real API (05-integration.md)
-  Phase 6a:  Parity check     -> functional validation, design doesn't matter yet (06a-functional-validation.md)
-  Phase 6b:  Design pass      -> apply visual system + improvements uniformly (06b-design-pass.md)
-  Phase 7:   Cutover          -> ship it (07-cutover.md)
+Migration: currently in Phase {N} ({name}).
+  Previous: Phase {N-1} ({name}) - gate passed.
+  Next: Phase {N+1} ({name}) - {what's needed to get there}.
 
-  Key rule: capture UX improvements in docs/improvements/, don't implement until 6a passes.
-  Key rule: no code without a spec. No spec without a logic doc.
-
-Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (strategic checkpoint), /learn (trade-offs)
+Key rules: no code without a spec. No spec without a logic doc. Improvements go to docs/improvements/, not code, until 6a passes.
+Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (checkpoint), /learn (trade-offs)
 ```
 
-Then state: current phase, gate status, and any violations detected.
+Then run enforcement checks and report violations before phase work.
 
 ## Prerequisites
 
