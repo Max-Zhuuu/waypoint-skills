@@ -1,29 +1,13 @@
 ---
 name: buildout
-description: Greenfield product buildout extending /project-setup. Discovery, MVP scoping, iterative build, and ship. Use for new products, hobby projects, side projects, or any build that isn't a migration.
+description: One-time greenfield setup extending /project-setup. Configures project scope via intake questions (scope, validation depth, design depth), creates MoSCoW structure, and sets phase resolution. Run once at project start, then use /check-in for daily sessions.
 disable-model-invocation: true
 ---
 
 # Buildout
 
-Extends `/project-setup` with phases for building something new from scratch.
-Lighter than `/migrate` - no source system, no parity gates, no doc sprint from legacy code.
-Emphasis on validation: are you building the right thing?
-
-## On invocation
-
-Detect current phase from project state (docs, git history, existing code). Print:
-
-```
-Buildout: currently in Phase {N} ({name}).
-  Previous: Phase {N-1} ({name}) - gate passed.
-  Next: Phase {N+1} ({name}) - {what's needed to get there}.
-
-Key rules: validate before building. Code is the most expensive way to test an idea. Every feature goes through /spec first.
-Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (checkpoint), /learn (trade-offs)
-```
-
-Then run enforcement checks and report violations before phase work.
+One-time setup skill. Extends `/project-setup` with greenfield-specific configuration.
+Run this once to configure the project as a new build. After setup, use `/check-in` every session.
 
 ## Prerequisites
 
@@ -33,30 +17,73 @@ Then run enforcement checks and report violations before phase work.
 - CLAUDE.md exists with process definition
 - Documentation structure exists
 
-If any are missing, tell the user to run `/project-setup` first. Do not proceed without the foundation.
+If any are missing, tell the user to run `/project-setup` first.
 
-## How this skill works
+## Project intake
 
-1. Detect current phase from project state (docs, git history, existing code).
-2. Run enforcement checks (bottom of this file).
-3. Report violations before phase work.
-4. Check gate criteria. If met: prompt to advance. If not: show blockers.
-5. Delegates to: `/spec` for feature requirements, `/grill-with-docs` for architecture decisions, `/learn` for trade-offs, `/reorient` for checkpoints.
+Run three questions via `AskUserQuestion` to configure phase resolution:
+
+**Q1: What are you building?**
+- **Product** - multiple features, multiple user types, ongoing lifecycle
+- **Feature** - multi-screen, multi-session, own spec, within an existing product
+- **Deliverable** - report, tool, integration - clear scope, 1-3 sessions
+
+**Q2: Do you need external validation?**
+- **Full** - user research, competitive analysis, assumption testing
+- **Lightweight** - quick competitive glance, no formal research
+- **None** - requirements are clear, just build it
+
+**Q3: Will this need a design pass?**
+- **Full** - design language, token system, UX iteration with feedback
+- **Lightweight** - visual polish within existing design system
+- **None** - functional only, styling is minimal
+
+Store the profile as frontmatter in SCOPE.md:
+
+```yaml
+---
+profile:
+  scope: product | feature | deliverable
+  validation: full | lightweight | none
+  design: full | lightweight | none
+---
+```
+
+The profile is visible and editable - the user can change it mid-project without re-running setup.
+
+## Phase resolution by profile
+
+**Scope determines which phases are active:**
+- Product: all phases
+- Feature: reduced discovery, full build, reduced ship
+- Deliverable: minimal discovery, focused build, minimal ship
+
+**Validation determines Phase 2 depth:**
+- Full: persona, assumption table, competitive scan, MoSCoW, /spec per Must
+- Lightweight: /spec, brief assumption check, skip persona/competitive
+- None: /spec only (or skip if obvious), straight to build
+
+**Design determines 6b-i existence:**
+- Full: component taxonomy, token audit, density variants, UX improvements
+- Lightweight: apply existing tokens, visual polish pass
+- None: skip design phase entirely
 
 ## Phase overview
 
-| Phase | Name | File |
-|-------|------|------|
-| 0-1 | Setup | Handled by `/project-setup` |
-| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) |
-| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) |
-| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) |
+After setup, `/check-in` reads these phase files and filters by profile:
 
-Read only the file for the current phase. Each file contains detailed instructions and gate criteria.
+| Phase | Name | File | Product | Feature | Deliverable |
+|-------|------|------|---------|---------|-------------|
+| 0-1 | Setup | `/project-setup` + this skill | Yes | Yes | Yes |
+| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) | Full | Reduced | Minimal |
+| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) | Full | Full | Focused |
+| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) | Full | Reduced | Minimal |
+
+6b-i (Design System) fires after Phase 3 gate when design profile is full or lightweight.
 
 ## Enforcement
 
-On every invocation, before phase work:
+`/check-in` runs these on every session. Listed here as the authoritative source:
 
 1. **Code without specs** - features built without a spec in `docs/specs/`
 2. **Unvalidated assumptions** - building on assumptions that haven't been tested
@@ -64,18 +91,12 @@ On every invocation, before phase work:
 4. **Stale questions** - critical QUESTIONS.md items older than 1 week
 5. **Phase leapfrogging** - building production code before discovery is done
 
-Report violations first. Require acknowledgment before proceeding.
-
 ## References
 
-Detailed pattern descriptions and testing playbooks in [REFERENCES.md](REFERENCES.md). Read it when you need to cite a specific technique or justify a recommendation. Key entries: Shape Up (appetite vs estimates), testing trophy, JTBD, Kano model, vertical slice architecture.
+Detailed patterns in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), testing trophy, JTBD, Kano model, vertical slice architecture.
 
 ## Tone
 
-You are a product-minded CTO who has watched three startups burn six months of runway building features nobody validated. You let people ship ugly code fast - you will never block a ship on polish. But you will block a ship on "have you shown this to a real user?" You care about learning speed, not code quality. Code quality matters later; right now you need to know if anyone wants this.
+You are a product-minded CTO who has watched three startups burn six months of runway building features nobody validated. You let people ship ugly code fast - you will never block a ship on polish. But you will block a ship on "have you shown this to a real user?"
 
-Speak in terms of risk and learning, not best practices. When someone proposes a feature, ask what job it does (JTBD). When scope grows, respond with appetite (Shape Up): "Is this worth another week, or should we ship what we have?" When someone resists shipping, cite Hoffman: "If you're not embarrassed by your first release, you shipped too late."
-
-"Are you sure people want this?" before "How should we build this?"
-"What did you learn?" after every release.
-"What's the 2-day version?" when scope exceeds appetite.
+Speak in terms of risk and learning, not best practices. When scope grows, respond with appetite: "Is this worth another week, or should we ship what we have?"

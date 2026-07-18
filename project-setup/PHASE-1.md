@@ -51,9 +51,22 @@ Enumerate the recurring UI patterns the project will use. Each pattern gets:
 
 These patterns are validated in Phase 3 (vertical slice) if running `/migrate`.
 
+## Testing template
+
+Generate a `TESTING.md` at the repo root. Seed with test expectations by complexity tier. One example per pattern type:
+
+- **Smoke test** - does it render without crashing?
+- **Structural enforcement** - do conventions hold across the codebase?
+- **Characterization / golden master** (migration) - does the new system match the old?
+- **Integration workflow** - does a multi-step user flow work end-to-end?
+
+Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
+
+Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md for patterns and expectations.`
+
 ## Documentation structure
 
-Create this tree (adapt to the project):
+Create this tree (adapt to the project). The `docs/local/` structure scales with the project intake profile:
 
 ```
 docs/
@@ -61,6 +74,7 @@ docs/
   DEPENDENCIES.md
   ARCHITECTURE.md
   adr/                        # ADRs via /grill-with-docs
+  design/                     # Design system docs (created during 6b-i)
   reference/
     features/
       _TEMPLATE.md            # Feature spec template
@@ -68,13 +82,22 @@ docs/
       _TEMPLATE.md            # Logic doc template
   specs/                      # Feature specs via /spec
   improvements/               # UX improvement ideas (capture, don't implement)
-  local/                      # Gitignored
-    ACTIVE-WORK.md
-    QUESTIONS.md
-    ASSUMPTIONS.md
-    PROGRESS-AUDIT.md         # /reorient output
-    learning/                 # /learn output
+  local/                      # Gitignored - scale by intake profile
+    ACTIVE-WORK.md            # [all] Concurrent agent tracker
+    QUESTIONS.md              # [all] Unresolved issues needing human input
+    ASSUMPTIONS.md            # [product, feature] Working assumptions
+    PROGRESS-AUDIT.md         # [product, feature] /reorient output
+    learning/                 # [product] /learn output
+    handoffs/                 # [product, feature] Cross-team requests
+      api-contracts/          # Tier 2: endpoint requests, data contracts
+      schema-changes/         # Tier 3: DB migrations, business rule changes
+    design-journal.md         # [product w/ full design] Tagged experiment history
 ```
+
+Scale by intake profile:
+- **Product**: full structure above
+- **Feature**: drop learning/, keep rest
+- **Deliverable**: QUESTIONS.md and ACTIVE-WORK.md only
 
 ## Spec templates
 

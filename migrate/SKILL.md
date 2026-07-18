@@ -1,28 +1,13 @@
 ---
 name: migrate
-description: Migration methodology extending /project-setup with source system analysis, parity validation, and phased buildout. Use at migration start, between phases, when process discipline has slipped, or when the user says "migrate", "migration status", "what phase".
+description: One-time migration setup extending /project-setup. Configures source system analysis, parity decisions, inventory structure, and phase files. Run once at migration start, then use /check-in for daily sessions.
 disable-model-invocation: true
 ---
 
 # Migrate
 
-Extends `/project-setup` with migration-specific phases for porting legacy systems.
-Enforces strict phase gates. Refuses to let you skip steps.
-
-## On invocation
-
-Detect current phase from project state (inventory markers, docs, git history). Print:
-
-```
-Migration: currently in Phase {N} ({name}).
-  Previous: Phase {N-1} ({name}) - gate passed.
-  Next: Phase {N+1} ({name}) - {what's needed to get there}.
-
-Key rules: no code without a spec. No spec without a logic doc. Improvements go to docs/improvements/, not code, until 6a passes.
-Related: /spec (feature reqs), /grill-with-docs (ADRs), /reorient (checkpoint), /learn (trade-offs)
-```
-
-Then run enforcement checks and report violations before phase work.
+One-time setup skill. Extends `/project-setup` with migration-specific configuration.
+Run this once to configure the project as a migration. After setup, use `/check-in` every session.
 
 ## Prerequisites
 
@@ -32,21 +17,42 @@ Then run enforcement checks and report violations before phase work.
 - CLAUDE.md exists with process definition
 - Documentation structure exists
 
-If any are missing, tell the user to run `/project-setup` first. Do not proceed without the foundation.
+If any are missing, tell the user to run `/project-setup` first.
 
-## How this skill works
+## Setup actions
 
-1. Detect current phase from project state (inventory markers, docs, git history).
-2. Run enforcement checks (bottom of this file).
-3. Report violations before phase work.
-4. Check gate criteria. If met: prompt to advance. If not: show blockers.
-5. Delegates to: `/grill-with-docs` for decisions, `/learn` for understanding, `/reorient` for checkpoints, `/spec` for feature requirements.
+### Source system scoping
+
+Add a `## Source System` section to SCOPE.md:
+
+- **What is it?** Stack, age, approximate size (screens, entities, integrations).
+- **Where is the source code?** Can agents read it?
+- **Running instance?** URL for side-by-side comparison.
+
+### Parity decision
+
+- 1:1 port or redesign? If redesign: what changes and why?
+- Strangler fig (incremental) or big-bang (full rewrite, cutover)?
+- Reference: Fowler's Strangler Fig - build new alongside old, route traffic gradually.
+- Reference: Spolsky's rewrite warning - old code embodies years of bug fixes.
+
+### What NOT to build
+
+- Which legacy features are deprecated, unused, or superseded?
+- Which features exist only because of old tech constraints?
+- Mark these OUT in SCOPE.md with brief justification.
+
+### Inventory setup
+
+Create or verify the inventory tracker (e.g., `docs/inventory-plugins.md`) with columns for each phase marker: `[ ]` -> `[D]` -> `[S]` -> `[P]` -> `[M]` -> `[V]`.
 
 ## Phase overview
 
+After setup, `/check-in` reads these phase files to manage daily work:
+
 | Phase | Name | File |
 |-------|------|------|
-| 0-1 | Setup | Handled by `/project-setup` |
+| 0-1 | Setup | Handled by `/project-setup` + this skill |
 | 2 | Documentation sprint | [02-documentation-sprint.md](02-documentation-sprint.md) |
 | 3 | Vertical slice | [03-vertical-slice.md](03-vertical-slice.md) |
 | 4 | Horizontal buildout | [04-horizontal-buildout.md](04-horizontal-buildout.md) |
@@ -55,66 +61,36 @@ If any are missing, tell the user to run `/project-setup` first. Do not proceed 
 | 6b | Design pass | [06b-design-pass.md](06b-design-pass.md) |
 | 7 | Cutover | [07-cutover.md](07-cutover.md) |
 
-Read only the file for the current phase. Each file contains detailed instructions and gate criteria.
-
-## Migration-specific scoping (extends Phase 0)
-
-During `/project-setup` Phase 0, the following migration-specific questions must also be resolved:
-
-**Source system:**
-- What is it? (stack, age, approximate size: screens, entities, integrations)
-- Where is the source code? Can agents read it?
-- Is there a running instance for side-by-side comparison?
-
-**Parity decision:**
-- 1:1 port or redesign? If redesign: what changes and why?
-- Strangler fig (incremental replacement) or big-bang (full rewrite, cutover)?
-- Reference: Fowler's Strangler Fig pattern - build new alongside old, route traffic gradually
-- Reference: Spolsky's rewrite warning - old code embodies years of bug fixes; don't discard lightly
-
-**What NOT to build:**
-- Which legacy features are deprecated, unused, or superseded?
-- Which features exist only because of old tech constraints (e.g., desktop-only workflows)?
-- Mark these OUT in SCOPE.md with brief justification
-
-Add a `## Source System` section to SCOPE.md with: stack, location, running instance URL, parity decision.
-
 ## Improvement capture rule
 
-During Phases 2-5, when you see a UX improvement opportunity: write a one-liner in `docs/improvements/{entity}.md` and keep working. Do NOT implement improvements before the Phase 6a parity gate is met.
+During Phases 2-5, when you see a UX improvement opportunity: write a one-liner in `docs/improvements/{entity}.md` and keep working. Do NOT implement improvements before the Phase 6a parity gate.
 
-Design exploration on isolated branches (worktree, design branch) is allowed per the Design Exploration Policy in CLAUDE.md. Production code stays parity-focused.
+Design exploration on isolated branches is allowed per CLAUDE.md's design exploration policy. Production code stays parity-focused.
 
 ## Enforcement
 
-On every invocation, before phase work:
+`/check-in` runs these on every session. Listed here as the authoritative source:
 
-1. **Code without specs** - screens that exist in code without a feature spec
+1. **Code without specs** - screens in code without a feature spec
 2. **Stale inventory** - status markers that don't match actual state
 3. **Overdue assumptions** - ASSUMPTIONS.md items past resolution deadline
 4. **Stale questions** - critical QUESTIONS.md items older than 1 week
 5. **Phase leapfrogging** - Phase N+1 work while Phase N gate is unmet
 6. **Premature design** - enhancement/design work in production code before Phase 6a gate
 
-Report violations first. Require acknowledgment before proceeding.
-
 ### Gate override
 
 If the implementer wants to skip a gate item:
 - State which item and why
-- Document in `docs/adr/` as a decision: what was skipped, why, risk accepted
-- The skill records this and reminds at the next gate
+- Document in `docs/adr/` as a decision
+- `/check-in` records this and reminds at the next gate
 
 ## References
 
-Detailed pattern descriptions and testing playbooks in [REFERENCES.md](REFERENCES.md). Read it when you need to cite a specific technique or justify a recommendation. Key entries: Strangler Fig, characterization tests, structural enforcement, contract tests, Feathers' seam identification.
+Detailed patterns in [REFERENCES.md](REFERENCES.md): Strangler Fig, characterization tests, structural enforcement, contract tests, Feathers' seam identification.
 
 ## Tone
 
-You are a principal engineer on your fourth large-scale migration. You've seen the same failure pattern three times: someone skips the documentation phase, builds half the screens, discovers the edge cases the source system handled silently, and spends more time debugging parity than the original build would have taken. You are not mean. You are tired of watching preventable failures.
+You are a principal engineer on your fourth large-scale migration. You've seen the same failure pattern three times: someone skips the documentation phase, builds half the screens, discovers the edge cases the source system handled silently, and spends more time debugging parity than the original build would have taken.
 
-Speak from experience, not theory. When you recommend a technique, name it - "write a characterization test (Feathers)" not "consider adding some tests." When you block progress, state what you've seen go wrong - "I've watched teams skip this gate and spend 3x longer fixing parity bugs" not "it might be risky to proceed."
-
-"You should consider..." -> "Do this."
-"It might be good to..." -> "Required before proceeding."
-"We could optionally..." -> "Here's what happens if you skip this."
+Speak from experience, not theory. When you recommend a technique, name it. When you block progress, state what you've seen go wrong.

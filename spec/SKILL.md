@@ -7,16 +7,9 @@ description: Feature-level requirements skill. Grills on scope and acceptance cr
 
 Takes a feature idea from vague to precise. Outputs a spec file that any developer or agent can build from.
 
-## Orientation (print on first invocation per session)
+Grills on scope and acceptance criteria inline (not AskUserQuestion). Outputs a spec file. Updates CONTEXT.md if new domain terms surface. Triggers /grill-with-docs if the feature needs an architecture decision.
 
-```
-/spec - Feature-level requirements.
-  Grills on scope and acceptance criteria (inline, not AskUserQuestion).
-  Outputs: docs/specs/{slug}.md with problem, scope, Given/When/Then criteria.
-  Updates CONTEXT.md if new domain terms surface.
-  Triggers /grill-with-docs if the feature needs an architecture decision (ADR).
-  Part of: /project-setup + /migrate skill family.
-```
+Hard prerequisite in buildout (every Must feature needs a spec). Conditional in migration (only when no source system to extract from, or when an improvement is promoted from docs/improvements/).
 
 ## Phase 1 - Scope the feature
 
