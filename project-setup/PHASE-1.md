@@ -156,7 +156,7 @@ Screenshot: {path or inline}
 Tags are diff-able (`git diff design/01..design/02`), restorable (`git checkout design/01`), and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
 
 ### Agent Coordination
-- Task brief template: What, Files claimed, Inputs, Output, Constraints
+- Task brief template: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
 - When to use workflows vs parallel agents vs inline subagents
 - Concurrent agent protocol (ACTIVE-WORK tracker, file claiming, stale entry policy)
 

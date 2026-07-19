@@ -105,7 +105,9 @@ Suggest /wrapup to the user:
 Build complete. {N} flags. Run /wrapup to resolve, or continue to next entity.
 ```
 
-## Concurrency (within session)
+## Concurrency
+
+### Within session
 
 Multiple subagents can run in parallel IF:
 - Non-overlapping entity-local files
@@ -113,10 +115,16 @@ Multiple subagents can run in parallel IF:
 
 Shared file changes (router config, type exports, shared components) serialize through the main context.
 
+### Cross-session
+
+Cross-session coordination (ACTIVE-WORK tracker, file claiming, stale entry policy) is owned by the project's CLAUDE.md and hook infrastructure, not this skill.
+/port respects whatever coordination protocol the project defines.
+
 ## UX improvements
 
 When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
 
 ## References
 
-Methodology references (characterization tests, Strangler Fig, seam identification, structural enforcement) live in this skill's knowledge, not in the phase files. Apply them as judgment calls during briefing and review.
+Methodology references in [REFERENCES.md](REFERENCES.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.
+Apply them as judgment calls during briefing and review.

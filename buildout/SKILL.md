@@ -46,15 +46,16 @@ The user can change archetypes mid-project without re-running setup.
 
 After setup, `/check-in` reads these phase files. Archetypes control which phases and enforcement rules are active:
 
-| Phase | Name | File |
-|-------|------|------|
-| 0-1 | Setup | `/project-setup` + this skill |
-| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) |
-| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) |
-| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) |
+| Phase | Name | File | Product | Feature | Deliverable |
+|-------|------|------|---------|---------|-------------|
+| 0-1 | Setup | `/project-setup` + this skill | full | full | full |
+| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) | full | reduced | skip |
+| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) | full | full | focused |
+| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) | full | reduced | minimal |
 
+"Reduced" = fewer checkpoints, lighter ceremony. "Focused" = Must features only, skip Should/Could. "Minimal" = ship checklist only, skip feedback rounds.
 Design system work fires after Phase 3 gate when "design-system" archetype is selected.
-/check-in adapts phase depth based on observed complexity.
+/check-in uses this table as a starting point and adapts based on observed complexity.
 
 ## Enforcement inputs
 
