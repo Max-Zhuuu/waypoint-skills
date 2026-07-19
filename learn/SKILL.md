@@ -128,15 +128,27 @@ After the user picks:
 3. Do NOT add general CSS, JavaScript, or Vue terms to CONTEXT.md - only terms specific to this project's maritime/shipping/VMS domain.
 4. If CONTEXT.md was updated, mention it: "Added [term] to CONTEXT.md."
 
-## Phase 5 - Quiz (opt-in)
+## Phase 5 - Reinforce (opt-in)
 
-After applying the edit, offer a one-liner: **"Quiz me on this?"**
+After applying the edit, offer reinforcement via `AskUserQuestion` with `multiSelect: true`:
 
-If the user accepts, present 2-3 quick multiple-choice/short answer questions inline (one question at a time).
+**"Reinforce this concept?"**
+- **Quiz** - 2-3 quick conceptual questions inline
+- **Practice** - guided exercises with real repo code to try in a split pane
 
-### Quiz design
+The user can select one, both, or skip entirely.
 
-Questions should test the **conceptual model**, not syntax memorization:
+### When to skip the offer
+
+- The edit was trivial (Phase 1 routed around options entirely)
+- The user is clearly in a hurry (short prompts, multiple edits in quick succession)
+- The concepts involved are ones the user has demonstrated mastery of in this session
+
+### Quiz
+
+Present 2-3 quick multiple-choice questions inline (one at a time).
+
+Questions test the **conceptual model**, not syntax memorization:
 - "What happens if you apply `gap` to a `display: block` element?" (tests: understanding that gap requires flex/grid context)
 - "You set `clamp(1rem, 4vw, 2rem)` on font-size. At a 300px viewport, which value wins?" (tests: understanding the clamp evaluation)
 - "A fixture has status 'Voyage Commenced'. Can you still edit its cargo records?" (tests: domain lifecycle understanding)
@@ -149,19 +161,85 @@ Rules:
 - If they miss one, explain the gap and link to the relevant Further Reading resource.
 - Never quiz on more than 3 questions. The point is a quick check, not an exam.
 
-### When to skip the quiz offer
+### Practice
 
-- The edit was trivial (Phase 1 routed around options entirely)
-- The user is clearly in a hurry (short prompts, multiple edits in quick succession)
-- The concepts involved are ones the user has demonstrated mastery of in this session
+Generate a single exercise file at `docs/local/learning/exercises/{date}-{slug}.md`.
+Create the `docs/local/learning/exercises/` directory if it does not exist.
+
+The file has three sections:
+
+#### 1. Reference tour
+
+Find 2-3 places in the actual repo where the concept (or a closely related pattern) is already used.
+For each, include:
+- `file:line` pointer the user can cmd-click open
+- 3-5 line snippet showing the key pattern
+- One-sentence annotation: what this demonstrates and why it works this way
+
+The tour grounds the concept in code the user already has. Pick snippets from different files to show how the pattern recurs.
+
+#### 2. Exercises
+
+2-3 small concrete tasks, increasing in difficulty:
+- **Exercise 1** (apply): reproduce the pattern in a new context. "Create a `useX` composable that does Y, following the pattern in `file:line`."
+- **Exercise 2** (extend): add a twist that forces a design choice. "Now add Z - do you need a `computed` or a `watch`? Why?"
+- **Exercise 3** (optional, edge case): probe the boundary. "What happens when the input is empty/null/concurrent? Handle it."
+
+Rules:
+- Each exercise must be specific enough to code against without asking clarifying questions.
+- Reference the real repo files where the user can see the pattern in action.
+- Exercises build on the chosen option from Phase 2 - not the rejected alternatives.
+- Keep the total exercise file under 60 lines. This is a practice card, not a workshop.
+
+#### 3. Check yourself
+
+Per exercise, a 2-3 line solution approach (the key decisions, not full code).
+If the concept has a common pitfall, call it out: "If you used X instead of Y, you'll hit Z because..."
+
+### File format
+
+```markdown
+# Practice: {Topic}
+
+## Reference tour
+
+### {Pattern name} - `src/path/file.ts:42`
+```ts
+// 3-5 line snippet
+```
+{One-sentence annotation.}
+
+### {Pattern name} - `src/path/other.vue:18`
+```vue
+// 3-5 line snippet
+```
+{One-sentence annotation.}
+
+## Exercises
+
+### 1. {Verb} - {what to build}
+{2-3 sentence instruction. Reference file:line for the pattern to follow.}
+
+### 2. {Verb} - {what to extend}
+{2-3 sentence instruction. State the design choice they'll face.}
+
+### 3. (Stretch) {Verb} - {edge case}
+{2-3 sentence instruction.}
+
+## Check yourself
+
+**1.** {Key decisions, 2-3 lines.}
+**2.** {Key decisions + why this choice wins.}
+**3.** {Key decisions + common pitfall.}
+```
 
 ## Phase 6 - Save learning notes (conditional)
 
-If the skill produced substantial output - 3 options with previews, a terms block with 3+ entries, further reading links, or a quiz - save a condensed record to `docs/local/learning/`.
+If the skill produced substantial output - 3 options with previews, a terms block with 3+ entries, further reading links, a quiz, or practice exercises - save a condensed record to `docs/local/learning/`.
 
 ### When to save
 
-Save when Phase 3 (Terms in play) has 3+ entries OR the user completed the quiz.
+Save when Phase 3 (Terms in play) has 3+ entries OR the user completed the quiz OR practice exercises were generated.
 Skip when the task was trivial (Phase 1 short-circuited) or the terms block was thin.
 
 ### File naming
@@ -188,6 +266,9 @@ Example: `2026-07-17-css-grid-gap.md`, `2026-07-17-pinia-store-patterns.md`.
 
 ## Quiz results
 {If quiz was taken: questions, answers, any gaps identified. Omit section if no quiz.}
+
+## Practice
+{If exercises were generated: link to exercise file. Omit section if no practice.}
 ```
 
 ### Rules
