@@ -6,9 +6,9 @@
 
 ### CP1: Pre-build for new Must features
 - **Trigger:** before building any new Must feature added during re-prioritization
-- **References:** feature spec (from /spec), CONVENTIONS.md
-- **Action:** verify spec exists. If new Must item surfaced from feedback: invoke /spec first. Verify naming conventions followed.
-- **Pass:** spec exists, conventions checked.
+- **References:** implementation verb's declared inputs (frontmatter contract)
+- **Action:** verify all required inputs exist. If new Must item surfaced from feedback: invoke /spec first.
+- **Pass:** all verb inputs satisfied.
 
 ### CP2: Design consolidation (conditional)
 - **Trigger:** after a feedback round produces 3+ design-related observations
@@ -17,9 +17,9 @@
 - **Pass:** design feedback clustered, pattern-level problems identified, research complete for any that need it, all items folded into MoSCoW.
 
 ### Post-build (per feature)
-- **Trigger:** when /tdd reports a feature complete
-- **Action:** spawn review agent. Run doc sync. Update SCOPE.md.
-- **Pass:** review passed, spec matches build, shared docs current.
+- **Trigger:** when implementation verb reports complete
+- **Action:** verb suggests /wrapup. If invoked: resolves flags, cascades, updates SCOPE.md.
+- **Pass:** /wrapup resolved flags (or flags persist for next session).
 
 ## Process
 
@@ -57,16 +57,16 @@ Update SCOPE.md. Run `/spec` for new Must items.
 
 ### Build Should features
 
-Same process as Phase 3: spec first (`/tdd`), test, mark complete.
+Same process as Phase 3: spec first, invoke implementation verb, /wrapup, mark complete.
 After each feature: is this ready to ship, or does it need more?
 
-Exploratory testing during demos catches bugs scripted tests miss. Capture what they find: bugs become regression tests, confusion becomes UX fixes, missing features feed back into MoSCoW.
+Demos catch issues that automated tests miss. Capture what users find: bugs become regression tests, confusion becomes UX fixes, missing features feed back into MoSCoW.
 
-### Design system (when design profile is full or lightweight)
+### Design system (when "design-system" archetype is selected)
 
-After Phase 3 gate, if the intake profile includes design work: run the 6b-i process from `migrate/06b-design-pass.md` (shared). Component taxonomy -> token audit -> semantic layering -> density variants -> prototype and compare.
+After Phase 3 gate, run the 6b-i process from `migrate/06b-design-pass.md` (shared). Invoke user's design methodology skill via AskUserQuestion.
 
-Design refinement during Phase 4 is feedback-driven, not sweep-driven. No macro->meso->micro ordering - feedback tells you which level the problem is at.
+Design refinement during Phase 4 is feedback-driven, not sweep-driven. Feedback tells you which level the problem is at.
 
 ### Ship checklist
 

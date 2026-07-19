@@ -19,37 +19,27 @@ Decisions to make (adapt to the project):
 
 ## Naming conventions
 
-Generate a `CONVENTIONS.md` at the repo root. Seed it with framework-level defaults the project inherits (e.g., PascalCase components, `use` prefix for composables, camelCase functions). For migrations, note which legacy naming patterns to mirror and which to deliberately break from.
+Generate a `CONVENTIONS.md` at the repo root by interrogating the implementer about their stack's conventions. Ask about:
+- Function naming patterns (API calls, event handlers, boolean returns)
+- Component/class naming patterns
+- Type/interface naming patterns
+- File naming patterns
+- For migrations: which legacy patterns to mirror vs. deliberately break from
 
-Keep it short - one line per convention. This file grows during Phase 3 (vertical slice or MVP build) when real patterns emerge from actual code. Example:
+Keep it short - one line per convention. This file grows during Phase 3 (vertical slice or MVP build) when real patterns emerge from actual code.
 
-```markdown
-# Naming Conventions
-
-## Functions
-- API calls: `fetchX` (not `getX`, `loadX`, `retrieveX`)
-- Event handlers: `onX` in templates, `handleX` in script
-- Boolean returns: `isX`, `hasX`, `canX`
-
-## Components
-- Route views: `XPage` (not `XView`, `XScreen`)
-- Composables: `useX` (returns reactive state), `createX` (returns plain object)
-
-## Types
-- Interfaces: no `I` prefix
-- Enums: PascalCase singular (`Status`, not `Statuses`)
-```
+Do NOT prescribe framework-specific conventions. Ask what the project uses, then document the answers.
 
 Add one line to the generated CLAUDE.md: `When writing new code or reviewing naming patterns, read CONVENTIONS.md.`
 
-## UI pattern library
+## UI pattern library (if applicable)
 
-Enumerate the recurring UI patterns the project will use. Each pattern gets:
-- A name (list view, detail card, form layout, tabbed container, etc.)
-- A brief contract (what props/data it expects, what it renders)
+For projects with a UI layer, enumerate the recurring patterns the project will use. Each pattern gets:
+- A name
+- A brief contract (what data it expects, what it renders/does)
 - Which architecture decisions it depends on
 
-These patterns are validated in Phase 3 (vertical slice) if running `/migrate`.
+These patterns are validated in Phase 3 (vertical slice) by the implementation verb.
 
 ## Testing template
 
@@ -166,7 +156,7 @@ Screenshot: {path or inline}
 Tags are diff-able (`git diff design/01..design/02`), restorable (`git checkout design/01`), and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
 
 ### Agent Coordination
-- Task brief template: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
+- Task brief template: What, Files claimed, Inputs, Output, Constraints
 - When to use workflows vs parallel agents vs inline subagents
 - Concurrent agent protocol (ACTIVE-WORK tracker, file claiming, stale entry policy)
 

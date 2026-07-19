@@ -1,92 +1,121 @@
 ---
 name: check-in
-description: Session orchestrator. Detects project type and phase, proposes next task, fires checkpoints, updates inventory. The daily verb - use at every session start.
+description: Session authority. Detects project type and phase, proposes next task, fires checkpoints. The daily verb - use at every session start.
 disable-model-invocation: true
+inputs: []
+outputs: []
+signals:
+  - proposes: implementation verb (/port, /tdd, or user-chosen methodology)
 ---
 
 # Check-in
 
-The session verb. Run this every time you sit down to work.
-Detects where you are, proposes what's next, fires checkpoints during and after work.
+The session authority. Run this every time you sit down to work.
+Detects where you are, makes the call on what's next, fires pre-build checkpoints.
 
-Does NOT implement. Proposes work, then the user invokes `/tdd` (greenfield) or `/port` (migration) to build.
+Does NOT implement. Does NOT update docs (that's /wrapup). Proposes work, then asks the user which implementation verb to invoke.
 
 ## On invocation
 
-1. Detect project type: look for `/migrate` or `/buildout` setup markers in SCOPE.md.
+1. Detect project type: look for archetype markers in SCOPE.md frontmatter.
 2. Detect current phase from inventory markers, docs, git history.
 3. Read the current phase file (from the appropriate skill folder).
-4. Run enforcement checks from the project's SKILL.md (migrate or buildout).
-5. Propose next task using the priority stack (below).
-6. Report violations before proposing work.
+4. Collect enforcement inputs from the project's SKILL.md (migrate or buildout).
+5. Check for unresolved ## Flags sections in feature specs (deferred /wrapup work).
+6. Apply priority stack to propose next task.
+7. Report state, then propose.
 
 Print:
 
 ```
 Phase {N} ({name}). {X} items remaining.
+{violations/flags if any - as context, not blockers}
 Next: {proposed task} - {why this one}.
-{violations if any}
 ```
+
+## Authority model
+
+/check-in is the authority, not a dispatcher. Phase files define *what* to check (enforcement rules). /check-in decides *when and how* to act.
+
+- Enforcement violations surface in the report as context.
+- The priority stack still proposes work - including the *resolution* of violations.
+- A violation never creates a deadlock. If enforcement says "spec missing" and the priority stack says "build next entity," /check-in proposes: "Write the spec first, then build."
 
 ## Task proposal - priority stack
 
-Four layers, checked in order. Propose the first match:
+Five layers, checked in order. Propose the first match:
 
-1. **Resume interrupted work.** Check ACTIVE-WORK.md and git history for uncommitted or in-progress items from previous sessions.
-2. **Resolve blockers.** Check QUESTIONS.md for critical items. Check ASSUMPTIONS.md for overdue items. Check handoffs/ for items with status: delivered that need integration.
-3. **Advance phase.** Pick the next item from the current phase's work list. Order by dependency (parents before children), then by risk (uncertain before routine).
-4. **Gate check.** If all phase work is done, evaluate gate criteria. If met, prompt to advance. If not, show specific blockers.
+1. **Resolve deferred /wrapup work.** Check feature specs for ## Flags sections from previous sessions. Propose "/wrapup on {entity}" if flags exist.
+2. **Resume interrupted work.** Check ACTIVE-WORK.md (if exists) and git history for uncommitted or in-progress items.
+3. **Resolve blockers.** Check QUESTIONS.md (if exists) for critical items. Check ASSUMPTIONS.md (if exists) for overdue items. Check handoffs/ (if exists) for delivered items needing integration.
+4. **Advance phase.** Pick the next item from the current phase's work list. Order by dependency (parents before children), then by risk (uncertain before routine).
+5. **Gate check.** If all phase work is done, evaluate gate criteria. If met, prompt to advance. If not, show specific remaining items.
 
-## Checkpoint execution
+## Methodology selection
 
-Read checkpoints from the current phase file (they appear at the top in CP1/CP2 format).
+When proposing implementation work, ask the user which verb to invoke via AskUserQuestion:
 
-### Pre-build checkpoint
+- For migration screens: /port (default), or user's chosen alternative
+- For new features: /tdd (default), or user's chosen alternative
+- For design work: /design or user's chosen methodology skill
 
-Fires before the user starts implementation. Reads the checkpoint's References list, validates each file exists and is current, and reports the result.
+The process layer does not hardcode which methodology skill to use.
 
-If the checkpoint blocks (e.g., no spec exists), report what's missing and what to do:
-- Missing spec + source system exists: "This is leaked Phase 2 work. Write the spec first."
-- Missing spec + no source system: "Invoke /spec to grill requirements."
+## Pre-build checkpoint
 
-### Post-build checkpoint
+Fires before the user starts implementation. Validates the verb's declared inputs exist:
 
-Fires when the user reports work complete. Spawns a review agent, runs doc sync, updates inventory.
+- Read the verb's frontmatter contract (inputs section).
+- Validate each required file exists.
+- Report what's missing and what to do.
 
-**Review agent allocation** (derived from spec content, not judgment):
-- **Moderate** (5:1 ratio, Sonnet reviewer): no conditional visibility 3+ rules, no status lifecycle in logic doc, fewer than 4 tabs.
-- **High** (3:1 ratio, Opus reviewer): conditional visibility 3+ rules, OR status lifecycle, OR 4+ tabs.
+If a required input is missing:
+- Missing spec + source system exists: "Leaked earlier-phase work. Write the spec first."
+- Missing spec + no source: "Invoke /spec to grill requirements."
 
-**Doc sync** (required action within post-build):
-1. Diff the build against its reference list. List any field, behavior, or pattern that differs from the spec.
-2. Mechanical diffs (field renamed, order changed): update the spec inline.
-3. Intentional deviations: flag for human review, append to spec's Change Log.
-4. Cascade check: did this build change anything that affects shared docs?
-   - New naming pattern -> update CONVENTIONS.md
-   - New token introduced -> update DESIGN-SYSTEM.md
-   - New domain term resolved -> update CONTEXT.md
-5. Pass condition: review passed AND spec matches build AND shared docs are current.
+## Phase regression
 
-## Phase-specific behavior
+When a gate can't pass because an earlier-phase decision is invalidated:
 
-### During build phases (3-5 migrate, 3-4 buildout)
+1. Recognize this as regression, not leapfrogging.
+2. Propose: "Phase {N} gate blocked - {ADR/decision} invalidated by {evidence}. Regressing to Phase {M} to resolve."
+3. The regression is tracked via: ADR (rationale) + inventory reversion (state) + git history (timeline).
+4. No separate artifact. No timestamp log.
+5. On resolution, /check-in re-proposes the original phase work naturally.
 
-Propose from inventory. Task-level granularity: "VesselParticulars is next - 3 dependents waiting on it."
+## Enforcement
 
-### During 6b-i (Design System)
+### Core rules (always fire)
 
-Propose from TOKEN-AUDIT.md gap list. Systematic: "3 token gaps in Feedback category. Next: define --toast-elevation and --toast-duration."
+1. Specs exist before implementation begins
+2. No phase leapfrogging (unless regression - see above)
+3. No stale critical blockers (QUESTIONS.md items if file exists)
 
-### During 6b-ii (UX Improvements)
+### Archetype extras (composable, multi-select)
 
-Phase-level guidance. Designer-directed: "You're in 6b-ii macro. 2 page-level improvements remaining. navigation-tab-personalization - research checkpoint not complete."
+Selected archetypes in SCOPE.md frontmatter add enforcement rules to the core set.
+If no archetypes selected: core rules only + dynamic adaptation.
 
-Do NOT propose design tasks during build phases. Design exploration during builds is unmanaged (D42).
+### Graceful degradation
+
+If a file referenced by an enforcement rule doesn't exist (docs/local/ is personal, ephemeral):
+- That rule doesn't fire.
+- No false violations from missing personal files.
+- /check-in never errors on missing optional state.
+
+## Dynamic adaptation
+
+/check-in adapts ceremony to observed complexity rather than rigidly following the archetype:
+- Few entities, simple specs -> lighter ceremony (skip verbose reporting)
+- Many entities, complex interdependencies -> more structure (explicit dependency ordering)
+- Repeated violations of the same type -> suggest /reorient
+
+The archetype sets the starting ceremony level. Reality adjusts it.
 
 ## Conditional invocations
 
-- **Invoke /reorient** when drift detected: same phase 2+ weeks, accumulating violations, stale questions piling up.
-- **/reorient**'s PROGRESS-AUDIT.md feeds back into the task proposal stack.
+- **Invoke /reorient** when drift detected: same phase 2+ weeks, accumulating violations, stale questions.
+- **/reorient** output feeds back into the task proposal stack.
 
 ## Resolution cascade
 

@@ -1,7 +1,16 @@
 ---
 name: port
-description: Migration implementation verb. Ports a screen from the source system to the target. Reads spec + logic doc + source code, writes characterization tests first, builds to match, verifies parity. Use when /check-in proposes a migration screen to build.
+description: Migration implementation verb. Reads spec + logic doc + source, briefs subagents, reviews output, flags discrepancies. Use when /check-in proposes a migration screen to build.
 disable-model-invocation: true
+inputs:
+  - feature-spec: docs/reference/features/{entity}.md
+  - logic-doc: docs/reference/logic/{entity}.md
+  - source: files referenced in feature-spec
+outputs:
+  - flags: appended to feature-spec ## Flags section
+  - inventory: marker updated to [P]
+signals:
+  - complete: suggests /wrapup to user
 ---
 
 # Port
@@ -10,68 +19,104 @@ The migration implementation verb. Backward-looking: capture current behavior, r
 
 Distinct from `/tdd` which is forward-looking: define desired behavior, test first, build to satisfy.
 
+## Role
+
+/port is an **orchestrator**, not a laborer. Its responsibilities:
+1. **Brief** - read inputs, synthesize a focused build instruction for subagents
+2. **Review** - evaluate subagent output against spec and source
+3. **Flag** - collect discrepancies as structured flags for /wrapup
+
+/port does NOT update specs or shared docs. It flags discrepancies for /wrapup to resolve.
+
 ## Inputs (three required)
 
-1. **Feature spec** - `docs/reference/features/{entity}.md` (or `docs/wpf-reference/features/` for this project)
-2. **Logic doc** - `docs/reference/logic/{entity}.md` (or `docs/wpf-reference/logic/`)
-3. **Source system** - WPF source files listed in the feature spec's reference section
+1. **Feature spec** - `docs/reference/features/{entity}.md`
+2. **Logic doc** - `docs/reference/logic/{entity}.md`
+3. **Source system** - files listed in the feature spec's reference section
 
 If any input is missing, stop and report. Do not build without all three.
 
 ## Process
 
-### 1. Lock current behavior (Feathers)
+### 1. Read and synthesize
 
-Write characterization tests first. Capture the legacy system's actual output for a set of inputs, then assert the new system matches. Don't assert what the output *should* be - assert what it *is*.
+Read all three inputs fully. Identify:
+- Fields, controls, and their behaviors
+- Conditional visibility rules
+- Navigation paths
+- Patterns from CONVENTIONS.md that apply
+- Whether this entity needs shared file changes (new route, new type export, new shared component)
 
-The spec might be incomplete; the golden master isn't. Discrepancies are either bugs in the migration or intentional improvements - categorize each one explicitly.
+### 2. Generate subagent brief
 
-### 2. Build to match
+Synthesize a focused build instruction containing:
+- Entity name and purpose (one sentence)
+- Fields table (name, type, source, editable, default)
+- Controls and behaviors (what each does)
+- Conditional visibility rules
+- Patterns to follow (from CONVENTIONS.md)
+- Files to create or modify
+- Reference files the subagent can read if it needs detail
 
-Follow the per-screen build process:
+The brief is a digested instruction, not a full pass-through of the inputs.
 
-1. Route (add to router)
-2. View component (layout, fields, controls per spec)
-3. Data layer (composable, types, API shape)
-4. Mock data (matching spec's field list and types)
-5. Tests (structural enforcement + characterization)
+### 3. Spawn implementation subagent(s)
 
-Cross-reference against source system side-by-side throughout.
+Classify the work:
+- **Entity-local only** (no shared file changes): safe to parallelize with other /port instances
+- **Touches shared files** (router, shared types, shared components): serialize
 
-### 3. Verify parity
+The subagent builds from the brief. It has read access to full spec/source if needed for detail checks.
 
-After the build:
+### 4. Review subagent output
+
+After the subagent completes, review against the spec and source:
 - Fields present and correct against spec?
 - Controls match source system behavior?
 - Conditional visibility rules implemented?
-- Navigation paths work (breadcrumb, tabs, drill-down)?
+- Navigation paths work?
+- Tests pass?
 
-### 4. Fix both code and docs
+If the output has issues: direct the subagent to fix, or fix in the main context.
 
-When cross-reference finds discrepancies:
-- Fix the Vue code
-- Update the feature spec where it was incomplete
-- Add Change Log entry to the spec
+### 5. Flag discrepancies
 
-### 5. Report complete
+When cross-reference finds discrepancies between spec and reality:
+- DO NOT update the spec. DO NOT update shared docs.
+- Append structured flags to the feature spec's ## Flags section:
 
-Run `pnpm test` - zero failures required.
+```markdown
+## Flags
+
+- [ ] Spec says field X is editable, source system has it read-only in status=Closed
+- [ ] Logic doc missing validation rule for negative values (discovered in source)
+- [ ] New naming pattern emerged: {pattern} - may need CONVENTIONS.md update
+```
+
+These flags are /wrapup's input.
+
+### 6. Report complete
+
+Run test suite - zero failures required.
 Mark `[P]` in inventory.
-Report to `/check-in` for post-build checkpoint (review agent, doc sync).
+Suggest /wrapup to the user:
 
-## Concurrency
+```
+Build complete. {N} flags. Run /wrapup to resolve, or continue to next entity.
+```
 
-Multiple `/port` sessions can run simultaneously IF:
-- Non-overlapping entities claimed in ACTIVE-WORK.md
-- Shared infra changes are single-threaded
-- Each agent reads the spec before building
+## Concurrency (within session)
+
+Multiple subagents can run in parallel IF:
+- Non-overlapping entity-local files
+- No shared file changes in the parallel set
+
+Shared file changes (router config, type exports, shared components) serialize through the main context.
 
 ## UX improvements
 
 When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
 
-Design exploration on isolated branches is allowed per CLAUDE.md's design exploration policy.
-
 ## References
 
-See REFERENCES.md for: characterization tests (Feathers), structural enforcement, seam identification, contract tests.
+Methodology references (characterization tests, Strangler Fig, seam identification, structural enforcement) live in this skill's knowledge, not in the phase files. Apply them as judgment calls during briefing and review.

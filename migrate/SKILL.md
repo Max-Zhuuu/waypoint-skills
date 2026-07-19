@@ -67,27 +67,39 @@ During Phases 2-5, when you see a UX improvement opportunity: write a one-liner 
 
 Design exploration on isolated branches is allowed per CLAUDE.md's design exploration policy. Production code stays parity-focused.
 
-## Enforcement
+## Enforcement inputs
 
-`/check-in` runs these on every session. Listed here as the authoritative source:
+These rules are inputs to /check-in's authority. /check-in decides how to act on them.
+
+### Core (always active)
 
 1. **Code without specs** - screens in code without a feature spec
-2. **Stale inventory** - status markers that don't match actual state
-3. **Overdue assumptions** - ASSUMPTIONS.md items past resolution deadline
-4. **Stale questions** - critical QUESTIONS.md items older than 1 week
-5. **Phase leapfrogging** - Phase N+1 work while Phase N gate is unmet
+2. **No phase leapfrogging** - unless /check-in recognizes a regression (see below)
+3. **Stale critical blockers** - QUESTIONS.md items (if file exists) older than 1 week
+
+### Archetype: migration (extra rules)
+
+4. **Stale inventory** - status markers that don't match actual state
+5. **Overdue assumptions** - ASSUMPTIONS.md items (if file exists) past resolution deadline
 6. **Premature design** - enhancement/design work in production code before Phase 6a gate
+
+### Phase regression
+
+When a gate can't pass because an earlier-phase decision is invalidated:
+- /check-in recognizes this as regression, not leapfrogging
+- Proposes ADR rework + inventory reversion for affected items
+- No separate tracking artifact (ADR + inventory + git history are sufficient)
 
 ### Gate override
 
 If the implementer wants to skip a gate item:
 - State which item and why
 - Document in `docs/adr/` as a decision
-- `/check-in` records this and reminds at the next gate
+- /check-in notes this and reminds at the next gate
 
 ## References
 
-Detailed patterns in [REFERENCES.md](REFERENCES.md): Strangler Fig, characterization tests, structural enforcement, contract tests, Feathers' seam identification.
+Process references in [REFERENCES.md](REFERENCES.md): Spolsky's rewrite warning, Feathers' "legacy code is code without tests," Beck's "make the change easy."
 
 ## Tone
 

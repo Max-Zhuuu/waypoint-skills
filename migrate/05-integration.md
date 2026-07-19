@@ -12,8 +12,8 @@
 
 ### Post-wire (per screen)
 - **Trigger:** when integration is complete for a screen
-- **Action:** spawn review agent. Run doc sync. Verify loading/error/empty states implemented. Update inventory marker to `[M]`.
-- **Pass:** review passed, spec matches build, all states handled, inventory updated.
+- **Action:** flag any discrepancies in spec's ## Flags section. Suggest /wrapup. Update inventory marker to `[M]`.
+- **Pass:** /wrapup resolved flags (or flags persist), loading/error/empty states implemented, inventory updated.
 
 ## Process
 

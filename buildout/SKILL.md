@@ -21,79 +21,63 @@ If any are missing, tell the user to run `/project-setup` first.
 
 ## Project intake
 
-Run three questions via `AskUserQuestion` to configure phase resolution:
+Run AskUserQuestion (multiSelect: true) to configure archetypes:
 
-**Q1: What are you building?**
-- **Product** - multiple features, multiple user types, ongoing lifecycle
-- **Feature** - multi-screen, multi-session, own spec, within an existing product
-- **Deliverable** - report, tool, integration - clear scope, 1-3 sessions
+**Which archetypes apply to this project?** (select all that fit, or none)
 
-**Q2: Do you need external validation?**
-- **Full** - user research, competitive analysis, assumption testing
-- **Lightweight** - quick competitive glance, no formal research
-- **None** - requirements are clear, just build it
+- **Product** - multiple features, multiple user types, ongoing lifecycle. Adds: scope creep enforcement, unvalidated assumptions check, full discovery phase.
+- **Feature** - multi-screen feature within an existing product. Adds: spec coverage enforcement, reduced discovery.
+- **Deliverable** - report, tool, integration with clear scope. Adds: minimal ceremony, focused build.
+- **Design system** - design language work (tokens, patterns, density). Adds: premature design enforcement during build, design phase after functional gate.
 
-**Q3: Will this need a design pass?**
-- **Full** - design language, token system, UX iteration with feedback
-- **Lightweight** - visual polish within existing design system
-- **None** - functional only, styling is minimal
-
-Store the profile as frontmatter in SCOPE.md:
+Store archetypes as frontmatter in SCOPE.md:
 
 ```yaml
 ---
-profile:
-  scope: product | feature | deliverable
-  validation: full | lightweight | none
-  design: full | lightweight | none
+archetypes: [product, design-system]  # or [] for none
 ---
 ```
 
-The profile is visible and editable - the user can change it mid-project without re-running setup.
-
-## Phase resolution by profile
-
-**Scope determines which phases are active:**
-- Product: all phases
-- Feature: reduced discovery, full build, reduced ship
-- Deliverable: minimal discovery, focused build, minimal ship
-
-**Validation determines Phase 2 depth:**
-- Full: persona, assumption table, competitive scan, MoSCoW, /spec per Must
-- Lightweight: /spec, brief assumption check, skip persona/competitive
-- None: /spec only (or skip if obvious), straight to build
-
-**Design determines 6b-i existence:**
-- Full: component taxonomy, token audit, density variants, UX improvements
-- Lightweight: apply existing tokens, visual polish pass
-- None: skip design phase entirely
+Archetypes are composable - a project can be both "product" and "design-system."
+No selection = core enforcement rules only + /check-in adapts dynamically.
+The user can change archetypes mid-project without re-running setup.
 
 ## Phase overview
 
-After setup, `/check-in` reads these phase files and filters by profile:
+After setup, `/check-in` reads these phase files. Archetypes control which phases and enforcement rules are active:
 
-| Phase | Name | File | Product | Feature | Deliverable |
-|-------|------|------|---------|---------|-------------|
-| 0-1 | Setup | `/project-setup` + this skill | Yes | Yes | Yes |
-| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) | Full | Reduced | Minimal |
-| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) | Full | Full | Focused |
-| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) | Full | Reduced | Minimal |
+| Phase | Name | File |
+|-------|------|------|
+| 0-1 | Setup | `/project-setup` + this skill |
+| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) |
+| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) |
+| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) |
 
-6b-i (Design System) fires after Phase 3 gate when design profile is full or lightweight.
+Design system work fires after Phase 3 gate when "design-system" archetype is selected.
+/check-in adapts phase depth based on observed complexity.
 
-## Enforcement
+## Enforcement inputs
 
-`/check-in` runs these on every session. Listed here as the authoritative source:
+These rules are inputs to /check-in's authority. /check-in decides how to act on them.
 
-1. **Code without specs** - features built without a spec in `docs/specs/`
-2. **Unvalidated assumptions** - building on assumptions that haven't been tested
-3. **Scope creep** - features not in SCOPE.md showing up in code
-4. **Stale questions** - critical QUESTIONS.md items older than 1 week
-5. **Phase leapfrogging** - building production code before discovery is done
+### Core (always active)
+
+1. **Code without specs** - features built without a spec
+2. **No phase leapfrogging** - unless /check-in recognizes a regression
+3. **Stale critical blockers** - QUESTIONS.md items (if file exists) older than 1 week
+
+### Archetype: product (extra rules)
+
+4. **Unvalidated assumptions** - building on assumptions that haven't been tested
+5. **Scope creep** - features not in SCOPE.md showing up in code
+
+### Archetype: design-system (extra rules)
+
+6. **Premature design** - design implementation in production code before functional gate
 
 ## References
 
-Detailed patterns in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), testing trophy, JTBD, Kano model, vertical slice architecture.
+Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
 
 ## Tone
 

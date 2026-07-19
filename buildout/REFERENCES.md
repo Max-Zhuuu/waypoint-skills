@@ -34,31 +34,14 @@ Organize code by feature, not by layer. Instead of `controllers/`, `services/`, 
 When a change is hard, don't force it. First, refactor until the change is easy (this might be the bulk of the work). Then make the now-easy change. Applied to greenfield: if adding a feature requires changing 8 files, the architecture is fighting you. Fix the architecture, then add the feature.
 **When to cite:** Phase 3 architecture checkpoint, when a pattern feels forced.
 
-## Testing Techniques
+## Testing (acceptance criteria only)
 
-### Testing Trophy (Kent C. Dodds)
-Inversion of the testing pyramid for frontend-heavy applications. Most value comes from **integration tests** (test user workflows through multiple components), not unit tests (test isolated functions). The trophy shape: a few E2E tests at the top, a thick band of integration tests in the middle, some unit tests for complex logic, and static analysis (TypeScript, ESLint) at the base catching the rest. Write the test the way the user uses the feature.
-**When to cite:** Phase 3 MVP build. For greenfield, integration tests give the most confidence per test written. Don't unit-test a component that only integration tests would meaningfully exercise.
+Testing methodology belongs to the implementation verbs (/tdd, /port), not this process layer.
 
-### Smoke Tests
-The smallest set of tests that prove the app isn't fundamentally broken. Hit the main entry points, verify they render without crashing, confirm the critical path works end-to-end. Not comprehensive - just a "did we break the building" check. Takes 30 seconds to run, catches 80% of "I shipped a white screen" disasters.
-**When to cite:** Phase 4 ship checklist. The first thing to automate in CI. If you only have time for one test, make it a smoke test of the happy path.
-
-### Hypothesis-Driven Testing
-Before writing a test, state the hypothesis: "If the user does X, then Y should happen because Z." Tests that don't defend a hypothesis tend to test implementation details (how the code works) rather than behavior (what the user experiences). Implementation tests break on refactors; behavior tests break on bugs.
-**When to cite:** Phase 3-4, when deciding what to test. Especially useful for hobby projects where testing time is scarce - test the behaviors that would hurt most if broken.
-
-### Exploratory Testing (Bach, Bolton)
-Structured improvisation: use the product with intent to break it, but without a script. Vary inputs, interrupt workflows, use the back button, resize the window, paste unexpected data. Discoveries feed back into the spec (as edge cases) or the test suite (as regression tests). Finds the bugs that scripted tests miss because the script was written by the same person who wrote the code.
-**When to cite:** Phase 4 feedback round. When the user demos to someone, that person is doing exploratory testing whether they know it or not. Capture what they find.
-
-## Testing Playbook by Phase
-
-| Phase | Primary technique | Why this one |
-|-------|------------------|--------------|
-| 2 - Discovery | No code tests | Validate assumptions with conversations, prototypes, landing pages. Code is the most expensive test. |
-| 3 - MVP build | Integration tests (testing trophy) | Test user workflows, not units. One integration test covering "user creates X, sees it in list, edits it" catches more bugs than 10 unit tests of individual components. |
-| 4 - Iterate & ship | Smoke tests + exploratory | Smoke tests in CI prevent shipping broken builds. Exploratory testing during feedback rounds catches what automation misses. |
+Phase files specify acceptance criteria:
+- Phase 2: no code tests needed (validate with conversations, prototypes, landing pages)
+- Phase 3: each Must feature has at least one end-to-end workflow test passing
+- Phase 4: CI catches regressions, demos catch UX issues
 
 ## Process References
 

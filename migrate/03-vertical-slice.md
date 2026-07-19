@@ -15,8 +15,8 @@ This is the most important gate. Skipping it means discovering broken patterns a
 ### CP2: Post-slice architecture review
 - **Trigger:** after all 3 screens are built and passing tests
 - **References:** all 3 feature specs, CONVENTIONS.md, ADR folder, source system files, TESTING.md
-- **Action:** invoke `/grill-with-docs` for any decision that meets the ADR threshold (hard to reverse, surprising, real trade-off). Spawn review agent per screen. Run doc sync (update specs where build diverged, cascade to shared docs). Update CONVENTIONS.md with patterns that emerged. Refine TESTING.md with test patterns that proved valuable.
-- **Pass:** architecture grill complete (no unresolved ADR-worthy decisions), review agents passed, CONVENTIONS.md and TESTING.md updated, all 3 specs match their builds.
+- **Action:** invoke `/grill-with-docs` for any decision that meets the ADR threshold (hard to reverse, surprising, real trade-off). Run /wrapup on all 3 screens to resolve flags and cascade to shared docs.
+- **Pass:** architecture grill complete (no unresolved ADR-worthy decisions), /wrapup passed on all 3 screens, no unresolved flags.
 
 ## Process
 
@@ -30,7 +30,7 @@ Present picks and justify why these 3 cover the architecture.
 
 ### Build end-to-end
 
-For each screen, invoke `/port`. Cross-reference against source system side-by-side.
+For each screen, invoke `/port` (or chosen implementation verb). Cross-reference against source system side-by-side.
 
 ### Architecture checkpoint
 
@@ -38,22 +38,16 @@ After all 3 (fires CP2):
 - What worked as designed?
 - What required workarounds?
 - What needs to change before Phase 4?
-- What naming patterns emerged? Update CONVENTIONS.md.
 
 If changes needed: update ADRs, update skeleton, re-validate all 3.
 Do NOT proceed with a known-broken pattern.
-
-### Characterization tests (Feathers)
-
-For complex screens, write characterization tests (golden master approach): capture the legacy system's actual output for a set of inputs, then assert the new system matches. Don't assert what the output *should* be - assert what it *is*.
-
-Discrepancies are either bugs in the migration or intentional improvements - categorize each one explicitly.
+If an earlier-phase decision is invalidated: this is a regression (see /check-in's regression model).
 
 ## Gate
 
 - [ ] 3 screens working end-to-end with mock data
 - [ ] All 3 cross-referenced against source system
-- [ ] CP2 passed (architecture grill, reviews, doc sync)
+- [ ] CP2 passed (architecture grill complete, /wrapup resolved all flags)
 - [ ] Required changes applied and validated
 - [ ] CONVENTIONS.md and TESTING.md refined from real patterns
 - [ ] Inventory shows 3 screens at `[P]`

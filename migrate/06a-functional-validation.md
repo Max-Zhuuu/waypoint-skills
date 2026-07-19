@@ -7,8 +7,8 @@
 ### CP1: Post-validation review (per screen)
 - **Trigger:** after a screen has been validated side-by-side against the source system
 - **References:** feature spec, source system screen, docs/improvements/ file for this entity
-- **Action:** spawn review agent. Categorize every discrepancy (bug, intentional difference, unknown). Run doc sync: update spec with any discoveries. If UX improvement spotted during validation: capture in docs/improvements/, do not implement.
-- **Pass:** all discrepancies categorized and resolved (bugs fixed, intentional diffs documented, unknowns logged in QUESTIONS.md), spec updated.
+- **Action:** categorize every discrepancy (bug, intentional difference, unknown). Flag discrepancies in spec's ## Flags section. If UX improvement spotted: capture in docs/improvements/, do not implement. Suggest /wrapup.
+- **Pass:** all discrepancies categorized (bugs fixed, intentional diffs documented, unknowns logged in QUESTIONS.md), /wrapup resolved flags.
 
 ## Process
 
@@ -27,11 +27,11 @@ For each screen, source system and target side by side:
 - **Intentional difference** - documented improvement or simplification -> note in spec
 - **Unknown** - can't determine if source behavior is correct -> add to QUESTIONS.md
 
-### Visual regression
+### At scale (30+ screens)
 
-For 30+ screens, manual side-by-side comparison doesn't scale. Use visual regression testing: automated screenshot capture at defined viewports, overlaid with pixel-diff highlighting.
+Manual side-by-side comparison doesn't scale. Automation should cover what it can (visual diffs, output comparison). Manual validation focuses on what automation can't capture (interaction flows, conditional visibility, permission-based behavior).
 
-Run characterization test diffs in parallel - compare legacy output against migrated output for the same inputs. Manual validation focuses on what automation can't capture (interaction flows, conditional visibility, permission-based behavior).
+How to automate is a methodology decision for the implementation verb.
 
 ### Performance
 

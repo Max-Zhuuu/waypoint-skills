@@ -13,13 +13,13 @@
 ### CP2: Post-slice architecture review
 - **Trigger:** after the vertical slice (first Must feature) is built and passing tests
 - **References:** feature spec, CONVENTIONS.md, ADR folder, TESTING.md
-- **Action:** invoke /grill-with-docs for any decision meeting ADR threshold. Spawn review agent. Run doc sync. Update CONVENTIONS.md with patterns that emerged. Refine TESTING.md with test patterns that proved valuable.
-- **Pass:** architecture grill complete, review passed, CONVENTIONS.md and TESTING.md updated, spec matches build.
+- **Action:** invoke /grill-with-docs for any decision meeting ADR threshold. Run /wrapup to resolve flags and cascade to shared docs.
+- **Pass:** architecture grill complete, /wrapup passed, no unresolved flags.
 
 ### Post-build (per feature)
-- **Trigger:** when /tdd reports a feature complete
-- **Action:** spawn review agent. Run doc sync. Update SCOPE.md to mark feature complete.
-- **Pass:** review passed, spec matches build, shared docs current.
+- **Trigger:** when implementation verb reports complete
+- **Action:** suggest /wrapup. Update SCOPE.md to mark feature complete.
+- **Pass:** /wrapup resolved flags (or flags persist for next session if skipped).
 
 ## Process
 
@@ -41,20 +41,20 @@ After the vertical slice works (fires CP2):
 
 If something feels wrong, fix it now. This is cheaper to fix with 1 feature than with 10.
 
-### Testing the MVP
+### Testing acceptance criteria
 
-Follow the testing trophy (Kent C. Dodds), not the testing pyramid. Integration tests give the most confidence per test written.
+Each Must feature must have:
+- At least one test covering the primary user workflow end-to-end
+- No test failures in the suite after the feature is built
 
-Write tests the way the user uses the feature. State the hypothesis first: "If the user does X, then Y should happen because Z."
-
-For hobby projects with limited testing time: one smoke test per feature + one integration test for the primary workflow.
+Testing methodology (what kind of tests, what style, what patterns) is owned by the implementation verb, not this phase file.
 
 ### Build remaining Must features
 
 For each Must feature from the MoSCoW list:
 1. CP1 fires (pre-build spec check)
-2. Invoke `/tdd`
-3. Post-build checkpoint fires
+2. Invoke chosen implementation verb (via /check-in methodology selection)
+3. Verb reports complete, suggests /wrapup
 4. Mark complete in SCOPE.md
 
 Order by dependency chain, then by risk.
