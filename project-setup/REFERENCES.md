@@ -97,6 +97,39 @@ See CLAUDE.md "Concurrent agent protocol" for full instructions.
 If `.claude/settings.json` already exists, merge the hook entry - do not overwrite existing hooks or settings.
 The hook injects the tracker contents into every agent prompt, so all sessions see claimed files before modifying anything.
 
+### Pre-Push Build Gate
+
+**Purpose:** Prevents broken builds from reaching shared branches.
+Runs the project's build command before any push to protected remote branches, blocking the push if it fails.
+
+**When to offer:** Phase 1, alongside the agent coordination hook. Important for any project with a build step.
+
+**Hook** - merge into `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PrePush": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'BRANCH=$(git rev-parse --abbrev-ref HEAD); PROTECTED=\"main beta\"; for b in $PROTECTED; do if [ \"$BRANCH\" = \"$b\" ]; then echo \"Protected branch $BRANCH - running build check...\"; npm run build || { echo \"Build failed. Push blocked.\"; exit 1; }; exit 0; fi; done; echo \"Branch $BRANCH is not protected - skipping build check.\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Adapt the hook for the project:
+- Replace `npm run build` with the project's build command (`pnpm build`, `cargo build`, `dotnet build`, etc.)
+- Replace `main beta` with the project's protected branch names from CLAUDE.md
+- If the project has a type-check step separate from build, chain it: `npm run type-check && npm run build`
+
+If `.claude/settings.json` already exists, merge the hook entry into the existing hooks object.
+
 ## Local Docs Reference
 
 See [LOCAL-DOCS.md](LOCAL-DOCS.md) for the canonical docs/local/ structure, file formats, scaling rules, and which skills own each file.
