@@ -18,6 +18,7 @@
 
 ### Post-build (per feature)
 - **Trigger:** when implementation verb reports complete
+- **References:** feature spec (## Flags section), SCOPE.md, CONVENTIONS.md
 - **Action:** verb suggests /wrapup. If invoked: resolves flags, cascades, updates SCOPE.md.
 - **Pass:** /wrapup resolved flags (or flags persist for next session).
 

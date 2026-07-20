@@ -12,6 +12,7 @@
 
 ### Post-wire (per screen)
 - **Trigger:** when integration is complete for a screen
+- **References:** feature spec, DEPENDENCIES.md, API response shape
 - **Action:** flag any discrepancies in spec's ## Flags section. Suggest /wrapup. Update inventory marker to `[M]`.
 - **Pass:** /wrapup resolved flags (or flags persist), loading/error/empty states implemented, inventory updated.
 

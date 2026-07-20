@@ -12,6 +12,7 @@
 
 ### Post-build (per screen)
 - **Trigger:** when `/port` reports a screen complete
+- **References:** feature spec (## Flags section), CONVENTIONS.md, CONTEXT.md
 - **Action:** /port suggests /wrapup. If invoked: /wrapup resolves flags, cascades to shared docs, updates inventory to `[P]`. If skipped: flags persist, /check-in surfaces next session.
 - **Pass:** /wrapup resolved flags (or flags persist for next session).
 
@@ -28,7 +29,7 @@ Invoke `/port` for each screen. `/port` handles:
 4. Review output against spec and source
 5. Flag discrepancies in spec's ## Flags section
 6. Run test suite - zero failures
-7. Report complete, suggest /wrapup
+7. Report complete (signals contract: suggests /wrapup)
 
 ### Concurrency
 
