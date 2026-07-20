@@ -91,6 +91,15 @@ When a checkpoint finds a mismatch:
 2. **Test case validation** - write or run a test that proves which side is correct
 3. **Human validation** - escalate with specifics if source and tests are ambiguous
 
+### AskUserQuestion Gates
+Decision gates use `AskUserQuestion` to confirm non-trivial choices before the agent elaborates or implements. Two behavioral conventions apply to all gates:
+
+**Conversational fallback:** If the user selects "Other" and writes something conversational, the agent drops back to chat - explains trade-offs, discusses, then re-presents the original AskUserQuestion when the user is ready. The gate stays pending until explicitly answered.
+
+**Learn-mode elaboration:** If the user asks for more context or says "explain," the agent gives /learn-style depth scoped to the specific decision: one terms block (3-5 terms max), one further reading link. After elaboration, re-present the original question. Don't elaborate all options - only the ones the user asks about. This is "/learn lite," not the full Phase 2 flow.
+
+These are behavioral conventions, not additional AskUserQuestion options. They keep gates from feeling like locked doors while preserving their value as decision records.
+
 ### Review Agent Allocation
 See `port/REFERENCES.md > Review Depth` for the complexity classification and reviewer model assignment.
 
