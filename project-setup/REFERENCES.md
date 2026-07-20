@@ -100,35 +100,30 @@ The hook injects the tracker contents into every agent prompt, so all sessions s
 ### Pre-Push Build Gate
 
 **Purpose:** Prevents broken builds from reaching shared branches.
-Runs the project's build command before any push to protected remote branches, blocking the push if it fails.
+Intercepts `git push` commands targeting protected branches and runs the build first. Blocks the push if the build fails.
 
 **When to offer:** Phase 1, alongside the agent coordination hook. Important for any project with a build step.
 
-**Hook** - merge into `.claude/settings.json`:
+**Implementation:** Claude Code has no `PrePush` hook event. Use a `PreToolUse` hook on the `Bash` matcher with an `if` filter matching `git push*`. The hook reads the push command, checks if it targets a protected branch, and runs the build.
+
+**Hook** - add to the existing `Bash` matcher's hooks array in `.claude/settings.json`:
 
 ```json
 {
-  "hooks": {
-    "PrePush": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'BRANCH=$(git rev-parse --abbrev-ref HEAD); PROTECTED=\"main beta\"; for b in $PROTECTED; do if [ \"$BRANCH\" = \"$b\" ]; then echo \"Protected branch $BRANCH - running build check...\"; npm run build || { echo \"Build failed. Push blocked.\"; exit 1; }; exit 0; fi; done; echo \"Branch $BRANCH is not protected - skipping build check.\"'"
-          }
-        ]
-      }
-    ]
-  }
+  "type": "command",
+  "if": "Bash(git push*)",
+  "command": "bash -c 'read -r INPUT; CMD=$(echo \"$INPUT\" | jq -r \".tool_input.command\" 2>/dev/null); if echo \"$CMD\" | grep -qE \"git push.*(origin )?(main|beta)\"; then echo \"Running build check...\"; npm run build > /dev/null 2>&1; if [ $? -ne 0 ]; then echo \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Build failed. Push to protected branch blocked.\\\"}}\"; else echo \"Build passed.\"; fi; fi'",
+  "timeout": 120,
+  "statusMessage": "Build gate..."
 }
 ```
 
+Add the same entry to the `PowerShell` matcher with `"if": "PowerShell(git push*)"`.
+
 Adapt the hook for the project:
 - Replace `npm run build` with the project's build command (`pnpm build`, `cargo build`, `dotnet build`, etc.)
-- Replace `main beta` with the project's protected branch names from CLAUDE.md
+- Replace `main|beta` in the grep pattern with the project's protected branch names
 - If the project has a type-check step separate from build, chain it: `npm run type-check && npm run build`
-
-If `.claude/settings.json` already exists, merge the hook entry into the existing hooks object.
 
 ## Local Docs Reference
 
