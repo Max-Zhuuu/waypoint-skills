@@ -3,15 +3,15 @@ name: create
 description: Add features to an existing codebase. Lighter than /buildout, structured enough to ensure specs exist and docs stay current. Use when adding a feature or small batch of features to a project that already has docs and conventions.
 disable-model-invocation: true
 inputs:
-  - scope-md: SCOPE.md (project context)
-  - conventions-md: CONVENTIONS.md (naming patterns)
-  - context-md: CONTEXT.md (domain glossary)
+  scope-md: SCOPE.md (project context)
+  conventions-md: CONVENTIONS.md (naming patterns)
+  context-md: CONTEXT.md (domain glossary)
 outputs:
-  - workflow-record: CLAUDE.md ## Active Workflow section updated
-  - specs: feature specs for each feature via /spec
-  - built-features: implemented via chosen verb
+  workflow-record: CLAUDE.md ## Active Workflow section updated
+  specs: feature specs for each feature via /spec
+  built-features: implemented via chosen verb
 signals:
-  - complete: suggests /wrapup
+  complete: suggests /wrapup
 ---
 
 # Create
@@ -28,7 +28,7 @@ Structured enough to ensure specs exist before building and docs get updated aft
 ## When NOT to use - recommend alternatives
 
 - **No project docs exist:** recommend /project-setup first
-- **Replacing an existing system screen by screen:** recommend /migrate (parity tracking, inventory, phased cutover)
+- **Replacing an existing system layer by layer:** recommend /migrate (parity tracking, inventory, phased cutover)
 - **Building a new product from scratch with unknown scope:** recommend /buildout (MoSCoW prioritization, MVP-first, feedback rounds)
 - **Scope is large (5+ features needing architecture decisions):** recommend /buildout - /create doesn't have gates to catch architectural drift at that scale
 

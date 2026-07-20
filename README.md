@@ -11,7 +11,7 @@ SETUP (run once per project)
                         CONVENTIONS.md, TESTING.md
 
 WORKFLOW (pick one - writes Active Workflow record to CLAUDE.md)
-  /migrate              Replace an existing system screen by screen
+  /migrate              Replace an existing system layer by layer
                         (parity tracking, inventory, phased cutover)
   /buildout             Build a new product from scratch
                         (MoSCoW prioritization, MVP-first, feedback rounds)

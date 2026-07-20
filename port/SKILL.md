@@ -3,14 +3,14 @@ name: port
 description: Migration implementation verb. Reads spec + logic doc + source, briefs subagents, reviews output, flags discrepancies. Use when /check-in proposes a migration screen to build.
 disable-model-invocation: true
 inputs:
-  - feature-spec: docs/reference/features/{entity}.md
-  - logic-doc: docs/reference/logic/{entity}.md
-  - source: files referenced in feature-spec
+  feature-spec: docs/reference/features/{entity}.md
+  logic-doc: docs/reference/logic/{entity}.md
+  source: files referenced in feature-spec
 outputs:
-  - flags: appended to feature-spec ## Flags section
-  - inventory: marker updated to [P]
+  flags: appended to feature-spec ## Flags section
+  inventory: marker updated to [P]
 signals:
-  - complete: suggests /wrapup to user
+  complete: suggests /wrapup to user
 ---
 
 # Port

@@ -1,13 +1,14 @@
 ---
 name: migrate
-description: One-time migration setup extending /project-setup. Configures source system analysis, parity decisions, inventory structure, and phase files. Run once at migration start, then use /check-in for daily sessions.
+description: Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete. One-time setup extending /project-setup, then use /check-in for daily sessions.
 disable-model-invocation: true
 ---
 
 # Migrate
 
-One-time setup skill. Extends `/project-setup` with migration-specific configuration.
-Run this once to configure the project as a migration. After setup, use `/check-in` every session.
+Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete.
+One-time setup extending `/project-setup` with migration-specific configuration.
+Run this once to configure the project. After setup, use `/check-in` every session.
 
 ## Prerequisites
 
@@ -108,7 +109,7 @@ After setup, `/check-in` reads these phase files to manage daily work:
 ## Cross-references
 
 If the user's request doesn't fit /migrate, recommend alternatives:
-- Adding a feature to the migrated system (not replacing a source screen): recommend /create
+- Adding a feature to the migrated system (not replacing a source layer): recommend /create
 - Building something new with no source system: recommend /buildout
 - Quick single-feature work: recommend task-layer verbs directly (/spec + /tdd)
 

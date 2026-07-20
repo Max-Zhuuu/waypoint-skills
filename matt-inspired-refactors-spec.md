@@ -49,7 +49,7 @@ Decisions from grill session 2026-07-20. Three changes to the skill family infor
 ```
 Setup complete. You described migrating from {system name}.
   -> /migrate - sets up parity tracking, spec extraction from the source,
-     and a phased plan to replace it screen by screen
+     and a phased plan to replace it layer by layer
   -> or invoke /spec, /tdd, /port directly if you already know what to build
 
 If this isn't a migration, /buildout structures a fresh product with

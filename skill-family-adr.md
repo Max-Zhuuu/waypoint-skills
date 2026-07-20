@@ -90,14 +90,14 @@ Each verb declares its contract:
 
 ```yaml
 inputs:
-  - feature-spec: docs/reference/features/{entity}.md
-  - logic-doc: docs/reference/logic/{entity}.md
-  - source: referenced in feature-spec
+  feature-spec: docs/reference/features/{entity}.md
+  logic-doc: docs/reference/logic/{entity}.md
+  source: referenced in feature-spec
 outputs:
-  - flags: appended to feature-spec ## Flags section
-  - inventory: marker updated to [P]
+  flags: appended to feature-spec ## Flags section
+  inventory: marker updated to [P]
 signals:
-  - complete: triggers /wrapup suggestion
+  complete: triggers /wrapup suggestion
 ```
 
 Process layer validates inputs before invocation (CP1).

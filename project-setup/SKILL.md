@@ -50,7 +50,7 @@ After Phase 1 gate passes, print an adaptive completion message. Read SCOPE.md a
 ```
 Setup complete. You described migrating from {system name}.
   -> /migrate - sets up parity tracking, spec extraction from the source,
-     and a phased plan to replace it screen by screen
+     and a phased plan to replace it layer by layer
 
 Other options:
   -> /create  - add specific features without the full migration workflow

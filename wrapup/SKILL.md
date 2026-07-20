@@ -3,11 +3,11 @@ name: wrapup
 description: Completion verb. Resolves flags from implementation verbs, cascades to shared docs, evaluates gate criteria. Optional but recommended after each /port or /tdd cycle.
 disable-model-invocation: true
 inputs:
-  - feature-spec: docs/reference/features/{entity}.md (with ## Flags section)
+  feature-spec: docs/reference/features/{entity}.md (with ## Flags section)
 outputs:
-  - spec-updated: feature spec with flags resolved and Change Log entry
-  - shared-docs: CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md updated if cascade needed
-  - inventory: marker confirmed or advanced
+  spec-updated: feature spec with flags resolved and Change Log entry
+  shared-docs: CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md updated if cascade needed
+  inventory: marker confirmed or advanced
 signals: []
 ---
 
