@@ -37,13 +37,10 @@ Print the recommendation with a plain-language explanation of why, not just the 
 ## On invocation
 
 1. Read existing project docs: SCOPE.md, CONVENTIONS.md, CONTEXT.md, TESTING.md, CLAUDE.md.
-2. Check for an Active Workflow section in CLAUDE.md. If another workflow is active, warn:
-
-```
-Active workflow: /migrate (Phase 4 - Horizontal Buildout, since 2026-07-15).
-Starting /create runs alongside that workflow, not inside it.
-Proceed, or fold this feature into the active workflow instead?
-```
+2. Check for `## Active Workflow` in CLAUDE.md:
+   - **Same skill already active** (/create in progress): don't restart. Ask what feature to add next, or suggest `/check-in` to orient.
+   - **Different skill active** (/migrate or /buildout in progress): warn that starting /create runs alongside that workflow, not inside it. Ask whether to proceed or fold this feature into the active workflow.
+   - **Completed workflow** (Status: completed): clear automatically and proceed.
 
 3. Write the workflow record to CLAUDE.md (see Workflow Record below).
 4. Ask what the user wants to build. Inline grill - not AskUserQuestion. Keep it conversational:

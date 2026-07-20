@@ -19,6 +19,14 @@ Run this once to configure the project as a new build. After setup, use `/check-
 
 If any are missing, tell the user to run `/project-setup` first.
 
+## Active workflow check
+
+Before setup, read `## Active Workflow` in CLAUDE.md.
+
+- **Same skill already active** (/buildout in progress): don't re-run setup. Redirect to `/check-in` to orient and resume, or suggest `/reorient` if the user feels stuck.
+- **Different skill active** (/migrate or /create in progress): warn that starting /buildout will replace the active workflow record. Ask whether to proceed or finish the current workflow first.
+- **Completed workflow** (Status: completed): clear automatically and proceed.
+
 ## Project intake
 
 Run AskUserQuestion (multiSelect: true) to configure archetypes:
