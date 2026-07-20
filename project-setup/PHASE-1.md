@@ -88,7 +88,7 @@ Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md fo
 
 ## Documentation structure
 
-Create this tree (adapt to the project). The `docs/local/` structure scales with the project intake profile:
+Create this tree (adapt to the project):
 
 ```
 docs/
@@ -104,22 +104,11 @@ docs/
       _TEMPLATE.md            # Logic doc template
   specs/                      # Feature specs via /spec
   improvements/               # UX improvement ideas (capture, don't implement)
-  local/                      # Gitignored - scale by intake profile
-    ACTIVE-WORK.md            # [all] Concurrent agent tracker
-    QUESTIONS.md              # [all] Unresolved issues needing human input
-    ASSUMPTIONS.md            # [product, feature] Working assumptions
-    PROGRESS-AUDIT.md         # [product, feature] /reorient output
-    learning/                 # [product] /learn output
-    handoffs/                 # [product, feature] Cross-team requests
-      api-contracts/          # Tier 2: endpoint requests, data contracts
-      schema-changes/         # Tier 3: DB migrations, business rule changes
-    design-journal.md         # [product w/ full design] Tagged experiment history
+  local/                      # Gitignored - see LOCAL-DOCS.md for full structure
 ```
 
-Scale by intake profile:
-- **Product**: full structure above
-- **Feature**: drop learning/, keep rest
-- **Deliverable**: QUESTIONS.md and ACTIVE-WORK.md only
+The `docs/local/` structure scales with the project intake profile.
+See [LOCAL-DOCS.md](LOCAL-DOCS.md) for the canonical file list, formats, scaling rules, and which skills own each file.
 
 ## Spec templates
 

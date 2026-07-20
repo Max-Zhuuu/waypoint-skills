@@ -191,6 +191,8 @@ This file is gitignored (lives in `docs/local/`).
 It serves as a reference for the current sprint direction - any agent session can read it to understand strategic context without re-running the skill.
 One audit per file. Each run reconciles with and replaces the previous one.
 
+If the prior audit is more than 2 weeks old and substantially different from the current one, move it to `docs/local/archive/{date}-progress-audit.md` before overwriting.
+
 ## When to use this skill
 
 - **Start of a work week or sprint** - set direction before diving into tasks

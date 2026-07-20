@@ -54,6 +54,12 @@ What are you adding?
 
 5. If the user describes multiple features, group them. If the group is large (5+), recommend /buildout.
 
+## Local docs
+
+/create does not eagerly scaffold docs/local/.
+When a question, assumption, or cross-boundary issue surfaces during work, create the relevant file using the format in [project-setup/LOCAL-DOCS.md](../project-setup/LOCAL-DOCS.md).
+If the file already exists, append to it.
+
 ## Process
 
 ### Per feature

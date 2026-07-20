@@ -96,3 +96,7 @@ See CLAUDE.md "Concurrent agent protocol" for full instructions.
 
 If `.claude/settings.json` already exists, merge the hook entry - do not overwrite existing hooks or settings.
 The hook injects the tracker contents into every agent prompt, so all sessions see claimed files before modifying anything.
+
+## Local Docs Reference
+
+See [LOCAL-DOCS.md](LOCAL-DOCS.md) for the canonical docs/local/ structure, file formats, scaling rules, and which skills own each file.

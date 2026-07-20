@@ -74,6 +74,7 @@ After resolving flags, check whether any resolution affects shared docs:
 - New domain term resolved -> update CONTEXT.md
 - New token or design pattern -> update DESIGN-SYSTEM.md (if exists)
 - Spec structure changed in a way that affects the template -> flag for review
+- Spec fully superseded by a new version -> move old to docs/local/archive/
 
 Only cascade when there's a genuine shared-doc change. Don't cascade for entity-local updates.
 

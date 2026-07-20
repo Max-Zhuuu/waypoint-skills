@@ -175,3 +175,8 @@ When design or build work crosses the frontend boundary:
 | 3 | Schema/logic | ADR via /grill-with-docs + handoff | docs/local/handoffs/schema-changes/ + docs/adr/ |
 
 Handoff format: `{date}-{slug}.md` with frontmatter `status: requested | in-progress | delivered | deferred`.
+
+## Local Documentation
+
+`docs/local/` is the gitignored working state that tracks what's happening right now - questions, assumptions, audits, handoffs, and learning artifacts.
+Canonical reference: [project-setup/LOCAL-DOCS.md](project-setup/LOCAL-DOCS.md) (file list, formats, scaling rules, ownership).

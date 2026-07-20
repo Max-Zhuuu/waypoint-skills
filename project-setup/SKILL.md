@@ -125,6 +125,7 @@ Work through these categories. Skip any the implementer has already answered cle
 **docs/local/ASSUMPTIONS.md** (gitignored):
 - Per assumption: description, risk level (low/medium/high), resolution deadline, owner
 - Optimistic planning is fine; invisible assumptions are not
+- Format: see [LOCAL-DOCS.md](LOCAL-DOCS.md)
 
 **CONTEXT.md** (repo root, if not exists):
 - Seed with domain terms that surfaced during scoping
