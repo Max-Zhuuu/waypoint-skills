@@ -23,7 +23,7 @@ Setting up project foundation. Two phases:
 Let's start with scope.
 ```
 
-**Resuming** (some exist): list what's done and what's missing, then pick up at the first incomplete phase.
+**Resuming** (some exist, some missing): list what's done and what's missing, then pick up at the first incomplete phase.
 
 ```
 Found: {list existing outputs}
@@ -31,6 +31,9 @@ Missing: {list missing outputs}
 
 Picking up at {phase}.
 ```
+
+**Reviewing** (all exist): activate the resume path. Read [RESUME-PATH.md](RESUME-PATH.md) and follow its instructions.
+The resume path lets the user review and revise project decisions without re-running setup from scratch.
 
 After the starting-fresh block, add one line:
 
