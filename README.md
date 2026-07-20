@@ -67,9 +67,8 @@ You sit down.
   |
   v  (implementation happens)
   |
-/check-in fires post-build checkpoint
-  -> review agent validates against spec + source
-  -> doc sync: spec updated, shared docs checked
+Verb reports complete, suggests /wrapup
+  -> /wrapup resolves flags, cascades to shared docs
   -> inventory updated
   -> "Done. 11 remaining. PortAgents is next, or resolve
      the 2 stale questions in QUESTIONS.md first?"
@@ -93,25 +92,19 @@ When a checkpoint finds a mismatch:
 3. **Human validation** - escalate with specifics if source and tests are ambiguous
 
 ### Review Agent Allocation
-Complexity derived from spec content, not judgment:
-- **Moderate** (5:1 ratio, Sonnet reviewer): no conditional visibility 3+ rules, no status lifecycle, fewer than 4 tabs
-- **High** (3:1 ratio, Opus reviewer): conditional visibility 3+ rules, OR status lifecycle, OR 4+ tabs
-- Every screen gets reviewed. No skip tier.
+See `port/REFERENCES.md > Review Depth` for the complexity classification and reviewer model assignment.
 
 ### Doc Sync
-Embedded in every post-build checkpoint. Not a separate task - a side effect of completion:
-1. Diff build against reference list
-2. Update mechanical diffs inline, flag intentional deviations
-3. Cascade check: CONVENTIONS.md, DESIGN-SYSTEM.md, CONTEXT.md
-4. Pass condition includes "shared docs are current"
+/wrapup is the single reconciliation point for all doc updates after implementation. It resolves flags left by implementation verbs, cascades changes to shared docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md), and evaluates gate criteria. See `wrapup/SKILL.md` for the full process.
 
 ### Project Intake (buildout only)
-Three questions at setup, stored as SCOPE.md frontmatter:
-- **Scope**: product / feature / deliverable
-- **Validation**: full / lightweight / none
-- **Design**: full / lightweight / none
+Composable archetypes via multiSelect AskUserQuestion, stored as SCOPE.md frontmatter:
+- **Product** - multiple features, multiple user types, ongoing lifecycle
+- **Feature** - multi-screen feature within an existing product
+- **Deliverable** - report, tool, integration with clear scope
+- **Design system** - design language work (tokens, patterns, density)
 
-The profile determines which phase sections are active and which docs get created.
+Archetypes are composable (a project can be both "product" and "design-system"). The selection determines which phase sections are active, which enforcement rules fire, and which docs get created.
 
 ### Shared References
 Repo-root files that all skills and subagents read:

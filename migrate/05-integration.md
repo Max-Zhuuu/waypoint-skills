@@ -40,10 +40,7 @@ At minimum, add smoke tests that hit each real endpoint and verify it returns th
 
 ### When API doesn't match
 
-Apply the resolution cascade:
-1. **Source code validation** - check the API implementation. Is mock wrong or API wrong?
-2. **Test case validation** - write a test that proves which side is correct.
-3. **Human validation** - escalate with specifics if ambiguous.
+Apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade).
 
 Then:
 - API wrong: file bug with backend, document in QUESTIONS.md, keep mock as fallback

@@ -37,11 +37,7 @@ Read the ## Flags section from the feature spec. Each flag is a structured discr
 
 ### 2. Resolve each flag
 
-For each flag, apply the resolution cascade:
-
-1. **Source code validation** - check the authoritative source. Is the spec wrong, or the build wrong?
-2. **Test case validation** - run or write a test that proves which side is correct.
-3. **Human validation** - escalate with specifics only if source and tests are ambiguous.
+For each flag, apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade).
 
 Resolution outcomes:
 - **Spec was wrong** - update the spec, add Change Log entry

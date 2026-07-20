@@ -119,10 +119,4 @@ The archetype sets the starting ceremony level. Reality adjusts it.
 
 ## Resolution cascade
 
-When a checkpoint finds a mismatch (spec vs code, spec vs API, spec vs source):
-
-1. **Source code validation** - read the authoritative source for ground truth.
-2. **Test case validation** - write or run a test that proves which side is correct.
-3. **Human validation** - escalate with specifics if source and tests are ambiguous.
-
-Never skip to human validation without trying the first two.
+When a checkpoint finds a mismatch (spec vs code, spec vs API, spec vs source), apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade). Never skip to human validation without trying the first two steps.
