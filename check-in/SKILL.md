@@ -105,7 +105,7 @@ If a file referenced by an enforcement rule doesn't exist (docs/local/ is person
 
 When a missing file would be useful for the current workflow phase (e.g., QUESTIONS.md during integration work), mention it once in the report as awareness: "QUESTIONS.md doesn't exist yet - will be created when unknowns surface." Not a blocker, not repeated.
 
-See [project-setup/LOCAL-DOCS.md](../project-setup/LOCAL-DOCS.md) for the canonical file list and lazy creation rule.
+See [project-setup/LOCAL-DOCS-REFERENCE.md](../project-setup/LOCAL-DOCS-REFERENCE.md) for the canonical file list and lazy creation rule.
 
 ## Dynamic adaptation
 

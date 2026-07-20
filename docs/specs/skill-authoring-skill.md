@@ -54,9 +54,9 @@ The hybrid serves both audiences without over-constraining either.
 **Must-codify (high risk of getting wrong):**
 1. **Frontmatter contracts** - inputs/outputs/signals format and semantics
 2. **Authority model** - /check-in decides, verbs execute; new skills must not be their own authority
-3. **LIGHTWEIGHT.md protocol** - graceful degradation without /project-setup
+3. **LIGHTWEIGHT-REFERENCE.md protocol** - graceful degradation without /project-setup
 4. **Single-writer discipline** - only /wrapup writes to shared docs; skills create only their own output artifacts
-5. **Shared reference file pattern** - CONTEXT-FORMAT.md, ADR-FORMAT.md, LIGHTWEIGHT.md consumption
+5. **Shared reference file pattern** - CONTEXT-FORMAT.md, ADR-FORMAT.md, LIGHTWEIGHT-REFERENCE.md consumption
 
 **Should-codify (medium risk):**
 6. **AskUserQuestion conventions** - conversational fallback, learn-mode elaboration
@@ -79,7 +79,7 @@ Prioritization is by "would a skill author get this wrong without documentation.
 - **Standalone** (post-hoc): run the checklist against an existing skill file for audit
 
 Checklist items by verifiability:
-- Mechanically checkable: has frontmatter with required fields, references LIGHTWEIGHT.md, declares signals, plugin.json entry exists
+- Mechanically checkable: has frontmatter with required fields, references LIGHTWEIGHT-REFERENCE.md, declares signals, plugin.json entry exists
 - Agent judgment: tone consistency, single-writer discipline compliance, authority model adherence
 **Rationale:** Inline validation handles the authoring case.
 Standalone handles convention audits after the family evolves, and reviews of contributed skills.

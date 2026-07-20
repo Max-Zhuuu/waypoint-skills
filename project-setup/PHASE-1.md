@@ -104,11 +104,11 @@ docs/
       _TEMPLATE.md            # Logic doc template
   specs/                      # Feature specs via /spec
   improvements/               # UX improvement ideas (capture, don't implement)
-  local/                      # Gitignored - see LOCAL-DOCS.md for full structure
+  local/                      # Gitignored - see LOCAL-DOCS-REFERENCE.md for full structure
 ```
 
 The `docs/local/` structure scales with the project intake profile.
-See [LOCAL-DOCS.md](LOCAL-DOCS.md) for the canonical file list, formats, scaling rules, and which skills own each file.
+See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical file list, formats, scaling rules, and which skills own each file.
 
 ## Spec templates
 

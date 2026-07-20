@@ -30,9 +30,9 @@ After the first notice, the marker is written and the prompt never repeats.
 **Decision:** /tdd, /spec, /diagnose, /grill-me, /grill-with-docs, /learn, /improve-codebase-architecture all work without scaffolding.
 **Rationale:** Every one has a self-contained core loop. Scaffolding adds domain awareness and cross-referencing, not core behavior. /grill-me already has zero scaffolding dependencies.
 
-### D5: Shared protocol file (LIGHTWEIGHT.md)
-**Decision:** Single LIGHTWEIGHT.md at the skill family root, referenced by each skill with one line: "If scaffolding is missing, follow [LIGHTWEIGHT.md](../LIGHTWEIGHT.md)."
-Follows the same pattern as CONTEXT-FORMAT.md and ADR-FORMAT.md - shared protocol file, multiple consumers.
+### D5: Shared protocol file (LIGHTWEIGHT-REFERENCE.md)
+**Decision:** Single LIGHTWEIGHT-REFERENCE.md at the skill family root, referenced by each skill with one line: "If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md)."
+Follows the `-REFERENCE` naming class for skill-internal docs (see conventions-architecture D6).
 **Contents:**
 1. Detection logic (which files to check, in what order)
 2. One-line notice template
@@ -59,8 +59,8 @@ Follows the same pattern as CONTEXT-FORMAT.md and ADR-FORMAT.md - shared protoco
 2. **Lazy file creation** (skill creates CONTEXT.md or docs/adr/) - inline note: "Created CONTEXT.md. Run /project-setup to build the full docs tree."
 **Rationale:** Counting invocations across sessions is fragile. Stateless file-existence checks are simpler and more robust.
 
-### D8: LIGHTWEIGHT.md owns the upgrade path
-**Decision:** The mapping from usage patterns to setup recommendations lives in LIGHTWEIGHT.md, not in individual skills.
+### D8: LIGHTWEIGHT-REFERENCE.md owns the upgrade path
+**Decision:** The mapping from usage patterns to setup recommendations lives in LIGHTWEIGHT-REFERENCE.md, not in individual skills.
 **Rationale:** Skills should call the protocol, not decide when or how to nudge. Centralizes the upgrade UX in one place.
 
 ### D9: No lazy scaffolding
@@ -97,4 +97,4 @@ Temporal queries via `grep -l "status: In Progress" docs/implementation/specs/`.
 ### D12: /create survives as the loop orchestrator
 **Decision:** /create's value is sequencing spec -> build -> wrapup as a single session workflow, not low ceremony.
 Lightweight entry points are "I just want to run /tdd right now." /create is "I want to add one feature, start to finish."
-Different intents, both valid. No changes needed to /create - it gets the LIGHTWEIGHT.md reference like everything else.
+Different intents, both valid. No changes needed to /create - it gets the LIGHTWEIGHT-REFERENCE.md reference like everything else.

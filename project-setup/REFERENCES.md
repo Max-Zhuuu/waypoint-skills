@@ -127,4 +127,4 @@ Adapt the hook for the project:
 
 ## Local Docs Reference
 
-See [LOCAL-DOCS.md](LOCAL-DOCS.md) for the canonical docs/local/ structure, file formats, scaling rules, and which skills own each file.
+See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical docs/local/ structure, file formats, scaling rules, and which skills own each file.

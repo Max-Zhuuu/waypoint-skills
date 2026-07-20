@@ -43,6 +43,14 @@ SUPPORTING (invoked by checkpoints, other skills, or directly)
   /grill-me             Open-ended interview on any plan or decision
 ```
 
+## Design Keywords
+
+Three anchoring properties that shape how the skill family behaves:
+
+- **Memoized** - decisions are persisted in CLAUDE.md. Re-running /project-setup doesn't re-ask answered questions. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already handled.
+- **Reentrant** - /project-setup can be re-run at any time. It reads current state, detects what exists, and only asks about what's new or changed. Tier transitions, convention upgrades, and workflow changes are all re-entry, not fresh setup.
+- **Self-healing** - when a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in flags map entries pointing to missing files. Scope creep across concurrent sessions triggers /reorient suggestions.
+
 ## Two-Layer Model
 
 The skill family operates at two layers:
@@ -124,6 +132,12 @@ Repo-root files that all skills and subagents read:
 - **TESTING.md** - test expectations by complexity tier (seeded Phase 1, refined Phase 3)
 - **CONTEXT.md** - domain glossary (updated whenever terms are resolved)
 
+### Naming Classes
+Skill-internal files follow a suffix taxonomy:
+- `FOO.md` - user-facing project doc (CONVENTIONS.md, CONTEXT.md, SCOPE.md)
+- `FOO-REFERENCE.md` - skill-internal doc that informs skill behavior, surfaced to users during uncertainty
+- `FOO-FORMAT.md` - format template for user-facing docs (CONTEXT-FORMAT.md, ADR-FORMAT.md)
+
 ## Phase Overview
 
 ### Migration (/migrate)
@@ -179,4 +193,4 @@ Handoff format: `{date}-{slug}.md` with frontmatter `status: requested | in-prog
 ## Local Documentation
 
 `docs/local/` is the gitignored working state that tracks what's happening right now - questions, assumptions, audits, handoffs, and learning artifacts.
-Canonical reference: [project-setup/LOCAL-DOCS.md](project-setup/LOCAL-DOCS.md) (file list, formats, scaling rules, ownership).
+Canonical reference: [project-setup/LOCAL-DOCS-REFERENCE.md](project-setup/LOCAL-DOCS-REFERENCE.md) (file list, formats, scaling rules, ownership).
