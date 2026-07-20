@@ -31,10 +31,24 @@ Add a `## Source System` section to SCOPE.md:
 
 ### Parity decision
 
-- 1:1 port or redesign? If redesign: what changes and why?
-- Strangler fig (incremental) or big-bang (full rewrite, cutover)?
-- Reference: Fowler's Strangler Fig - build new alongside old, route traffic gradually.
-- Reference: Spolsky's rewrite warning - old code embodies years of bug fixes.
+Two sequential AskUserQuestion gates:
+
+**Q1: "What's the migration strategy?"**
+- **1:1 parity port (Recommended)** - replicate source behavior exactly, improve later in Phase 6b
+- **Selective redesign** - port core, redesign specific areas (user lists which areas and why)
+- **Full redesign** - new UX informed by old, not constrained by it
+
+**Q2: "What's the cutover approach?"**
+- **Strangler fig (Recommended)** - incremental, run both systems, shift traffic gradually
+- **Big-bang** - build everything, cut over at once
+- **Parallel run** - both systems live, compare output, switch when confident
+
+If the combination creates tension (e.g., full redesign + strangler fig), note it conversationally after both answers - don't filter options.
+
+Store both answers in SCOPE.md `## Source System` section.
+
+Reference: Fowler's Strangler Fig - build new alongside old, route traffic gradually.
+Reference: Spolsky's rewrite warning - old code embodies years of bug fixes.
 
 ### What NOT to build
 
@@ -92,10 +106,13 @@ When a gate can't pass because an earlier-phase decision is invalidated:
 
 ### Gate override
 
-If the implementer wants to skip a gate item:
-- State which item and why
-- Document in `docs/adr/` as a decision
-- /check-in notes this and reminds at the next gate
+If the implementer wants to skip a gate item, gate with AskUserQuestion:
+
+**"Skip gate item: {item}. This will be tracked in ADR and surfaced at next gate."**
+- **Yes, skip and document** - create ADR with rationale, /check-in reminds at next gate
+- **No, let me address it first** - return to the blocking item
+
+The friction is intentional. Single-select.
 
 ## References
 

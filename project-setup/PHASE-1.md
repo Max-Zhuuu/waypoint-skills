@@ -6,16 +6,13 @@ Read by `/project-setup` when Phase 1 work is needed.
 
 Invoke `/grill-with-docs` for each decision that meets the ADR threshold (hard to reverse, surprising without context, real trade-off). For obvious stack choices that don't warrant an ADR, document them in ARCHITECTURE.md directly.
 
-Decisions to make (adapt to the project):
+Assemble 6-8 relevant architecture areas from the catalog in [REFERENCES.md](REFERENCES.md#architecture-decision-catalog) based on Phase 0 context. Mark 4 as Recommended using the project-type mapping in the catalog.
 
-1. **Component architecture** - layout patterns, view composition, shared vs local components
-2. **State management** - store vs composable/hook vs component-local vs URL state
-3. **Data fetching** - where fetch calls live, caching, loading/error/empty states
-4. **Routing** - URL structure, navigation model, deep links
-5. **Styling** - tokens/variables, component styling approach, responsive strategy
-6. **Testing** - layers, minimum bar, structural enforcement
-7. **Error handling** - user-facing errors, logging, recovery
-8. **Mock data strategy** - structure, location, replacement path to real API
+Present via AskUserQuestion (multiSelect: true):
+
+**"Which architecture areas need decisions?"** (select all that apply)
+
+Adapt descriptions to the project profile per the catalog's adaptation rules. Unselected areas can be deferred to Phase 3 (surfaced by /check-in as pre-build checkpoint items) or skipped entirely.
 
 ## Naming conventions
 
@@ -43,7 +40,16 @@ These patterns are validated in Phase 3 (vertical slice) by the implementation v
 
 ## Testing template
 
-Generate a `TESTING.md` at the repo root. Seed with test expectations by complexity tier. One example per pattern type:
+Before generating TESTING.md, ask via AskUserQuestion:
+
+**"What's your testing approach?"**
+- **Integration-first (Recommended)** - test user workflows end-to-end, unit test complex logic only
+- **TDD** - test-first for all features, high unit coverage
+- **Structural enforcement** - automated convention checks, smoke tests, minimal unit tests
+
+Store as `testing-philosophy: integration-first | tdd | structural-enforcement` in SCOPE.md frontmatter. This sets the default stance - Phase 3 refines from real patterns, /project-setup resume path allows revisiting.
+
+Generate a `TESTING.md` at the repo root. Seed with test expectations by complexity tier, emphasizing the chosen philosophy. One example per pattern type:
 
 - **Smoke test** - does it render without crashing?
 - **Structural enforcement** - do conventions hold across the codebase?
@@ -133,7 +139,9 @@ Document the tier structure. Example:
 - `beta` - integration testing
 - Feature branches off `beta`, merged back via PR
 
-### Design Exploration Policy
+### Design Exploration Policy (design-system archetype only)
+Skip this section and Design Archival if no design-system archetype is selected.
+
 Isolated design experimentation is allowed on separate branches (worktree or design branch) that do not tie into production components. Guardrails:
 - Time-boxed: set a limit before starting, stop when it hits
 - Critically questioned: is this for user benefit and grounded in domain truth, or just modern UX cloning that doesn't respect the domain?

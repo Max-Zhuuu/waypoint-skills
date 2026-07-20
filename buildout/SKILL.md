@@ -42,6 +42,15 @@ Archetypes are composable - a project can be both "product" and "design-system."
 No selection = core enforcement rules only + /check-in adapts dynamically.
 The user can change archetypes mid-project without re-running setup.
 
+After archetypes, ask via AskUserQuestion:
+
+**"What ship standard does this project need?"**
+- **Hobby/side project** - deployed, README, no crashes on happy path
+- **Has real users (Recommended)** - pipeline, error handling, persistence, someone else used it
+- **May grow** - monitoring, perf, security, v2 scope
+
+Store as `ship-tier: hobby | users | growth` in SCOPE.md frontmatter. Phase 4 re-confirms before ship checklist.
+
 ## Phase overview
 
 After setup, `/check-in` reads these phase files. Archetypes control which phases and enforcement rules are active:

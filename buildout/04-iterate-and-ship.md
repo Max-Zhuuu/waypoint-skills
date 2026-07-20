@@ -70,7 +70,13 @@ Design refinement during Phase 4 is feedback-driven, not sweep-driven. Feedback 
 
 ### Ship checklist
 
-Scale to the project:
+Re-confirm the ship tier set during /buildout setup via AskUserQuestion:
+
+**"You set this as '{tier}' tier. Still right?"**
+- **Yes, {current tier}**
+- **Change to {other tiers}**
+
+Then apply the checklist for the confirmed tier:
 
 **For hobby/side projects:**
 - [ ] Deployed somewhere accessible

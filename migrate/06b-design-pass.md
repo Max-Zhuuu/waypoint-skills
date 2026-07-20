@@ -49,7 +49,7 @@ The chosen skill owns the methodology. This phase file owns the acceptance crite
 
 ### Process (what to do)
 
-1. **Triage** - review all items in docs/improvements/. Classify each by scope (token/component/page) and impact.
+1. **Triage** - review all items in docs/improvements/. Classify each by scope (token/component/page) and impact. After triage, present the prioritized list grouped by tier and gate with AskUserQuestion: **"Build in this order?"** Accept or adjust. Tier ordering is prescribed (token -> component -> page); priority within tiers is the user's call.
 2. **Research** - for component-level and page-level improvements, research comparable solutions before building. Token-level changes can proceed directly.
 3. **Build** - invoke chosen methodology skill. Work top-down (page flow before component behavior before micro-polish).
 4. **Validate** - verify no functional regressions (re-run 6a spot checks on modified screens).

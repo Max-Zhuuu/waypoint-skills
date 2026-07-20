@@ -26,7 +26,11 @@ This is the most important gate. Skipping it means discovering broken patterns a
 2. **Medium** - relationships, conditional logic, tabs. Tests: state management, composition, navigation.
 3. **Complex** - most fields, most rules, most integrations. Tests: performance, edge cases, pattern limits.
 
-Present picks and justify why these 3 cover the architecture.
+Present picks with justification, then gate with AskUserQuestion:
+
+**"Confirm vertical slice picks?"**
+- **Accept these 3** - proceed with the proposed screens
+- **I want to adjust** - drop to chat, user modifies picks, re-present after adjustment
 
 ### Build end-to-end
 

@@ -1,7 +1,45 @@
 # Project Setup References
 
-Hook templates and infrastructure patterns for `/project-setup` Phase 1.
-This file grows as new hooks and coordination mechanisms are developed.
+Reference material for `/project-setup` Phase 1.
+This file grows as new architecture areas, hooks, and coordination mechanisms are developed.
+
+## Architecture Decision Catalog
+
+Areas available for the G4 gate (multiSelect AskUserQuestion in PHASE-1.md). The agent assembles 6-8 relevant areas based on Phase 0 context and marks 4 as Recommended. Descriptions adapt to the project profile.
+
+| Area | Base description | Surfaces when |
+|------|-----------------|---------------|
+| Component architecture | Layout patterns, view composition, shared vs local | UI layer detected |
+| State management | Store vs composable vs component-local vs URL state | Always (universal) |
+| Data fetching | Where fetch calls live, caching, loading/error/empty | External data source |
+| Routing | URL structure, navigation model, deep links | UI layer with navigation |
+| Styling | Tokens/variables, component styling, responsive strategy | UI layer detected |
+| Testing | Layers, minimum bar, structural enforcement | Always (universal) |
+| Error handling | User-facing errors, logging, recovery | Always (universal) |
+| Mock data strategy | Structure, location, replacement path to real API | API dependency exists |
+| Data modeling | Entity relationships, normalization, constraints, schema | Domain entities detected |
+| Validation strategy | Where rules live (boundary, domain, DB), composition | User input or business rules |
+| Algorithm / computation | Pure vs stateful, streaming vs batch, precision | Computational logic detected |
+| Concurrency model | Async patterns, workers, queues, race conditions | Parallel processing needed |
+| Observability | Logging strategy, metrics, tracing, alerting | Production service |
+| API design | Contract shape, versioning, error format, auth model | Producing an API |
+| Security model | Auth, authorization, input sanitization, secrets | User-facing or multi-tenant |
+
+### Description adaptation
+
+Base descriptions are starting points. The agent rewrites them to match the project's Phase 0 profile:
+- "Error handling" for a CLI: "Exit codes, user-facing error messages, graceful failure on malformed input"
+- "Error handling" for a pipeline: "Retry policies, dead letter queues, partial failure recovery"
+- "State management" for a pipeline: "Pipeline state, checkpointing, resume-from-failure"
+
+### Recommended marks by project type
+
+Agent infers from Phase 0 scoping grill answers:
+- **UI layer detected:** Component architecture, State management, Data fetching, Testing
+- **Backend service:** Data modeling, Validation strategy, API design, Testing
+- **Data pipeline:** Data modeling, Concurrency model, Error handling, Observability
+- **CLI tool:** Error handling, Testing (only 2 recommended - light ceremony)
+- **Full-stack product:** Component architecture, State management, Data modeling, Security model
 
 ## Hook Catalog
 
