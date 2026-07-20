@@ -16,7 +16,7 @@ Created 2026-07-19. Survives compaction.
 
 These are NOT additional AskUserQuestion options (that would clutter every gate). They are behavioral: if the user selects "Other" and types something conversational, the agent treats it as "let me think about this." If the user explicitly asks for more context or says "explain," the agent invokes learn-mode depth.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 **Context bloat mitigation:** When learn-mode fires mid-gate, scope the elaboration to the specific decision. Don't elaborate all options - only the ones the user asks about. Cap at one terms block + one further reading link. Re-present the AskUserQuestion after elaboration, not a second elaboration.
 
@@ -33,7 +33,7 @@ Implementation:
 - **Cascade warning:** when a change has downstream effects on files with content, warn with specific impact before confirming. Intentional friction on destructive cascades.
 - **Spec requirement:** a resume-path spec doc must be generated during /project-setup that maps each decision to: canonical location, AskUserQuestion shape, edit operations per choice, cascade effects. This is the agent's instruction set for the resume path - without it, the agent flails.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### M3: Resolution cascade deduplication
 
@@ -41,7 +41,7 @@ Implementation:
 
 **Decision:** Define once in README.md under "Key Concepts > Resolution Cascade" (already the most complete version at lines 89-94). Replace inline definitions in check-in, wrapup, and integration with a one-liner reference: "Apply the resolution cascade (see README.md)."
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### M4: README.md staleness
 
@@ -52,7 +52,7 @@ Implementation:
 
 **Decision:** Fix all three. No separate doc needed - the fixes are mechanical (bring README current with existing skill files). The spec doc you're reading is the record of what and why.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ---
 
@@ -77,7 +77,7 @@ Q2: "What's the cutover approach?"
 Both questions stand independently. If the combination creates tension (e.g., full redesign + strangler fig), the agent notes it conversationally after both answers - doesn't filter or restrict options.
 
 **Store:** SCOPE.md ## Source System section
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G2: Vertical slice picks gate
 
@@ -93,7 +93,7 @@ Single-select, not multiSelect. The agent's job is to propose well; the user's j
 
 Re-present AskUserQuestion after conversational detour per M1 pattern.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G3: Ship checklist tier
 
@@ -108,7 +108,7 @@ Re-present AskUserQuestion after conversational detour per M1 pattern.
 
 **Store:** SCOPE.md frontmatter as `ship-tier: hobby | users | growth`
 **Timing:** Ask during /buildout setup for initial calibration. Phase 4 ship checklist re-confirms: "You set this as '{tier}' tier. Still right?" Quick single-select, no ceremony.
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G4: Architecture decision relevance
 
@@ -132,7 +132,7 @@ Catalog areas: Component architecture, State management, Data fetching, Routing,
 
 4 areas marked Recommended based on project type. Unselected areas can be deferred to Phase 3 (surfaced by /check-in as pre-build checkpoint items) or skipped entirely.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G5: Testing philosophy
 
@@ -148,7 +148,7 @@ Catalog areas: Component architecture, State management, Data fetching, Routing,
 Single-select sets the default stance - shapes TESTING.md emphasis and /check-in checkpoint language. Not a contract: Phase 3 vertical slice refines from real patterns, /project-setup resume path (M2) allows revisiting. The philosophy is a seed, not a binding choice.
 
 **Store:** SCOPE.md frontmatter as `testing-philosophy: integration-first | tdd | structural-enforcement`
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G6: Documentation depth confirmation
 
@@ -156,7 +156,7 @@ Single-select sets the default stance - shapes TESTING.md emphasis and /check-in
 **Current state:** Tree prescribed by archetype, no confirmation
 **Decision:** No AskUserQuestion gate. The archetype selection already determines the tree - a confirmation gate on a derived output adds friction without signal. Instead: print the generated tree as a summary and say "Adjust if needed." No structured question, no blocking. The user redirects organically if something's wrong.
 
-**Status:** DECIDED (killed as gate, kept as summary)
+**Status:** IMPLEMENTED (killed as gate, kept as summary)
 
 ### G7: Design branch policy
 
@@ -164,7 +164,7 @@ Single-select sets the default stance - shapes TESTING.md emphasis and /check-in
 **Current state:** Always generated into CLAUDE.md
 **Decision:** Conditional on design-system archetype. No AskUserQuestion - the archetype is the gate. If design-system archetype is added later via M2 resume path, sections get added. If removed, sections get removed (with cascade warning if design-journal.md has content).
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G8: Gate override confirmation
 
@@ -178,7 +178,7 @@ Single-select sets the default stance - shapes TESTING.md emphasis and /check-in
 
 Single-select. The friction is the feature.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### G9: Integration order
 
@@ -186,7 +186,7 @@ Single-select. The friction is the feature.
 **Current state:** No ordering guidance
 **Decision:** No AskUserQuestion gate. Integration order is heavily constrained by API availability - not a meaningful choice point. Instead: sharpen 05-integration.md with an ordering heuristic (dependencies first, then by API readiness), print proposed order as summary. User redirects organically if needed.
 
-**Status:** DECIDED (killed as gate, kept as summary)
+**Status:** IMPLEMENTED (killed as gate, kept as summary)
 
 ### G10: 6b improvement triage
 
@@ -194,7 +194,7 @@ Single-select. The friction is the feature.
 **Current state:** Triage happens, build order not confirmed
 **Decision:** Keep as gate. After triage, present prioritized list grouped by tier (token -> component -> page) and gate with AskUserQuestion: "Build in this order?" Same propose-confirm pattern as G2. Tiers are prescribed by the phase file's top-down ordering; priority within tiers is the user's call.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ---
 
@@ -206,7 +206,7 @@ Single-select. The friction is the feature.
 
 **Decision:** Enforce the 4-field format literally in every checkpoint across all phase files. Consistency isn't cosmetic - the agent reads these fields to fire checkpoints. Drifted format forces prose interpretation instead of structure parsing. Mechanical fix across all phase files.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### S2: "Suggest /wrapup" consolidation
 
@@ -214,7 +214,7 @@ Single-select. The friction is the feature.
 
 **Decision:** Every verb that suggests /wrapup declares it in frontmatter `signals: [complete: suggests /wrapup]`. Phase files reference the signal ("verb reports complete per its signals contract") instead of spelling out the behavior. Follow the pattern /port established.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
 
 ### S3: migrate/07-cutover.md expansion
 
@@ -222,4 +222,4 @@ Single-select. The friction is the feature.
 
 **Decision:** Expand to match the structural skeleton of all other phase files. Checkpoints (4-field format per S1): pre-cutover readiness check (verify all prior gates passed), post-cutover validation (verify production behavior). Process sections: deployment plan, communication plan, monitoring plan, rollback criteria. Gate: deployed + monitoring confirms parity + rollback tested + sunset date set. Content stays lightweight - structure ensures nothing gets skipped, details are project-specific.
 
-**Status:** DECIDED
+**Status:** IMPLEMENTED
