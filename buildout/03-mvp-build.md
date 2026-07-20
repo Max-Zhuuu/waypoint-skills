@@ -61,7 +61,7 @@ Order by dependency chain, then by risk.
 
 ### Concurrency
 
-If working with multiple agents, each agent claims features in `docs/local/ACTIVE-WORK.md`. No two agents build the same feature. Each agent reads the spec before building.
+If working with multiple agents, each agent claims features in `docs/local/ACTIVE-WORK.md` (see [project-setup/REFERENCES.md](../project-setup/REFERENCES.md#hook-catalog) for setup). No two agents build the same feature. Each agent reads the spec before building.
 
 ## When to stop
 

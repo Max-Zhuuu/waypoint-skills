@@ -158,7 +158,7 @@ Tags are diff-able (`git diff design/01..design/02`), restorable (`git checkout 
 ### Agent Coordination
 - Task brief template: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
 - When to use workflows vs parallel agents vs inline subagents
-- Concurrent agent protocol (ACTIVE-WORK tracker, file claiming, stale entry policy)
+- Concurrent agent protocol (ACTIVE-WORK tracker, file claiming, stale entry policy) - wired by the "Concurrent agent coordination" step below
 
 ### Change Protocol
 1. When a dependency changes: update spec first, then code. Never code without updating spec.
@@ -171,3 +171,14 @@ Identify which rules need hooks (deterministic enforcement) vs CLAUDE.md (adviso
 - Advisory: template compliance, brief format, documentation currency
 
 Generate project-specific hooks where identified.
+
+### Concurrent agent coordination (strongly recommended)
+
+After CLAUDE.md is generated, ask via `AskUserQuestion` (multiSelect: true):
+
+**Which hooks do you want to set up?**
+- **ACTIVE-WORK tracker (Recommended)** - UserPromptSubmit hook that injects concurrent agent tracker into every prompt. Prevents file conflicts when multiple sessions modify the codebase simultaneously.
+- **I have other hooks I want to set up** - Describe additional hooks to wire. Each gets added to `.claude/settings.json` and templated in [REFERENCES.md](REFERENCES.md#hook-catalog) for future projects.
+
+If ACTIVE-WORK is selected, follow the "Concurrent Agent Coordination" template in [REFERENCES.md](REFERENCES.md#hook-catalog).
+If other hooks is selected, grill the user on each additional hook: what event triggers it, what it checks or injects, and what the failure mode looks like. Add each to the Hook Catalog in REFERENCES.md.
