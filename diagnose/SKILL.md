@@ -130,12 +130,7 @@ List the domain terms, framework concepts, and language/platform mechanics that 
 
 ### Further reading
 
-2-3 curated links on the root cause mechanism. Source trust rules:
-
-- **Prefer**: official specs (W3C, TC39), platform references (MDN), framework docs (vuejs.org, vitejs.dev)
-- **Allow**: web.dev, CSS-Tricks "Complete Guide" series, Josh Comeau, Lea Verou, Ahmad Shadeed, Smashing Magazine
-- **Never**: tutorial farms (w3schools, tutorialspoint, geeksforgeeks), SEO rewrites, AI-generated aggregators, stale URLs you're not confident about
-
+2-3 curated links on the root cause mechanism. See [learn/REFERENCES.md](../learn/REFERENCES.md#source-trust-tiers) for source trust tiers.
 Omit the section entirely if the root cause is project-specific and no external resource adds value.
 
 ### Quiz (opt-in)
