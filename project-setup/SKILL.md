@@ -51,10 +51,11 @@ After Phase 1 gate passes, print an adaptive completion message. Read SCOPE.md a
 Setup complete. You described migrating from {system name}.
   -> /migrate - sets up parity tracking, spec extraction from the source,
      and a phased plan to replace it screen by screen
-  -> or invoke /spec, /tdd, /port directly if you already know what to build
 
-If this isn't a migration, /buildout structures a fresh product with
-prioritized features and an MVP-first build cycle.
+Other options:
+  -> /create  - add specific features without the full migration workflow
+  -> /buildout - structure a new product with prioritized features and
+     an MVP-first build cycle
 
 Next session: run /check-in to orient and pick up where you left off.
 ```
@@ -65,7 +66,8 @@ Next session: run /check-in to orient and pick up where you left off.
 Setup complete. Ready to start building.
   -> /buildout - structures the work into prioritized features, builds
      an MVP first, then iterates with user feedback
-  -> or invoke /spec, /tdd directly if you already know what to build
+  -> /create  - add a feature or small batch of features with light
+     structure (spec, build, wrapup - no phases or inventory)
 
 If you're replacing an existing system, /migrate sets up parity tracking
 and phased replacement instead.

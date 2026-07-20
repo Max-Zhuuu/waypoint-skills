@@ -17,10 +17,10 @@ Does NOT implement. Does NOT update docs (that's /wrapup). Proposes work, then a
 
 ## On invocation
 
-1. Detect project type: look for archetype markers in SCOPE.md frontmatter.
-2. Detect current phase from inventory markers, docs, git history.
-3. Read the current phase file (from the appropriate skill folder).
-4. Collect enforcement inputs from the project's SKILL.md (migrate or buildout).
+1. Read `## Active Workflow` section from CLAUDE.md. This tells you the active skill (/migrate, /buildout, or /create), current phase, and activation date.
+2. If no workflow record exists: detect project type from SCOPE.md frontmatter (archetype markers, parity-strategy). Recommend the user run /migrate, /buildout, or /create to set one.
+3. Read the current phase file (from the workflow skill's folder). For /create, there are no phase files - just check for pending specs and unresolved flags.
+4. Collect enforcement inputs from the workflow skill's SKILL.md.
 5. Check for unresolved ## Flags sections in feature specs (deferred /wrapup work).
 6. Apply priority stack to propose next task.
 7. Report state, then propose.

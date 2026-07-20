@@ -9,12 +9,19 @@ Three layers: setup the project, check in every session, build with the right ve
 SETUP (run once per project)
   /project-setup        Foundation: architecture, docs, CLAUDE.md, templates,
                         CONVENTIONS.md, TESTING.md
-    -> /migrate         Configure as migration (source system, parity gates, inventory)
-    -> /buildout        Configure as greenfield (intake: scope/validation/design profile)
+
+WORKFLOW (pick one - writes Active Workflow record to CLAUDE.md)
+  /migrate              Replace an existing system screen by screen
+                        (parity tracking, inventory, phased cutover)
+  /buildout             Build a new product from scratch
+                        (MoSCoW prioritization, MVP-first, feedback rounds)
+  /create               Add features to an existing codebase
+                        (spec, build, wrapup - no phases or inventory)
 
 SESSION (run every time you sit down)
-  /check-in             Orient, propose next task, fire checkpoints, update inventory
-    reads:              Phase files from /migrate or /buildout
+  /check-in             Orient, propose next task, fire checkpoints
+    reads:              Active Workflow record in CLAUDE.md
+                        Phase files from /migrate or /buildout (if active)
                         PROGRESS-AUDIT.md from /reorient
                         ACTIVE-WORK.md, inventory, CONVENTIONS.md, TESTING.md
     fires:              Pre-build checkpoint (load references, verify spec exists)
@@ -22,20 +29,16 @@ SESSION (run every time you sit down)
     invokes:            /reorient when drift detected (same phase 2+ weeks, stale questions)
 
 IMPLEMENTATION (the building verbs)
-  /tdd                  Greenfield: define desired behavior, test first, build to satisfy
+  /tdd                  Define desired behavior, test first, build to satisfy
   /port                 Migration: capture current behavior, replicate, verify parity
 
 SUPPORTING (invoked by checkpoints, other skills, or directly)
   /spec                 Grill requirements, output spec file
-                        Hard prerequisite in buildout, conditional in migration
+  /wrapup               Resolve flags, spec drift check, cascade to shared docs
   /grill-with-docs      Architecture decisions that meet the ADR threshold
-                        Hard at Phase 3 post-slice, conditional in Phases 4-5
   /reorient             Strategic course correction, axis audit, re-prioritize
-                        Invoked by /check-in on drift, or directly between sprints
   /learn                Trade-off exploration with options, terms, quiz
-                        Soft recommendation in early phases, user-driven later
   /prototype            Quick validation mockup
-                        Recommended for mature improvements entering design phase
   /diagnose             Debug a specific issue
   /grill-me             Open-ended interview on any plan or decision
 ```
@@ -44,7 +47,7 @@ SUPPORTING (invoked by checkpoints, other skills, or directly)
 
 The skill family operates at two layers:
 
-**Project layer** (multi-session work): `/project-setup` + `/buildout` or `/migrate` + `/check-in` + inventory + gates. Use when you need to track progress across sessions.
+**Project layer** (multi-session work): `/project-setup` + a workflow skill (`/migrate`, `/buildout`, or `/create`) + `/check-in`. Each workflow writes an Active Workflow record to CLAUDE.md so /check-in knows the context without guessing.
 
 **Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`. Self-contained verbs. Use directly for small work without project setup ceremony.
 

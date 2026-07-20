@@ -51,6 +51,27 @@ After archetypes, ask via AskUserQuestion:
 
 Store as `ship-tier: hobby | users | growth` in SCOPE.md frontmatter. Phase 4 re-confirms before ship checklist.
 
+## Workflow record
+
+Write the `## Active Workflow` section to CLAUDE.md:
+
+```markdown
+## Active Workflow
+
+| Field | Value |
+|-------|-------|
+| Skill | /buildout |
+| Activated | {date} |
+| Archetypes | {selected archetypes} |
+| Ship tier | {hobby / users / growth} |
+| Current phase | Phase 2 - Discovery & Validation |
+| Status | in progress |
+```
+
+/check-in reads this to know the workflow and current phase without guessing.
+Update `Current phase` each time a phase gate passes.
+When /buildout completes (Phase 4 gate), update Status to `completed ({date})`.
+
 ## Phase overview
 
 After setup, `/check-in` reads these phase files. Archetypes control which phases and enforcement rules are active:
@@ -65,6 +86,13 @@ After setup, `/check-in` reads these phase files. Archetypes control which phase
 "Reduced" = fewer checkpoints, lighter ceremony. "Focused" = Must features only, skip Should/Could. "Minimal" = ship checklist only, skip feedback rounds.
 Design system work fires after Phase 3 gate when "design-system" archetype is selected.
 /check-in uses this table as a starting point and adapts based on observed complexity.
+
+## Cross-references
+
+If the user's request doesn't fit /buildout, recommend alternatives:
+- Adding a feature to an existing codebase (not building a new product): recommend /create
+- Replacing an existing system: recommend /migrate
+- Quick single-feature work: recommend task-layer verbs directly (/spec + /tdd)
 
 ## Enforcement inputs
 

@@ -62,6 +62,28 @@ Create or verify the inventory tracker (e.g., `docs/inventory-plugins.md`) with 
 
 ## Phase overview
 
+### Workflow record
+
+Write the `## Active Workflow` section to CLAUDE.md:
+
+```markdown
+## Active Workflow
+
+| Field | Value |
+|-------|-------|
+| Skill | /migrate |
+| Activated | {date} |
+| Source system | {name from source system scoping} |
+| Current phase | Phase 2 - Documentation Sprint |
+| Status | in progress |
+```
+
+/check-in reads this to know the workflow and current phase without guessing.
+Update `Current phase` each time a phase gate passes.
+When /migrate completes (Phase 7 gate), update Status to `completed ({date})`.
+
+### Phases
+
 After setup, `/check-in` reads these phase files to manage daily work:
 
 | Phase | Name | File |
@@ -74,6 +96,13 @@ After setup, `/check-in` reads these phase files to manage daily work:
 | 6a | Functional validation | [06a-functional-validation.md](06a-functional-validation.md) |
 | 6b | Design pass | [06b-design-pass.md](06b-design-pass.md) |
 | 7 | Cutover | [07-cutover.md](07-cutover.md) |
+
+## Cross-references
+
+If the user's request doesn't fit /migrate, recommend alternatives:
+- Adding a feature to the migrated system (not replacing a source screen): recommend /create
+- Building something new with no source system: recommend /buildout
+- Quick single-feature work: recommend task-layer verbs directly (/spec + /tdd)
 
 ## Improvement capture rule
 
