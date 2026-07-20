@@ -8,7 +8,7 @@
 ## Problem
 
 CONVENTIONS.md is a single file that covers naming patterns.
-As the MZ skill family grows, project conventions expand beyond naming: decomposition preferences, testing philosophy, review standards, documentation structure.
+As the Waypoint skill family grows, project conventions expand beyond naming: decomposition preferences, testing philosophy, review standards, documentation structure.
 A single file becomes overloaded for large projects.
 
 The current shared reference file pattern (CONTEXT.md, CONVENTIONS.md, SCOPE.md, TESTING.md) treats each as a standalone document.
@@ -23,13 +23,14 @@ Some of these are really convention subtypes that could live under a unified con
 
 ## Design Keywords
 
-Three anchoring properties for the skill family, discovered during this grilling session:
+Four anchoring properties for the skill family, discovered and refined during grilling:
 
 - **Memoized** - /project-setup's decisions are persisted in CLAUDE.md. Re-running doesn't re-ask answered questions. The scaffold knows what it knows. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already resolved.
 - **Reentrant** - /project-setup can be re-run at any time. It reads current state from CLAUDE.md, detects what exists, and only asks about what's new or changed. Tier transitions (Moderate -> Large, Large -> Moderate) are just re-running /project-setup. Concurrent check-ins propose work in non-conflicting areas without re-asking.
 - **Self-healing** - If a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in or /project-setup notices and offers repair. Scope creep triggers /reorient suggestions. Documentation Map entries pointing to missing files are flagged.
+- **Bias to action** - When the answer is inferrable from the codebase, existing docs, or conventions, act on it. Propose the result; don't ask the question. AskUserQuestion is reserved for genuinely ambiguous forks where both paths are reasonable and the wrong choice wastes significant work. Skills adapt to existing documentation structure rather than demanding their own.
 
-These keywords should be documented in the family README as design anchors.
+These keywords are documented in the family README as design anchors.
 
 ## Decisions
 

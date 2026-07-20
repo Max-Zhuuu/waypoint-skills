@@ -6,7 +6,7 @@
 
 ## Problem
 
-The MZ skill family requires /project-setup before any verb skill works at full capacity.
+The Waypoint skill family requires /project-setup before any verb skill works at full capacity.
 Users who want to TDD a feature, spec a requirement, or diagnose a bug must first run a heavyweight scaffolding step.
 This creates adoption friction - rated C on adoption velocity in the strategic comparison.
 

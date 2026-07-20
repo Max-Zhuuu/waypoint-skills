@@ -1,4 +1,4 @@
-# Skills
+# Waypoint Skills
 
 A process toolkit for building software products with AI agents.
 Three layers: setup the project, check in every session, build with the right verb.
@@ -45,11 +45,12 @@ SUPPORTING (invoked by checkpoints, other skills, or directly)
 
 ## Design Keywords
 
-Three anchoring properties that shape how the skill family behaves:
+Four anchoring properties that shape how the skill family behaves:
 
 - **Memoized** - decisions are persisted in CLAUDE.md. Re-running /project-setup doesn't re-ask answered questions. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already handled.
 - **Reentrant** - /project-setup can be re-run at any time. It reads current state, detects what exists, and only asks about what's new or changed. Tier transitions, convention upgrades, and workflow changes are all re-entry, not fresh setup.
 - **Self-healing** - when a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in flags map entries pointing to missing files. Scope creep across concurrent sessions triggers /reorient suggestions.
+- **Bias to action** - when the answer is inferrable from the codebase, existing docs, or conventions, act on it. Propose the result; don't ask the question. AskUserQuestion is reserved for genuinely ambiguous forks where both paths are reasonable and the wrong choice wastes significant work. Skills should just work.
 
 ## Two-Layer Model
 

@@ -6,15 +6,15 @@
 
 ## Problem
 
-The MZ skill family has no issue tracker integration.
+The Waypoint skill family has no issue tracker integration.
 Implementation work is tracked in files (ACTIVE-WORK.md, specs, phase gates) but not where PMs and external collaborators look.
 /to-issues and /triage exist as installed skills but belong to the MP family and reference MP infrastructure (setup-matt-pocock-skills, ask-matt router).
 Two skill families with different conventions coexist in the same install.
 
 ## Decisions
 
-### D1: Absorb /to-issues and /triage into MZ family
-**Decision:** Fork, adapt to MZ conventions, maintain independently.
+### D1: Absorb /to-issues and /triage into Waypoint family
+**Decision:** Fork, adapt to Waypoint conventions, maintain independently.
 Both skills are small (84 and 104 lines).
 The adaptation surface is well-defined.
 **Rationale:** Keeping them as MP externals means convention mismatches and split mental models.
@@ -52,7 +52,7 @@ Same pattern as /create chaining spec -> build -> wrapup, and /diagnose recommen
 **Decision:** Do not absorb /to-prd.
 Remove it from the install.
 **Rationale:** /to-prd's value proposition is no-interview synthesis - "just write from context, don't grill."
-This conflicts with the MZ family's grill-first philosophy.
+This conflicts with the Waypoint family's grill-first philosophy.
 /grill-with-docs produces decision-rich specs; /spec produces formal specs with acceptance criteria.
 A no-interview synthesizer is the same kind of shallow shortcut that led to deleting the superpowers plugin.
 If context is fully resolved, /spec's grill is naturally short.
@@ -61,7 +61,7 @@ If context is fully resolved, /spec's grill is naturally short.
 **Decision:** No rename.
 /to-issues follows the "to-X" conversion pattern (verb: convert to).
 /triage is a well-understood action verb in software ("triage the backlog").
-**Rationale:** Both names are verb-oriented in practice, consistent with MZ conventions (/spec, /tdd, /diagnose).
+**Rationale:** Both names are verb-oriented in practice, consistent with Waypoint conventions (/spec, /tdd, /diagnose).
 Renaming adds churn without clarity.
 
 ### D7: No shared agent brief format
@@ -98,7 +98,7 @@ Local issues are shared implementation artifacts, not ephemeral scratch.
 
 ### D10: Field validation expected
 **Decision:** Implement with a light touch, expect one revision cycle after first use.
-All decisions are internally consistent with established MZ patterns and the lightweight-entry-points spec.
+All decisions are internally consistent with established Waypoint patterns and the lightweight-entry-points spec.
 Risk areas requiring field validation:
 - Decomposition UX (D8 quiz flow)
 - /triage-to-/check-in interface contract (D7)
