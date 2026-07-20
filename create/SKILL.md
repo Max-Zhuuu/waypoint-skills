@@ -2,6 +2,16 @@
 name: create
 description: Add features to an existing codebase. Lighter than /buildout, structured enough to ensure specs exist and docs stay current. Use when adding a feature or small batch of features to a project that already has docs and conventions.
 disable-model-invocation: true
+inputs:
+  scope-md: SCOPE.md (project context)
+  conventions-md: CONVENTIONS.md (naming patterns)
+  context-md: CONTEXT.md (domain glossary)
+outputs:
+  workflow-record: CLAUDE.md ## Active Workflow section updated
+  specs: feature specs for each feature via /spec
+  built-features: implemented via chosen verb
+signals:
+  complete: suggests /wrapup
 ---
 
 # Create

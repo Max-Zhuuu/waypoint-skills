@@ -2,6 +2,10 @@
 name: check-in
 description: Session authority. Detects project type and phase, proposes next task, fires checkpoints. The daily verb - use at every session start.
 disable-model-invocation: true
+inputs: {}
+outputs: {}
+signals:
+  proposes: implementation verb (/port, /tdd, or user-chosen methodology)
 ---
 
 # Check-in
