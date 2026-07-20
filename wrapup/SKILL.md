@@ -35,6 +35,28 @@ Read the ## Flags section from the feature spec. Each flag is a structured discr
 - Missing information discovered during build
 - Potential cascade to shared docs
 
+### 1.5. Spec drift check
+
+Re-read the entity's documentation and compare against what was actually built on disk.
+This catches discrepancies the implementation verb didn't flag - a documentation safety net, not a code review.
+
+**Feature spec** - check these sections against the built component:
+- Fields & Controls: is every declared field present? Any undeclared fields added?
+- Interaction Behaviors: do sortable/filterable/resizable declarations match?
+- Conditional Visibility: do show/hide rules match the implementation?
+- Navigation: do declared routes and links exist?
+
+**Logic doc** - check these sections against the built code:
+- Data Model: do field names, types, and nullability match?
+- Relationships: are declared entity references present?
+- Status Lifecycle: do transitions match the implementation?
+- Business Rules: are declared rules enforced?
+
+Any mismatch becomes a new flag, fed into step 2's normal resolution cascade.
+
+**If no feature spec or logic doc exists:** print "No {doc type} found for {entity}. Spec drift check skipped." and continue.
+Do not block - this preserves /wrapup's lightweight contract for task-layer usage without project ceremony.
+
 ### 2. Resolve each flag
 
 For each flag, apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade).

@@ -19,37 +19,22 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 During codebase exploration, also look for existing documentation:
 
-### File structure
+### Documentation landscape
 
-Most repos have a single context:
+Check what documentation structure exists before starting. Read the project's CLAUDE.md for the full layout.
 
-```
-/
-├── CONTEXT.md
-├── docs/
-│   └── adr/
-│       ├── 0001-event-sourced-orders.md
-│       └── 0002-postgres-for-write-model.md
-└── src/
-```
+**Always look for:**
+- `CONTEXT.md` (or `CONTEXT-MAP.md` for multi-context repos) - domain glossary
+- `docs/adr/` - architecture decision records
+- `SCOPE.md` - what's in, out, uncertain
+- `CONVENTIONS.md` - naming patterns
+- `DEPENDENCIES.md` - external system status
+- `TESTING.md` - test expectations
+- `docs/reference/features/` and `docs/reference/logic/` - per-entity specs
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
-
-```
-/
-├── CONTEXT-MAP.md
-├── docs/
-│   └── adr/                          ← system-wide decisions
-├── src/
-│   ├── ordering/
-│   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
-│   └── billing/
-│       ├── CONTEXT.md
-│       └── docs/adr/
-```
-
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+If none of these exist, create files lazily - only when you have something to write.
+If `CONTEXT.md` doesn't exist, create one when the first term is resolved.
+If `docs/adr/` doesn't exist, create it when the first ADR is needed.
 
 ## During the session
 
@@ -74,6 +59,17 @@ When the user states how something works, check whether the code agrees. If you 
 When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
 `CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+
+### Cascade to other project docs
+
+When a grill decision affects project-wide docs beyond CONTEXT.md, update them inline too:
+- New naming pattern resolved -> update CONVENTIONS.md
+- Scope changed (in/out/uncertain shifted) -> update SCOPE.md
+- Dependency status changed -> update DEPENDENCIES.md
+- Test expectations changed -> update TESTING.md
+- Entity-level decision -> update the entity's feature spec or logic doc if one exists
+
+Only cascade when the doc exists and the change is genuine. Don't create docs just to cascade into them.
 
 ### Offer ADRs sparingly
 

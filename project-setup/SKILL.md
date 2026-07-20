@@ -32,10 +32,42 @@ Missing: {list missing outputs}
 Picking up at {phase}.
 ```
 
-After either block, add one line:
+After the starting-fresh block, add one line:
 
 ```
-Related: /migrate (porting from existing system), /buildout (greenfield product), /spec (feature specs), /reorient (checkpoint)
+Related: /spec (feature specs), /grill-with-docs (architecture decisions), /reorient (checkpoint)
+```
+
+## On completion
+
+After Phase 1 gate passes, print an adaptive completion message. Read SCOPE.md and the Phase 0 conversation to determine which template to use.
+
+**If a source system was identified** (SCOPE.md repositories section mentions an existing system, or scope describes replacing/migrating from something):
+
+```
+Setup complete. You described migrating from {system name}.
+  -> /migrate - sets up parity tracking, spec extraction from the source,
+     and a phased plan to replace it screen by screen
+  -> or invoke /spec, /tdd, /port directly if you already know what to build
+
+If this isn't a migration, /buildout structures a fresh product with
+prioritized features and an MVP-first build cycle.
+
+Next session: run /check-in to orient and pick up where you left off.
+```
+
+**If no source system was identified:**
+
+```
+Setup complete. Ready to start building.
+  -> /buildout - structures the work into prioritized features, builds
+     an MVP first, then iterates with user feedback
+  -> or invoke /spec, /tdd directly if you already know what to build
+
+If you're replacing an existing system, /migrate sets up parity tracking
+and phased replacement instead.
+
+Next session: run /check-in to orient and pick up where you left off.
 ```
 
 ## Phase 0 - Discovery & Scoping
