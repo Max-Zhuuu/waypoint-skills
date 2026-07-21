@@ -107,11 +107,27 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 
 ### Claude Code
 
+**Plugin** (managed, auto-updates):
+
+```
+/plugin marketplace add max-zhu-bv/waypoint-skills
+/plugin install waypoint-skills@max-zhu-bv
+```
+
+Or from your shell:
+
+```bash
+claude plugin marketplace add max-zhu-bv/waypoint-skills
+claude plugin install waypoint-skills@max-zhu-bv
+```
+
+**skills.sh** (copies into your project, editable):
+
 ```bash
 npx skills add max-zhu-bv/waypoint-skills
 ```
 
-Invoke any skill directly:
+Either way, invoke any skill directly:
 
 ```
 /diagnose flaky-test

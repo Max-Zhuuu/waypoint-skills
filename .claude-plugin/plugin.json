@@ -1,0 +1,38 @@
+{
+  "name": "waypoint-skills",
+  "version": "1.0.0",
+  "description": "Structured methodologies for debugging, spec writing, TDD, project planning, and legacy migration. Process-first skills that work standalone or accumulate project context across sessions.",
+  "author": {
+    "name": "Max Zhu",
+    "url": "https://github.com/max-zhu-bv"
+  },
+  "repository": "https://github.com/max-zhu-bv/waypoint-skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "tdd",
+    "debugging",
+    "migration",
+    "project-management",
+    "spec-writing"
+  ],
+  "skills": [
+    "./diagnose",
+    "./spec",
+    "./tdd",
+    "./port",
+    "./grill-me",
+    "./grill-with-docs",
+    "./improve-codebase-architecture",
+    "./learn",
+    "./prototype",
+    "./create",
+    "./check-in",
+    "./wrapup",
+    "./reorient",
+    "./project-setup",
+    "./migrate",
+    "./buildout"
+  ]
+}
