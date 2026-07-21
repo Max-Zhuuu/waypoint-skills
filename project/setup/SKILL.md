@@ -125,7 +125,7 @@ Work through these categories. Skip any the implementer has already answered cle
 
 **CONCERNS.md** (docs/local/, gitignored):
 - Seed initial concerns from scoping: assumptions with risk/deadline, unresolved questions
-- Format: see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md)
+- Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md)
 
 **CONTEXT.md** (repo root, if not exists):
 - Seed with domain terms that surfaced during scoping

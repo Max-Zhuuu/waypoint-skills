@@ -58,7 +58,7 @@ What are you adding?
 ## Local docs
 
 /create does not eagerly scaffold docs/local/.
-When a question, assumption, or cross-boundary issue surfaces during work, create the relevant file using the format in [setup/LOCAL-DOCS-REFERENCE.md](../setup/LOCAL-DOCS-REFERENCE.md).
+When a question, assumption, or cross-boundary issue surfaces during work, create the relevant file using the format in [setup/LOCAL-DOCS-REFERENCE.md](../../project/setup/LOCAL-DOCS-REFERENCE.md).
 If the file already exists, append to it.
 
 ## Process

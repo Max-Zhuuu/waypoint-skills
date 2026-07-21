@@ -6,7 +6,7 @@ status: stable
 
 # Improve Codebase Architecture
 
-Follow the architecture review methodology in [process/architecture-review.md](../process/architecture-review.md).
+Follow the architecture review methodology in [process/architecture-review.md](../../process/architecture-review.md).
 Execute each phase using the tools available in this environment.
 
 ## Execution notes
@@ -37,8 +37,8 @@ For interface design alternatives, spawn 3+ parallel agents with different const
 See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for the sub-agent pattern.
 
 Side effects happen inline:
-- New domain term -> update CONTEXT.md (see grill-with-docs/CONTEXT-FORMAT.md).
-- Rejected candidate with load-bearing reason -> offer an ADR (see grill-with-docs/ADR-FORMAT.md).
+- New domain term -> update CONTEXT.md (see task/grill-with-docs/CONTEXT-FORMAT.md).
+- Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/ADR-FORMAT.md).
 
 ## Engagement
 

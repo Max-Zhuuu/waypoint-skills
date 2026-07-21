@@ -158,7 +158,7 @@ Everything below is for people who want to understand the internals - how skills
 Each skill has two layers:
 
 1. **Process document** (`process/*.md`) - the methodology, tool-agnostic. Works as a human checklist, a team playbook, or an AI instruction set.
-2. **Adapter** (`{skill}/SKILL.md` or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
+2. **Adapter** (`task/{skill}/SKILL.md`, `project/{skill}/SKILL.md`, or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
 
 | Process document | Methodology | Adapter skills |
 |-----------------|-------------|----------------|

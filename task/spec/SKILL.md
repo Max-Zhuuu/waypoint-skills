@@ -1,37 +1,37 @@
 ---
-name: tdd
-description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
+name: spec
+description: Feature-level requirements skill. Grills on scope and acceptance criteria, outputs a spec file. Use when starting a new feature, when requirements are vague, or when the user says "spec this", "write a spec", "PRD".
 status: stable
-signals:
-  - complete: suggests /wrapup
 ---
 
-# Test-Driven Development
+# Spec
 
-Follow the TDD methodology in [process/tdd.md](../process/tdd.md).
+Follow the requirements methodology in [process/requirements.md](../../process/requirements.md).
 Execute each phase using the tools available in this environment.
 
 ## Execution notes
 
-### Phase 1 - Plan
+### Phase 1 - Scope
 
-Read project context first: TESTING.md, CONVENTIONS.md, CONTEXT.md.
-Check the project's domain glossary so test names match project language.
-Check ADRs in the area you are touching.
+Read any existing context first: SCOPE.md, CONTEXT.md, ARCHITECTURE.md, related specs in `docs/specs/`.
 
-Confirm the behavior list and interface design with the user before writing code.
-Ask: "What should the public interface look like? Which behaviors are most important to test?"
+Grill inline. Print questions with your recommended answer so the user can challenge.
+Do not use `AskUserQuestion` for the grilling loop - inline conversation lets the user redirect naturally.
 
-### Phase 3 - Incremental loop
+### Phase 2 - Acceptance criteria
 
-Show the user each test before writing implementation.
-Do not block on their response - proceed with your ranking, but give the opportunity to redirect.
+Present options where trade-offs exist, per the methodology.
+Mark the recommendation and state why. The user picks or challenges.
 
-### Phase 4 - Refactor
+### Phase 3 - Write the spec
 
-See [tests.md](tests.md) for good/bad test examples, [mocking.md](mocking.md) for mocking guidelines,
-[deep-modules.md](deep-modules.md) for interface depth, [interface-design.md](interface-design.md) for testability,
-and [refactoring.md](refactoring.md) for refactor candidates.
+Output to `docs/specs/{feature-slug}.md` using the template from the methodology.
+
+### Phase 4 - Update shared artifacts
+
+1. New domain terms -> update CONTEXT.md (domain terms only, not general programming concepts).
+2. Architecture decision -> suggest invoking `/grill-with-docs` for an ADR.
+3. Feature tracked in an inventory or roadmap -> add it.
 
 ## Engagement
 
@@ -66,12 +66,8 @@ After work, follow the nudge protocol for discoveries. Emit as `[open]` with typ
 
 **Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
 
-## Per-cycle checklist
+## Tone
 
-```
-[ ] Test describes behavior, not implementation
-[ ] Test uses public interface only
-[ ] Test would survive internal refactor
-[ ] Code is minimal for this test
-[ ] No speculative features added
-```
+Concise. A spec is a contract, not a narrative.
+Every sentence should either constrain scope or define behavior.
+If a sentence does neither, cut it.

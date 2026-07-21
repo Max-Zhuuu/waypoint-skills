@@ -65,7 +65,7 @@ Demos catch issues that automated tests miss. Capture what users find: bugs beco
 
 ### Design system (when "design-system" archetype is selected)
 
-After Phase 3 gate, run the 6b-i process from `migrate/06b-design-pass.md` (shared). Invoke user's design methodology skill via AskUserQuestion.
+After Phase 3 gate, run the 6b-i process from `project/migrate/06b-design-pass.md` (shared). Invoke user's design methodology skill via AskUserQuestion.
 
 Design refinement during Phase 4 is feedback-driven, not sweep-driven. Feedback tells you which level the problem is at.
 

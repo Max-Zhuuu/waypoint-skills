@@ -8,7 +8,7 @@ Each adapter points to a process doc and translates execution idioms.
 ```
 process/debugging.md          <-- methodology (tool-agnostic)
   |
-  +-- diagnose/SKILL.md       <-- Claude Code adapter (43 lines)
+  +-- task/diagnose/SKILL.md   <-- Claude Code adapter (43 lines)
   +-- adapters/cursor/         <-- Cursor adapter (.mdc)
   +-- adapters/opencode/       <-- OpenCode adapter (skill format)
   +-- adapters/codex/          <-- Codex adapter (AGENTS.md fragment)

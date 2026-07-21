@@ -11,7 +11,7 @@ All project tracking converges on a single artifact:
 |------|---------|------------|---------|
 | CONCERNS.md | Questions, assumptions, flags, session claims | /setup (seed), any skill (emit) | /check-in, /wrapup, /reorient |
 
-Format: see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md).
+Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md).
 
 CONCERNS.md replaces the previous four-file pattern (QUESTIONS.md, ASSUMPTIONS.md, ACTIVE-WORK.md, PROGRESS-AUDIT.md).
 See the "What this replaces" section in CONCERNS-FORMAT.md for the mapping.

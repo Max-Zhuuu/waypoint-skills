@@ -6,7 +6,7 @@ status: stable
 
 # Diagnose
 
-Follow the debugging methodology in [process/debugging.md](../process/debugging.md).
+Follow the debugging methodology in [process/debugging.md](../../process/debugging.md).
 Execute each phase using the tools available in this environment.
 
 ## Execution notes
@@ -37,9 +37,9 @@ For the regression test seam assessment: if no correct seam exists and the archi
 
 ### Phase 7 - Learn
 
-Follow the quiz and practice protocols in [learn/LEARN-REFERENCE.md](../learn/LEARN-REFERENCE.md) if the user opts in.
+Follow the quiz and practice protocols in [learn/LEARN-REFERENCE.md](../../task/learn/LEARN-REFERENCE.md) if the user opts in.
 Update CONTEXT.md with domain terms only (not general programming concepts).
-Link further-reading sources per [learn/REFERENCES.md](../learn/REFERENCES.md#source-trust-tiers).
+Link further-reading sources per [learn/REFERENCES.md](../../task/learn/REFERENCES.md#source-trust-tiers).
 
 ## Engagement
 

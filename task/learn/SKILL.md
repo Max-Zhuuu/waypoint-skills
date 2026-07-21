@@ -6,7 +6,7 @@ status: stable
 
 # Learn
 
-Follow the structured learning methodology in [process/learning.md](../process/learning.md).
+Follow the structured learning methodology in [process/learning.md](../../process/learning.md).
 Execute each phase using the tools available in this environment.
 
 ## Execution notes

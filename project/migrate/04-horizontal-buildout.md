@@ -34,7 +34,7 @@ Invoke `/port` for each screen. `/port` handles:
 ### Concurrency
 
 Primary fan-out opportunity. Multiple agents can build different screens IF:
-- Non-overlapping entities claimed in CONCERNS.md (see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md#claims-section) for format)
+- Non-overlapping entities claimed in CONCERNS.md (see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md#claims-section) for format)
 - Shared infra changes (router, shared components, types) are single-threaded
 - One agent proposes shared changes, merges; others pull
 
