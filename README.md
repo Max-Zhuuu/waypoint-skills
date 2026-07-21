@@ -1,197 +1,217 @@
 # Waypoint Skills
 
-A process toolkit for building software products with AI agents.
-Three layers: setup the project, check in every session, build with the right verb.
+A skill family for building software products with AI agents.
+Two layers: invoke a verb for single-session work, or set up a project for multi-session continuity.
 
-## Skill Map
+## Getting Started
+
+Install the plugin, then invoke any skill directly - no setup required.
+
+```bash
+npx claude-plugins install waypoint-skills
+```
+
+**Task layer** (single-session work): invoke a verb and go.
 
 ```
-SETUP (run once per project)
-  /project-setup        Foundation: architecture, docs, CLAUDE.md, templates,
-                        CONVENTIONS.md, TESTING.md
-
-WORKFLOW (pick one - writes Active Workflow record to CLAUDE.md)
-  /migrate              Replace an existing system layer by layer
-                        (parity tracking, inventory, phased cutover)
-  /buildout             Build a new product from scratch
-                        (MoSCoW prioritization, MVP-first, feedback rounds)
-  /create               Add features to an existing codebase
-                        (spec, build, wrapup - no phases or inventory)
-
-SESSION (run every time you sit down)
-  /check-in             Orient, propose next task, fire checkpoints
-    reads:              Active Workflow record in CLAUDE.md
-                        Phase files from /migrate or /buildout (if active)
-                        PROGRESS-AUDIT.md from /reorient
-                        ACTIVE-WORK.md, inventory, CONVENTIONS.md, TESTING.md
-    fires:              Pre-build checkpoint (load references, verify spec exists)
-                        Post-build checkpoint (review agent, doc sync, inventory update)
-    invokes:            /reorient when drift detected (same phase 2+ weeks, stale questions)
-
-IMPLEMENTATION (the building verbs)
-  /tdd                  Define desired behavior, test first, build to satisfy
-  /port                 Migration: capture current behavior, replicate, verify parity
-
-SUPPORTING (invoked by checkpoints, other skills, or directly)
-  /spec                 Grill requirements, output spec file
-  /wrapup               Resolve flags, spec drift check, cascade to shared docs
-  /grill-with-docs      Architecture decisions that meet the ADR threshold
-  /reorient             Strategic course correction, axis audit, re-prioritize
-  /learn                Trade-off exploration with options, terms, quiz
-  /prototype            Quick validation mockup
-  /diagnose             Debug a specific issue
-  /grill-me             Open-ended interview on any plan or decision
+/tdd CreateVessel         # test-driven build
+/spec VesselParticulars   # grill requirements, output spec
+/diagnose flaky-test      # disciplined debug loop
 ```
+
+**Project layer** (multi-session work): run /project-setup once, pick a workflow, then /check-in each session.
+
+```
+/project-setup            # architecture, docs, CLAUDE.md, conventions
+/migrate                  # or /buildout, or /create
+/check-in                 # every session after that
+```
+
+/project-setup creates a Documentation Map in CLAUDE.md - a table mapping logical concepts to physical file paths.
+Skills resolve references through the map, never hardcoded paths.
+The structure scales with project size (None/Small/Moderate/Large tiers), and /project-setup can be re-run to change tiers without losing decisions.
+
+`docs/local/` is the gitignored working state for questions, assumptions, audits, and handoffs.
+See [LOCAL-DOCS-REFERENCE.md](project-setup/LOCAL-DOCS-REFERENCE.md) for structure and scaling rules.
 
 ## Design Keywords
 
-Four anchoring properties that shape how the skill family behaves:
+Four properties that shape how every skill in the family behaves:
 
-- **Memoized** - decisions are persisted in CLAUDE.md. Re-running /project-setup doesn't re-ask answered questions. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already handled.
+- **Memoized** - decisions persist in CLAUDE.md. Re-running /project-setup doesn't re-ask answered questions. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already handled.
 - **Reentrant** - /project-setup can be re-run at any time. It reads current state, detects what exists, and only asks about what's new or changed. Tier transitions, convention upgrades, and workflow changes are all re-entry, not fresh setup.
-- **Self-healing** - when a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in flags map entries pointing to missing files. Scope creep across concurrent sessions triggers /reorient suggestions.
-- **Bias to action** - when the answer is inferrable from the codebase, existing docs, or conventions, act on it. Propose the result; don't ask the question. AskUserQuestion is reserved for genuinely ambiguous forks where both paths are reasonable and the wrong choice wastes significant work. Skills should just work.
+- **Self-healing** - when a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in flags Documentation Map entries pointing to missing files. Scope creep across concurrent sessions triggers /reorient suggestions.
+- **Bias to action** - when the answer is inferrable from the codebase, existing docs, or conventions, act on it and propose the result. AskUserQuestion is reserved for genuinely ambiguous forks where both paths are reasonable and the wrong choice wastes significant work. Skills should just work.
+
+### Decision gates
+
+When a skill does use AskUserQuestion, two behavioral conventions apply:
+
+**Conversational fallback:** if the user selects "Other" and writes something conversational, the agent drops back to chat - explains trade-offs, discusses, then re-presents the original question when the user is ready.
+The gate stays pending until explicitly answered.
+
+**Learn-mode elaboration:** if the user asks for more context, the agent gives /learn-style depth scoped to the specific decision: one terms block (3-5 terms max), one further reading pointer.
+After elaboration, re-present the original question.
 
 ## Two-Layer Model
 
-The skill family operates at two layers:
+**Project layer** (multi-session work): `/project-setup` + a workflow (`/migrate`, `/buildout`, or `/create`) + `/check-in`.
+Each workflow writes an Active Workflow record to CLAUDE.md so /check-in knows the context without guessing.
 
-**Project layer** (multi-session work): `/project-setup` + a workflow skill (`/migrate`, `/buildout`, or `/create`) + `/check-in`. Each workflow writes an Active Workflow record to CLAUDE.md so /check-in knows the context without guessing.
-
-**Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`. Self-contained verbs. Use directly for small work without project setup ceremony.
+**Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`, `/diagnose`, `/grill-me`, `/learn`, `/grill-with-docs`, `/improve-codebase-architecture`.
+Self-contained verbs that work without project setup.
+Missing scaffolding degrades gracefully: no domain term cross-referencing without CONTEXT.md, no convention enforcement without CONVENTIONS.md, but core skill loops always work.
 
 Boundary: if you need to track progress across sessions, you need the project layer.
 
-## How a Session Flows
+## Skill Map
+
+### User-invoked
 
 ```
-You sit down.
-  |
-  v
-/check-in
-  "Phase 4. 12 screens left. VesselParticulars is next -
-   3 dependents waiting on it. Spec is current."
-  |
-  v  (pre-build checkpoint fires: spec verified, references loaded)
-  |
-/port VesselParticulars          (migration)
-/tdd  CreateVessel               (greenfield)
-  |
-  v  (implementation happens)
-  |
-Verb reports complete, suggests /wrapup
-  -> /wrapup resolves flags, cascades to shared docs
-  -> inventory updated
-  -> "Done. 11 remaining. PortAgents is next, or resolve
-     the 2 stale questions in QUESTIONS.md first?"
+PROJECT SETUP
+  /project-setup          Foundation: architecture, docs, CLAUDE.md, conventions
+
+WORKFLOWS (pick one)
+  /migrate                Replace an existing system layer by layer
+  /buildout               Build a new product from scratch
+  /create                 Add features to an existing codebase
+
+SESSION
+  /check-in               Orient, propose next task, fire checkpoints
+
+IMPLEMENTATION
+  /tdd                    Test-driven: define behavior, test first, build to satisfy
+  /port                   Migration: capture current behavior, replicate, verify parity
+
+SUPPORTING
+  /spec                   Grill requirements, output spec file
+  /wrapup                 Resolve flags, spec drift check, cascade to shared docs
+  /grill-with-docs        Architecture decisions that meet the ADR threshold
+  /reorient               Strategic course correction, axis audit, re-prioritize
+  /learn                  Trade-off exploration with options, terms, quiz
+  /prototype              Quick validation mockup
+  /diagnose               Disciplined debug loop for hard bugs
+  /grill-me               Open-ended interview on any plan or decision
+  /improve-codebase-architecture  Surface architectural friction, propose deepening
 ```
 
-## Key Concepts
+### Model-invoked
 
-### Checkpoints
-Named blocks inside phase files with four fields:
-- **Trigger** - when it fires (before each build, after slice, etc.)
-- **References** - exact files to read and validate against
-- **Action** - what to do (invoke /spec, spawn reviewer, block)
-- **Pass condition** - what "done" looks like
+```
+  chrome-devtools-axi     Browser automation via Chrome DevTools
+  find-skills             Skill discovery and installation from the ecosystem
+```
 
+## Session Flows
+
+### Task session
+
+```
+                    invoke verb directly
+                           |
+                           v
+              +-----------------------+
+              |  /tdd, /spec, /port,  |
+              |  /diagnose, /proto... |
+              +-----------------------+
+                           |
+                           v
+                   verb completes
+                           |
+                 +---------+---------+
+                 |                   |
+           done (exit)        /wrapup (optional)
+                                     |
+                                     v
+                            doc sync, flag resolution
+```
+
+### Project session
+
+```
+          /check-in
+               |
+               v
+    +---------------------+
+    | read Active Workflow |
+    | read phase files     |
+    | read ACTIVE-WORK.md  |
+    +---------------------+
+               |
+       +-------+-------+
+       |               |
+  drift detected    propose task
+       |               |
+       v               v
+  /reorient     pre-build checkpoint
+       |         (verify spec, load refs)
+       v               |
+  re-prioritize        v
+       |         /port or /tdd
+       v               |
+  resume here          v
+                 verb completes
+                       |
+                       v
+                 post-build checkpoint
+                 (review, doc sync, inventory)
+                       |
+                       v
+                 suggest /wrapup
+                       |
+                       v
+                 propose next task or
+                 flag stale questions
+```
+
+## Glossary
+
+**Active Workflow** - record in CLAUDE.md written by /migrate, /buildout, or /create.
+Contains skill name, activation date, scope, and status.
+/check-in reads it to orient each session.
+
+**Checkpoint** - named block inside phase files with four fields: trigger (when it fires), references (files to validate against), action (what to do), pass condition (what "done" looks like).
 Distinct from gates (end-of-phase go/no-go) and enforcement (per-invocation checks in SKILL.md).
 
-### Resolution Cascade
-When a checkpoint finds a mismatch:
-1. **Source code validation** - read the authoritative source for ground truth
-2. **Test case validation** - write or run a test that proves which side is correct
-3. **Human validation** - escalate with specifics if source and tests are ambiguous
+**Documentation Map** - table in CLAUDE.md mapping logical concepts (e.g., "Naming conventions") to physical file paths.
+Skills resolve references through the map.
+When an entry points to a missing file, /check-in flags it (self-healing).
 
-### AskUserQuestion Gates
-Decision gates use `AskUserQuestion` to confirm non-trivial choices before the agent elaborates or implements. Two behavioral conventions apply to all gates:
+**Naming classes** - suffix taxonomy for skill-internal files:
+`FOO.md` (user-facing project doc), `FOO-REFERENCE.md` (skill-internal reference), `FOO-FORMAT.md` (format template).
 
-**Conversational fallback:** If the user selects "Other" and writes something conversational, the agent drops back to chat - explains trade-offs, discusses, then re-presents the original AskUserQuestion when the user is ready. The gate stays pending until explicitly answered.
+**Resolution cascade** - when a checkpoint finds a mismatch: (1) read the authoritative source for ground truth, (2) write or run a test that proves which side is correct, (3) escalate to the user with specifics if source and tests are ambiguous.
 
-**Learn-mode elaboration:** If the user asks for more context or says "explain," the agent gives /learn-style depth scoped to the specific decision: one terms block (3-5 terms max), one further reading link. After elaboration, re-present the original question. Don't elaborate all options - only the ones the user asks about. This is "/learn lite," not the full Phase 2 flow.
+**Single-writer discipline** - only /wrapup writes to shared docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md).
+Other skills create only their own output artifacts.
 
-These are behavioral conventions, not additional AskUserQuestion options. They keep gates from feeling like locked doors while preserving their value as decision records.
-
-### Review Agent Allocation
-See `port/REFERENCES.md > Review Depth` for the complexity classification and reviewer model assignment.
-
-### Doc Sync
-/wrapup is the single reconciliation point for all doc updates after implementation. It resolves flags left by implementation verbs, cascades changes to shared docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md), and evaluates gate criteria. See `wrapup/SKILL.md` for the full process.
-
-### Project Intake (buildout only)
-Composable archetypes via multiSelect AskUserQuestion, stored as SCOPE.md frontmatter:
-- **Product** - multiple features, multiple user types, ongoing lifecycle
-- **Feature** - multi-screen feature within an existing product
-- **Deliverable** - report, tool, integration with clear scope
-- **Design system** - design language work (tokens, patterns, density)
-
-Archetypes are composable (a project can be both "product" and "design-system"). The selection determines which phase sections are active, which enforcement rules fire, and which docs get created.
-
-### Shared References
-Repo-root files that all skills and subagents read:
-- **CONVENTIONS.md** - naming patterns (seeded Phase 1, refined Phase 3)
-- **TESTING.md** - test expectations by complexity tier (seeded Phase 1, refined Phase 3)
-- **CONTEXT.md** - domain glossary (updated whenever terms are resolved)
-
-### Naming Classes
-Skill-internal files follow a suffix taxonomy:
-- `FOO.md` - user-facing project doc (CONVENTIONS.md, CONTEXT.md, SCOPE.md)
-- `FOO-REFERENCE.md` - skill-internal doc that informs skill behavior, surfaced to users during uncertainty
-- `FOO-FORMAT.md` - format template for user-facing docs (CONTEXT-FORMAT.md, ADR-FORMAT.md)
+See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions and examples.
 
 ## Phase Overview
+
+Phase systems belong to the project layer.
+Task-layer skills have no phases.
 
 ### Migration (/migrate)
 
 | Phase | Name | Verb | Key Checkpoint |
 |-------|------|------|----------------|
 | 0-1 | Setup | /project-setup + /migrate | - |
-| 2 | Documentation Sprint | manual | Gate only (every entity spec'd) |
+| 2 | Documentation Sprint | manual | Gate: every entity spec'd |
 | 3 | Vertical Slice | /port | Pre-build spec check, post-slice architecture grill |
-| 4 | Horizontal Buildout | /port | Pre-build spec prerequisite per screen, post-build review + doc sync |
+| 4 | Horizontal Buildout | /port | Pre-build spec prerequisite, post-build review + doc sync |
 | 5 | Integration | /port | Pre-wire dependency + shape check, post-wire review |
 | 6a | Functional Validation | manual | Post-validation review per screen |
-| 6b-i | Design System | - | Component taxonomy audit, post-token doc sync |
-| 6b-ii | UX Improvements | /prototype | Research protocol (3-step), impact classification (Tier 1/2/3) |
+| 6b | Design System + UX | /prototype | See migrate/REFERENCES.md for design phase details |
 | 7 | Cutover | manual | Ship checklist |
 
 ### Buildout (/buildout)
 
 | Phase | Name | Verb | Key Checkpoint |
 |-------|------|------|----------------|
-| 0-1 | Setup | /project-setup + /buildout | Project intake (3 questions) |
-| 2 | Discovery & Validation | /spec | Gate only (persona, MoSCoW, specs) |
+| 0-1 | Setup | /project-setup + /buildout | Project intake |
+| 2 | Discovery & Validation | /spec | Gate: persona, MoSCoW, specs |
 | 3 | MVP Build | /tdd | Pre-build spec check, post-slice architecture grill |
-| 4 | Iterate & Ship | /tdd | Pre-build for new Must, design consolidation (3+ design items) |
-| - | Design System (shared) | - | After Phase 3 gate when design profile is full/lightweight |
-
-## Design Phase
-
-### 6b-i (shared - both project types)
-Component taxonomy audit -> token audit -> semantic layering -> density variants -> prototype and compare. Gate: zero hardcoded values, density toggle works, DESIGN-SYSTEM.md written.
-
-### 6b-ii (migration-only)
-Top-down macro -> meso -> micro interaction refinement. Research protocol required before prototyping component-level or page-level improvements. Improvements classified by impact tier (frontend-only / API-shape / schema-logic). Cross-boundary work flows through docs/local/handoffs/.
-
-### Buildout design work
-No 6b-ii. Design refinement is feedback-driven inside Phase 4 via the design consolidation checkpoint (fires when 3+ design observations accumulate).
-
-### Design during build phases
-Allowed but unmanaged. Ideas go to docs/improvements/, experiments go on design branches, nothing merges until the design phase.
-
-## Cross-Boundary Handoffs
-
-When design or build work crosses the frontend boundary:
-
-| Tier | What changes | Output | Where it lives |
-|------|-------------|--------|----------------|
-| 1 | Frontend only | Nothing | Proceed |
-| 2 | API shape | Design brief + data contract | docs/local/handoffs/api-contracts/ |
-| 3 | Schema/logic | ADR via /grill-with-docs + handoff | docs/local/handoffs/schema-changes/ + docs/adr/ |
-
-Handoff format: `{date}-{slug}.md` with frontmatter `status: requested | in-progress | delivered | deferred`.
-
-## Local Documentation
-
-`docs/local/` is the gitignored working state that tracks what's happening right now - questions, assumptions, audits, handoffs, and learning artifacts.
-Canonical reference: [project-setup/LOCAL-DOCS-REFERENCE.md](project-setup/LOCAL-DOCS-REFERENCE.md) (file list, formats, scaling rules, ownership).
+| 4 | Iterate & Ship | /tdd | Pre-build for new Must, design consolidation |
+| - | Design System | - | After Phase 3 gate; see buildout/REFERENCES.md |
