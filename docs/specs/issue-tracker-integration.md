@@ -1,6 +1,6 @@
 # Issue Tracker Integration
 
-**Status:** Draft - grilling complete
+**Status:** Draft - README alignment complete
 **Created:** 2026-07-20
 **Updated:** 2026-07-20
 
@@ -23,12 +23,12 @@ Absorbing is cheaper than the ongoing cognitive tax of two families.
 ### D2: Tracker configuration lives in /project-setup
 **Decision:** Fold tracker config into /project-setup Phase 1 as an optional section.
 AskUserQuestion: "Do you use an issue tracker?" with options (GitHub Issues, Linear, Local files only, None).
-If yes, write config to a TRACKER.md reference file at the skill family root.
-For lightweight mode: /to-issues and /triage ask on first invocation if TRACKER.md is missing, then write it themselves.
+If yes, write config to TRACKER-REFERENCE.md at the skill family root (follows the -REFERENCE naming class from conventions-architecture D6).
+For lightweight mode: /to-issues and /triage ask on first invocation if TRACKER-REFERENCE.md is missing, then write it themselves.
 Stateless - file exists = use it, doesn't = ask once.
 **Rationale:** /project-setup already handles one-time project decisions.
 Tracker config is the same kind of decision.
-TRACKER.md follows the REFERENCES.md pattern.
+TRACKER-REFERENCE.md follows the -REFERENCE naming class for skill-internal docs.
 
 ### D3: Chain integration
 **Decision:** Four integration points:
@@ -93,6 +93,7 @@ docs/implementation/
 ```
 Same frontmatter pattern as lightweight-entry-points D11 (created, updated, status).
 When a real tracker is configured, /to-issues writes there instead.
+Canonical docs/implementation/ structure owned by conventions-architecture U3.
 **Rationale:** Follows the established `docs/implementation/` container pattern.
 Local issues are shared implementation artifacts, not ephemeral scratch.
 
@@ -115,3 +116,25 @@ A conventions folder structure - root-level or under docs/ - would let each subt
 
 This affects every skill in the family, not just issue tracking.
 **Captured as a separate spec: conventions-architecture.md**
+
+## README Alignment
+
+Decisions from the comprehensive README alignment grill.
+
+### U1: TRACKER group in Skill Map
+**Decision:** /to-issues and /triage get their own TRACKER group in the Skill Map:
+```
+TRACKER
+  /to-issues*             Convert specs/plans to tracker issues
+  /triage*                Triage and prioritize backlog
+```
+Both are annotated with `*` as bridge skills (see conventions-architecture U2).
+**Rationale:** Tracker operations are a distinct concern from SUPPORTING verbs.
+The group makes the tracker integration visible at the Skill Map level.
+
+### U2: /to-issues and /triage as bridge skills
+**Decision:** Both skills are bridge skills per conventions-architecture U2.
+- **Task-layer core:** /to-issues converts a spec to issues. /triage prioritizes a backlog. Both work standalone.
+- **Project-layer integration:** /to-issues chains from /create and /buildout (D3). /triage feeds into /check-in as priority layer 3 (D3.3). Both read TRACKER-REFERENCE.md when present.
+- **Graceful degradation:** Without TRACKER-REFERENCE.md, both ask for tracker config on first invocation (D2 lightweight mode). Without project scaffolding, they still function using their standalone core loop.
+**Rationale:** These skills exemplify the bridge pattern - fully functional alone, enhanced by project context.

@@ -1,6 +1,6 @@
 # Conventions Architecture
 
-**Status:** Draft - grilling complete
+**Status:** Draft - README alignment complete
 **Created:** 2026-07-20
 **Updated:** 2026-07-20
 **Origin:** Discovered during issue-tracker-integration grilling (Q4/D8)
@@ -165,4 +165,117 @@ Concurrent sessions read this state and coordinate:
 - **Self-healing** - detect scope creep across sessions, suggest /reorient, recommend user focus on one area
 
 This evolves ACTIVE-WORK.md from "avoid file conflicts" to "coordinate on decisions and progress."
-Implementation details deferred to a /check-in evolution spec.
+
+## README Alignment
+
+Decisions from the comprehensive README alignment grill.
+These extend the original D1-D7 decisions with cross-cutting concerns surfaced by the finalized README.
+
+### U1: Content vs state writer split
+**Decision:** Single-writer discipline applies to content docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md) - only /wrapup writes to these.
+Machine-readable state in CLAUDE.md has designated writers per section:
+- **Project Scaffold** - owned by /project-setup, timestamps updated by /check-in
+- **Documentation Map** - owned by /project-setup, updated on tier transitions
+- **Active Workflow** - owned by the workflow skill (/create, /buildout, /migrate)
+
+This is not an exception to single-writer - it IS single-writer, applied per artifact.
+The ownership table lives in CONCEPTS-REFERENCE.md as the canonical reference.
+**Rationale:** The original "only /wrapup writes to shared docs" was imprecise.
+/project-setup and /check-in clearly write to CLAUDE.md.
+Making the per-section ownership explicit removes ambiguity without weakening the principle.
+
+### U2: Bridge skill pattern
+**Decision:** Formalize "bridge skill" as a named pattern for skills that span both layers.
+Three levels of formalization:
+
+1. **Glossary entry:** "Bridge skill - a task-layer skill with project-layer integration points.
+   Works standalone; gains context when project scaffolding exists."
+2. **Skill Map annotation:** Bridge skills marked with `*` in the Skill Map.
+   Readers see at a glance which skills enhance with project setup.
+3. **Spec section (this section):** A bridge skill must:
+   - Have a self-contained core loop that works without any scaffolding
+   - Define specific integration points (what project-layer data it reads, what it writes)
+   - Degrade gracefully per LIGHTWEIGHT-REFERENCE.md when integration data is missing
+   - Never require project setup to function at its core purpose
+
+**Bridge skills identified:**
+- `/to-issues` - task verb (convert spec to issues) + /check-in integration (triaged issues as priority layer)
+- `/triage` - task verb (triage backlog) + /check-in pull (surfaces ready-for-agent issues)
+- `/create` - single-session orchestrator (spec -> build -> wrapup) + can write Active Workflow for multi-session features
+- `/prototype` - task verb (quick validation mockup) + integrates with /buildout Phase design system
+- `/spec` - task verb (grill requirements) + cross-references SCOPE.md boundaries and CONVENTIONS.md naming when present
+
+**Rationale:** The two-layer model creates a clean separation, but some skills genuinely participate in both.
+Naming the pattern prevents them from being misclassified as purely one layer or the other.
+The annotation in the Skill Map gives readers immediate visibility.
+
+### U3: docs/implementation/ canonical structure
+**Decision:** Conventions-architecture owns the canonical docs/implementation/ structure definition.
+Other specs (lightweight-entry-points, issue-tracker-integration) reference it.
+
+```
+docs/implementation/
+  specs/          - feature specs from /spec
+  improvements/   - improvement proposals
+  handoffs/       - cross-boundary work that pauses implementation
+  issues/         - work items from /to-issues (local mode only)
+```
+
+Same frontmatter pattern for all files:
+```yaml
+---
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+status: Draft | In Progress | Done | Blocked
+---
+```
+
+Flat structure within subdirectories - no date folders.
+Temporal queries via grep on status field.
+**Rationale:** Multiple specs were independently defining the same container.
+Centralizing the canonical structure here prevents drift between specs.
+Lightweight-entry-points D10 and issue-tracker D9 defer to this definition.
+
+### U4: /check-in full specification
+**Decision:** Fold /check-in's complete behavior into this spec rather than a standalone spec.
+/check-in is tightly coupled to the Documentation Map, tier system, and coordination fabric.
+
+**Single-session behavior (existing, now codified):**
+1. Read Active Workflow record from CLAUDE.md
+2. Read phase files for current workflow
+3. Read ACTIVE-WORK.md for concurrent session state
+4. Detect drift (scope creep, stale questions, missing files) -> suggest /reorient
+5. If no drift: propose next task based on phase state and remaining work
+6. Fire pre-build checkpoint (verify spec, load references) before implementation
+7. Fire post-build checkpoint (review, doc sync, inventory update) after implementation
+8. Suggest /wrapup for session close
+9. Propose next task or flag stale questions
+
+**Coordination fabric (evolution):**
+- CLAUDE.md records last check-in date in Project Scaffold section
+- /check-in notes session progress: what it resolved, which docs it touched, when
+- Concurrent sessions read this state:
+  - **Memoized** - don't re-resolve what another session already resolved
+  - **Reentrant** - propose work in non-conflicting areas without re-asking
+  - **Self-healing** - detect scope creep across sessions, suggest /reorient
+
+**Rationale:** The README's project session flow promises behavior that was underdocumented.
+Splitting /check-in behavior across a SKILL.md and a separate evolution spec fragments the specification.
+This spec already owns the tier system and Documentation Map that /check-in depends on.
+
+### U5: Documentation Map includes Skill State
+**Decision:** The Documentation Map includes a "Skill State" concept pointing to the .claude/ directory.
+Marker files (.claude/.setup-prompted) and other skill-internal state are map-resolvable.
+
+```markdown
+| Concept | Path | Status |
+|---------|------|--------|
+| ... | ... | ... |
+| Skill state | .claude/ | Active |
+```
+
+The canonical fallback path list (CONTEXT.md, CONVENTIONS.md at root, etc.) lives in LIGHTWEIGHT-REFERENCE.md.
+When no Documentation Map exists, skills use the fallback list to detect what's present.
+**Rationale:** "Never hardcoded paths" should be a universal principle, not one with ad-hoc exceptions.
+Map-resolving marker files keeps the principle clean.
+The fallback list in LIGHTWEIGHT-REFERENCE.md handles the bootstrapping case (no map yet).

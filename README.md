@@ -58,9 +58,16 @@ After elaboration, re-present the original question.
 **Project layer** (multi-session work): `/project-setup` + a workflow (`/migrate`, `/buildout`, or `/create`) + `/check-in`.
 Each workflow writes an Active Workflow record to CLAUDE.md so /check-in knows the context without guessing.
 
-**Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`, `/diagnose`, `/grill-me`, `/learn`, `/grill-with-docs`, `/improve-codebase-architecture`.
+**Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`, `/diagnose`, `/grill-me`, `/learn`, `/grill-with-docs`, `/improve-codebase-architecture`, `/to-issues`, `/triage`, `/author-skill`.
 Self-contained verbs that work without project setup.
 Missing scaffolding degrades gracefully: no domain term cross-referencing without CONTEXT.md, no convention enforcement without CONVENTIONS.md, but core skill loops always work.
+
+**Bridge skills** (marked with `*` in the Skill Map): task-layer skills with project-layer integration points.
+They work standalone but gain context when project scaffolding exists.
+`/spec*` cross-references SCOPE.md and CONVENTIONS.md when present.
+`/create*` can write an Active Workflow record for multi-session features.
+`/to-issues*` and `/triage*` integrate with /check-in for backlog coordination.
+`/prototype*` integrates with workflow design system phases.
 
 Boundary: if you need to track progress across sessions, you need the project layer.
 
@@ -75,7 +82,7 @@ PROJECT SETUP
 WORKFLOWS (pick one)
   /migrate                Replace an existing system layer by layer
   /buildout               Build a new product from scratch
-  /create                 Add features to an existing codebase
+  /create*                Add features to an existing codebase
 
 SESSION
   /check-in               Orient, propose next task, fire checkpoints
@@ -84,16 +91,23 @@ IMPLEMENTATION
   /tdd                    Test-driven: define behavior, test first, build to satisfy
   /port                   Migration: capture current behavior, replicate, verify parity
 
+TRACKER
+  /to-issues*             Convert specs/plans to tracker issues
+  /triage*                Triage and prioritize backlog
+
 SUPPORTING
-  /spec                   Grill requirements, output spec file
+  /spec*                  Grill requirements, output spec file
   /wrapup                 Resolve flags, spec drift check, cascade to shared docs
   /grill-with-docs        Architecture decisions that meet the ADR threshold
   /reorient               Strategic course correction, axis audit, re-prioritize
   /learn                  Trade-off exploration with options, terms, quiz
-  /prototype              Quick validation mockup
+  /prototype*             Quick validation mockup
   /diagnose               Disciplined debug loop for hard bugs
   /grill-me               Open-ended interview on any plan or decision
+  /author-skill           Guided skill authoring with Waypoint conventions
   /improve-codebase-architecture  Surface architectural friction, propose deepening
+
+* = bridge skill (task-layer core, project-layer integration)
 ```
 
 ### Model-invoked
@@ -171,22 +185,28 @@ SUPPORTING
 Contains skill name, activation date, scope, and status.
 /check-in reads it to orient each session.
 
+**Bridge skill** - a task-layer skill with project-layer integration points.
+Works standalone; gains context when project scaffolding exists.
+Marked with `*` in the Skill Map.
+
 **Checkpoint** - named block inside phase files with four fields: trigger (when it fires), references (files to validate against), action (what to do), pass condition (what "done" looks like).
 Distinct from gates (end-of-phase go/no-go) and enforcement (per-invocation checks in SKILL.md).
+See CONCEPTS-REFERENCE.md for the canonical format specification.
 
 **Documentation Map** - table in CLAUDE.md mapping logical concepts (e.g., "Naming conventions") to physical file paths.
 Skills resolve references through the map.
 When an entry points to a missing file, /check-in flags it (self-healing).
+Includes a "Skill State" concept for .claude/ marker files.
 
 **Naming classes** - suffix taxonomy for skill-internal files:
 `FOO.md` (user-facing project doc), `FOO-REFERENCE.md` (skill-internal reference), `FOO-FORMAT.md` (format template).
 
 **Resolution cascade** - when a checkpoint finds a mismatch: (1) read the authoritative source for ground truth, (2) write or run a test that proves which side is correct, (3) escalate to the user with specifics if source and tests are ambiguous.
 
-**Single-writer discipline** - only /wrapup writes to shared docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md).
-Other skills create only their own output artifacts.
+**Single-writer discipline** - content docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md) are written only by /wrapup.
+Machine-readable state in CLAUDE.md has per-section ownership: /project-setup owns scaffold + map, workflows own Active Workflow, /check-in owns timestamps.
 
-See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions and examples.
+See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions, the checkpoint format specification, and the write ownership table.
 
 ## Phase Overview
 

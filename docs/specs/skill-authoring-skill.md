@@ -1,6 +1,6 @@
 # Skill-Authoring Skill
 
-**Status:** Draft - grilling complete
+**Status:** Draft - README alignment complete
 **Created:** 2026-07-20
 **Updated:** 2026-07-20
 
@@ -63,9 +63,13 @@ The hybrid serves both audiences without over-constraining either.
 7. **Tone definitions** - characteristic tone per skill, avoiding generic assistant tone
 8. **Phase gates with regression handling** - relevant when new skill participates in the phase system
 
+**Should-codify (added during README alignment):**
+9. **Bridge skill pattern** - when a new skill spans both layers: standalone core loop, project-layer integration points, graceful degradation. Author must decide if their skill is a bridge and declare integration points.
+10. **Content vs state writer split** - what the skill is allowed to write: content docs (owned by /wrapup), machine-readable state (per-section ownership in CLAUDE.md), or only its own output artifacts. Critical to get right during authoring.
+
 **Reference only (documented elsewhere):**
-9. ACTIVE-WORK.md coordination - runtime protocol, not authoring concern
-10. Resolution cascade - documented in README.md, reference don't duplicate
+11. ACTIVE-WORK.md coordination - runtime protocol, not authoring concern
+12. Resolution cascade - documented in README.md, reference don't duplicate
 
 Each reference section needs examples from existing skills showing how the pattern manifests, not just the abstract rule.
 The reference must be rich enough for the agent to make good field proposals, not just for humans to validate.
@@ -103,3 +107,19 @@ Light coverage prevents the "I wrote a skill but forgot to register it" failure 
 The two-word form "/author-skill" makes the object explicit even outside the skill family context.
 Single-word "/author" was considered but is slightly vague when seen in isolation (author what?).
 Consistent with Waypoint verb-oriented naming convention.
+
+## README Alignment
+
+Decisions from the comprehensive README alignment grill.
+
+### U1: Patterns 9-10 integrated into D3
+**Decision:** Bridge skill pattern and content-vs-state writer split added to D3's pattern catalog as should-codify items 9 and 10.
+Both are authoring-relevant - a skill author needs to know:
+- Whether their skill is a bridge (and if so, declare integration points)
+- What their skill is allowed to write (content docs, state sections, or only own artifacts)
+
+Pattern 9 references conventions-architecture U2 for the full bridge skill specification.
+Pattern 10 references conventions-architecture U1 for the full ownership table.
+**Rationale:** The propose-then-correct flow (D3) needs these patterns to make good proposals.
+Without bridge awareness, the agent might propose a task-only skill when bridge behavior is appropriate.
+Without writer awareness, the agent might propose writing to shared docs that /wrapup owns.

@@ -1,6 +1,6 @@
 # Lightweight Entry Points
 
-**Status:** Draft - grilling complete
+**Status:** Draft - README alignment complete
 **Created:** 2026-07-20
 **Updated:** 2026-07-20
 
@@ -71,16 +71,13 @@ Follows the `-REFERENCE` naming class for skill-internal docs (see conventions-a
 **Rationale:** Avoids half-built scaffolding that /project-setup would then have to detect and merge with.
 
 ### D10: docs/implementation/ as the shared container
-**Decision:** Consolidate implementation artifacts under docs/implementation/ with three subdirectories:
-```
-docs/implementation/
-  specs/       - feature specs from /spec
-  improvements/ - improvement proposals from /migrate, /diagnose
-  handoffs/    - cross-boundary work that pauses implementation
-```
+**Decision:** Consolidate implementation artifacts under docs/implementation/.
+Canonical structure definition owned by conventions-architecture U3.
+This spec defers to that definition for the full subdirectory list and frontmatter pattern.
 - Existing docs/improvements/ moves to docs/implementation/improvements/
 - docs/local/handoffs/ moves to docs/implementation/handoffs/ (these are shared, not local)
 **Rationale:** Three related artifact types that all track implementation work, all shared, all using the same status lifecycle.
+Canonical ownership moved to conventions-architecture to prevent drift between specs.
 
 ### D11: Flat structure within subdirectories, metadata in frontmatter
 **Decision:** No date folders. Each file gets frontmatter:
@@ -98,3 +95,30 @@ Temporal queries via `grep -l "status: In Progress" docs/implementation/specs/`.
 **Decision:** /create's value is sequencing spec -> build -> wrapup as a single session workflow, not low ceremony.
 Lightweight entry points are "I just want to run /tdd right now." /create is "I want to add one feature, start to finish."
 Different intents, both valid. No changes needed to /create - it gets the LIGHTWEIGHT-REFERENCE.md reference like everything else.
+Note: /create is now classified as a bridge skill (see conventions-architecture U2).
+
+## README Alignment
+
+Decisions from the comprehensive README alignment grill.
+
+### U1: Canonical fallback paths in LIGHTWEIGHT-REFERENCE.md
+**Decision:** LIGHTWEIGHT-REFERENCE.md owns the canonical list of well-known fallback paths used when no Documentation Map exists:
+- CONTEXT.md (root)
+- CONVENTIONS.md (root)
+- SCOPE.md (root)
+- TESTING.md (root)
+- ARCHITECTURE.md (root)
+- docs/adr/ (directory)
+- .claude/ (skill state directory)
+
+When the Documentation Map is absent, skills check these paths in order.
+When the Documentation Map is present, skills resolve through the map exclusively.
+**Rationale:** Fallback paths were scattered across individual specs and the degradation table (D6).
+Centralizing them in LIGHTWEIGHT-REFERENCE.md gives new skill authors one place to look.
+The README principle "never hardcoded paths" applies when the map exists; the fallback list handles bootstrapping.
+
+### U2: Marker files map-resolvable via Skill State
+**Decision:** The .claude/.setup-prompted marker file and any future skill-internal markers are resolvable through the Documentation Map's "Skill State" concept (see conventions-architecture U5).
+When no map exists, skills check .claude/ directly (part of the fallback path list above).
+**Rationale:** Keeps the "everything through the map" principle clean.
+Marker files are infrastructure, but they're still file references that benefit from map resolution.
