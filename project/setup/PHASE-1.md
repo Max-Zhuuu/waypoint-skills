@@ -42,7 +42,7 @@ Adapt descriptions to the project profile per the catalog's adaptation rules. Un
 
 ## Naming conventions
 
-Generate a `CONVENTIONS.md` at the repo root by interrogating the implementer about their stack's conventions. Ask about:
+Read [../../templates/CONVENTIONS.md](../../templates/CONVENTIONS.md) and populate it by interrogating the implementer about their stack's conventions. Ask about:
 - Function naming patterns (API calls, event handlers, boolean returns)
 - Component/class naming patterns
 - Type/interface naming patterns
@@ -75,14 +75,7 @@ Before generating TESTING.md, ask via AskUserQuestion:
 
 Store as `testing-philosophy: integration-first | tdd | structural-enforcement` in SCOPE.md frontmatter. This sets the default stance - Phase 3 refines from real patterns, /setup resume path allows revisiting.
 
-Generate a `TESTING.md` at the repo root. Seed with test expectations by complexity tier, emphasizing the chosen philosophy. One example per pattern type:
-
-- **Smoke test** - does it render without crashing?
-- **Structural enforcement** - do conventions hold across the codebase?
-- **Characterization / golden master** (migration) - does the new system match the old?
-- **Integration workflow** - does a multi-step user flow work end-to-end?
-
-Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
+Read [../../templates/TESTING.md](../../templates/TESTING.md) and populate it, emphasizing the chosen philosophy. Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
 
 Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md for patterns and expectations.`
 
@@ -112,27 +105,11 @@ See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical file li
 
 ## Spec templates
 
-Generate two templates grilled to the project's needs.
+Copy and adapt the base templates to the project's needs:
 
-**docs/reference/features/_TEMPLATE.md** - adapt sections based on stack:
-- Overview (one paragraph: what this screen does)
-- Fields & Controls (table: field, type, source, editable, default)
-- Interaction Behaviors (table: control, behavior, notes - e.g., sortable, resizable, filterable)
-- Conditional Visibility (what shows/hides based on state)
-- Toolbar/Navigation Actions (buttons, links, what they do)
-- Navigation (how user gets here, where they can go)
-- Validation Rules
-- Change Log
+**docs/reference/features/_TEMPLATE.md** - copy from [../../templates/feature-spec.md](../../templates/feature-spec.md), adapt sections based on stack.
 
-**docs/reference/logic/_TEMPLATE.md**:
-- Data Model (fields, types, nullability)
-- Relationships (to other entities)
-- Status Lifecycle (state machine if applicable)
-- Business Rules
-- Calculated Fields
-- Edge Cases
-- Known Bugs / Quirks
-- Change Log
+**docs/reference/logic/_TEMPLATE.md** - copy from [../../templates/logic-doc.md](../../templates/logic-doc.md), adapt sections based on domain.
 
 ## Documentation Map
 
@@ -163,23 +140,11 @@ On re-entry, read the existing map and only update entries that changed.
 
 ## CLAUDE.md generation
 
-Generate the project's CLAUDE.md with these sections (each concise):
+Read [../../templates/CLAUDE.md](../../templates/CLAUDE.md) and populate it from Phase 0 and Phase 1 answers.
 
-### Repository Overview
-One paragraph: what this project is.
+The template includes: Repository Overview, Development commands, Project Structure, Project Scaffold, Documentation Map, Branch Workflow, Agent Coordination, and Change Protocol.
 
-### Development
-Commands to install, run, build, test.
-
-### Project Structure
-Directory tree with one-line descriptions.
-
-### Branch Workflow
-Document the tier structure. Example:
-- `main` - production, protected
-- `preview` - staging/QA
-- `beta` - integration testing
-- Feature branches off `beta`, merged back via PR
+Add these sections only when applicable:
 
 ### Design Exploration Policy (design-system archetype only)
 Skip this section and Design Archival if no design-system archetype is selected.
@@ -195,25 +160,8 @@ Before each new design direction, tag the current state:
 ```
 git tag design/{nn}-{slug}
 ```
-After tagging, add a journal entry in `docs/local/design-journal.md`:
-```
-## {date} - {what you explored}
-### design/{nn}-{slug}
-{One sentence: what this variant does differently}
-{One sentence: why it was chosen or rejected}
-Screenshot: {path or inline}
-```
-Tags are diff-able (`git diff design/01..design/02`), restorable (`git checkout design/01`), and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
-
-### Agent Coordination
-- Task brief template: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
-- When to use workflows vs parallel agents vs inline subagents
-- Concurrent agent protocol (ACTIVE-WORK tracker, file claiming, stale entry policy) - wired by the "Concurrent agent coordination" step below
-
-### Change Protocol
-1. When a dependency changes: update spec first, then code. Never code without updating spec.
-2. When scope changes: update SCOPE.md, update inventory, ADR if significant.
-3. When updating a spec: add entry to the Change Log section at bottom (date + one-liner).
+After tagging, add a journal entry in `docs/local/design-journal.md`.
+Tags are diff-able, restorable, and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
 
 ### Enforcement
 Identify which rules need hooks (deterministic enforcement) vs CLAUDE.md (advisory):

@@ -113,23 +113,13 @@ Work through these categories. Skip any the implementer has already answered cle
 
 ### Outputs
 
-**SCOPE.md** (docs root):
-- One-paragraph summary
-- In / out / uncertain table with decision owners
-- Repositories section (active repos, what each does, how they relate)
-- Constraints section (compliance, performance, browser support)
-- "Done" in 2 sentences
+**SCOPE.md** - read [../../templates/SCOPE.md](../../templates/SCOPE.md), populate from grill answers.
 
-**DEPENDENCIES.md** (docs root):
-- Per dependency: what, status (available / promised by date / unknown), owner, resolution instructions for unknowns
+**DEPENDENCIES.md** - read [../../templates/DEPENDENCIES.md](../../templates/DEPENDENCIES.md), one row per external contract.
 
-**CONCERNS.md** (docs/local/, gitignored):
-- Seed initial concerns from scoping: assumptions with risk/deadline, unresolved questions
-- Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md)
+**CONCERNS.md** (docs/local/, gitignored) - read [../../templates/CONCERNS.md](../../templates/CONCERNS.md), seed with assumptions and open questions from scoping. Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md).
 
-**CONTEXT.md** (repo root, if not exists):
-- Seed with domain terms that surfaced during scoping
-- Follow existing CONTEXT-FORMAT if `/grill-with-docs` format file exists
+**CONTEXT.md** (repo root, if not exists) - read [../../templates/CONTEXT.md](../../templates/CONTEXT.md), seed with domain terms from scoping. Follow existing CONTEXT-FORMAT if `/grill-with-docs` format file exists.
 
 ### Gate
 

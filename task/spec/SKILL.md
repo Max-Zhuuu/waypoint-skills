@@ -25,7 +25,7 @@ Mark the recommendation and state why. The user picks or challenges.
 
 ### Phase 3 - Write the spec
 
-Output to `docs/specs/{feature-slug}.md` using the template from the methodology.
+Output to `docs/specs/{feature-slug}.md` using `docs/reference/features/_TEMPLATE.md` if it exists, otherwise [../../templates/feature-spec.md](../../templates/feature-spec.md).
 
 ### Phase 4 - Update shared artifacts
 
