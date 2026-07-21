@@ -279,3 +279,26 @@ When no Documentation Map exists, skills use the fallback list to detect what's 
 **Rationale:** "Never hardcoded paths" should be a universal principle, not one with ad-hoc exceptions.
 Map-resolving marker files keeps the principle clean.
 The fallback list in LIGHTWEIGHT-REFERENCE.md handles the bootstrapping case (no map yet).
+
+## Discovery: Agents as Optional Companions
+
+The skill family currently ships zero agent definitions.
+Custom agents (design-reviewer, tech-lead, ux-engineer) exist outside the family as user-authored files.
+
+Agents that could belong in the family (they serve skill workflows):
+- **design-reviewer** - visual QA + Lighthouse + perf traces, reads CONVENTIONS.md/DESIGN-SYSTEM.md when present
+- **tech-lead** - architecture scoping with Waypoint checkpoints, knows the resolution cascade and Documentation Map
+
+Agents that don't belong (personal preferences, domain-specific):
+- User-tuned variants of the above
+- Domain-specific agents (dotnet-skills, ux-engineer)
+
+Delivery model: /project-setup could offer agents during Phase 1 based on project stack.
+Agents install to `.claude/agents/` and reference the Documentation Map for project context.
+
+Open questions:
+- Naming: namespace (`waypoint-design-reviewer.md`) or bare names with conflict detection?
+- Scope: should agents reference LIGHTWEIGHT-REFERENCE.md for graceful degradation like skills do?
+- Relationship to chrome-devtools-axi: the design-reviewer agent should leverage perf commands (lighthouse, perf-start/stop, heap) that are already available but underdocumented in the agent context
+
+Deferred to a separate spec or future grill.
