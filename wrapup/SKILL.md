@@ -1,11 +1,11 @@
 ---
 name: wrapup
-description: Completion verb. Resolves flags from implementation verbs, cascades to shared docs, evaluates gate criteria. Optional but recommended after each /port or /tdd cycle.
+description: Completion verb. Resolves concerns from implementation, cascades to shared docs, evaluates gate criteria. Run after /port or /tdd.
 disable-model-invocation: true
 inputs:
-  feature-spec: docs/reference/features/{entity}.md (with ## Flags section)
+  concerns: CONCERNS.md entries referencing the current entity
 outputs:
-  spec-updated: feature spec with flags resolved and Change Log entry
+  concerns-resolved: CONCERNS.md entries marked resolved with decision lines
   shared-docs: CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md updated if cascade needed
   inventory: marker confirmed or advanced
 signals: []
@@ -17,98 +17,92 @@ The completion verb. Single reconciliation point for all doc updates after imple
 
 ## Role
 
-/wrapup is the only skill that writes to specs and shared docs after implementation.
-It resolves the structured flags that /port (or /tdd) left behind, cascades changes to shared docs, and evaluates whether the gate criteria are met.
+/wrapup resolves concerns raised during implementation, cascades changes to shared docs, and evaluates gate criteria.
+It is the only skill that writes to shared docs after implementation.
 
 ## When to invoke
 
 - After /port or /tdd reports complete (suggested by the verb)
-- Optional: skip if confident. Flags persist in the spec's ## Flags section.
-- If skipped: /check-in surfaces unresolved flags next session as priority-1 work.
+- Optional: skip if confident. Unresolved concerns persist in CONCERNS.md.
+- If skipped: /check-in surfaces them next session as priority work.
 
 ## Process
 
-### 1. Read flags
+### 1. Gather concerns
 
-Read the ## Flags section from the feature spec. Each flag is a structured discrepancy:
-- Spec vs. reality mismatch
-- Missing information discovered during build
-- Potential cascade to shared docs
+Read CONCERNS.md. Filter open concerns that reference the current entity (by `refs:` field or entity name in the description).
+Also include any concerns emitted by the implementation verb this session.
 
-### 1.5. Spec drift check
+### 2. Spec drift check
 
-Re-read the entity's documentation and compare against what was actually built on disk.
+Re-read the entity's documentation and compare against what was built.
 This catches discrepancies the implementation verb didn't flag - a documentation safety net, not a code review.
 
 **Feature spec** - check these sections against the built component:
 - Fields & Controls: is every declared field present? Any undeclared fields added?
 - Interaction Behaviors: do sortable/filterable/resizable declarations match?
-- Conditional Visibility: do show/hide rules match the implementation?
+- Conditional Visibility: do show/hide rules match?
 - Navigation: do declared routes and links exist?
 
 **Logic doc** - check these sections against the built code:
 - Data Model: do field names, types, and nullability match?
 - Relationships: are declared entity references present?
-- Status Lifecycle: do transitions match the implementation?
+- Status Lifecycle: do transitions match?
 - Business Rules: are declared rules enforced?
 
-Any mismatch becomes a new flag, fed into step 2's normal resolution cascade.
+Any mismatch becomes a new concern in CONCERNS.md (type: flag, source: /wrapup).
 
-**If no feature spec or logic doc exists:** print "No {doc type} found for {entity}. Spec drift check skipped." and continue.
-Do not block - this preserves /wrapup's lightweight contract for task-layer usage without project ceremony.
+If no feature spec or logic doc exists: "No {doc type} found. Drift check skipped." Continue.
+Do not block - this preserves /wrapup's lightweight contract for task-layer usage.
 
-### 2. Resolve each flag
+### 3. Resolve each concern
 
-For each flag, apply the resolution cascade (see [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#resolution-cascade)).
+Apply the resolution cascade (see [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#resolution-cascade)).
 
 Resolution outcomes:
 - **Spec was wrong** - update the spec, add Change Log entry
-- **Build was wrong** - fix the code (or note as a follow-up if non-trivial)
+- **Build was wrong** - fix the code (or note as follow-up)
 - **Both need updating** - update spec, fix code
 - **Intentional difference** - document in spec Change Log with rationale
 
-### 3. Cascade to shared docs
+Mark each resolved concern in CONCERNS.md: change status to `[resolved]`, add `resolved:` date and `decision:` line, move to the Resolved section.
 
-After resolving flags, check whether any resolution affects shared docs:
-- New naming pattern emerged -> update CONVENTIONS.md
-- New domain term resolved -> update CONTEXT.md
-- New token or design pattern -> update DESIGN-SYSTEM.md (if exists)
-- Spec structure changed in a way that affects the template -> flag for review
-- Spec fully superseded by a new version -> move old to docs/local/archive/
+### 4. Cascade to shared docs
 
-Only cascade when there's a genuine shared-doc change. Don't cascade for entity-local updates.
+Check whether any resolution affects shared docs:
+- New naming pattern emerged -> CONVENTIONS.md
+- New domain term resolved -> CONTEXT.md
+- New token or design pattern -> DESIGN-SYSTEM.md (if exists)
+- Spec structure change -> flag for template review
+- Spec fully superseded -> move old to docs/local/archive/
 
-### 4. Clear flags
-
-Remove the ## Flags section from the spec (all flags resolved or escalated).
-If any flags need human input: leave them with `[ESCALATED]` marker and move on.
+Only cascade for genuine shared-doc changes, not entity-local updates.
 
 ### 5. Evaluate gate
 
-Check the current phase's gate criteria against project state:
+Check the current phase's gate criteria:
 - How many items remain at current phase?
 - Are all gate conditions for completed items satisfied?
-- Are there blocking issues?
+- Are there blocking concerns?
 
 Report:
 
 ```
-Wrapup complete. {entity} resolved ({N} flags cleared, {M} escalated).
-Gate: {X}/{Y} criteria met. Remaining: {list specific items}.
+Wrapup complete. {entity}: {N} concerns resolved, {M} escalated.
+Gate: {X}/{Y} criteria met. Remaining: {list}.
 ```
 
 ## What /wrapup does NOT do
 
-- Does not propose next work (that's /check-in)
-- Does not implement features (that's the implementation verb)
-- Does not make architectural decisions (that's /grill-with-docs)
-- Does not fire enforcement rules (that's /check-in)
+- Propose next work (that's /check-in)
+- Implement features (that's the implementation verb)
+- Make architectural decisions (that's /grill-with-docs)
 
 ## Scaffolding
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
-/wrapup's spec drift check (step 1.5) gracefully handles missing docs: "No {doc type} found. Spec drift check skipped."
-Cascade to shared docs (step 3) only fires for docs that exist.
+If CONCERNS.md doesn't exist, /wrapup creates it with the resolved entries from this run.
+See [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md) for tier detection and fallback.
+Cascade to shared docs (step 4) only fires for docs that exist.
 
 ## Tone
 

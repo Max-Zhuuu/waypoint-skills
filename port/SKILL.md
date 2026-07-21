@@ -7,7 +7,7 @@ inputs:
   logic-doc: docs/reference/logic/{entity}.md
   source: files referenced in feature-spec
 outputs:
-  flags: appended to feature-spec ## Flags section
+  concerns: emitted to CONCERNS.md with entity reference
   inventory: marker updated to [P]
 signals:
   complete: suggests /wrapup to user
@@ -79,21 +79,19 @@ After the subagent completes, review against the spec and source:
 
 If the output has issues: direct the subagent to fix, or fix in the main context.
 
-### 5. Flag discrepancies
+### 5. Emit concerns
 
 When cross-reference finds discrepancies between spec and reality:
 - DO NOT update the spec. DO NOT update shared docs.
-- Append structured flags to the feature spec's ## Flags section:
+- Emit each discrepancy as a concern in CONCERNS.md (type: flag, source: /port, refs: entity spec):
 
 ```markdown
-## Flags
-
-- [ ] Spec says field X is editable, source system has it read-only in status=Closed
-- [ ] Logic doc missing validation rule for negative values (discovered in source)
-- [ ] New naming pattern emerged: {pattern} - may need CONVENTIONS.md update
+### C-{NNN} [open] Spec says field X is editable, source has it read-only in status=Closed
+type: flag | raised: {date} | source: /port
+refs: docs/reference/features/{entity}.md
 ```
 
-These flags are /wrapup's input.
+These concerns are /wrapup's input.
 
 ### 6. Report complete
 
@@ -102,7 +100,7 @@ Mark `[P]` in inventory.
 Suggest /wrapup to the user:
 
 ```
-Build complete. {N} flags. Run /wrapup to resolve, or continue to next entity.
+Build complete. {N} concerns emitted. Run /wrapup to resolve, or continue to next entity.
 ```
 
 ## Concurrency
@@ -126,7 +124,7 @@ When you spot a UX improvement during porting: write a one-liner in `docs/improv
 
 ## Scaffolding
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 /port requires its three inputs (feature spec, logic doc, source) regardless of scaffolding state.
 CONVENTIONS.md enhances pattern enforcement during review but is not required.
 

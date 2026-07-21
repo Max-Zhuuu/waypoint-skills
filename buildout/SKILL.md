@@ -110,7 +110,7 @@ These rules are inputs to /check-in's authority. /check-in decides how to act on
 
 1. **Code without specs** - features built without a spec
 2. **No phase leapfrogging** - unless /check-in recognizes a regression
-3. **Stale critical blockers** - QUESTIONS.md items (if file exists) older than 1 week
+3. **Stale critical concerns** - flags or questions in CONCERNS.md older than 1 week
 
 ### Archetype: product (extra rules)
 

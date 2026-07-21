@@ -6,15 +6,15 @@
 
 ### CP1: Pre-build spec prerequisite (per screen)
 - **Trigger:** before building each screen
-- **References:** feature spec, logic doc, CONVENTIONS.md, ASSUMPTIONS.md
+- **References:** feature spec, logic doc, CONVENTIONS.md, CONCERNS.md
 - **Action:** verify spec exists and is complete. If missing: block - leaked Phase 2 work. If spec exists but incomplete: flag specific gaps. Invoke `/spec` only if no source system to extract from (new feature not in legacy).
-- **Pass:** feature spec and logic doc exist, are cross-referenced against source, and have no `[ASSUMPTION]` markers older than their resolution deadline.
+- **Pass:** feature spec and logic doc exist, are cross-referenced against source, and no related assumptions in CONCERNS.md are past their resolution deadline.
 
 ### Post-build (per screen)
 - **Trigger:** when `/port` reports a screen complete
-- **References:** feature spec (## Flags section), CONVENTIONS.md, CONTEXT.md
-- **Action:** /port suggests /wrapup. If invoked: /wrapup resolves flags, cascades to shared docs, updates inventory to `[P]`. If skipped: flags persist, /check-in surfaces next session.
-- **Pass:** /wrapup resolved flags (or flags persist for next session).
+- **References:** CONCERNS.md (entity concerns), CONVENTIONS.md, CONTEXT.md
+- **Action:** /port suggests /wrapup. If invoked: /wrapup resolves concerns, cascades to shared docs, updates inventory to `[P]`. If skipped: concerns persist, /check-in surfaces next session.
+- **Pass:** /wrapup resolved concerns (or concerns persist for next session).
 
 ## Process
 
@@ -27,14 +27,14 @@ Invoke `/port` for each screen. `/port` handles:
 2. Generate subagent brief
 3. Spawn implementation subagent(s)
 4. Review output against spec and source
-5. Flag discrepancies in spec's ## Flags section
+5. Emit discrepancies as concerns in CONCERNS.md
 6. Run test suite - zero failures
 7. Report complete (signals contract: suggests /wrapup)
 
 ### Concurrency
 
 Primary fan-out opportunity. Multiple agents can build different screens IF:
-- Non-overlapping entities claimed in ACTIVE-WORK.md (see [project-setup/REFERENCES.md](../project-setup/REFERENCES.md#hook-catalog) for setup)
+- Non-overlapping entities claimed in CONCERNS.md (see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md#claims-section) for format)
 - Shared infra changes (router, shared components, types) are single-threaded
 - One agent proposes shared changes, merges; others pull
 

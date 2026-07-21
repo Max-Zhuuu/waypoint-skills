@@ -1,0 +1,5 @@
+# Spec docs - design artifacts, not shipped
+docs/specs/
+
+# Claude Code local state
+.claude/

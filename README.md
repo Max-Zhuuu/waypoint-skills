@@ -1,208 +1,216 @@
 # Waypoint Skills
 
-A skill family for building software products with AI agents.
-Two layers: invoke a verb for single-session work, or set up a project for multi-session continuity.
+Engineering methodology for building software products.
+Works standalone as process documentation, with manual tracking, or fully automated through AI agents.
 
-## Getting Started
+## Install
 
-Install the plugin, then invoke any skill directly - no setup required.
+### Claude Code
 
 ```bash
 npx skills add max-zhu-bv/waypoint-skills
 ```
 
-**Task layer** (single-session work): invoke a verb and go.
+Then invoke any skill directly. No setup required.
 
 ```
-/tdd CreateVessel         # test-driven build
-/spec VesselParticulars   # grill requirements, output spec
-/diagnose flaky-test      # disciplined debug loop
+/diagnose flaky-test       # disciplined debug loop
+/spec VesselParticulars    # grill requirements, output spec
+/tdd CreateVessel          # test-driven build
 ```
 
-**Project layer** (multi-session work): run /project-setup once, pick a workflow, then /check-in each session.
+### OpenCode
 
+OpenCode reads `.claude/skills/` natively, so the Claude Code install works as-is.
+For standalone use, copy adapters from `adapters/opencode/` to `.opencode/skills/{name}/SKILL.md`.
+
+### Cursor
+
+Copy adapter files from `adapters/cursor/` to `.cursor/rules/` in your project.
+Each `.mdc` file uses Agent Requested activation - Cursor's agent reads the description and applies it when relevant.
+
+### Codex
+
+Add the contents of files in `adapters/codex/` to your project's `AGENTS.md`.
+Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurable in `~/.codex/config.toml`).
+
+### No AI
+
+Read the process documents in `process/` directly.
+They are the complete methodology without any tool-specific instructions.
+
+## How It Works
+
+### The substrate: Concerns
+
+Every project accumulates unknowns, assumptions, and flags.
+Waypoint tracks these in a single flat file - `CONCERNS.md` - where each entry has an ID, a status, and a type:
+
+```markdown
+### C-041 [open] Should vessel status transitions require confirmation?
+type: question | raised: 2026-07-18
+WPF app has a confirmation dialog. Our implementation doesn't. Intentional or gap?
 ```
-/project-setup            # architecture, docs, CLAUDE.md, conventions
-/migrate                  # or /buildout, or /create
-/check-in                 # every session after that
-```
 
-/project-setup writes a Documentation Map to CLAUDE.md so every skill knows where things live:
+Skills read from and write to this file.
+Humans read from and write to this file.
+No special tooling required - it is a markdown document.
 
-```
-| Concept              | Path             | Status |
-|----------------------|------------------|--------|
-| Domain glossary      | CONTEXT.md       | Active |
-| Naming conventions   | CONVENTIONS.md   | Active |
-| Scope boundaries     | SCOPE.md         | Active |
-```
+See [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) for the full specification.
 
-Skills look up "Naming conventions" in the map instead of hardcoding `CONVENTIONS.md`.
-When a project grows, /project-setup can be re-run to restructure (e.g., split CONVENTIONS.md into a conventions/ folder) - the map updates, skills follow automatically.
+### Three engagement tiers
 
-`docs/local/` is the gitignored working state for questions, assumptions, and handoffs.
-See [LOCAL-DOCS-REFERENCE.md](project-setup/LOCAL-DOCS-REFERENCE.md) for structure and scaling rules.
+Tiers emerge from usage. You never select one.
 
-## Design Keywords
+**Tier 1 - Just working.**
+Invoke a skill. It works.
+At the end, the skill may suggest tracking something: "This bug revealed an undocumented business rule about vessel status transitions. It affects 3 other views. Worth tracking?"
+If yes, it emits one concern. If no, nothing changes.
 
-Four properties that shape how every skill behaves:
+**Tier 2 - Tracking.**
+CONCERNS.md exists and has content.
+/check-in reads it and proposes what to work on next.
+/wrapup resolves concerns after implementation.
+Discovery (/project-setup) is available when you want to think bigger - not as a gate, but as an option: "You have 8 assumptions, 3 medium-risk with no deadline. Want to do a validation pass?"
 
-- **Memoized** - decisions stick. You told /project-setup your test runner is Vitest? It writes that to CLAUDE.md and never asks again - even if you re-run setup, even if a different agent session picks up the project.
+**Tier 3 - Automated.**
+For practitioners who already know why tracking matters.
+Skills emit concerns silently during work, resolve them where they can, and surface only what needs human judgment.
+Suggestions shift from "track this?" to "I notice you've manually resolved 4 spec-drift concerns this week. Want me to add a drift check to your commit hook?"
 
-- **Reentrant** - re-running is safe. Your project outgrew flat config files? Re-run /project-setup. It reads what exists, keeps your answers, and only asks about the new structure. No "start over" path.
+### Process documents
 
-- **Self-healing** - broken references get caught. Someone deletes CONVENTIONS.md? Next /check-in notices the Documentation Map points to a missing file and offers to fix it.
+The engineering methodology behind each skill is extracted into standalone documents that work without AI:
 
-- **Bias to action** - skills should just work. If /spec can infer the naming convention from existing code, it uses it and shows what it chose. Questions are reserved for genuine forks where either path is reasonable and the wrong one wastes real work.
+| Document | Covers | Derived from |
+|----------|--------|-------------|
+| [process/debugging.md](process/debugging.md) | 7-phase debugging discipline | /diagnose |
+| [process/requirements.md](process/requirements.md) | Requirements grilling and spec writing | /spec |
+| [process/tdd.md](process/tdd.md) | Test-driven development philosophy | /tdd |
+| [process/architecture-review.md](process/architecture-review.md) | Codebase architecture assessment | /improve-codebase-architecture |
+| [process/learning.md](process/learning.md) | Structured technical learning | /learn |
 
-### Decision gates
+Each document ends with an "Adapting to your context" section covering solo developer, team session, AI-assisted, and fully automated modes.
 
-When a skill does ask a question, two conventions keep the flow natural:
-
-**Conversational fallback:** if you pick "Other" and write something like "I'm not sure, what would you recommend?", the agent drops into discussion - explains trade-offs, talks through the options. When you're ready, it re-presents the original question.
-
-**Learn-mode elaboration:** if you ask "what does that mean?", the agent gives a short explainer scoped to the specific decision (a few key terms, one further reading link), then re-presents the question.
-
-## Two-Layer Model
-
-**Project layer** - for work that spans multiple sessions.
-Run /project-setup once, pick a workflow (/migrate, /buildout, or /create), then /check-in at the start of every session.
-/check-in reads a workflow record from CLAUDE.md so it knows where you left off without asking.
-
-**Task layer** - for one-and-done work.
-Invoke any verb directly: `/tdd`, `/spec`, `/diagnose`, `/learn`, etc.
-No setup required. If project docs exist, skills use them. If not, they still work - you just don't get cross-referencing or convention enforcement.
-
-**Bridge skills** (marked `*` in the Skill Map) live in both layers.
-Example: `/spec` is a task-layer verb - you can run `/spec UserProfile` with zero setup and get a grilled spec.
-But if SCOPE.md and CONVENTIONS.md exist, `/spec` also cross-references scope boundaries and enforces naming patterns.
-
-Rule of thumb: if you need progress tracked across sessions, use the project layer. Otherwise, invoke verbs directly.
+The Claude Code skills are thin adapters that reference these documents and add platform-specific execution notes (which tools to use, how to handle user interaction, where to emit concerns).
 
 ## Skill Map
 
-### User-invoked
+### Task layer (standalone verbs)
 
 ```
-PROJECT SETUP
-  /project-setup          Foundation: architecture, docs, CLAUDE.md, conventions
-
-WORKFLOWS (pick one)
-  /migrate                Replace an existing system layer by layer
-  /buildout               Build a new product from scratch
-  /create*                Add features to an existing codebase
-
-SESSION
-  /check-in               Orient, propose next task, fire checkpoints
-
 IMPLEMENTATION
-  /tdd                    Test-driven: define behavior, test first, build to satisfy
-  /port                   Migration: capture current behavior, replicate, verify parity
+  /tdd                    Test-driven build
+  /port                   Migration: capture, replicate, verify parity
 
-TRACKER
-  /to-issues*             Convert specs/plans to tracker issues
-  /triage*                Triage and prioritize backlog
-
-SUPPORTING
-  /spec*                  Grill requirements, output spec file
-  /wrapup                 Resolve flags, spec drift check, cascade to shared docs
-  /grill-with-docs        Architecture decisions that meet the ADR threshold
-  /reorient               Strategic course correction, axis audit, re-prioritize
-  /learn                  Trade-off exploration with options, terms, quiz
-  /prototype*             Quick validation mockup
-  /diagnose               Disciplined debug loop for hard bugs
+REQUIREMENTS
+  /spec*                  Grill requirements, output spec
   /grill-me               Open-ended interview on any plan or decision
-  /author-skill           Guided skill authoring with Waypoint conventions
+  /grill-with-docs        Architecture decisions that meet the ADR threshold
+
+DIAGNOSTIC
+  /diagnose               Disciplined debug loop for hard bugs
   /improve-codebase-architecture  Surface architectural friction, propose deepening
 
-* = bridge skill (task-layer core, project-layer integration)
+LEARNING
+  /learn                  Explore trade-offs with options, terms, quiz
+
+CREATION
+  /prototype*             Quick validation mockup (logic, UI, or design)
+  /create*                Add a feature to an existing codebase
+
+TRACKER
+  /to-issues*             Convert specs to tracker issues
+  /triage*                Triage and prioritize backlog
+
+* = bridge skill: works standalone, gains cross-referencing with project docs
 ```
 
-### Model-invoked
+### Project layer (operations over concerns)
+
+```
+SESSION
+  /check-in               Read concerns, propose next task
+  /wrapup                 Resolve concerns after implementation, cascade to shared docs
+  /reorient               Analyze concern stats, emit new flags, re-prioritize
+
+SETUP (optional, not a gate)
+  /project-setup          Seed initial concerns, establish conventions and doc structure
+  /migrate                Legacy replacement workflow with phase tracking
+  /buildout               Greenfield product workflow with phase tracking
+```
+
+### Model-invoked (not user-facing)
 
 ```
   chrome-devtools-axi     Browser automation via Chrome DevTools
-  find-skills             Skill discovery and installation from the ecosystem
+  find-skills             Skill discovery and installation
+  author-skill            Guided skill authoring with Waypoint conventions
 ```
 
-## Session Flows
+## Design Properties
 
-### Task session
+Four properties shape every skill:
 
-```mermaid
-graph LR
-    A[invoke verb] --> B["/tdd, /spec, /port,\n/diagnose, /prototype..."]
-    B --> C{verb completes}
-    C --> D[done]
-    C --> E["/wrapup (optional)"]
-    E --> F[doc sync + flag resolution]
-```
+- **Memoized** - decisions persist.
+  Your test runner is Vitest? That's written to CLAUDE.md once and never asked again, even across sessions and agents.
 
-### Project session
+- **Reentrant** - re-running is safe.
+  Project outgrew flat config files? Re-run /project-setup. It reads what exists, keeps your answers, asks only about the new structure.
 
-```mermaid
-graph LR
-    A["/check-in"] --> B["read workflow,\nphase files,\nACTIVE-WORK.md"]
-    B --> C{drift?}
-    C -->|yes| D["/reorient"]
-    D --> E[re-prioritize]
-    E --> B
-    C -->|no| F[propose task]
-    F --> G["pre-build checkpoint\n(verify spec, load refs)"]
-    G --> H["/port or /tdd"]
-    H --> I["post-build checkpoint\n(review, doc sync)"]
-    I --> J["suggest /wrapup"]
-    J --> K[propose next task]
-```
+- **Self-healing** - broken references get caught.
+  Someone deletes CONVENTIONS.md? Next /check-in notices the Documentation Map points to a missing file and offers to fix it.
 
-## Glossary
+- **Bias to action** - skills should just work.
+  If /spec can infer the naming convention from existing code, it uses it and says what it chose.
+  Questions are reserved for genuine forks where either path is reasonable and the wrong one wastes real work.
 
-**Active Workflow** - a record /migrate, /buildout, or /create writes to CLAUDE.md: "we're migrating a VMS frontend, currently in Phase 4."
-/check-in reads it next session and picks up where you left off.
+### The nudge protocol
 
-**Bridge skill** - a verb that works alone but gets smarter with project docs (marked `*` in the Skill Map).
-Example: `/spec` grills requirements either way, but when SCOPE.md exists, it also checks whether the feature is in scope.
+When a skill discovers something worth tracking, it follows three steps:
 
-**Checkpoint** - a validation step inside phase files: what triggers it, what files to check against, what to do, and what "pass" looks like.
-Example: "before building, verify the spec covers all source system fields."
+1. **What** - state the specific discovery. Not abstract: "Undocumented rule: vessel status requires confirmation before transition."
+2. **Why** - state why it matters. Not generic: "This affects 3 other views with status transitions."
+3. **Ask** - offer once, respect the answer, never nag.
 
-**Documentation Map** - the table in CLAUDE.md that tells skills where files live.
-/check-in uses it to detect missing files (e.g., map says "Naming conventions -> CONVENTIONS.md" but the file was deleted).
+This protocol appears in the process documents as a human checklist item ("before closing a debugging session, check: did you discover anything that affects other parts of the system?") and in the AI adapters as concern emission logic.
 
-**Naming classes** - file suffix convention: `FOO.md` (user-facing), `FOO-REFERENCE.md` (skill-internal), `FOO-FORMAT.md` (template).
+### Decision gates
 
-**Resolution cascade** - when a spec disagrees with the code: (1) read the source of truth, (2) write a test to prove which side is right, (3) only ask the human if both are ambiguous.
+When a skill asks a question:
 
-**Single-writer** - only /wrapup edits content docs (CONVENTIONS.md, CONTEXT.md).
-Other skills flag what should change; /wrapup makes the edits.
-Machine-readable state in CLAUDE.md has per-section owners (e.g., /project-setup owns the Documentation Map).
+**Conversational fallback:** pick "Other" and write "I'm not sure, what would you recommend?" - the agent drops into discussion, explains trade-offs, then re-presents the question.
 
-See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions and the full write-ownership table.
+**Learn-mode elaboration:** ask "what does that mean?" - the agent gives a scoped explainer (key terms, one link), then re-presents the question.
 
-## Phase Overview
+## For Non-AI Users
 
-Phase systems belong to the project layer.
-Task-layer skills have no phases.
+The process documents in `process/` are the complete engineering methodology without any AI-specific instructions.
+Read them as guides. Follow them as checklists. Adapt them to your team's tools.
 
-### Migration (/migrate)
+CONCERNS.md is a markdown file you maintain by hand.
+Open it, Ctrl+F for `[open]`, add new entries by copying a header line and changing the ID and text.
+No tooling required.
 
-| Phase | Name | Verb | Key Checkpoint |
-|-------|------|------|----------------|
-| 0-1 | Setup | /project-setup + /migrate | - |
-| 2 | Documentation Sprint | manual | Gate: every entity spec'd |
-| 3 | Vertical Slice | /port | Pre-build spec check, post-slice architecture grill |
-| 4 | Horizontal Buildout | /port | Pre-build spec prerequisite, post-build review + doc sync |
-| 5 | Integration | /port | Pre-wire dependency + shape check, post-wire review |
-| 6a | Functional Validation | manual | Post-validation review per screen |
-| 6b | Design System + UX | /prototype | See migrate/REFERENCES.md for design phase details |
-| 7 | Cutover | manual | Ship checklist |
+The AI skills are one way to execute the methodology - not the only way.
 
-### Buildout (/buildout)
+## Reference
 
-| Phase | Name | Verb | Key Checkpoint |
-|-------|------|------|----------------|
-| 0-1 | Setup | /project-setup + /buildout | Project intake |
-| 2 | Discovery & Validation | /spec | Gate: persona, MoSCoW, specs |
-| 3 | MVP Build | /tdd | Pre-build spec check, post-slice architecture grill |
-| 4 | Iterate & Ship | /tdd | Pre-build for new Must, design consolidation |
-| - | Design System | - | After Phase 3 gate; see buildout/REFERENCES.md |
+- [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking substrate format specification
+- [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) - Extended definitions: Documentation Map, Resolution Cascade, Single-Writer, naming classes
+- [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) - How skills adapt to engagement tier, nudge protocol, concern emission rules
+- [process/](process/) - Standalone engineering methodology documents
+
+## Phase Systems
+
+/migrate and /buildout have phase tracking for large efforts.
+These are optional deepening, not prerequisites.
+
+| Workflow | Phases | When to use |
+|----------|--------|-------------|
+| /migrate | 7 phases (docs sprint through cutover) | Replacing an existing system |
+| /buildout | 4 phases (discovery through iterate-and-ship) | Building a new product |
+| /create | No phases | Adding features to an existing codebase |
+
+Phase details live in each skill's directory.
+You can start with /create and upgrade to /migrate or /buildout later if the scope warrants it.

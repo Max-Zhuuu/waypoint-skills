@@ -122,10 +122,9 @@ Work through these categories. Skip any the implementer has already answered cle
 **DEPENDENCIES.md** (docs root):
 - Per dependency: what, status (available / promised by date / unknown), owner, resolution instructions for unknowns
 
-**docs/local/ASSUMPTIONS.md** (gitignored):
-- Per assumption: description, risk level (low/medium/high), resolution deadline, owner
-- Optimistic planning is fine; invisible assumptions are not
-- Format: see [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md)
+**CONCERNS.md** (docs/local/, gitignored):
+- Seed initial concerns from scoping: assumptions with risk/deadline, unresolved questions
+- Format: see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md)
 
 **CONTEXT.md** (repo root, if not exists):
 - Seed with domain terms that surfaced during scoping
@@ -137,6 +136,7 @@ Work through these categories. Skip any the implementer has already answered cle
 - [ ] DEPENDENCIES.md has all external contracts identified
 - [ ] Uncertain scope items have decision owners and deadlines
 - [ ] CONTEXT.md exists (even if minimal)
+- [ ] CONCERNS.md seeded with assumptions and open questions from scoping
 
 ## Tier selection
 

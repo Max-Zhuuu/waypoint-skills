@@ -127,12 +127,12 @@ These rules are inputs to /check-in's authority. /check-in decides how to act on
 
 1. **Code without specs** - screens in code without a feature spec
 2. **No phase leapfrogging** - unless /check-in recognizes a regression (see below)
-3. **Stale critical blockers** - QUESTIONS.md items (if file exists) older than 1 week
+3. **Stale critical concerns** - flags or questions in CONCERNS.md older than 1 week
 
 ### Archetype: migration (extra rules)
 
 4. **Stale inventory** - status markers that don't match actual state
-5. **Overdue assumptions** - ASSUMPTIONS.md items (if file exists) past resolution deadline
+5. **Overdue assumptions** - assumptions in CONCERNS.md past resolution deadline
 6. **Premature design** - enhancement/design work in production code before Phase 6a gate
 
 ### Phase regression

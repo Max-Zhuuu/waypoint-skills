@@ -21,13 +21,13 @@ Parallelizes well. Multiple agents document different entities with no file conf
 
 ## Assumption handling
 
-1. Log unknowns in `docs/local/QUESTIONS.md` (entity, question, who might know, date)
-2. If reasonable assumption exists: mark `[ASSUMPTION]` in spec, add to ASSUMPTIONS.md with risk level
+1. Log unknowns as concerns in CONCERNS.md (type: question, entity reference, date)
+2. If reasonable assumption exists: mark `[ASSUMPTION]` in spec, add to CONCERNS.md (type: assumption, with risk level)
 3. Do not block. Document what you know, flag what you don't.
 
 ## Gate
 
 - [ ] Every in-scope entity has logic doc + feature spec
 - [ ] Inventory shows no items at `[ ]`
-- [ ] QUESTIONS.md triaged: critical escalated, non-critical deferred with deadlines
+- [ ] Open concerns triaged: critical escalated, non-critical deferred with deadlines
 - [ ] High-risk assumptions have resolution plans
