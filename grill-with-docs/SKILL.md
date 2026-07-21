@@ -36,6 +36,8 @@ If none of these exist, create files lazily - only when you have something to wr
 If `CONTEXT.md` doesn't exist, create one when the first term is resolved.
 If `docs/adr/` doesn't exist, create it when the first ADR is needed.
 
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+
 ## During the session
 
 ### Challenge against the glossary

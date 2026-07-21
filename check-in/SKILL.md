@@ -106,6 +106,7 @@ If a file referenced by an enforcement rule doesn't exist (docs/local/ is person
 When a missing file would be useful for the current workflow phase (e.g., QUESTIONS.md during integration work), mention it once in the report as awareness: "QUESTIONS.md doesn't exist yet - will be created when unknowns surface." Not a blocker, not repeated.
 
 See [project-setup/LOCAL-DOCS-REFERENCE.md](../project-setup/LOCAL-DOCS-REFERENCE.md) for the canonical file list and lazy creation rule.
+See [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md) for degradation detection logic and fallback paths.
 
 ## Dynamic adaptation
 
@@ -121,6 +122,29 @@ The archetype sets the starting ceremony level. Reality adjusts it.
 - **Invoke /reorient** when drift detected: same phase 2+ weeks, accumulating violations, stale questions.
 - **/reorient** output feeds back into the task proposal stack.
 
+## Coordination fabric
+
+When the project has multiple concurrent agent sessions, /check-in coordinates.
+
+### State recording
+
+After each session, /check-in updates CLAUDE.md's Project Scaffold section:
+- Last check-in date
+- What was resolved this session
+- Which docs were touched
+
+### Concurrent session awareness
+
+On invocation, read the recorded state from prior check-ins:
+- **Memoized** - don't re-resolve what another session already resolved. If the prior check-in recorded resolving a question, skip it.
+- **Reentrant** - propose work in non-conflicting areas without re-asking. If a prior session claimed an entity, propose a different one.
+- **Self-healing** - detect scope creep across sessions. If two sessions touched overlapping areas without coordination, suggest /reorient.
+
+When ACTIVE-WORK.md shows multiple active sessions, mention it in the report:
+```
+{N} concurrent sessions active. Proposing work in unclaimed areas.
+```
+
 ## Resolution cascade
 
-When a checkpoint finds a mismatch (spec vs code, spec vs API, spec vs source), apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade). Never skip to human validation without trying the first two steps.
+When a checkpoint finds a mismatch (spec vs code, spec vs API, spec vs source), apply the resolution cascade (see [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#resolution-cascade)). Never skip to human validation without trying the first two steps.

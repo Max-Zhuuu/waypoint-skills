@@ -253,6 +253,12 @@ Example: `2026-07-17-css-grid-gap.md`, `2026-07-17-pinia-store-patterns.md`.
 - Keep each file under 40 lines. This is a reference card, not a textbook.
 - These files are gitignored (lives in `docs/local/`). They are personal learning artifacts, not project documentation.
 
+## Scaffolding
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+When CONTEXT.md exists, cross-reference domain terms in the Terms block.
+When CONTEXT.md is missing, still explain domain terms inline but skip the "append to CONTEXT.md" step.
+
 ## Tone
 
 Keep it brisk.

@@ -201,6 +201,12 @@ If the prior audit is more than 2 weeks old and substantially different from the
 - **Before spinning up parallel agents** - make sure they are working on the right things
 - **After a milestone ships** - reassess what is next
 
+## Scaffolding
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+/reorient reads whatever tracking docs exist (inventory, PAGES, roadmap) and adapts.
+Without formal trackers, the skill relies more heavily on git history and code structure analysis.
+
 ## Tone
 
 Direct.

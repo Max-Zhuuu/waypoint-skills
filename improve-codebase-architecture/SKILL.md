@@ -28,6 +28,8 @@ Key principles (see [LANGUAGE.md](LANGUAGE.md) for the full list):
 
 This skill is _informed_ by the project's domain model. The domain language gives names to good seams; ADRs record decisions the skill should not re-litigate.
 
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+
 ## Process
 
 ### 1. Explore

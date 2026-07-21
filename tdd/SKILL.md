@@ -100,6 +100,12 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 
 **Never refactor while RED.** Get to GREEN first.
 
+## Scaffolding
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+When CONVENTIONS.md exists, respect naming patterns in test and implementation files.
+When TESTING.md exists, follow project-specific test philosophy.
+
 ## Checklist Per Cycle
 
 ```

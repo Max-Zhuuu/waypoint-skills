@@ -138,6 +138,60 @@ Work through these categories. Skip any the implementer has already answered cle
 - [ ] Uncertain scope items have decision owners and deadlines
 - [ ] CONTEXT.md exists (even if minimal)
 
+## Tier selection
+
+After Phase 0 scoping, determine the project tier conversationally.
+Read [SCOPE-REFERENCE.md](SCOPE-REFERENCE.md) to explain options if the user asks.
+
+| Tier | When | Scaffolding |
+|------|------|-------------|
+| Small | Solo dev, few features, low ceremony | CLAUDE.md + basic SCOPE.md |
+| Moderate | Standard project, team, conventions needed | Full flat files at root |
+| Large | Complex domain, multiple teams, extensive conventions | conventions/ folder + full docs tree |
+
+Record the tier in CLAUDE.md's Project Scaffold section:
+
+```markdown
+## Project Scaffold
+
+| Field | Value |
+|-------|-------|
+| Tier | Moderate |
+| Setup date | {date} |
+| Last re-entry | {date} |
+| Last check-in | - |
+```
+
+Tier can be changed by re-running /project-setup (reentrant).
+
+## Documentation Map
+
+After scaffolding, write the Documentation Map to CLAUDE.md.
+Maps logical concepts to physical file paths - skills resolve through this map, never hardcoded paths.
+
+```markdown
+## Documentation Map
+
+| Concept | Path | Status |
+|---------|------|--------|
+| Domain glossary | CONTEXT.md | Active |
+| Naming conventions | CONVENTIONS.md | Active |
+| Test expectations | TESTING.md | Active |
+| Scope boundaries | SCOPE.md | Active |
+| Architecture decisions | docs/adr/ | Active |
+| Skill state | .claude/ | Active |
+```
+
+Tier-dependent content: Small projects get fewer rows. Large projects add conventions/ subpaths.
+See [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#documentation-map) for the full tier-dependent table.
+
+On re-entry, read the existing map and only update entries that changed. Don't regenerate from scratch.
+
+### Skill State directory
+
+Create `.claude/` if it doesn't exist. This directory holds skill-internal state files (marker files, setup state).
+Map-resolvable through the "Skill state" concept in the Documentation Map.
+
 ## Phase 1 - Architecture & Standards
 
 **Goal:** every decision that affects all screens/features is made once, before building.
@@ -149,7 +203,7 @@ Detailed instructions in [PHASE-1.md](PHASE-1.md). Read that file before proceed
 - [ ] Architecture decisions documented as ADRs in `docs/adr/` (via `/grill-with-docs`)
 - [ ] Project skeleton runs (dev server + tests)
 - [ ] Documentation structure created with spec templates
-- [ ] CLAUDE.md process definition written
+- [ ] CLAUDE.md with Project Scaffold + Documentation Map sections
 - [ ] ARCHITECTURE.md summary exists
 
 ## Tone

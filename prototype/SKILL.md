@@ -29,6 +29,19 @@ The three branches produce very different artifacts - getting this wrong wastes 
 5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
 6. **Delete or absorb when done.** When the prototype has answered its question, either delete it or fold the validated decision into the real code - don't leave it rotting in the repo.
 
+## Bridge behavior
+
+/prototype is a bridge skill: fully functional standalone, enhanced by project scaffolding.
+
+**Integration points when scaffolding exists:**
+- Workflow design system phases: /prototype integrates with /buildout Phase design system and /migrate Phase 6b
+- CONVENTIONS.md: UI prototypes use the project's design tokens and naming patterns
+- CONTEXT.md: domain terms inform prototype naming and labeling
+
+**Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+
 ## When done
 
 The _answer_ is the only thing worth keeping from a prototype. Capture it somewhere durable (commit message, ADR via `/grill-with-docs`, spec update via `/spec`, or a `NOTES.md` next to the prototype) along with the question it was answering. If the user is around, that capture is a quick conversation; if not, leave the placeholder so they (or you, on the next pass) can fill in the verdict before deleting the prototype.

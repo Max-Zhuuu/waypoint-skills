@@ -119,6 +119,19 @@ Output to `docs/specs/{feature-slug}.md`:
 2. If the feature involves an architecture decision (new pattern, new state management approach, new API convention): suggest invoking `/grill-with-docs` for an ADR.
 3. If the feature should be tracked in an inventory or roadmap: add it.
 
+## Bridge behavior
+
+/spec is a bridge skill: fully functional standalone, enhanced by project scaffolding.
+
+**Integration points when scaffolding exists:**
+- SCOPE.md: cross-reference scope boundaries, check if feature is in/out/uncertain
+- CONVENTIONS.md: enforce naming patterns in the spec output
+- CONTEXT.md: validate domain terms against the glossary, flag new terms for Phase 4
+
+**Without scaffolding:** core grill loop works. No scope cross-referencing, no convention enforcement, no term validation. All outputs still produced.
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+
 ## Tone
 
 Concise. A spec is a contract, not a narrative.

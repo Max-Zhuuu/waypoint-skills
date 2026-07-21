@@ -98,6 +98,20 @@ On invocation, write or update the `## Active Workflow` section in CLAUDE.md:
 /check-in reads this section to know what workflow is active and orient accordingly.
 When /create completes, update Status to `completed ({date})`.
 
+## Bridge behavior
+
+/create is a bridge skill: works as a single-session orchestrator by default, but can write an Active Workflow record for multi-session features.
+
+**Task-layer mode (default):** user describes a feature, /create sequences spec -> build -> wrapup in one session. No Active Workflow record needed.
+
+**Project-layer mode:** when the feature is large enough to span sessions, /create writes the Active Workflow record (step 3 in On invocation). /check-in picks it up next session.
+
+The user doesn't choose the mode explicitly - /create writes the workflow record by default (step 3). If the work completes in one session, the record is cleared at the end. If the user leaves mid-feature, /check-in finds the record and continues.
+
+**Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+
 ## Tone
 
 Lightweight. This is the daily driver for "I need to add something."

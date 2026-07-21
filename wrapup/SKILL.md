@@ -59,7 +59,7 @@ Do not block - this preserves /wrapup's lightweight contract for task-layer usag
 
 ### 2. Resolve each flag
 
-For each flag, apply the resolution cascade (see README.md > Key Concepts > Resolution Cascade).
+For each flag, apply the resolution cascade (see [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#resolution-cascade)).
 
 Resolution outcomes:
 - **Spec was wrong** - update the spec, add Change Log entry
@@ -103,6 +103,12 @@ Gate: {X}/{Y} criteria met. Remaining: {list specific items}.
 - Does not implement features (that's the implementation verb)
 - Does not make architectural decisions (that's /grill-with-docs)
 - Does not fire enforcement rules (that's /check-in)
+
+## Scaffolding
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+/wrapup's spec drift check (step 1.5) gracefully handles missing docs: "No {doc type} found. Spec drift check skipped."
+Cascade to shared docs (step 3) only fires for docs that exist.
 
 ## Tone
 

@@ -124,6 +124,12 @@ Cross-session coordination (ACTIVE-WORK tracker, file claiming, stale entry poli
 
 When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
 
+## Scaffolding
+
+If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+/port requires its three inputs (feature spec, logic doc, source) regardless of scaffolding state.
+CONVENTIONS.md enhances pattern enforcement during review but is not required.
+
 ## References
 
 Methodology references in [REFERENCES.md](REFERENCES.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.
