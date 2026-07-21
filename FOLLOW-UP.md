@@ -17,7 +17,7 @@ Non-interrupting cleanup and completion items after the initial restructure.
 ## Process extraction (remaining skills)
 
 - [x] /diagnose - process/debugging.md + adapter
-- [ ] /spec - process/requirements.md + adapter
+- [x] /spec - process/requirements.md + adapter
 - [ ] /tdd - process/tdd.md + adapter (supporting docs already close to standalone)
 - [ ] /improve-codebase-architecture - process/architecture-review.md + adapter
 - [ ] /learn - process/learning.md + adapter
