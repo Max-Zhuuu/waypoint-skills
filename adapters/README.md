@@ -1,7 +1,7 @@
 # Tool Adapters
 
-Proof-of-concept adapters that connect tool-agnostic process docs to specific AI coding tools.
-Each adapter is a thin file that points to a process doc and translates execution idioms.
+Thin files that connect tool-agnostic process docs to specific AI coding tools.
+Each adapter points to a process doc and translates execution idioms.
 
 ## Architecture
 
@@ -54,4 +54,4 @@ Each adapter needs three things:
 2. **Translate interaction idioms.** Map "show hypotheses to user before testing" to whatever interactive mechanism the tool supports.
 3. **Note capability gaps.** If the tool lacks subagents, say "work inline." If it lacks structured output, describe a markdown format.
 
-A good adapter is 15-30 lines. If it's longer, methodology is leaking into the adapter.
+A good adapter is 25-45 lines. If it's longer, methodology is leaking into the adapter.
