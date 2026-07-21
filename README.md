@@ -168,9 +168,9 @@ Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/pr
 Skills can optionally track what a project doesn't know yet, is assuming, or has flagged as wrong - in a single file called `CONCERNS.md`:
 
 ```markdown
-### C-041 [open] Should vessel status transitions require confirmation?
+### C-041 [open] Should status changes require a confirmation dialog?
 type: question | raised: 2026-07-18
-WPF app has a confirmation dialog. Our implementation doesn't. Intentional or gap?
+Legacy app confirms before status transitions. Our rebuild doesn't. Intentional or gap?
 ```
 
 Three types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **flags** (something looks wrong).
