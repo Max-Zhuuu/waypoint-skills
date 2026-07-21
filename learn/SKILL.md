@@ -113,145 +113,14 @@ After applying the edit, offer reinforcement via `AskUserQuestion` with `multiSe
 
 The user can select one, both, or skip entirely.
 
-### When to skip the offer
+Skip the offer when: the edit was trivial (Phase 1 short-circuited), the user is clearly in a hurry, or the concepts are ones they've demonstrated mastery of this session.
 
-- The edit was trivial (Phase 1 routed around options entirely)
-- The user is clearly in a hurry (short prompts, multiple edits in quick succession)
-- The concepts involved are ones the user has demonstrated mastery of in this session
-
-### Quiz
-
-Present 2-3 quick multiple-choice questions inline (one at a time).
-
-Questions test the **conceptual model**, not syntax memorization:
-- "What happens if you apply `gap` to a `display: block` element?" (tests: understanding that gap requires flex/grid context)
-- "You set `clamp(1rem, 4vw, 2rem)` on font-size. At a 300px viewport, which value wins?" (tests: understanding the clamp evaluation)
-- "A fixture has status 'Voyage Commenced'. Can you still edit its cargo records?" (tests: domain lifecycle understanding)
-
-Rules:
-- Questions must reference the specific concepts from the options the user just compared - not generic trivia.
-- Each question gets 3 choices. Wrong answers should be plausible misconceptions, not obviously absurd.
-- After the user answers, give a one-sentence explanation of why the right answer is right (or why their answer was wrong). Connect it back to the code they just touched.
-- If the user gets all questions right, acknowledge it briefly and move on.
-- If they miss one, explain the gap and link to the relevant Further Reading resource.
-- Never quiz on more than 3 questions. The point is a quick check, not an exam.
-
-### Practice
-
-Generate a single exercise file at `docs/local/learning/exercises/{date}-{slug}.md`.
-Create the `docs/local/learning/exercises/` directory if it does not exist.
-
-The file has three sections:
-
-#### 1. Reference tour
-
-Find 2-3 places in the actual repo where the concept (or a closely related pattern) is already used.
-For each, include:
-- `file:line` pointer the user can cmd-click open
-- 3-5 line snippet showing the key pattern
-- One-sentence annotation: what this demonstrates and why it works this way
-
-The tour grounds the concept in code the user already has. Pick snippets from different files to show how the pattern recurs.
-
-#### 2. Exercises
-
-2-3 small concrete tasks, increasing in difficulty:
-- **Exercise 1** (apply): reproduce the pattern in a new context. "Create a `useX` composable that does Y, following the pattern in `file:line`."
-- **Exercise 2** (extend): add a twist that forces a design choice. "Now add Z - do you need a `computed` or a `watch`? Why?"
-- **Exercise 3** (optional, edge case): probe the boundary. "What happens when the input is empty/null/concurrent? Handle it."
-
-Rules:
-- Each exercise must be specific enough to code against without asking clarifying questions.
-- Reference the real repo files where the user can see the pattern in action.
-- Exercises build on the chosen option from Phase 2 - not the rejected alternatives.
-- Keep the total exercise file under 60 lines. This is a practice card, not a workshop.
-
-#### 3. Check yourself
-
-Per exercise, a 2-3 line solution approach (the key decisions, not full code).
-If the concept has a common pitfall, call it out: "If you used X instead of Y, you'll hit Z because..."
-
-### File format
-
-```markdown
-# Practice: {Topic}
-
-## Reference tour
-
-### {Pattern name} - `src/path/file.ts:42`
-```ts
-// 3-5 line snippet
-```
-{One-sentence annotation.}
-
-### {Pattern name} - `src/path/other.vue:18`
-```vue
-// 3-5 line snippet
-```
-{One-sentence annotation.}
-
-## Exercises
-
-### 1. {Verb} - {what to build}
-{2-3 sentence instruction. Reference file:line for the pattern to follow.}
-
-### 2. {Verb} - {what to extend}
-{2-3 sentence instruction. State the design choice they'll face.}
-
-### 3. (Stretch) {Verb} - {edge case}
-{2-3 sentence instruction.}
-
-## Check yourself
-
-**1.** {Key decisions, 2-3 lines.}
-**2.** {Key decisions + why this choice wins.}
-**3.** {Key decisions + common pitfall.}
-```
+For quiz and practice protocols, read [LEARN-REFERENCE.md](LEARN-REFERENCE.md).
 
 ## Phase 6 - Save learning notes (conditional)
 
-If the skill produced substantial output - 3 options with previews, a terms block with 3+ entries, further reading links, a quiz, or practice exercises - save a condensed record to `docs/local/learning/`.
-
-### When to save
-
-Save when Phase 3 (Terms in play) has 3+ entries OR the user completed the quiz OR practice exercises were generated.
-Skip when the task was trivial (Phase 1 short-circuited) or the terms block was thin.
-
-### File naming
-
-`{date}-{slug}.md` where slug is a 2-3 word kebab-case topic.
-Example: `2026-07-17-css-grid-gap.md`, `2026-07-17-pinia-store-patterns.md`.
-
-### File structure
-
-```markdown
-# {Topic} - {date}
-
-## Context
-{One sentence: what task triggered this, what file}
-
-## Decision
-{Which option was chosen and why}
-
-## Key concepts
-{Terms in play block, condensed - term: one-line definition}
-
-## Resources
-{Further reading links}
-
-## Quiz results
-{If quiz was taken: questions, answers, any gaps identified. Omit section if no quiz.}
-
-## Practice
-{If exercises were generated: link to exercise file. Omit section if no practice.}
-```
-
-### Rules
-
-- Create the `docs/local/learning/` directory if it does not exist.
-- Do not duplicate: if a file for the same topic already exists from the same day, append to it rather than creating a second file.
-- Keep each file under 40 lines. This is a reference card, not a textbook.
-- These files are gitignored (lives in `docs/local/`). They are personal learning artifacts, not project documentation.
+Save a condensed record to `docs/local/learning/` after substantial output.
+For format, naming, and rules, read [LEARN-REFERENCE.md](LEARN-REFERENCE.md#learning-notes).
 
 ## Scaffolding
 

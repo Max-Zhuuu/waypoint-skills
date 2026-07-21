@@ -139,8 +139,5 @@ Omit the section entirely if the root cause is project-specific and no external 
 
 Offer: **"Quiz me on this?"**
 
-If accepted, 2-3 multiple-choice/short answer questions testing the conceptual model behind the root cause - not syntax, but the "why":
-- Each question gets 3 choices with plausible wrong answers.
-- After each answer, one sentence connecting the explanation back to the bug they just fixed.
-- If they miss one, link to the relevant Further Reading resource.
-- Max 3 questions. Quick check, not an exam.
+If accepted, follow the quiz protocol in [learn/LEARN-REFERENCE.md](../learn/LEARN-REFERENCE.md#quiz-protocol).
+Questions should test the conceptual model behind the root cause, connecting back to the bug just fixed.
