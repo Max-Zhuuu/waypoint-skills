@@ -74,21 +74,21 @@ agent: Phase 5 (Integration). 12 screens remaining.
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> Solo : pick a skill
-    Solo --> Solo : /diagnose, /spec, /tdd, /learn
-    Solo --> Tracking : "worth tracking?" - yes
-    Tracking --> Tracking : /check-in → work → /wrapup
-    Tracking --> Automated : concerns flow naturally
-    Automated --> Automated : skills emit, resolve, surface decisions
+    [*] --> OnDemand : pick a skill
+    OnDemand --> OnDemand : /diagnose, /spec, /tdd, /learn
+    OnDemand --> Connected : "worth tracking?" - yes
+    Connected --> Connected : /check-in → work → /wrapup
+    Connected --> Autonomous : concerns flow naturally
+    Autonomous --> Autonomous : skills emit, resolve, surface decisions
 ```
 
-**Solo** - no setup, no project context. Invoke `/diagnose` on a bug, `/spec` on a feature. Done.
+**On demand** - invoke a skill, it does the work, done. No setup, no project context needed.
 
-**Tracking** - a skill discovers something worth remembering. You say yes, it writes a line to `CONCERNS.md`. Now `/check-in` knows what's open and proposes work. `/wrapup` resolves concerns after implementation.
+**Connected** - a skill discovers something worth remembering across sessions. You say yes, it writes a line to `CONCERNS.md`. Now `/check-in` reads what's open and proposes work. `/wrapup` resolves concerns after implementation. Sessions link together.
 
-**Automated** - you're using CONCERNS.md regularly. Skills start emitting concerns during work, resolving what they can, and only surfacing what needs your judgment.
+**Autonomous** - concerns flow naturally. Skills emit them during work, resolve what they can, and only surface what needs your judgment.
 
-Each stage includes the previous one. You never "switch modes" - structure accumulates when it helps and stays out of the way when it doesn't.
+Each stage includes the previous one. Structure accumulates when it helps and stays out of the way when it doesn't.
 
 ## Starting points
 
@@ -184,9 +184,10 @@ Project skills (/check-in, /wrapup, /reorient) become more useful when concerns 
 
 See [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) for the full specification.
 
-### Skills adapt to your usage
+### On demand, connected, autonomous
 
-Use a skill once, it just works. Start tracking concerns, and /check-in begins proposing work based on what's open. The more structure you put in, the more the skills do with it - but they never require it.
+The state diagram above describes a natural progression, not a setting.
+On demand: invoke a skill, it works. Connected: CONCERNS.md links sessions. Autonomous: skills handle the bookkeeping.
 
 Decisions persist across sessions. Re-running a skill is always safe (it reads what exists and picks up where it left off). If something breaks - a referenced file gets deleted, a spec drifts from the code - the next skill invocation catches it and offers to fix it.
 
