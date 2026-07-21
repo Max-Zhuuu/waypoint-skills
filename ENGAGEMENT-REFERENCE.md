@@ -1,10 +1,10 @@
 # Engagement Reference
 
-How skills adapt to the user's current engagement level.
-Replaces LIGHTWEIGHT-REFERENCE.md with a model based on progressive engagement rather than missing scaffolding.
+Design document for skill authors. Skills inline their own engagement rules.
 
-Every skill references this file.
-Skill authors read it when deciding how their skill should behave at each tier.
+How skills adapt to the user's current engagement level.
+Model based on progressive engagement rather than missing scaffolding.
+Skill authors read this when deciding how their skill should behave at each tier.
 
 ## Detection
 
@@ -65,7 +65,7 @@ On first-ever invocation in a project without scaffolding, show:
 
 ```
 Tip: Waypoint skills work standalone. For convention enforcement
-and cross-referencing, run /project-setup when you're ready.
+and cross-referencing, run /setup when you're ready.
 ```
 
 Write `.claude/.setup-prompted` after showing this. Never show it again.
@@ -94,7 +94,7 @@ Two kinds of nudges become available:
 2. **Deepening suggestions** (when the concern history shows a pattern):
    ```
    You have 8 open assumptions, 3 with medium risk and no deadline.
-   /project-setup can run a structured validation pass if you want
+   /setup can run a structured validation pass if you want
    to stress-test these before they become real problems.
    ```
 
@@ -180,14 +180,14 @@ When they don't, skills substitute (see Tier 1 adaptations).
 
 | File | What it gives skills | Created by |
 |------|---------------------|------------|
-| CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge) or /project-setup |
+| CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge) or /setup |
 | CONTEXT.md | Term validation, glossary challenges | /grill-with-docs |
-| CONVENTIONS.md | Naming enforcement | /project-setup |
-| SCOPE.md | Scope boundary checks | /project-setup |
-| TESTING.md | Project-specific test philosophy | /project-setup |
-| ARCHITECTURE.md | Architecture cross-referencing | /project-setup |
+| CONVENTIONS.md | Naming enforcement | /setup |
+| SCOPE.md | Scope boundary checks | /setup |
+| TESTING.md | Project-specific test philosophy | /setup |
+| ARCHITECTURE.md | Architecture cross-referencing | /setup |
 | docs/adr/ | Decision history | /grill-with-docs |
-| Documentation Map (in CLAUDE.md) | Indirection layer for all of the above | /project-setup |
+| Documentation Map (in CLAUDE.md) | Indirection layer for all of the above | /setup |
 
 Skills create only their own output artifacts.
 /spec creates spec files, not SCOPE.md.
@@ -199,7 +199,7 @@ Exception: /grill-with-docs creates CONTEXT.md and docs/adr/ because those ARE i
 
 - Don't block on missing scaffolding. Every skill works at Tier 1.
 - Don't repeatedly mention what's missing. Adapt once, move on.
-- Don't prompt for /project-setup more than once (marker file prevents this).
+- Don't prompt for /setup more than once (marker file prevents this).
 - Don't create scaffolding that belongs to another skill.
 - Don't degrade silently. When you skip a check, say what you skipped and what you did instead, in one sentence.
 - Don't nudge more than once per discovery. Ask, respect the answer.

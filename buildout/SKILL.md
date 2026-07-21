@@ -1,23 +1,24 @@
 ---
 name: buildout
-description: One-time greenfield setup extending /project-setup. Configures project scope via intake questions (scope, validation depth, design depth), creates MoSCoW structure, and sets phase resolution. Run once at project start, then use /check-in for daily sessions.
+description: One-time greenfield setup extending /setup. Configures project scope via intake questions (scope, validation depth, design depth), creates MoSCoW structure, and sets phase resolution. Run once at project start, then use /check-in for daily sessions.
+status: stable
 disable-model-invocation: true
 ---
 
 # Buildout
 
-One-time setup skill. Extends `/project-setup` with greenfield-specific configuration.
+One-time setup skill. Extends `/setup` with greenfield-specific configuration.
 Run this once to configure the project as a new build. After setup, use `/check-in` every session.
 
 ## Prerequisites
 
-`/project-setup` must have been run first. Check for:
+`/setup` must have been run first. Check for:
 - SCOPE.md exists
 - DEPENDENCIES.md exists
 - CLAUDE.md exists with process definition
 - Documentation structure exists
 
-If any are missing, tell the user to run `/project-setup` first.
+If any are missing, tell the user to run `/setup` first.
 
 ## Active workflow check
 
@@ -86,7 +87,7 @@ After setup, `/check-in` reads these phase files. Archetypes control which phase
 
 | Phase | Name | File | Product | Feature | Deliverable |
 |-------|------|------|---------|---------|-------------|
-| 0-1 | Setup | `/project-setup` + this skill | full | full | full |
+| 0-1 | Setup | `/setup` + this skill | full | full | full |
 | 2 | Discovery & validation | [02-discovery.md](02-discovery.md) | full | reduced | skip |
 | 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) | full | full | focused |
 | 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) | full | reduced | minimal |

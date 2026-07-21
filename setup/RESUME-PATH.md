@@ -1,10 +1,10 @@
 # Resume Path
 
-Instructions for /project-setup when all outputs already exist and the user wants to review or revise decisions.
+Instructions for /setup when all outputs already exist and the user wants to review or revise decisions.
 
 ## When to activate
 
-/project-setup detects all expected outputs exist (SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree, CONVENTIONS.md, TESTING.md).
+/setup detects all expected outputs exist (SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree, CONVENTIONS.md, TESTING.md).
 Instead of "Resuming at {phase}", activate the resume path.
 
 ## Decision registry
@@ -15,11 +15,11 @@ The agent reads each canonical location and assembles a summary table.
 |---|---|---|
 | Archetypes | SCOPE.md frontmatter `archetypes:` | /buildout setup |
 | Ship tier | SCOPE.md frontmatter `ship-tier:` | /buildout setup |
-| Testing philosophy | SCOPE.md frontmatter `testing-philosophy:` | /project-setup Phase 1 |
+| Testing philosophy | SCOPE.md frontmatter `testing-philosophy:` | /setup Phase 1 |
 | Parity strategy | SCOPE.md frontmatter `parity-strategy:` | /migrate setup |
 | Cutover approach | SCOPE.md frontmatter `cutover-approach:` | /migrate setup |
-| Architecture areas | docs/adr/ (list ADR titles) | /project-setup Phase 1 |
-| Hooks | .claude/settings.json `hooks:` | /project-setup Phase 1 |
+| Architecture areas | docs/adr/ (list ADR titles) | /setup Phase 1 |
+| Hooks | .claude/settings.json `hooks:` | /setup Phase 1 |
 
 Not all decisions exist in every project.
 Migration projects have parity strategy and cutover approach.

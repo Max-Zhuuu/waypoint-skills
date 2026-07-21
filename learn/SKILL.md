@@ -1,6 +1,7 @@
 ---
 name: learn
 description: Learning-oriented approach to any code task - new features, refactors, fixes, design patterns, architecture choices. Presents meaningfully different options with trade-off explanations and a terminology bridge. Use when you want to understand why one solution beats another.
+status: stable
 ---
 
 # Learn
@@ -14,8 +15,6 @@ Execute each phase using the tools available in this environment.
 
 Read code context. Grep CONTEXT.md for domain terms relevant to this area.
 If the task is trivial, say so and just do it - do not force options on a non-decision.
-
-If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 
 ### Phase 2 - Present options
 
@@ -38,6 +37,39 @@ Skip when: the edit was trivial, the user is clearly in a hurry, or the concepts
 
 Save to `docs/local/learning/`. Create the directory if needed.
 For format and rules, see [LEARN-REFERENCE.md](LEARN-REFERENCE.md#learning-notes).
+
+## Engagement
+
+On invocation, detect engagement tier:
+
+| Signal | Tier |
+|--------|------|
+| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
+| CONCERNS.md exists | Tier 2 - tracking |
+| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
+| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
+
+**Tier 1:** Execute the full methodology. Skip cross-referencing.
+Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
+no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
+State each adaptation once, then move on.
+
+**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
+After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
+
+**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
+
+**Nudge protocol:**
+1. **What** - the specific discovery, concrete names
+2. **Why** - impact beyond this session
+3. **Ask** - one question, one time. If declined, do not re-offer.
+
+**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
+
+**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
+**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
+
+**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
 
 ## Tone
 

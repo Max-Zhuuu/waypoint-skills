@@ -1,7 +1,7 @@
 # Scope Reference
 
-Reference for /project-setup tier selection.
-Read by /project-setup when explaining tier options to the user during setup.
+Reference for /setup tier selection.
+Read by /setup when explaining tier options to the user during setup.
 
 ## Tiers
 
@@ -59,7 +59,7 @@ Example: an enterprise platform, a multi-service system, a domain with deep busi
 
 ## Tier selection guidance
 
-/project-setup should not cold-ask "which tier?" with a dropdown.
+/setup should not cold-ask "which tier?" with a dropdown.
 Instead, open conversationally - ask what the user is building, how many people are involved, how complex the domain is.
 Then recommend a tier based on the answers.
 
@@ -78,27 +78,27 @@ A team of 10 building a straightforward CRUD app might choose Moderate.
 
 ## Tier transitions
 
-Tiers are not permanent. Re-run /project-setup to upgrade or downgrade.
+Tiers are not permanent. Re-run /setup to upgrade or downgrade.
 
 **Upgrade (Small -> Moderate):**
-- /project-setup detects the existing Small scaffold
+- /setup detects the existing Small scaffold
 - Asks about the new files (CONVENTIONS.md, TESTING.md, etc.)
 - Generates them and updates the Documentation Map
 - Existing decisions in CLAUDE.md are preserved (memoized)
 
 **Upgrade (Moderate -> Large):**
-- /project-setup reads existing flat files
+- /setup reads existing flat files
 - Proposes the conventions/ folder structure
 - Extracts sections from CONVENTIONS.md into separate files
 - Moves TESTING.md to conventions/testing.md
 - Updates the Documentation Map (skills follow automatically)
 
 **Downgrade (Large -> Moderate):**
-- /project-setup consolidates conventions/ back into flat files
+- /setup consolidates conventions/ back into flat files
 - Updates the Documentation Map
 - No data loss - content is merged, not deleted
 
 ## Documentation Map generation
 
-After tier selection, /project-setup generates the Documentation Map in CLAUDE.md.
+After tier selection, /setup generates the Documentation Map in CLAUDE.md.
 See [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#documentation-map) for the tier-dependent table and format.

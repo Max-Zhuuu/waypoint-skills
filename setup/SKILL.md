@@ -1,6 +1,7 @@
 ---
-name: project-setup
+name: setup
 description: Structured project kickoff with scoping grill, architecture decisions, documentation structure, and CLAUDE.md generation. Use at project start, when setting up a new repo, or when foundational decisions are missing.
+status: stable
 disable-model-invocation: true
 ---
 
@@ -162,7 +163,7 @@ Record the tier in CLAUDE.md's Project Scaffold section:
 | Last check-in | - |
 ```
 
-Tier can be changed by re-running /project-setup (reentrant).
+Tier can be changed by re-running /setup (reentrant).
 
 ## Documentation Map
 
@@ -182,8 +183,19 @@ Maps logical concepts to physical file paths - skills resolve through this map, 
 | Skill state | .claude/ | Active |
 ```
 
-Tier-dependent content: Small projects get fewer rows. Large projects add conventions/ subpaths.
-See [CONCEPTS-REFERENCE.md](../CONCEPTS-REFERENCE.md#documentation-map) for the full tier-dependent table.
+Tier-dependent content varies by project size:
+
+| Concept | Small | Moderate | Large |
+|---------|-------|----------|-------|
+| Domain glossary | - | CONTEXT.md | CONTEXT.md |
+| Naming conventions | - | CONVENTIONS.md | conventions/naming.md |
+| Decomposition prefs | - | CONVENTIONS.md (section) | conventions/decomposition.md |
+| Test expectations | - | TESTING.md | conventions/testing.md |
+| Review standards | - | - | conventions/review.md |
+| Scope boundaries | SCOPE.md | SCOPE.md | SCOPE.md |
+| Architecture decisions | - | docs/adr/ | docs/adr/ |
+| Architecture overview | - | - | ARCHITECTURE.md |
+| Skill state | .claude/ | .claude/ | .claude/ |
 
 On re-entry, read the existing map and only update entries that changed. Don't regenerate from scratch.
 

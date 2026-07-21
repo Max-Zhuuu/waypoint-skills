@@ -1,6 +1,7 @@
 ---
 name: create
 description: Add features to an existing codebase. Lighter than /buildout, structured enough to ensure specs exist and docs stay current. Use when adding a feature or small batch of features to a project that already has docs and conventions.
+status: stable
 disable-model-invocation: true
 inputs:
   scope-md: SCOPE.md (project context)
@@ -22,12 +23,12 @@ Structured enough to ensure specs exist before building and docs get updated aft
 ## When to use
 
 - Adding a feature or small batch of related features to an existing project
-- The project already has SCOPE.md, CONVENTIONS.md, and a docs structure (from /project-setup or equivalent)
+- The project already has SCOPE.md, CONVENTIONS.md, and a docs structure (from /setup or equivalent)
 - You know roughly what you want to build
 
 ## When NOT to use - recommend alternatives
 
-- **No project docs exist:** recommend /project-setup first
+- **No project docs exist:** recommend /setup first
 - **Replacing an existing system layer by layer:** recommend /migrate (parity tracking, inventory, phased cutover)
 - **Building a new product from scratch with unknown scope:** recommend /buildout (MoSCoW prioritization, MVP-first, feedback rounds)
 - **Scope is large (5+ features needing architecture decisions):** recommend /buildout - /create doesn't have gates to catch architectural drift at that scale
@@ -57,7 +58,7 @@ What are you adding?
 ## Local docs
 
 /create does not eagerly scaffold docs/local/.
-When a question, assumption, or cross-boundary issue surfaces during work, create the relevant file using the format in [project-setup/LOCAL-DOCS-REFERENCE.md](../project-setup/LOCAL-DOCS-REFERENCE.md).
+When a question, assumption, or cross-boundary issue surfaces during work, create the relevant file using the format in [setup/LOCAL-DOCS-REFERENCE.md](../setup/LOCAL-DOCS-REFERENCE.md).
 If the file already exists, append to it.
 
 ## Process
@@ -110,7 +111,38 @@ The user doesn't choose the mode explicitly - /create writes the workflow record
 
 **Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
 
-If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
+## Engagement
+
+On invocation, detect engagement tier:
+
+| Signal | Tier |
+|--------|------|
+| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
+| CONCERNS.md exists | Tier 2 - tracking |
+| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
+| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
+
+**Tier 1:** Execute the full methodology. Skip cross-referencing.
+Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
+no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
+State each adaptation once, then move on.
+
+**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
+After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
+
+**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
+
+**Nudge protocol:**
+1. **What** - the specific discovery, concrete names
+2. **Why** - impact beyond this session
+3. **Ask** - one question, one time. If declined, do not re-offer.
+
+**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
+
+**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
+**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
+
+**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
 
 ## Tone
 

@@ -96,8 +96,8 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 |-------------------|------------|
 | "This is broken" | `/diagnose` |
 | "I need to build a thing" | `/spec` then `/tdd` |
-| "We're replacing a legacy system" | `/project-setup` then `/migrate` |
-| "We're building something new" | `/project-setup` then `/buildout` |
+| "We're replacing a legacy system" | `/setup` then `/migrate` |
+| "We're building something new" | `/setup` then `/buildout` |
 | "What should I work on?" | `/check-in` |
 | "I've lost the plot" | `/reorient` |
 | "I want to understand X" | `/learn` |
@@ -109,16 +109,8 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 
 **Plugin** (managed, auto-updates):
 
-```
-/plugin marketplace add max-zhu-bv/waypoint-skills
-/plugin install waypoint-skills@max-zhu-bv
-```
-
-Or from your shell:
-
 ```bash
-claude plugin marketplace add max-zhu-bv/waypoint-skills
-claude plugin install waypoint-skills@max-zhu-bv
+claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
 ```
 
 **skills.sh** (copies into your project, editable):
@@ -242,14 +234,14 @@ These are optional - you can start with /create and upgrade later.
 | `/check-in` | Start-of-session: reads project state, proposes next task |
 | `/wrapup` | End-of-task: resolves discrepancies, updates shared docs |
 | `/reorient` | Course correction: audits progress, surfaces deferred decisions |
-| `/project-setup` | One-time: establishes scope, conventions, doc structure |
+| `/setup` | One-time: establishes scope, conventions, doc structure |
 | `/migrate` | Multi-phase workflow for replacing a legacy system |
 | `/buildout` | Multi-phase workflow for building a new product |
 
 ### Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
-- [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) - Tier detection, nudge protocol, concern emission rules
+- [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) - Design doc: Documentation Map, Resolution Cascade, Single-Writer, naming classes
+- [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) - Design doc: tier detection, nudge protocol, concern emission rules (skills inline their own)
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
 - [process/](process/) - Standalone methodology documents

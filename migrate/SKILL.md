@@ -1,24 +1,25 @@
 ---
 name: migrate
-description: Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete. One-time setup extending /project-setup, then use /check-in for daily sessions.
+description: Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete. One-time setup extending /setup, then use /check-in for daily sessions.
+status: stable
 disable-model-invocation: true
 ---
 
 # Migrate
 
 Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete.
-One-time setup extending `/project-setup` with migration-specific configuration.
+One-time setup extending `/setup` with migration-specific configuration.
 Run this once to configure the project. After setup, use `/check-in` every session.
 
 ## Prerequisites
 
-`/project-setup` must have been run first. Check for:
+`/setup` must have been run first. Check for:
 - SCOPE.md exists
 - DEPENDENCIES.md exists
 - CLAUDE.md exists with process definition
 - Documentation structure exists
 
-If any are missing, tell the user to run `/project-setup` first.
+If any are missing, tell the user to run `/setup` first.
 
 ## Active workflow check
 
@@ -97,7 +98,7 @@ After setup, `/check-in` reads these phase files to manage daily work:
 
 | Phase | Name | File |
 |-------|------|------|
-| 0-1 | Setup | Handled by `/project-setup` + this skill |
+| 0-1 | Setup | Handled by `/setup` + this skill |
 | 2 | Documentation sprint | [02-documentation-sprint.md](02-documentation-sprint.md) |
 | 3 | Vertical slice | [03-vertical-slice.md](03-vertical-slice.md) |
 | 4 | Horizontal buildout | [04-horizontal-buildout.md](04-horizontal-buildout.md) |

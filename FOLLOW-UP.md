@@ -10,9 +10,9 @@ Non-interrupting cleanup and completion items after the initial restructure.
 - [x] Update /check-in SKILL.md - simplify against Concerns (read + prioritize, drop 5-layer stack)
 - [x] Update /wrapup SKILL.md - resolve concerns by entity instead of flags-in-spec pattern
 - [x] Update /reorient SKILL.md - emit flags to Concerns instead of writing PROGRESS-AUDIT.md
-- [x] Update /project-setup SKILL.md - reframe as optional deepening, seeds initial concerns
+- [x] Update /setup SKILL.md - reframe as optional deepening, seeds initial concerns
 - [x] Review /migrate and /buildout phase files for Concerns integration
-- [x] Update project-setup/LOCAL-DOCS-REFERENCE.md to reflect CONCERNS.md replacing the four-file pattern
+- [x] Update setup/LOCAL-DOCS-REFERENCE.md to reflect CONCERNS.md replacing the four-file pattern
 
 ## Process extraction (remaining skills)
 

@@ -31,7 +31,7 @@
     "./check-in",
     "./wrapup",
     "./reorient",
-    "./project-setup",
+    "./setup",
     "./migrate",
     "./buildout",
     "./chrome-devtools-axi"

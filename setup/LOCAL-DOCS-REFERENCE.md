@@ -9,7 +9,7 @@ All project tracking converges on a single artifact:
 
 | File | Purpose | Created by | Read by |
 |------|---------|------------|---------|
-| CONCERNS.md | Questions, assumptions, flags, session claims | /project-setup (seed), any skill (emit) | /check-in, /wrapup, /reorient |
+| CONCERNS.md | Questions, assumptions, flags, session claims | /setup (seed), any skill (emit) | /check-in, /wrapup, /reorient |
 
 Format: see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md).
 
@@ -21,15 +21,15 @@ See the "What this replaces" section in CONCERNS-FORMAT.md for the mapping.
 | Folder | Purpose | Created by | Populated by |
 |--------|---------|------------|--------------|
 | learning/ | /learn exercises and session notes | /learn (on demand) | /learn Phase 5-6 |
-| handoffs/ | Cross-team requests and contracts | /project-setup scaffolding | /migrate Phase 6b, any skill surfacing cross-boundary work |
-| handoffs/api-contracts/ | Tier 2: endpoint requests, data contracts | /project-setup scaffolding | Phase 5+ integration work |
-| handoffs/schema-changes/ | Tier 3: DB migrations, business rule changes | /project-setup scaffolding | Phase 6b design pass |
+| handoffs/ | Cross-team requests and contracts | /setup scaffolding | /migrate Phase 6b, any skill surfacing cross-boundary work |
+| handoffs/api-contracts/ | Tier 2: endpoint requests, data contracts | /setup scaffolding | Phase 5+ integration work |
+| handoffs/schema-changes/ | Tier 3: DB migrations, business rule changes | /setup scaffolding | Phase 6b design pass |
 | archive/ | Superseded specs, retired docs, old audit snapshots | Any skill (lazy) | /wrapup (superseded specs) |
 
 ## Scaling by intake profile
 
 Not every project needs every folder.
-/project-setup scaffolds based on the intake profile selected during setup:
+/setup scaffolds based on the intake profile selected during setup:
 
 | Profile | Gets |
 |---------|------|

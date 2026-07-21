@@ -162,7 +162,7 @@ The Documentation Map grows with the project tier:
 
 ### Fallback
 
-When no Documentation Map exists (pre-/project-setup), skills fall back to well-known root paths.
+When no Documentation Map exists (pre-/setup), skills fall back to well-known root paths.
 See ENGAGEMENT-REFERENCE.md for tier detection and fallback behavior.
 
 ## Naming Classes
@@ -221,15 +221,15 @@ CLAUDE.md sections have designated writers per section:
 
 | Section | Owner | Updated by |
 |---------|-------|-----------|
-| Project Scaffold | /project-setup | /check-in (timestamps only) |
-| Documentation Map | /project-setup | /project-setup (on tier transitions) |
+| Project Scaffold | /setup | /check-in (timestamps only) |
+| Documentation Map | /setup | /setup (on tier transitions) |
 | Active Workflow | Workflow skill (/migrate, /buildout, /create) | /check-in (phase transitions) |
 | Prose sections (Overview, Dev, Tech Stack) | Human | Human |
 
 ### Why the split
 
 The original principle ("only /wrapup writes to shared docs") was imprecise.
-/project-setup and /check-in clearly write to CLAUDE.md.
+/setup and /check-in clearly write to CLAUDE.md.
 The content-vs-state split makes the per-section ownership explicit without weakening the principle.
 
 Content docs contain human-judgment prose (domain terms, naming rationale, design decisions).

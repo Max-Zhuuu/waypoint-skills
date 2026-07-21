@@ -1,6 +1,6 @@
 # Project Setup References
 
-Reference material for `/project-setup` Phase 1.
+Reference material for `/setup` Phase 1.
 This file grows as new architecture areas, hooks, and coordination mechanisms are developed.
 
 ## Architecture Decision Catalog

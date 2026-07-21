@@ -1,6 +1,7 @@
 ---
 name: reorient
 description: Strategic course correction. Snapshots real project state, surfaces deferred decisions, audits progress, outputs a focused plan. Use when scattered, between milestones, or before a work sprint.
+status: stable
 ---
 
 # Reorient
@@ -141,11 +142,104 @@ The summary is a compass reading, not a stored document.
 - Before spinning up parallel agents
 - After a milestone ships
 
-## Scaffolding
+## Engagement
 
 If CONCERNS.md doesn't exist, /reorient creates it with the findings from this run.
-See [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md) for tier detection and fallback.
 /reorient reads whatever tracking docs exist and adapts.
+
+On invocation, detect engagement tier:
+
+| Signal | Tier |
+|--------|------|
+| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
+| CONCERNS.md exists | Tier 2 - tracking |
+| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
+| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
+
+Tier 3 requires explicit opt-in in CLAUDE.md:
+
+```
+## Waypoint
+concerns: auto-emit
+```
+
+Without that marker, always ask before emitting concerns.
+
+### Tier behaviors
+
+**Tier 1:** Execute the full methodology. Skip cross-referencing.
+Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
+no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
+State each adaptation once, then move on.
+
+First-invocation notice (if `.claude/.setup-prompted` doesn't exist):
+
+```
+Tip: Waypoint skills work standalone. For convention enforcement
+and cross-referencing, run /setup when you're ready.
+```
+
+Write `.claude/.setup-prompted` after showing. Never show again.
+
+**Tier 2:** Read CONCERNS.md at start. Categorize open concerns by type and age.
+After work, follow the nudge protocol. Emit as `[open]` with type, date, refs.
+Resolve concerns addressed by current work.
+
+Deepening suggestions (at most once per session, when pattern emerges):
+
+```
+You have 8 open assumptions, 3 with medium risk and no deadline.
+/setup can run a structured validation pass if you want
+to stress-test these before they become real problems.
+```
+
+**Tier 3:** Emit concerns without asking. Log emissions at session end.
+Resolve automatically when work addresses them.
+Surface only concerns needing human judgment.
+
+Automation suggestions (Tier 3 only, requires 3+ instances of same concern type):
+
+```
+You've resolved 4 spec-drift flags this week, all caught during /wrapup.
+A PostToolUse hook could catch these at write time. Want me to add it?
+```
+
+### Nudge protocol
+
+1. **What** - specific discovery, concrete names
+2. **Why** - impact beyond this session
+3. **Ask** - one question, one time. If declined, do not re-offer.
+
+### Concern emission
+
+**Format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
+
+**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
+**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
+
+### Scaffolding file table
+
+| File | What it gives skills | Created by |
+|------|---------------------|------------|
+| CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge) or /setup |
+| CONTEXT.md | Term validation, glossary challenges | /grill-with-docs |
+| CONVENTIONS.md | Naming enforcement | /setup |
+| SCOPE.md | Scope boundary checks | /setup |
+| TESTING.md | Project-specific test philosophy | /setup |
+| ARCHITECTURE.md | Architecture cross-referencing | /setup |
+| docs/adr/ | Decision history | /grill-with-docs |
+| Documentation Map (in CLAUDE.md) | Indirection layer | /setup |
+
+### Prohibitions
+
+- Don't block on missing scaffolding
+- Don't repeatedly mention what's missing
+- Don't prompt for /setup more than once (`.claude/.setup-prompted`)
+- Don't create scaffolding owned by another skill
+- Don't degrade silently - state what you skipped, once
+- Don't nudge more than once per discovery
+- Don't emit at Tier 2 without the nudge protocol
+- Don't offer automation suggestions below Tier 3
 
 ## Tone
 
