@@ -1,0 +1,45 @@
+---
+description: Feature-level requirements grilling. Scopes a feature, defines acceptance criteria, outputs a spec file. Use when starting a new feature, when requirements are vague, or when asked to "spec this" or "write a spec".
+globs:
+alwaysApply: false
+---
+
+# Spec
+
+Follow the requirements methodology in @process/requirements.md - read it in full before starting.
+
+## Before you start
+
+Read any existing context:
+- @SCOPE.md for project boundaries
+- @CONTEXT.md for domain terminology
+- @ARCHITECTURE.md for technical decisions
+- Related specs in @docs/specs/
+
+## Execution rules
+
+### Phase 1 - Scope
+
+Grill inline. Print each question with your recommended answer so the user can challenge.
+Do not use the ask tool for the grilling loop - inline conversation lets them redirect naturally.
+
+### Phase 2 - Acceptance criteria
+
+Present trade-off options where they exist. Mark the recommendation and state why.
+Use the ask tool only for major decisions where the user must explicitly choose.
+
+### Phase 3 - Write the spec
+
+Output to `docs/specs/{feature-slug}.md` using the template from the methodology.
+
+### Phase 4 - Update shared artifacts
+
+1. New domain terms -> update @CONTEXT.md (domain terms only).
+2. Architecture decision -> suggest grilling it into an ADR in @docs/adr/.
+3. Feature tracked in inventory or roadmap -> add it.
+4. Open questions or assumptions surfaced -> add to @docs/local/CONCERNS.md if it exists.
+
+## Tone
+
+A spec is a contract, not a narrative.
+Every sentence constrains scope or defines behavior. If it does neither, cut it.
