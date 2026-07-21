@@ -3,7 +3,9 @@
 Engineering methodology for building software products.
 Works standalone as process documentation, with manual tracking, or fully automated through AI agents.
 
-## Install (Claude Code)
+## Install
+
+### Claude Code
 
 ```bash
 npx skills add max-zhu-bv/waypoint-skills
@@ -16,6 +18,26 @@ Then invoke any skill directly. No setup required.
 /spec VesselParticulars    # grill requirements, output spec
 /tdd CreateVessel          # test-driven build
 ```
+
+### OpenCode
+
+OpenCode reads `.claude/skills/` natively, so the Claude Code install works as-is.
+For standalone use, copy adapters from `adapters/opencode/` to `.opencode/skills/{name}/SKILL.md`.
+
+### Cursor
+
+Copy adapter files from `adapters/cursor/` to `.cursor/rules/` in your project.
+Each `.mdc` file uses Agent Requested activation - Cursor's agent reads the description and applies it when relevant.
+
+### Codex
+
+Add the contents of files in `adapters/codex/` to your project's `AGENTS.md`.
+Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurable in `~/.codex/config.toml`).
+
+### No AI
+
+Read the process documents in `process/` directly.
+They are the complete methodology without any tool-specific instructions.
 
 ## How It Works
 
