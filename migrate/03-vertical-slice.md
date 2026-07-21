@@ -8,7 +8,7 @@ This is the most important gate. Skipping it means discovering broken patterns a
 
 ### CP1: Pre-build spec check
 - **Trigger:** before building each of the 3 screens
-- **References:** feature spec, logic doc, CONVENTIONS.md, ASSUMPTIONS.md
+- **References:** feature spec, logic doc, CONVENTIONS.md, CONCERNS.md
 - **Action:** verify spec exists and is complete (all sections filled). Verify logic doc exists. If missing: block - this is leaked Phase 2 work. If spec exists but source system files aren't cross-referenced: flag, allow with acknowledgment.
 - **Pass:** all four reference files exist and are current for this entity.
 

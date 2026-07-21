@@ -46,36 +46,16 @@ Agent infers from Phase 0 scoping grill answers:
 ### Concurrent Agent Coordination
 
 **Purpose:** Prevents file conflicts when multiple agent sessions modify the codebase simultaneously.
-Two artifacts work together: a tracker file that agents read/write, and a hook that injects it into every prompt.
+A hook injects the Claims section from CONCERNS.md into every prompt so all sessions see claimed files.
 
 **When to offer:** Phase 1, after CLAUDE.md generation. Strongly recommended for any project that will use parallel sessions.
 
-**1. Tracker file** - `docs/local/ACTIVE-WORK.md` (gitignored):
+**Claims format** lives in CONCERNS.md (see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md#claims-section)):
+- Agents register a claim before their first file modification
+- Claims are session-lifetime, stale after 4 hours
+- Claims share the C-NNN ID space with other concerns
 
-```markdown
-# Active Work
-
-Concurrent agent sessions register here to avoid duplicate work and file conflicts.
-Read by every agent via the `UserPromptSubmit` hook. Updated by agents during work.
-See CLAUDE.md "Concurrent agent protocol" for full instructions.
-
-## Protocol
-
-- **Always read** this file (the hook injects it automatically).
-- **Register** before your first file modification (not before - pure discussion sessions skip registration).
-- **Update** your entry when you claim new plugins or touch new files.
-- **Remove** your entry when the session ends.
-- Entries older than 4 hours are considered stale. Ask the user if they should be removed.
-
-## In Progress
-
-<!-- One row per active agent session. Session = first 8 chars of scratchpad UUID. -->
-
-| Session | Slug | Started | Last Update | Working On | Claimed | Files |
-|---------|------|---------|-------------|------------|---------|-------|
-```
-
-**2. Hook** - merge into `.claude/settings.json`:
+**Hook** - merge into `.claude/settings.json`:
 
 ```json
 {
@@ -85,7 +65,7 @@ See CLAUDE.md "Concurrent agent protocol" for full instructions.
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'FILE=\"docs/local/ACTIVE-WORK.md\"; if [ -f \"$FILE\" ]; then cat \"$FILE\"; else echo \"No active work tracker at docs/local/ACTIVE-WORK.md\"; fi'"
+            "command": "bash -c 'FILE=\"docs/local/CONCERNS.md\"; if [ -f \"$FILE\" ]; then echo \"# Concerns\"; sed -n \"/^## Claims/,/^## [^C]/p\" \"$FILE\" | head -n -1; sed -n \"/^## Open/,//p\" \"$FILE\"; else echo \"No concerns file at $FILE\"; fi'"
           }
         ]
       }
@@ -95,7 +75,7 @@ See CLAUDE.md "Concurrent agent protocol" for full instructions.
 ```
 
 If `.claude/settings.json` already exists, merge the hook entry - do not overwrite existing hooks or settings.
-The hook injects the tracker contents into every agent prompt, so all sessions see claimed files before modifying anything.
+The hook injects claims and open concerns into every agent prompt, so all sessions see claimed files and outstanding issues.
 
 ### Pre-Push Build Gate
 

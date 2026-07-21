@@ -7,12 +7,12 @@ Non-interrupting cleanup and completion items after the initial restructure.
 - [x] Update all skill SKILL.md files to reference ENGAGEMENT-REFERENCE.md instead of LIGHTWEIGHT-REFERENCE.md
 - [x] Remove LIGHTWEIGHT-REFERENCE.md after all references are updated
 - [x] Update CONCEPTS-REFERENCE.md to reflect ENGAGEMENT-REFERENCE.md references
-- [ ] Update /check-in SKILL.md - simplify against Concerns (read + prioritize, drop 5-layer stack)
-- [ ] Update /wrapup SKILL.md - resolve concerns by entity instead of flags-in-spec pattern
-- [ ] Update /reorient SKILL.md - emit flags to Concerns instead of writing PROGRESS-AUDIT.md
-- [ ] Update /project-setup SKILL.md - reframe as optional deepening, seeds initial concerns
-- [ ] Review /migrate and /buildout phase files for Concerns integration
-- [ ] Update project-setup/LOCAL-DOCS-REFERENCE.md to reflect CONCERNS.md replacing the four-file pattern
+- [x] Update /check-in SKILL.md - simplify against Concerns (read + prioritize, drop 5-layer stack)
+- [x] Update /wrapup SKILL.md - resolve concerns by entity instead of flags-in-spec pattern
+- [x] Update /reorient SKILL.md - emit flags to Concerns instead of writing PROGRESS-AUDIT.md
+- [x] Update /project-setup SKILL.md - reframe as optional deepening, seeds initial concerns
+- [x] Review /migrate and /buildout phase files for Concerns integration
+- [x] Update project-setup/LOCAL-DOCS-REFERENCE.md to reflect CONCERNS.md replacing the four-file pattern
 
 ## Process extraction (remaining skills)
 

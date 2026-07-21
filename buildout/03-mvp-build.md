@@ -6,8 +6,8 @@
 
 ### CP1: Pre-build spec check (per Must feature)
 - **Trigger:** before building each Must feature
-- **References:** feature spec (from /spec), CONVENTIONS.md, ASSUMPTIONS.md
-- **Action:** verify spec exists via /spec. If missing: invoke /spec before proceeding. Verify CONVENTIONS.md exists (seed in Phase 1, refine here). Verify no unresolved critical assumptions.
+- **References:** feature spec (from /spec), CONVENTIONS.md, CONCERNS.md
+- **Action:** verify spec exists via /spec. If missing: invoke /spec before proceeding. Verify CONVENTIONS.md exists (seed in Phase 1, refine here). Verify no unresolved critical assumptions in CONCERNS.md.
 - **Pass:** spec exists and is complete, CONVENTIONS.md current, no blocking assumptions.
 
 ### CP2: Post-slice architecture review
@@ -18,9 +18,9 @@
 
 ### Post-build (per feature)
 - **Trigger:** when implementation verb reports complete
-- **References:** feature spec (## Flags section), SCOPE.md, CONVENTIONS.md
+- **References:** CONCERNS.md (entity concerns), SCOPE.md, CONVENTIONS.md
 - **Action:** suggest /wrapup. Update SCOPE.md to mark feature complete.
-- **Pass:** /wrapup resolved flags (or flags persist for next session if skipped).
+- **Pass:** /wrapup resolved concerns (or concerns persist for next session if skipped).
 
 ## Process
 
@@ -62,7 +62,7 @@ Order by dependency chain, then by risk.
 
 ### Concurrency
 
-If working with multiple agents, each agent claims features in `docs/local/ACTIVE-WORK.md` (see [project-setup/REFERENCES.md](../project-setup/REFERENCES.md#hook-catalog) for setup). No two agents build the same feature. Each agent reads the spec before building.
+If working with multiple agents, each agent claims features via the Claims section in CONCERNS.md (see [../CONCERNS-FORMAT.md](../CONCERNS-FORMAT.md#claims-section) for format). No two agents build the same feature. Each agent reads the spec before building.
 
 ## When to stop
 
