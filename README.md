@@ -142,16 +142,16 @@ graph LR
 
 ```mermaid
 graph LR
-    A[/check-in] --> B["read workflow,\nphase files,\nACTIVE-WORK.md"]
+    A["/check-in"] --> B["read workflow,\nphase files,\nACTIVE-WORK.md"]
     B --> C{drift?}
-    C -->|yes| D[/reorient]
+    C -->|yes| D["/reorient"]
     D --> E[re-prioritize]
     E --> B
     C -->|no| F[propose task]
     F --> G["pre-build checkpoint\n(verify spec, load refs)"]
-    G --> H[/port or /tdd]
+    G --> H["/port or /tdd"]
     H --> I["post-build checkpoint\n(review, doc sync)"]
-    I --> J[suggest /wrapup]
+    I --> J["suggest /wrapup"]
     J --> K[propose next task]
 ```
 

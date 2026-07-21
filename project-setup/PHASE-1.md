@@ -134,6 +134,33 @@ Generate two templates grilled to the project's needs.
 - Known Bugs / Quirks
 - Change Log
 
+## Documentation Map
+
+After generating the documentation structure above, write the Documentation Map to CLAUDE.md.
+The map tells every skill where project files live - skills resolve references through it, never hardcoded paths.
+
+Generate the map based on the selected tier (see [SCOPE-REFERENCE.md](SCOPE-REFERENCE.md) for tier details):
+
+```markdown
+## Documentation Map
+
+| Concept | Path | Status |
+|---------|------|--------|
+| Domain glossary | CONTEXT.md | Active |
+| Naming conventions | CONVENTIONS.md | Active |
+| Test expectations | TESTING.md | Active |
+| Scope boundaries | SCOPE.md | Active |
+| Architecture decisions | docs/adr/ | Active |
+| Architecture overview | ARCHITECTURE.md | Active |
+| Skill state | .claude/ | Active |
+```
+
+Small tier: only SCOPE.md and Skill state rows.
+Large tier: conventions/ subpaths replace CONVENTIONS.md and TESTING.md rows.
+Mark rows as "Planned" if the file will be created later (e.g., ARCHITECTURE.md during Phase 1 architecture decisions).
+
+On re-entry, read the existing map and only update entries that changed.
+
 ## CLAUDE.md generation
 
 Generate the project's CLAUDE.md with these sections (each concise):
