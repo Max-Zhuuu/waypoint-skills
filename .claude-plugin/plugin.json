@@ -33,6 +33,7 @@
     "./reorient",
     "./project-setup",
     "./migrate",
-    "./buildout"
+    "./buildout",
+    "./chrome-devtools-axi"
   ]
 }
