@@ -57,6 +57,21 @@ you:   agree on both, but refresh should be every 15 min not hourly
 agent: [writes spec to docs/specs/news-feed-widget.md with acceptance criteria]
 ```
 
+### Not sure where to start
+
+```
+you:   /how-to-start the vessel reporting is broken
+
+agent: Read: Mid-workflow (Phase 5 /migrate), concerns tracking active.
+       Recommend: /diagnose - concrete failure, not a planning problem.
+       C-016 is related: "FE has no business logic fidelity verification."
+       Proceed with /diagnose?
+
+you:   yes
+
+agent: [invokes /diagnose with "the vessel reporting is broken"]
+```
+
 ### Starting a work session
 
 ```
@@ -94,10 +109,11 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 
 | You're thinking... | Start here |
 |-------------------|------------|
+| "I have a thing, not sure where to start" | `/how-to-start` |
 | "This is broken" | `/diagnose` |
 | "I need to build a thing" | `/spec` then `/tdd` |
-| "We're replacing a legacy system" | `/project-setup` then `/migrate` |
-| "We're building something new" | `/project-setup` then `/buildout` |
+| "We're replacing a legacy system" | `/setup` then `/migrate` |
+| "We're building something new" | `/setup` then `/buildout` |
 | "What should I work on?" | `/check-in` |
 | "I've lost the plot" | `/reorient` |
 | "I want to understand X" | `/learn` |
@@ -109,16 +125,8 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 
 **Plugin** (managed, auto-updates):
 
-```
-/plugin marketplace add max-zhu-bv/waypoint-skills
-/plugin install waypoint-skills@max-zhu-bv
-```
-
-Or from your shell:
-
 ```bash
-claude plugin marketplace add max-zhu-bv/waypoint-skills
-claude plugin install waypoint-skills@max-zhu-bv
+claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
 ```
 
 **skills.sh** (copies into your project, editable):
@@ -166,7 +174,7 @@ Everything below is for people who want to understand the internals - how skills
 Each skill has two layers:
 
 1. **Process document** (`process/*.md`) - the methodology, tool-agnostic. Works as a human checklist, a team playbook, or an AI instruction set.
-2. **Adapter** (`{skill}/SKILL.md` or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
+2. **Adapter** (`task/{skill}/SKILL.md`, `project/{skill}/SKILL.md`, or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
 
 | Process document | Methodology | Adapter skills |
 |-----------------|-------------|----------------|
@@ -234,6 +242,7 @@ These are optional - you can start with /create and upgrade later.
 | `/learn` | Explore a topic with options, terminology bridging, quiz |
 | `/prototype` | Quick throwaway mockup to validate an idea |
 | `/create` | Add a feature end-to-end: spec, build, wrapup |
+| `/how-to-start` | Context-aware skill router: reads project state, recommends the right skill |
 
 **Project skills:**
 
@@ -242,14 +251,14 @@ These are optional - you can start with /create and upgrade later.
 | `/check-in` | Start-of-session: reads project state, proposes next task |
 | `/wrapup` | End-of-task: resolves discrepancies, updates shared docs |
 | `/reorient` | Course correction: audits progress, surfaces deferred decisions |
-| `/project-setup` | One-time: establishes scope, conventions, doc structure |
+| `/setup` | One-time: establishes scope, conventions, doc structure |
 | `/migrate` | Multi-phase workflow for replacing a legacy system |
 | `/buildout` | Multi-phase workflow for building a new product |
 
 ### Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
-- [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) - Tier detection, nudge protocol, concern emission rules
+- [design/CONCEPTS-REFERENCE.md](design/CONCEPTS-REFERENCE.md) - Design doc: Documentation Map, Resolution Cascade, Single-Writer, naming classes
+- [design/ENGAGEMENT-REFERENCE.md](design/ENGAGEMENT-REFERENCE.md) - Design doc: tier detection, nudge protocol, concern emission rules (skills inline their own)
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
 - [process/](process/) - Standalone methodology documents

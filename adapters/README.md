@@ -8,7 +8,7 @@ Each adapter points to a process doc and translates execution idioms.
 ```
 process/debugging.md          <-- methodology (tool-agnostic)
   |
-  +-- diagnose/SKILL.md       <-- Claude Code adapter (43 lines)
+  +-- task/diagnose/SKILL.md   <-- Claude Code adapter (43 lines)
   +-- adapters/cursor/         <-- Cursor adapter (.mdc)
   +-- adapters/opencode/       <-- OpenCode adapter (skill format)
   +-- adapters/codex/          <-- Codex adapter (AGENTS.md fragment)
@@ -44,7 +44,7 @@ Watch the 32KiB combined budget - keep AGENTS.md lean.
 | Ask user questions | AskUserQuestion | Native ask tool | Conversational only | ask_user_question (TUI) |
 | Subagents | Agent tool | @mention / subagents | @mention / Task tool | None |
 | Structured output | ReportFindings | Markdown convention | Markdown convention | Markdown convention |
-| Engagement tiers | ENGAGEMENT-REFERENCE.md | Manual check | Manual check | Manual check |
+| Engagement tiers | design/ENGAGEMENT-REFERENCE.md | Manual check | Manual check | Manual check |
 
 ## Writing adapters for other skills
 
