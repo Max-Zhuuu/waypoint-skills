@@ -28,6 +28,7 @@
     "./task/learn",
     "./task/prototype",
     "./task/create",
+    "./task/how-to-start",
     "./project/check-in",
     "./project/wrapup",
     "./project/reorient",

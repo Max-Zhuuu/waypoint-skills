@@ -57,6 +57,21 @@ you:   agree on both, but refresh should be every 15 min not hourly
 agent: [writes spec to docs/specs/news-feed-widget.md with acceptance criteria]
 ```
 
+### Not sure where to start
+
+```
+you:   /how-to-start the vessel reporting is broken
+
+agent: Read: Mid-workflow (Phase 5 /migrate), concerns tracking active.
+       Recommend: /diagnose - concrete failure, not a planning problem.
+       C-016 is related: "FE has no business logic fidelity verification."
+       Proceed with /diagnose?
+
+you:   yes
+
+agent: [invokes /diagnose with "the vessel reporting is broken"]
+```
+
 ### Starting a work session
 
 ```
@@ -94,6 +109,7 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 
 | You're thinking... | Start here |
 |-------------------|------------|
+| "I have a thing, not sure where to start" | `/how-to-start` |
 | "This is broken" | `/diagnose` |
 | "I need to build a thing" | `/spec` then `/tdd` |
 | "We're replacing a legacy system" | `/setup` then `/migrate` |
@@ -226,6 +242,7 @@ These are optional - you can start with /create and upgrade later.
 | `/learn` | Explore a topic with options, terminology bridging, quiz |
 | `/prototype` | Quick throwaway mockup to validate an idea |
 | `/create` | Add a feature end-to-end: spec, build, wrapup |
+| `/how-to-start` | Context-aware skill router: reads project state, recommends the right skill |
 
 **Project skills:**
 
@@ -241,7 +258,7 @@ These are optional - you can start with /create and upgrade later.
 ### Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
-- [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) - Design doc: Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) - Design doc: tier detection, nudge protocol, concern emission rules (skills inline their own)
+- [design/CONCEPTS-REFERENCE.md](design/CONCEPTS-REFERENCE.md) - Design doc: Documentation Map, Resolution Cascade, Single-Writer, naming classes
+- [design/ENGAGEMENT-REFERENCE.md](design/ENGAGEMENT-REFERENCE.md) - Design doc: tier detection, nudge protocol, concern emission rules (skills inline their own)
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
 - [process/](process/) - Standalone methodology documents
