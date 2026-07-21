@@ -27,49 +27,57 @@ npx claude-plugins install waypoint-skills
 /check-in                 # every session after that
 ```
 
-/project-setup creates a Documentation Map in CLAUDE.md - a table mapping logical concepts to physical file paths.
-Skills resolve references through the map, never hardcoded paths.
-The structure scales with project size (None/Small/Moderate/Large tiers), and /project-setup can be re-run to change tiers without losing decisions.
+/project-setup writes a Documentation Map to CLAUDE.md so every skill knows where things live:
 
-`docs/local/` is the gitignored working state for questions, assumptions, audits, and handoffs.
+```
+| Concept              | Path             | Status |
+|----------------------|------------------|--------|
+| Domain glossary      | CONTEXT.md       | Active |
+| Naming conventions   | CONVENTIONS.md   | Active |
+| Scope boundaries     | SCOPE.md         | Active |
+```
+
+Skills look up "Naming conventions" in the map instead of hardcoding `CONVENTIONS.md`.
+When a project grows, /project-setup can be re-run to restructure (e.g., split CONVENTIONS.md into a conventions/ folder) - the map updates, skills follow automatically.
+
+`docs/local/` is the gitignored working state for questions, assumptions, and handoffs.
 See [LOCAL-DOCS-REFERENCE.md](project-setup/LOCAL-DOCS-REFERENCE.md) for structure and scaling rules.
 
 ## Design Keywords
 
-Four properties that shape how every skill in the family behaves:
+Four properties that shape how every skill behaves:
 
-- **Memoized** - decisions persist in CLAUDE.md. Re-running /project-setup doesn't re-ask answered questions. /check-in records what it resolved and when. Concurrent sessions don't re-resolve what another session already handled.
-- **Reentrant** - /project-setup can be re-run at any time. It reads current state, detects what exists, and only asks about what's new or changed. Tier transitions, convention upgrades, and workflow changes are all re-entry, not fresh setup.
-- **Self-healing** - when a referenced file is deleted, moved, or becomes stale, the system detects the inconsistency. /check-in flags Documentation Map entries pointing to missing files. Scope creep across concurrent sessions triggers /reorient suggestions.
-- **Bias to action** - when the answer is inferrable from the codebase, existing docs, or conventions, act on it and propose the result. AskUserQuestion is reserved for genuinely ambiguous forks where both paths are reasonable and the wrong choice wastes significant work. Skills should just work.
+- **Memoized** - decisions stick. You told /project-setup your test runner is Vitest? It writes that to CLAUDE.md and never asks again - even if you re-run setup, even if a different agent session picks up the project.
+
+- **Reentrant** - re-running is safe. Your project outgrew flat config files? Re-run /project-setup. It reads what exists, keeps your answers, and only asks about the new structure. No "start over" path.
+
+- **Self-healing** - broken references get caught. Someone deletes CONVENTIONS.md? Next /check-in notices the Documentation Map points to a missing file and offers to fix it.
+
+- **Bias to action** - skills should just work. If /spec can infer the naming convention from existing code, it uses it and shows what it chose. Questions are reserved for genuine forks where either path is reasonable and the wrong one wastes real work.
 
 ### Decision gates
 
-When a skill does use AskUserQuestion, two behavioral conventions apply:
+When a skill does ask a question, two conventions keep the flow natural:
 
-**Conversational fallback:** if the user selects "Other" and writes something conversational, the agent drops back to chat - explains trade-offs, discusses, then re-presents the original question when the user is ready.
-The gate stays pending until explicitly answered.
+**Conversational fallback:** if you pick "Other" and write something like "I'm not sure, what would you recommend?", the agent drops into discussion - explains trade-offs, talks through the options. When you're ready, it re-presents the original question.
 
-**Learn-mode elaboration:** if the user asks for more context, the agent gives /learn-style depth scoped to the specific decision: one terms block (3-5 terms max), one further reading pointer.
-After elaboration, re-present the original question.
+**Learn-mode elaboration:** if you ask "what does that mean?", the agent gives a short explainer scoped to the specific decision (a few key terms, one further reading link), then re-presents the question.
 
 ## Two-Layer Model
 
-**Project layer** (multi-session work): `/project-setup` + a workflow (`/migrate`, `/buildout`, or `/create`) + `/check-in`.
-Each workflow writes an Active Workflow record to CLAUDE.md so /check-in knows the context without guessing.
+**Project layer** - for work that spans multiple sessions.
+Run /project-setup once, pick a workflow (/migrate, /buildout, or /create), then /check-in at the start of every session.
+/check-in reads a workflow record from CLAUDE.md so it knows where you left off without asking.
 
-**Task layer** (single-session work): `/tdd`, `/port`, `/spec`, `/prototype`, `/diagnose`, `/grill-me`, `/learn`, `/grill-with-docs`, `/improve-codebase-architecture`, `/to-issues`, `/triage`, `/author-skill`.
-Self-contained verbs that work without project setup.
-Missing scaffolding degrades gracefully: no domain term cross-referencing without CONTEXT.md, no convention enforcement without CONVENTIONS.md, but core skill loops always work.
+**Task layer** - for one-and-done work.
+Invoke any verb directly: `/tdd`, `/spec`, `/diagnose`, `/learn`, etc.
+No setup required. If project docs exist, skills use them. If not, they still work - you just don't get cross-referencing or convention enforcement.
 
-**Bridge skills** (marked with `*` in the Skill Map): task-layer skills with project-layer integration points.
-They work standalone but gain context when project scaffolding exists.
-`/spec*` cross-references SCOPE.md and CONVENTIONS.md when present.
-`/create*` can write an Active Workflow record for multi-session features.
-`/to-issues*` and `/triage*` integrate with /check-in for backlog coordination.
-`/prototype*` integrates with workflow design system phases.
+**Bridge skills** (marked `*` in the Skill Map) live in both layers.
+Example: `/spec` is a task-layer verb - you can run `/spec UserProfile` with zero setup and get a grilled spec.
+But if SCOPE.md and CONVENTIONS.md exist, `/spec` also cross-references scope boundaries and enforces naming patterns.
 
-Boundary: if you need to track progress across sessions, you need the project layer.
+Rule of thumb: if you need progress tracked across sessions, use the project layer. Otherwise, invoke verbs directly.
 
 ## Skill Map
 
@@ -121,92 +129,55 @@ SUPPORTING
 
 ### Task session
 
-```
-                    invoke verb directly
-                           |
-                           v
-              +-----------------------+
-              |  /tdd, /spec, /port,  |
-              |  /diagnose, /proto... |
-              +-----------------------+
-                           |
-                           v
-                   verb completes
-                           |
-                 +---------+---------+
-                 |                   |
-           done (exit)        /wrapup (optional)
-                                     |
-                                     v
-                            doc sync, flag resolution
+```mermaid
+graph LR
+    A[invoke verb] --> B["/tdd, /spec, /port,\n/diagnose, /prototype..."]
+    B --> C{verb completes}
+    C --> D[done]
+    C --> E["/wrapup (optional)"]
+    E --> F[doc sync + flag resolution]
 ```
 
 ### Project session
 
-```
-          /check-in
-               |
-               v
-    +---------------------+
-    | read Active Workflow |
-    | read phase files     |
-    | read ACTIVE-WORK.md  |
-    +---------------------+
-               |
-       +-------+-------+
-       |               |
-  drift detected    propose task
-       |               |
-       v               v
-  /reorient     pre-build checkpoint
-       |         (verify spec, load refs)
-       v               |
-  re-prioritize        v
-       |         /port or /tdd
-       v               |
-  resume here          v
-                 verb completes
-                       |
-                       v
-                 post-build checkpoint
-                 (review, doc sync, inventory)
-                       |
-                       v
-                 suggest /wrapup
-                       |
-                       v
-                 propose next task or
-                 flag stale questions
+```mermaid
+graph LR
+    A[/check-in] --> B["read workflow,\nphase files,\nACTIVE-WORK.md"]
+    B --> C{drift?}
+    C -->|yes| D[/reorient]
+    D --> E[re-prioritize]
+    E --> B
+    C -->|no| F[propose task]
+    F --> G["pre-build checkpoint\n(verify spec, load refs)"]
+    G --> H[/port or /tdd]
+    H --> I["post-build checkpoint\n(review, doc sync)"]
+    I --> J[suggest /wrapup]
+    J --> K[propose next task]
 ```
 
 ## Glossary
 
-**Active Workflow** - record in CLAUDE.md written by /migrate, /buildout, or /create.
-Contains skill name, activation date, scope, and status.
-/check-in reads it to orient each session.
+**Active Workflow** - a record /migrate, /buildout, or /create writes to CLAUDE.md: "we're migrating a VMS frontend, currently in Phase 4."
+/check-in reads it next session and picks up where you left off.
 
-**Bridge skill** - a task-layer skill with project-layer integration points.
-Works standalone; gains context when project scaffolding exists.
-Marked with `*` in the Skill Map.
+**Bridge skill** - a verb that works alone but gets smarter with project docs (marked `*` in the Skill Map).
+Example: `/spec` grills requirements either way, but when SCOPE.md exists, it also checks whether the feature is in scope.
 
-**Checkpoint** - named block inside phase files with four fields: trigger (when it fires), references (files to validate against), action (what to do), pass condition (what "done" looks like).
-Distinct from gates (end-of-phase go/no-go) and enforcement (per-invocation checks in SKILL.md).
-See CONCEPTS-REFERENCE.md for the canonical format specification.
+**Checkpoint** - a validation step inside phase files: what triggers it, what files to check against, what to do, and what "pass" looks like.
+Example: "before building, verify the spec covers all source system fields."
 
-**Documentation Map** - table in CLAUDE.md mapping logical concepts (e.g., "Naming conventions") to physical file paths.
-Skills resolve references through the map.
-When an entry points to a missing file, /check-in flags it (self-healing).
-Includes a "Skill State" concept for .claude/ marker files.
+**Documentation Map** - the table in CLAUDE.md that tells skills where files live.
+/check-in uses it to detect missing files (e.g., map says "Naming conventions -> CONVENTIONS.md" but the file was deleted).
 
-**Naming classes** - suffix taxonomy for skill-internal files:
-`FOO.md` (user-facing project doc), `FOO-REFERENCE.md` (skill-internal reference), `FOO-FORMAT.md` (format template).
+**Naming classes** - file suffix convention: `FOO.md` (user-facing), `FOO-REFERENCE.md` (skill-internal), `FOO-FORMAT.md` (template).
 
-**Resolution cascade** - when a checkpoint finds a mismatch: (1) read the authoritative source for ground truth, (2) write or run a test that proves which side is correct, (3) escalate to the user with specifics if source and tests are ambiguous.
+**Resolution cascade** - when a spec disagrees with the code: (1) read the source of truth, (2) write a test to prove which side is right, (3) only ask the human if both are ambiguous.
 
-**Single-writer discipline** - content docs (CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md) are written only by /wrapup.
-Machine-readable state in CLAUDE.md has per-section ownership: /project-setup owns scaffold + map, workflows own Active Workflow, /check-in owns timestamps.
+**Single-writer** - only /wrapup edits content docs (CONVENTIONS.md, CONTEXT.md).
+Other skills flag what should change; /wrapup makes the edits.
+Machine-readable state in CLAUDE.md has per-section owners (e.g., /project-setup owns the Documentation Map).
 
-See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions, the checkpoint format specification, and the write ownership table.
+See [CONCEPTS-REFERENCE.md](CONCEPTS-REFERENCE.md) for extended definitions and the full write-ownership table.
 
 ## Phase Overview
 
