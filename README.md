@@ -8,7 +8,7 @@ Two layers: invoke a verb for single-session work, or set up a project for multi
 Install the plugin, then invoke any skill directly - no setup required.
 
 ```bash
-npx claude-plugins install waypoint-skills
+npx skills add max-zhu-bv/claude-skills-mz --ssh
 ```
 
 **Task layer** (single-session work): invoke a verb and go.
