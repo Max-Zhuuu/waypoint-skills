@@ -4,9 +4,9 @@ Non-interrupting cleanup and completion items after the initial restructure.
 
 ## Cleanup
 
-- [ ] Update all skill SKILL.md files to reference ENGAGEMENT-REFERENCE.md instead of LIGHTWEIGHT-REFERENCE.md
-- [ ] Remove LIGHTWEIGHT-REFERENCE.md after all references are updated
-- [ ] Update CONCEPTS-REFERENCE.md to reflect Concerns as the tracking substrate (replaces ACTIVE-WORK, ASSUMPTIONS, PROGRESS-AUDIT, QUESTIONS references)
+- [x] Update all skill SKILL.md files to reference ENGAGEMENT-REFERENCE.md instead of LIGHTWEIGHT-REFERENCE.md
+- [x] Remove LIGHTWEIGHT-REFERENCE.md after all references are updated
+- [x] Update CONCEPTS-REFERENCE.md to reflect ENGAGEMENT-REFERENCE.md references
 - [ ] Update /check-in SKILL.md - simplify against Concerns (read + prioritize, drop 5-layer stack)
 - [ ] Update /wrapup SKILL.md - resolve concerns by entity instead of flags-in-spec pattern
 - [ ] Update /reorient SKILL.md - emit flags to Concerns instead of writing PROGRESS-AUDIT.md
@@ -19,10 +19,10 @@ Non-interrupting cleanup and completion items after the initial restructure.
 - [x] /diagnose - process/debugging.md + adapter
 - [x] /spec - process/requirements.md + adapter
 - [x] /tdd - process/tdd.md + adapter (supporting docs stay in tdd/ as implementation reference)
-- [ ] /improve-codebase-architecture - process/architecture-review.md + adapter
-- [ ] /learn - process/learning.md + adapter
-- [ ] /grill-me - evaluate whether the grilling methodology warrants its own process doc
-- [ ] /prototype - evaluate extraction (three branches may be too agent-specific)
+- [x] /improve-codebase-architecture - process/architecture-review.md + adapter
+- [x] /learn - process/learning.md + adapter
+- [x] /grill-me - evaluated: 13-line instruction, not a methodology. No process doc needed.
+- [x] /prototype - evaluated: three branches are agent-specific execution. Principle is one sentence, not a document.
 
 ## Validation
 

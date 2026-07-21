@@ -40,7 +40,7 @@ The three branches produce very different artifacts - getting this wrong wastes 
 
 **Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 
 ## When done
 

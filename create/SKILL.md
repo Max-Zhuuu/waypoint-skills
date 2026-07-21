@@ -110,7 +110,7 @@ The user doesn't choose the mode explicitly - /create writes the workflow record
 
 **Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 
 ## Tone
 

@@ -43,7 +43,7 @@ Works standalone; gains context when project scaffolding exists.
 A skill qualifies as a bridge when it:
 1. Has a self-contained core loop that works without any scaffolding
 2. Defines specific integration points (what project-layer data it reads or writes)
-3. Degrades gracefully per LIGHTWEIGHT-REFERENCE.md when integration data is missing
+3. Degrades gracefully per ENGAGEMENT-REFERENCE.md when integration data is missing
 4. Never requires project setup to function at its core purpose
 
 ### Identified bridge skills
@@ -163,7 +163,7 @@ The Documentation Map grows with the project tier:
 ### Fallback
 
 When no Documentation Map exists (pre-/project-setup), skills fall back to well-known root paths.
-See LIGHTWEIGHT-REFERENCE.md for the canonical fallback list.
+See ENGAGEMENT-REFERENCE.md for tier detection and fallback behavior.
 
 ## Naming Classes
 
@@ -172,7 +172,7 @@ Suffix taxonomy for files in the skill family.
 | Class | Suffix | Purpose | Examples |
 |-------|--------|---------|----------|
 | User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | CONVENTIONS.md, CONTEXT.md, SCOPE.md |
-| Skill-internal reference | `FOO-REFERENCE.md` | Informs skill behavior, can be surfaced to users during uncertainty | LIGHTWEIGHT-REFERENCE.md, LOCAL-DOCS-REFERENCE.md, TRACKER-REFERENCE.md |
+| Skill-internal reference | `FOO-REFERENCE.md` | Informs skill behavior, can be surfaced to users during uncertainty | ENGAGEMENT-REFERENCE.md, LOCAL-DOCS-REFERENCE.md, TRACKER-REFERENCE.md |
 | Format template | `FOO-FORMAT.md` | Template for user-facing docs | CONTEXT-FORMAT.md, ADR-FORMAT.md |
 
 ### Naming rules

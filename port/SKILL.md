@@ -126,7 +126,7 @@ When you spot a UX improvement during porting: write a one-liner in `docs/improv
 
 ## Scaffolding
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 /port requires its three inputs (feature spec, logic doc, source) regardless of scaffolding state.
 CONVENTIONS.md enhances pattern enforcement during review but is not required.
 

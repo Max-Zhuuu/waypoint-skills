@@ -20,7 +20,7 @@ Use project tools to build the loop:
 If the project has a domain glossary (check Documentation Map or CONTEXT.md), read it before exploring the codebase.
 If ADRs exist, check the ones in the area you are touching.
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 
 ### Phase 3 - Hypotheses
 

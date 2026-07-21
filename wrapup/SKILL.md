@@ -106,7 +106,7 @@ Gate: {X}/{Y} criteria met. Remaining: {list specific items}.
 
 ## Scaffolding
 
-If scaffolding is missing, follow [LIGHTWEIGHT-REFERENCE.md](../LIGHTWEIGHT-REFERENCE.md).
+If scaffolding is missing, follow [ENGAGEMENT-REFERENCE.md](../ENGAGEMENT-REFERENCE.md).
 /wrapup's spec drift check (step 1.5) gracefully handles missing docs: "No {doc type} found. Spec drift check skipped."
 Cascade to shared docs (step 3) only fires for docs that exist.
 
