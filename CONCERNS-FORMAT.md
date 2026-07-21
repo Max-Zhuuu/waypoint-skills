@@ -1,15 +1,8 @@
 # Concerns
 
 A single tracking artifact for everything a project doesn't know yet, is assuming, or has flagged as wrong.
-Replaces the four-file pattern (ACTIVE-WORK, ASSUMPTIONS, PROGRESS-AUDIT, QUESTIONS) with one file, one format, one scroll.
-
-## Why one file
-
-Four files with four formats and four update cadences means five things to hold in your head: the four files plus how they relate.
-One file means one place to look, one place to update, one format to learn.
-
-The cost is mixing volatile entries (claims) with persistent entries (questions, assumptions).
-This is handled by section ordering and clear marking, not by splitting into separate files.
+One file, one format, one scroll.
+Volatile entries (claims) and persistent entries (questions, assumptions) coexist through section ordering and clear marking.
 
 ## The file
 

@@ -18,7 +18,7 @@ Non-interrupting cleanup and completion items after the initial restructure.
 
 - [x] /diagnose - process/debugging.md + adapter
 - [x] /spec - process/requirements.md + adapter
-- [ ] /tdd - process/tdd.md + adapter (supporting docs already close to standalone)
+- [x] /tdd - process/tdd.md + adapter (supporting docs stay in tdd/ as implementation reference)
 - [ ] /improve-codebase-architecture - process/architecture-review.md + adapter
 - [ ] /learn - process/learning.md + adapter
 - [ ] /grill-me - evaluate whether the grilling methodology warrants its own process doc
