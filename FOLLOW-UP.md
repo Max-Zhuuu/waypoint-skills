@@ -26,6 +26,6 @@ Non-interrupting cleanup and completion items after the initial restructure.
 
 ## Validation
 
-- [ ] Write one human checklist adapter for /diagnose or /spec to prove the non-AI story
+- [x] Write tool adapters for /diagnose to prove the multi-tool story (Cursor .mdc, OpenCode skill, Codex AGENTS.md)
 - [ ] Test CONCERNS.md format in a second project (beyond bv-glomaris)
 - [ ] Pressure-test Tier 2 nudge behavior in a real skill session

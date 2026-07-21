@@ -1,0 +1,43 @@
+---
+description: Structured debugging workflow for hard bugs, test failures, and performance regressions. Use when diagnosing a defect, not for feature work.
+globs:
+alwaysApply: false
+---
+
+# Diagnose
+
+Follow the debugging methodology in @process/debugging.md - read it in full before touching code.
+
+## Before you start
+
+- If @CONTEXT.md exists, read it for domain terms.
+- If @docs/local/CONCERNS.md exists, check for related open concerns.
+- If ADRs exist in @docs/adr/, check the ones in the area you are touching.
+
+## Execution rules
+
+### Hypotheses (Phase 3)
+
+Generate 3-5 ranked hypotheses before testing any of them.
+Present the ranked list to the user using the ask tool and wait for confirmation before proceeding.
+The user often has domain knowledge that re-ranks instantly.
+
+### Instrumentation (Phase 4)
+
+Tag every debug log with `[DEBUG-xxxx]` (random 4-char hex per session).
+One variable at a time. Prefer debugger breakpoints over log lines.
+Grep for the tag prefix during cleanup.
+
+### Fix (Phase 5)
+
+Write a failing regression test BEFORE the fix.
+Watch it fail for the right reason. Then apply the fix. Then watch it pass.
+If no correct test seam exists, note that as a finding for architectural improvement.
+
+### Cleanup (Phase 6)
+
+Before declaring done:
+- Original repro no longer reproduces
+- Regression test passes
+- All `[DEBUG-...]` logs removed (grep the prefix)
+- Root cause stated in the commit message
