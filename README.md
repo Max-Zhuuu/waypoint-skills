@@ -202,26 +202,26 @@ agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
 stateDiagram-v2
     direction LR
 
-    state "New to this project" as new
-    state "Know the codebase" as exp
+    state "New to this project" as newcomer
+    state "Know the codebase" as experienced
 
     state "Orient" as orient
     state "Plan" as plan
     state "Build" as build
     state "Verify" as verify
 
-    [*] --> new
-    [*] --> exp
+    [*] --> newcomer
+    [*] --> experienced
 
-    new --> orient : /setup, /how-to-start
-    exp --> build : /diagnose, /tdd, /create
+    newcomer --> orient : /setup, /how-to-start
+    experienced --> build : /diagnose, /tdd, /create
 
     orient --> plan : /spec, /design
     plan --> build : /breakdown, /tdd, /create, /port
     build --> verify : /wrapup, /check-in
     verify --> orient : gaps found
 
-    exp --> orient : system nudges
+    experienced --> orient : system nudges
 ```
 
 Both paths lead to the same place.
