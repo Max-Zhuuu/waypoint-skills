@@ -13,13 +13,36 @@ Execute each phase using the tools available in this environment.
 
 ### Phase 1 - Scope
 
-Read any existing context first: SCOPE.md, CONTEXT.md, ARCHITECTURE.md, related specs in `docs/specs/`.
+**Before grilling, check for existing coverage.**
+Search for docs that already resolve the feature's scope:
+- `docs/specs/`, `docs/implementation/`, `docs/adr/` - look for files matching the feature area.
+- If a matching doc exists, check its Change Log for entries within the last ~7 days.
+- Also check ARCHITECTURE.md sections and feature-specific design docs.
 
+**If a recent doc covers the topic** (decisions already made, scope already grilled - typically by /grill-with-docs):
+skip the grill entirely.
+Print what you found and go straight to Phase 2 (acceptance criteria extraction).
+
+```
+Found: {doc path} (updated {date})
+Decisions already resolved - skipping scope grill.
+Extracting acceptance criteria from the existing doc.
+```
+
+**If no recent doc exists:**
+run the full grill.
+Read any existing context first: SCOPE.md, CONTEXT.md, ARCHITECTURE.md, related specs in `docs/specs/`.
 Grill inline. Print questions with your recommended answer so the user can challenge.
 Do not use `AskUserQuestion` for the grilling loop - inline conversation lets the user redirect naturally.
 
 ### Phase 2 - Acceptance criteria
 
+**Reduced mode** (existing doc found in Phase 1):
+Extract Given/When/Then acceptance criteria directly from the doc.
+No scoping questions, no options presentation - the decisions are already made.
+Present the extracted criteria for review, then write the spec.
+
+**Full mode** (no existing doc):
 Present options where trade-offs exist, per the methodology.
 Mark the recommendation and state why. The user picks or challenges.
 

@@ -94,4 +94,11 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 - **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
 - **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
+## Exit
+
+After all branches are resolved:
+- "Decisions resolved and docs updated. /breakdown to decompose into implementation slices, or /spec to extract acceptance criteria from the updated doc."
+
+/spec detects recently-grilled docs and skips its own grill phase, so the chain is non-redundant either way.
+
 </supporting-info>
