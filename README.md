@@ -1,33 +1,42 @@
 # Waypoint Skills
 
-Structured methodologies for the tasks that eat your day - debugging, writing specs, test-driven builds, architecture review, project planning.
-Each one is a step-by-step process you can follow on paper, with an AI assistant, or fully automated.
+Understand what you're building before you build it.
+Systematic software development - from orienting in a new codebase to shipping features - that works on paper, with an AI, or fully automated.
+
+## Why
+
+Most AI-assisted development starts with a prompt and ends with code.
+What's missing is the middle: understanding the system you're changing, deciding what to build before building it, and verifying that what you built matches what you decided.
+Waypoint skills enforce that middle.
+Every skill reads project state before acting and writes decisions down before moving on.
 
 ## What does this look like?
 
-### Debugging a hard bug
+### Not sure where to start
 
 ```
-you:   /diagnose login page throws 401 after token refresh
+you:   /how-to-start the vessel reporting is broken
 
-agent: Building a feedback loop. Running the auth flow in the browser...
-       [reproduces the bug in 3 seconds]
+agent: Read: Mid-workflow (Phase 5 /migrate), concerns tracking active.
+       Recommend: /diagnose - concrete failure, not a planning problem.
+       C-016 is related: "FE has no business logic fidelity verification."
+       Proceed with /diagnose?
 
-       Reproduced. Three hypotheses, ranked:
-       1. Token refresh returns a new token but the interceptor still sends the cached one
-       2. Refresh endpoint CORS preflight fails silently in production
-       3. Refresh token itself has expired (clock skew)
+you:   yes
 
-       Proceed with this ranking?
+agent: [invokes /diagnose with "the vessel reporting is broken"]
+```
 
-you:   1 is most likely, we just changed the token cache layer
+### Starting a work session
 
-agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
-       interceptor...
-       [confirms stale cache, writes regression test, fixes, cleans up]
+```
+you:   /check-in
 
-       Fixed. Root cause: token cache was keyed by URL, new refresh endpoint
-       returns a different URL. Regression test at auth.spec.ts:142.
+agent: Phase 5 (Integration). 12 screens remaining.
+       Concerns: 3 flags (oldest: 4 days), 2 questions pending BE team
+       Next: Wire Claims list to real API - endpoint exists but FE still
+       hits mock. Recommend this because the contract is fresh and field
+       mappings should be verified now, not after they drift.
 ```
 
 ### Speccing a new feature
@@ -57,68 +66,84 @@ you:   agree on both, but refresh should be every 15 min not hourly
 agent: [writes spec to docs/specs/news-feed-widget.md with acceptance criteria]
 ```
 
-### Not sure where to start
+### Debugging a hard bug
 
 ```
-you:   /how-to-start the vessel reporting is broken
+you:   /diagnose login page throws 401 after token refresh
 
-agent: Read: Mid-workflow (Phase 5 /migrate), concerns tracking active.
-       Recommend: /diagnose - concrete failure, not a planning problem.
-       C-016 is related: "FE has no business logic fidelity verification."
-       Proceed with /diagnose?
+agent: Building a feedback loop. Running the auth flow in the browser...
+       [reproduces the bug in 3 seconds]
 
-you:   yes
+       Reproduced. Three hypotheses, ranked:
+       1. Token refresh returns a new token but the interceptor still sends the cached one
+       2. Refresh endpoint CORS preflight fails silently in production
+       3. Refresh token itself has expired (clock skew)
 
-agent: [invokes /diagnose with "the vessel reporting is broken"]
+       Proceed with this ranking?
+
+you:   1 is most likely, we just changed the token cache layer
+
+agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
+       interceptor...
+       [confirms stale cache, writes regression test, fixes, cleans up]
+
+       Fixed. Root cause: token cache was keyed by URL, new refresh endpoint
+       returns a different URL. Regression test at auth.spec.ts:142.
 ```
 
-### Starting a work session
-
-```
-you:   /check-in
-
-agent: Phase 5 (Integration). 12 screens remaining.
-       Concerns: 3 flags (oldest: 4 days), 2 questions pending BE team
-       Next: Wire Claims list to real API - endpoint exists but FE still
-       hits mock. Recommend this because the contract is fresh and field
-       mappings should be verified now, not after they drift.
-```
-
-## How usage evolves
+## How it fits together
 
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> OnDemand : pick a skill
-    OnDemand --> OnDemand : /diagnose, /spec, /tdd, /learn
-    OnDemand --> Connected : "worth tracking?" - yes
-    Connected --> Connected : /check-in → work → /wrapup
-    Connected --> Autonomous : concerns flow naturally
-    Autonomous --> Autonomous : skills emit, resolve, surface decisions
+
+    state "New to this project" as new
+    state "Know the codebase" as exp
+
+    state "Orient" as orient
+    state "Plan" as plan
+    state "Build" as build
+    state "Verify" as verify
+
+    [*] --> new
+    [*] --> exp
+
+    new --> orient : /setup, /how-to-start
+    exp --> build : /diagnose, /tdd, /create
+
+    orient --> plan : /spec, /design
+    plan --> build : /tdd, /create, /port
+    build --> verify : /wrapup
+    verify --> orient : gaps found
+
+    exp --> orient : system nudges
 ```
 
-**On demand** - invoke a skill, it does the work, done. No setup, no project context needed.
+Both paths lead to the same place.
+If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
 
-**Connected** - a skill discovers something worth remembering across sessions. You say yes, it writes a line to `CONCERNS.md`. Now `/check-in` reads what's open and proposes work. `/wrapup` resolves concerns after implementation. Sessions link together.
-
-**Autonomous** - concerns flow naturally. Skills emit them during work, resolve what they can, and only surface what needs your judgment.
-
-Each stage includes the previous one. Structure accumulates when it helps and stays out of the way when it doesn't.
+**You don't have to set up everything.**
+Any skill works standalone - `/diagnose` a bug without project context, `/spec` a feature without a glossary.
+But when a skill discovers something worth remembering (a domain term, an assumption, a decision), it offers to write it down.
+Say yes and sessions start linking together.
+Say no and it moves on.
+Structure accumulates when it helps and stays out of the way when it doesn't.
 
 ## Starting points
 
 | You're thinking... | Start here |
 |-------------------|------------|
+| "I just joined this project" | `/setup` |
 | "I have a thing, not sure where to start" | `/how-to-start` |
-| "This is broken" | `/diagnose` |
-| "I need to build a thing" | `/spec` then `/tdd` |
-| "We're replacing a legacy system" | `/setup` then `/migrate` |
-| "We're building something new" | `/setup` then `/buildout` |
 | "What should I work on?" | `/check-in` |
 | "I've lost the plot" | `/reorient` |
-| "I want to understand X" | `/learn` |
+| "We're replacing a legacy system" | `/setup` then `/migrate` |
+| "We're building something new" | `/setup` then `/buildout` |
 | "This needs a design system" | `/design` |
+| "I need to build a thing" | `/spec` then `/tdd` |
 | "Just add this feature" | `/create` |
+| "This is broken" | `/diagnose` |
+| "I want to understand X" | `/learn` |
 
 ## Install
 
@@ -164,103 +189,56 @@ Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurabl
 Read the process documents in `process/` directly.
 They are the complete methodology without any tool-specific instructions.
 
----
+## Skills
 
-## How it works
-
-Everything below is for people who want to understand the internals - how skills are structured, how tracking works, and how to extend the system.
-
-### Process and adapter split
-
-Each skill has two layers:
-
-1. **Process document** (`process/*.md`) - the methodology, tool-agnostic. Works as a human checklist, a team playbook, or an AI instruction set.
-2. **Adapter** (`task/{skill}/SKILL.md`, `project/{skill}/SKILL.md`, or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
-
-| Process document | Methodology | Adapter skills |
-|-----------------|-------------|----------------|
-| [process/debugging.md](process/debugging.md) | 7-phase debugging discipline | /diagnose |
-| [process/requirements.md](process/requirements.md) | Requirements grilling and spec writing | /spec |
-| [process/tdd.md](process/tdd.md) | Test-driven development | /tdd |
-| [process/architecture-review.md](process/architecture-review.md) | Architecture assessment | /improve-codebase-architecture |
-| [process/learning.md](process/learning.md) | Structured technical learning | /learn |
-
-Not every skill has a process doc.
-Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/prototype has three execution branches that depend on the agent model).
-
-### Tracking with Concerns
-
-Skills can optionally track what a project doesn't know yet, is assuming, or has flagged as wrong - in a single file called `CONCERNS.md`:
-
-```markdown
-### C-041 [open] Should status changes require a confirmation dialog?
-type: question | raised: 2026-07-18
-Legacy app confirms before status transitions. Our rebuild doesn't. Intentional or gap?
-```
-
-Three types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **flags** (something looks wrong).
-
-Skills read from and write to this file. Humans read from and write to this file.
-It is a markdown document - no special tooling required.
-
-You don't need CONCERNS.md to use the skills.
-Task skills (/diagnose, /spec, /tdd) work standalone.
-Project skills (/check-in, /wrapup, /reorient) become more useful when concerns exist to operate on.
-
-See [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) for the full specification.
-
-### On demand, connected, autonomous
-
-The state diagram above describes a natural progression, not a setting.
-On demand: invoke a skill, it works. Connected: CONCERNS.md links sessions. Autonomous: skills handle the bookkeeping.
-
-Decisions persist across sessions. Re-running a skill is always safe (it reads what exists and picks up where it left off). If something breaks - a referenced file gets deleted, a spec drifts from the code - the next skill invocation catches it and offers to fix it.
-
-### Multi-phase workflows
-
-/migrate and /buildout have phase tracking for large efforts.
-These are optional - you can start with /create and upgrade later.
-
-| Workflow | Phases | When to use |
-|----------|--------|-------------|
-| /migrate | 7 phases (docs sprint through cutover) | Replacing an existing system |
-| /buildout | 4 phases (discovery through iterate-and-ship) | Building a new product |
-| /create | No phases | Adding features to an existing codebase |
-
-### Full skill list
-
-**Task skills:**
+### Orient
 
 | Skill | What it does |
 |-------|-------------|
-| `/diagnose` | Structured debugging: feedback loop, hypothesize, instrument, fix, regression test |
+| `/setup` | One-time project setup: scope, conventions, doc structure |
+| `/how-to-start` | Context-aware skill router: reads project state, recommends the right skill |
+| `/check-in` | Start-of-session: reads project state, proposes next task |
+| `/reorient` | Course correction: audits progress, surfaces deferred decisions |
+
+### Plan
+
+| Skill | What it does |
+|-------|-------------|
 | `/spec` | Grill requirements, output spec with acceptance criteria |
-| `/tdd` | Test-driven build: plan slices, tracer bullet, incremental red-green-refactor |
-| `/port` | Migrate a screen from a legacy system: read source, build, verify parity |
+| `/design` | Design system creation: soul-finding, token architecture, proof screens |
 | `/grill-me` | Open-ended interview on any plan or decision |
 | `/grill-with-docs` | Architecture decisions that meet the ADR threshold |
-| `/improve-codebase-architecture` | Surface architectural friction, propose improvements |
-| `/learn` | Explore a topic with options, terminology bridging, quiz |
-| `/prototype` | Quick throwaway mockup to validate an idea |
-| `/create` | Add a feature end-to-end: spec, build, wrapup |
-| `/how-to-start` | Context-aware skill router: reads project state, recommends the right skill |
 
-**Project skills:**
+### Build
 
 | Skill | What it does |
 |-------|-------------|
-| `/check-in` | Start-of-session: reads project state, proposes next task |
+| `/tdd` | Test-driven build: plan slices, tracer bullet, incremental red-green-refactor |
+| `/create` | Add a feature end-to-end: spec, build, wrapup |
+| `/port` | Migrate a screen from a legacy system: read source, build, verify parity |
+| `/prototype` | Quick throwaway mockup to validate an idea |
+
+### Sustain
+
+| Skill | What it does |
+|-------|-------------|
 | `/wrapup` | End-of-task: resolves discrepancies, updates shared docs |
-| `/reorient` | Course correction: audits progress, surfaces deferred decisions |
-| `/setup` | One-time: establishes scope, conventions, doc structure |
 | `/migrate` | Multi-phase workflow for replacing a legacy system |
 | `/buildout` | Multi-phase workflow for building a new product |
-| `/design` | Design system creation: soul-finding, token architecture, proof screens |
+| `/improve-codebase-architecture` | Surface architectural friction, propose improvements |
 
-### Reference
+### Learn
+
+| Skill | What it does |
+|-------|-------------|
+| `/learn` | Explore a topic with options, terminology bridging, quiz |
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how the system works internally: the process/adapter split, concerns tracking, engagement tiers, and the skill directory structure.
+
+## Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
-- [design/CONCEPTS-REFERENCE.md](design/CONCEPTS-REFERENCE.md) - Design doc: Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [design/ENGAGEMENT-REFERENCE.md](design/ENGAGEMENT-REFERENCE.md) - Design doc: tier detection, nudge protocol, concern emission rules (skills inline their own)
+- [process/](process/) - Standalone methodology documents (no AI required)
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
-- [process/](process/) - Standalone methodology documents
