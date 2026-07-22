@@ -2,7 +2,6 @@
 name: how-to-start
 description: "Context-aware skill router. Reads project state, classifies intent, recommends the right skill with a one-line reason. Use when the user has a vague goal and doesn't know which skill fits."
 status: stable
-user-invocable: true
 metadata:
   hermes:
     tags: [routing, discovery, onboarding]

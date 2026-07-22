@@ -2,7 +2,6 @@
 name: breakdown
 description: "Decompose a spec into implementable slices with dependency ordering. Use when a spec exists and the user wants a clear build plan, mentions 'break down', 'decompose', 'slices', or 'implementation plan'."
 status: draft
-user-invocable: true
 ---
 
 # Breakdown

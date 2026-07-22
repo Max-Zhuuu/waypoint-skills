@@ -2,7 +2,6 @@
 name: setup
 description: Structured project kickoff with scoping grill, architecture decisions, documentation structure, and CLAUDE.md generation. Use at project start, when setting up a new repo, or when foundational decisions are missing.
 status: stable
-user-invocable: false
 ---
 
 # Project Setup

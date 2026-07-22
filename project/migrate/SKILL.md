@@ -2,7 +2,6 @@
 name: migrate
 description: Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete. One-time setup extending /setup, then use /check-in for daily sessions.
 status: stable
-user-invocable: false
 ---
 
 # Migrate

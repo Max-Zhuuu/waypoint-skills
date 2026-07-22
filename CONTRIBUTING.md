@@ -47,7 +47,7 @@ user-invocable: true | false        # Optional. Default: true.
 ---
 ```
 
-`user-invocable: false` marks a skill that should not be triggered directly by user request or model inference - typically because another skill orchestrates it (e.g. `/buildout`, `/check-in`, `/migrate`, `/setup`, `/wrapup`, `/create`, `/port` are invoked as part of a larger workflow rather than standalone).
+`user-invocable: false` marks a skill that should not be triggered directly by user request or model inference - typically a utility skill that another skill orchestrates internally.
 Omit `user-invocable` entirely for the common case where a skill is freely invocable - it defaults to `true`.
 
 All other frontmatter fields (`metadata.hermes`, `inputs`, `outputs`, `signals`, etc.) are optional and skill-specific.

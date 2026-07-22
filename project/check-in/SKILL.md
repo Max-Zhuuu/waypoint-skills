@@ -2,7 +2,6 @@
 name: check-in
 description: Session authority. Reads concerns, proposes next task, fires checkpoints. The daily verb - use at every session start.
 status: stable
-user-invocable: false
 inputs: {}
 outputs: {}
 signals:

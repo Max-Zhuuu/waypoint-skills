@@ -2,7 +2,6 @@
 name: port
 description: Migration implementation verb. Reads spec + logic doc + source, briefs subagents, reviews output, flags discrepancies. Use when /check-in proposes a migration screen to build.
 status: stable
-user-invocable: false
 inputs:
   feature-spec: docs/reference/features/{entity}.md
   logic-doc: docs/reference/logic/{entity}.md
