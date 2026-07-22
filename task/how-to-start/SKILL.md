@@ -51,6 +51,7 @@ Map the user's input to one of these clusters. If ambiguous, pick the most likel
 | stress-test, review, challenge, grill, is this right | /grill-me | /grill-with-docs (if project docs exist) | - |
 | understand, learn, explain, how does, teach me | /learn | /improve-arch (if about structure) | - |
 | start, new project, kick off, set up, initialize | /setup | /buildout or /migrate (after setup) | - |
+| design system, tokens, colors, typography, visual identity, look and feel | /design | /prototype (if exploring one component) | Needs project context |
 | prototype, mock up, try, quick test, experiment | /prototype | - | - |
 | find skill, what skills, how to use waypoint | /find-skills | - | - |
 | spec, requirements, scope, what should it do | /spec | - | - |

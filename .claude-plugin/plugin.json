@@ -35,6 +35,7 @@
     "./project/setup",
     "./project/migrate",
     "./project/buildout",
+    "./project/design",
     "./third-party/chrome-devtools-axi"
   ]
 }

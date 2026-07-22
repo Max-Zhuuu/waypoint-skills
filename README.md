@@ -117,6 +117,7 @@ Each stage includes the previous one. Structure accumulates when it helps and st
 | "What should I work on?" | `/check-in` |
 | "I've lost the plot" | `/reorient` |
 | "I want to understand X" | `/learn` |
+| "This needs a design system" | `/design` |
 | "Just add this feature" | `/create` |
 
 ## Install
@@ -254,6 +255,7 @@ These are optional - you can start with /create and upgrade later.
 | `/setup` | One-time: establishes scope, conventions, doc structure |
 | `/migrate` | Multi-phase workflow for replacing a legacy system |
 | `/buildout` | Multi-phase workflow for building a new product |
+| `/design` | Design system creation: soul-finding, token architecture, proof screens |
 
 ### Reference
 
