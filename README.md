@@ -12,16 +12,24 @@ Every skill reads project state before acting and writes decisions down before m
 ### Not sure where to start
 
 ```
-you:   /how-to-start the vessel reporting is broken
+you:   /how-to-start
 
-agent: Read: Mid-workflow (Phase 5 /migrate), concerns tracking active.
-       Recommend: /diagnose - concrete failure, not a planning problem.
-       C-016 is related: "FE has no business logic fidelity verification."
-       Proceed with /diagnose?
+agent: Read: Project setup, no active workflow.
+       What are you trying to do?
+       /diagnose for bugs, /spec for features, /tdd to build test-first,
+       /design for visual system, /learn to understand something.
+       /find-skills to browse everything.
+
+you:   I need to add a news feed widget to the dashboard
+
+agent: Read: No spec exists for news feed.
+       Recommend: /spec - underspecified feature, nail down requirements
+       before building.
+       Proceed with /spec?
 
 you:   yes
 
-agent: [invokes /diagnose with "the vessel reporting is broken"]
+agent: [invokes /spec with "news feed widget"]
 ```
 
 ### Starting a work session
