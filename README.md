@@ -222,20 +222,15 @@ They are the complete methodology without any tool-specific instructions.
 | `/create` | Add a feature end-to-end: spec, build, wrapup |
 | `/port` | Migrate a screen from a legacy system: read source, build, verify parity |
 | `/prototype` | Quick throwaway mockup to validate an idea |
+| `/migrate` | Multi-phase workflow for replacing a legacy system |
+| `/buildout` | Multi-phase workflow for building a new product |
 
 ### Sustain
 
 | Skill | What it does |
 |-------|-------------|
 | `/wrapup` | End-of-task: resolves discrepancies, updates shared docs |
-| `/migrate` | Multi-phase workflow for replacing a legacy system |
-| `/buildout` | Multi-phase workflow for building a new product |
 | `/improve-codebase-architecture` | Surface architectural friction, propose improvements |
-
-### Learn
-
-| Skill | What it does |
-|-------|-------------|
 | `/learn` | Explore a topic with options, terminology bridging, quiz |
 
 ## Contributing
