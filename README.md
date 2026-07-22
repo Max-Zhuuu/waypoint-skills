@@ -130,8 +130,8 @@ Structure accumulates when it helps and stays out of the way when it doesn't.
 
 | You're thinking... | Start here |
 |-------------------|------------|
-| "I just joined this project" | `/setup` |
 | "I have a thing, not sure where to start" | `/how-to-start` |
+| "I just joined this project" | `/setup` |
 | "What should I work on?" | `/check-in` |
 | "I've lost the plot" | `/reorient` |
 | "We're replacing a legacy system" | `/setup` then `/migrate` |
