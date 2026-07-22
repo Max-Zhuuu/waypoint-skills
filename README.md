@@ -51,7 +51,7 @@ Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurabl
 Read the process documents in `process/` directly.
 They are the complete methodology without any tool-specific instructions.
 
-## What does this look like?
+## Developing with Waypoint
 
 ### Not sure where to start
 
