@@ -60,10 +60,10 @@ Map the user's input to one of these clusters. If ambiguous, pick the most likel
 
 **No input:** if the user types just `/how-to-start` with nothing after it, run Step 1 (quick scan) and respond
 based on project state:
-- Active Workflow exists -> "You're mid-workflow. /check-in to resume?"
-- CONCERNS.md has open items -> "You have {n} open concerns. /check-in to triage, or tell me what you're working on."
-- Project docs exist but no workflow -> "Project is set up. What are you trying to do?"
-- Nothing exists -> "No project context yet. What are you working on? Or /setup to get started."
+- Active Workflow exists -> "You're mid-workflow. /check-in to resume? Or: /diagnose for bugs, /spec for features, /design for visual system, /learn to understand something. /find-skills to browse everything."
+- CONCERNS.md has open items -> "You have {n} open concerns. /check-in to triage, or tell me what you're working on. Also: /diagnose, /spec, /design, /learn. /find-skills to browse everything."
+- Project docs exist but no workflow -> "Project is set up. What are you trying to do? /diagnose for bugs, /spec for features, /tdd to build test-first, /design for visual system, /learn to understand something. /find-skills to browse everything."
+- Nothing exists -> "No project context yet. What are you working on? /setup to establish scope, or jump straight in: /diagnose for bugs, /spec for features, /learn to understand something. /find-skills to browse everything."
 
 One question, then classify whatever they say.
 
