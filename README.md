@@ -1,9 +1,6 @@
 # Waypoint Skills
 
 Understand what you're building before you build it.
-Systematic software development - from orienting in a new codebase to shipping features - that works on paper, with an AI, or fully automated.
-
-## Why
 
 Most AI-assisted development starts with a prompt and ends with code.
 What's missing is the middle: understanding the system you're changing, deciding what to build before building it, and verifying that what you built matches what you decided.
@@ -113,7 +110,7 @@ stateDiagram-v2
 
     orient --> plan : /spec, /design
     plan --> build : /tdd, /create, /port
-    build --> verify : /wrapup
+    build --> verify : /wrapup, /check-in
     verify --> orient : gaps found
 
     exp --> orient : system nudges
