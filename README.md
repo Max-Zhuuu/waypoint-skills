@@ -7,6 +7,50 @@ What's missing is the middle: understanding the system you're changing, deciding
 Waypoint skills enforce that middle.
 Every skill reads project state before acting and writes decisions down before moving on.
 
+## Install
+
+### Claude Code
+
+**Plugin** (managed, auto-updates):
+
+```bash
+claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
+```
+
+**skills.sh** (copies into your project, editable):
+
+```bash
+npx skills add max-zhu-bv/waypoint-skills
+```
+
+Either way, invoke any skill directly:
+
+```
+/diagnose flaky-test
+/spec VesselParticulars
+/tdd CreateVessel
+```
+
+### OpenCode
+
+OpenCode reads `.claude/skills/` natively, so the Claude Code install works as-is.
+For standalone use, copy adapters from `adapters/opencode/` to `.opencode/skills/{name}/SKILL.md`.
+
+### Cursor
+
+Copy adapter files from `adapters/cursor/` to `.cursor/rules/` in your project.
+Each `.mdc` file uses Agent Requested activation - Cursor's agent reads the description and applies it when relevant.
+
+### Codex
+
+Add the contents of files in `adapters/codex/` to your project's `AGENTS.md`.
+Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurable in `~/.codex/config.toml`).
+
+### No AI
+
+Read the process documents in `process/` directly.
+They are the complete methodology without any tool-specific instructions.
+
 ## What does this look like?
 
 ### Not sure where to start
@@ -96,44 +140,6 @@ agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
        returns a different URL. Regression test at auth.spec.ts:142.
 ```
 
-## How it fits together
-
-```mermaid
-stateDiagram-v2
-    direction LR
-
-    state "New to this project" as new
-    state "Know the codebase" as exp
-
-    state "Orient" as orient
-    state "Plan" as plan
-    state "Build" as build
-    state "Verify" as verify
-
-    [*] --> new
-    [*] --> exp
-
-    new --> orient : /setup, /how-to-start
-    exp --> build : /diagnose, /tdd, /create
-
-    orient --> plan : /spec, /design
-    plan --> build : /tdd, /create, /port
-    build --> verify : /wrapup, /check-in
-    verify --> orient : gaps found
-
-    exp --> orient : system nudges
-```
-
-Both paths lead to the same place.
-If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
-
-**You don't have to set up everything.**
-Any skill works standalone - `/diagnose` a bug without project context, `/spec` a feature without a glossary.
-But when a skill discovers something worth remembering (a domain term, an assumption, a decision), it offers to write it down.
-Say yes and sessions start linking together.
-Say no and it moves on.
-Structure accumulates when it helps and stays out of the way when it doesn't.
-
 ## Starting points
 
 | You're thinking... | Start here |
@@ -149,50 +155,6 @@ Structure accumulates when it helps and stays out of the way when it doesn't.
 | "Just add this feature" | `/create` |
 | "This is broken" | `/diagnose` |
 | "I want to understand X" | `/learn` |
-
-## Install
-
-### Claude Code
-
-**Plugin** (managed, auto-updates):
-
-```bash
-claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
-```
-
-**skills.sh** (copies into your project, editable):
-
-```bash
-npx skills add max-zhu-bv/waypoint-skills
-```
-
-Either way, invoke any skill directly:
-
-```
-/diagnose flaky-test
-/spec VesselParticulars
-/tdd CreateVessel
-```
-
-### OpenCode
-
-OpenCode reads `.claude/skills/` natively, so the Claude Code install works as-is.
-For standalone use, copy adapters from `adapters/opencode/` to `.opencode/skills/{name}/SKILL.md`.
-
-### Cursor
-
-Copy adapter files from `adapters/cursor/` to `.cursor/rules/` in your project.
-Each `.mdc` file uses Agent Requested activation - Cursor's agent reads the description and applies it when relevant.
-
-### Codex
-
-Add the contents of files in `adapters/codex/` to your project's `AGENTS.md`.
-Keep AGENTS.md lean - Codex has a 32KiB combined instruction budget (configurable in `~/.codex/config.toml`).
-
-### No AI
-
-Read the process documents in `process/` directly.
-They are the complete methodology without any tool-specific instructions.
 
 ## Skills
 
@@ -232,6 +194,44 @@ They are the complete methodology without any tool-specific instructions.
 | `/wrapup` | End-of-task: resolves discrepancies, updates shared docs |
 | `/improve-codebase-architecture` | Surface architectural friction, propose improvements |
 | `/learn` | Explore a topic with options, terminology bridging, quiz |
+
+## How it fits together
+
+```mermaid
+stateDiagram-v2
+    direction LR
+
+    state "New to this project" as new
+    state "Know the codebase" as exp
+
+    state "Orient" as orient
+    state "Plan" as plan
+    state "Build" as build
+    state "Verify" as verify
+
+    [*] --> new
+    [*] --> exp
+
+    new --> orient : /setup, /how-to-start
+    exp --> build : /diagnose, /tdd, /create
+
+    orient --> plan : /spec, /design
+    plan --> build : /tdd, /create, /port
+    build --> verify : /wrapup, /check-in
+    verify --> orient : gaps found
+
+    exp --> orient : system nudges
+```
+
+Both paths lead to the same place.
+If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
+
+**You don't have to set up everything.**
+Any skill works standalone - `/diagnose` a bug without project context, `/spec` a feature without a glossary.
+But when a skill discovers something worth remembering (a domain term, an assumption, a decision), it offers to write it down.
+Say yes and sessions start linking together.
+Say no and it moves on.
+Structure accumulates when it helps and stays out of the way when it doesn't.
 
 ## Contributing
 
