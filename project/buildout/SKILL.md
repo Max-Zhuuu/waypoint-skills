@@ -2,7 +2,7 @@
 name: buildout
 description: One-time greenfield setup extending /setup. Configures project scope via intake questions (scope, validation depth, design depth), creates MoSCoW structure, and sets phase resolution. Run once at project start, then use /check-in for daily sessions.
 status: stable
-disable-model-invocation: true
+user-invocable: false
 ---
 
 # Buildout
@@ -125,6 +125,18 @@ These rules are inputs to /check-in's authority. /check-in decides how to act on
 ## References
 
 Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
+
+## Engagement
+
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+
+- **Emits:** concerns (type: flag, question, assumption)
+- **Scaffolding writes:** Active Workflow record in CLAUDE.md
+- **Override:** workflow skill - writes Active Workflow on activation, clears on completion
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
 ## Tone
 

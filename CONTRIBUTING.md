@@ -28,11 +28,30 @@ task/           # Skills that do work (diagnose, spec, tdd, etc.)
 project/        # Skills that manage projects (check-in, wrapup, migrate, etc.)
 process/        # Tool-agnostic methodology documents
 adapters/       # Platform-specific adapters (cursor, opencode, codex)
-design/         # System design docs (concepts, engagement model)
+internals/      # System design docs (concepts, engagement model)
 ```
 
 Task skills work standalone with no project context.
 Project skills become more useful when project docs (SCOPE.md, CONCERNS.md, etc.) exist.
+
+## Frontmatter Schema
+
+Every `SKILL.md` must declare exactly these required fields:
+
+```yaml
+---
+name: skill-name                    # Required. Kebab-case.
+description: "One-line description" # Required. Used for routing and discovery.
+status: stable | draft | experimental  # Required.
+user-invocable: true | false        # Optional. Default: true.
+---
+```
+
+`user-invocable: false` marks a skill that should not be triggered directly by user request or model inference - typically because another skill orchestrates it (e.g. `/buildout`, `/check-in`, `/migrate`, `/setup`, `/wrapup`, `/create`, `/port` are invoked as part of a larger workflow rather than standalone).
+Omit `user-invocable` entirely for the common case where a skill is freely invocable - it defaults to `true`.
+
+All other frontmatter fields (`metadata.hermes`, `inputs`, `outputs`, `signals`, etc.) are optional and skill-specific.
+Keep them as needed for routing metadata or workflow bookkeeping.
 
 ## Tracking with Concerns
 
@@ -91,5 +110,5 @@ These are optional - you can start with /create and upgrade later.
 
 ## Design references
 
-- [design/CONCEPTS-REFERENCE.md](design/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [design/ENGAGEMENT-REFERENCE.md](design/ENGAGEMENT-REFERENCE.md) - Tier detection, nudge protocol, concern emission rules
+- [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
+- [internals/ENGAGEMENT-REFERENCE.md](internals/ENGAGEMENT-REFERENCE.md) - Tier detection, nudge protocol, concern emission rules

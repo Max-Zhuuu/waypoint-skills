@@ -55,6 +55,7 @@ Map the user's input to one of these clusters. If ambiguous, pick the most likel
 | prototype, mock up, try, quick test, experiment | /prototype | - | - |
 | find skill, what skills, how to use waypoint | /find-skills | - | - |
 | spec, requirements, scope, what should it do | /spec | - | - |
+| break down, decompose, slices, implementation plan, build order | /breakdown | - | Needs spec |
 | test, tdd, red-green, test-first, coverage | /tdd | - | Needs spec or clear scope |
 | done, wrap up, finished, ship it, close out | /wrapup | - | - |
 
@@ -142,3 +143,8 @@ If the user redirects ("no, I want X"), adjust without arguing.
 
 No tier detection. This skill works identically regardless of project maturity.
 If CONCERNS.md exists, grep it for topic relevance. Otherwise ignore engagement tiers.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol (this skill opts out).
+
+- **Emits:** nothing (read-only routing skill)
+- **Scaffolding writes:** none
+- **Override:** full opt-out - no tier detection, no concern emission, no nudging

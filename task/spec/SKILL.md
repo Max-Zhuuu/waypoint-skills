@@ -25,7 +25,8 @@ Mark the recommendation and state why. The user picks or challenges.
 
 ### Phase 3 - Write the spec
 
-Output to `docs/specs/{feature-slug}.md` using `docs/reference/features/_TEMPLATE.md` if it exists, otherwise [../../templates/feature-spec.md](../../templates/feature-spec.md).
+Output to Documentation Map "Feature specs" path or `docs/specs/{feature-slug}.md`.
+Use template from Documentation Map "Feature reference" `_TEMPLATE.md` if it exists, otherwise [../../templates/feature-spec.md](../../templates/feature-spec.md).
 
 ### Phase 4 - Update shared artifacts
 
@@ -35,36 +36,20 @@ Output to `docs/specs/{feature-slug}.md` using `docs/reference/features/_TEMPLAT
 
 ## Engagement
 
-On invocation, detect engagement tier:
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-| Signal | Tier |
-|--------|------|
-| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
-| CONCERNS.md exists | Tier 2 - tracking |
-| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
-| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
+- **Emits:** concerns (type: question, assumption)
+- **Scaffolding writes:** none (task-layer skill)
+- **Override:** none
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
-**Tier 1:** Execute the full methodology. Skip cross-referencing.
-Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
-no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
-State each adaptation once, then move on.
+## Exit
 
-**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
-After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
-
-**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
-
-**Nudge protocol:**
-1. **What** - the specific discovery, concrete names
-2. **Why** - impact beyond this session
-3. **Ask** - one question, one time. If declined, do not re-offer.
-
-**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
-
-**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
-**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
-
-**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
+After the spec is written:
+- "Spec written. /breakdown to decompose into slices, or /tdd to build directly?"
 
 ## Tone
 

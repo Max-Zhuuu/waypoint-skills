@@ -101,4 +101,4 @@ Tiers are not permanent. Re-run /setup to upgrade or downgrade.
 ## Documentation Map generation
 
 After tier selection, /setup generates the Documentation Map in CLAUDE.md.
-See [CONCEPTS-REFERENCE.md](../../design/CONCEPTS-REFERENCE.md#documentation-map) for the tier-dependent table and format.
+See [CONCEPTS-REFERENCE.md](../../internals/CONCEPTS-REFERENCE.md#documentation-map) for the tier-dependent table and format.

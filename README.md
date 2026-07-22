@@ -151,7 +151,7 @@ agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
 | "We're replacing a legacy system" | `/setup` then `/migrate` |
 | "We're building something new" | `/setup` then `/buildout` |
 | "This needs a design system" | `/design` |
-| "I need to build a thing" | `/spec` then `/tdd` |
+| "I need to build a thing" | `/spec` then `/breakdown` then `/tdd` |
 | "Just add this feature" | `/create` |
 | "This is broken" | `/diagnose` |
 | "I want to understand X" | `/learn` |
@@ -175,6 +175,7 @@ agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
 | `/design` | Design system creation: soul-finding, token architecture, proof screens |
 | `/grill-me` | Open-ended interview on any plan or decision |
 | `/grill-with-docs` | Architecture decisions that meet the ADR threshold |
+| `/breakdown` | Decompose a spec into implementable slices with dependency ordering |
 
 ### Build
 
@@ -216,7 +217,7 @@ stateDiagram-v2
     exp --> build : /diagnose, /tdd, /create
 
     orient --> plan : /spec, /design
-    plan --> build : /tdd, /create, /port
+    plan --> build : /breakdown, /tdd, /create, /port
     build --> verify : /wrapup, /check-in
     verify --> orient : gaps found
 

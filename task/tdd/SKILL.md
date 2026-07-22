@@ -35,36 +35,29 @@ and [refactoring.md](refactoring.md) for refactor candidates.
 
 ## Engagement
 
-On invocation, detect engagement tier:
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-| Signal | Tier |
-|--------|------|
-| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
-| CONCERNS.md exists | Tier 2 - tracking |
-| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
-| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
+- **Emits:** concerns (type: flag, deferred-doc)
+- **Scaffolding writes:** none (task-layer skill)
+- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
-**Tier 1:** Execute the full methodology. Skip cross-referencing.
-Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
-no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
-State each adaptation once, then move on.
+## Before committing
 
-**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
-After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
+**Mid-cycle commits** (individual test passing, incremental refactor):
+Auto-provisional. Emit deferred-doc concern silently. Commit with `[provisional]` marker.
+No "stable or provisional?" question - asking on every commit in a 3-8 commit session trains reflexive dismissal.
 
-**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
+**Natural boundary commits** (all slices for a feature complete, user signals "done"):
+Ask: "All slices complete. Stable enough to document, or provisional?"
+- Stable: run mini-wrapup (spec sync, term/pattern capture, concern resolution). Commit code + docs together.
+- Provisional: emit deferred-doc concern with what needs documenting. Commit with `[provisional]` marker.
+- Either way: "Next feature, or /wrapup?"
 
-**Nudge protocol:**
-1. **What** - the specific discovery, concrete names
-2. **Why** - impact beyond this session
-3. **Ask** - one question, one time. If declined, do not re-offer.
-
-**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
-
-**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
-**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
-
-**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
 
 ## Per-cycle checklist
 

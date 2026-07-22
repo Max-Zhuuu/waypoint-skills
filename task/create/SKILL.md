@@ -2,7 +2,7 @@
 name: create
 description: Add features to an existing codebase. Lighter than /buildout, structured enough to ensure specs exist and docs stay current. Use when adding a feature or small batch of features to a project that already has docs and conventions.
 status: stable
-disable-model-invocation: true
+user-invocable: false
 inputs:
   scope-md: SCOPE.md (project context)
   conventions-md: CONVENTIONS.md (naming patterns)
@@ -67,7 +67,8 @@ If the file already exists, append to it.
 
 1. **Spec:** invoke /spec. If a spec already exists for this entity, read it and ask whether to update or start fresh.
 2. **Build:** invoke the user's chosen implementation verb (/tdd default). If the user has a methodology preference from a previous /check-in, use that.
-3. **Wrapup:** suggest /wrapup when the verb reports complete. /wrapup runs the spec drift check, resolves flags, cascades to shared docs.
+3. **Before committing:** follow the exit protocol (see [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6). At natural boundaries, ask "Stable or provisional?" If the build verb is /tdd, it handles per-commit exit protocol internally.
+4. **Wrapup:** suggest /wrapup when the verb reports complete. /wrapup runs the spec drift check, resolves flags, cascades to shared docs.
 
 ### After all features
 
@@ -113,36 +114,15 @@ The user doesn't choose the mode explicitly - /create writes the workflow record
 
 ## Engagement
 
-On invocation, detect engagement tier:
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-| Signal | Tier |
-|--------|------|
-| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
-| CONCERNS.md exists | Tier 2 - tracking |
-| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
-| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
-
-**Tier 1:** Execute the full methodology. Skip cross-referencing.
-Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
-no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
-State each adaptation once, then move on.
-
-**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
-After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
-
-**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
-
-**Nudge protocol:**
-1. **What** - the specific discovery, concrete names
-2. **Why** - impact beyond this session
-3. **Ask** - one question, one time. If declined, do not re-offer.
-
-**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
-
-**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
-**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
-
-**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
+- **Emits:** concerns (type: flag, question, deferred-doc)
+- **Scaffolding writes:** none (task-layer skill)
+- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
 ## Tone
 

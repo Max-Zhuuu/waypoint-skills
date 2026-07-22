@@ -2,7 +2,7 @@
 name: setup
 description: Structured project kickoff with scoping grill, architecture decisions, documentation structure, and CLAUDE.md generation. Use at project start, when setting up a new repo, or when foundational decisions are missing.
 status: stable
-disable-model-invocation: true
+user-invocable: false
 ---
 
 # Project Setup
@@ -207,6 +207,18 @@ Detailed instructions in [PHASE-1.md](PHASE-1.md). Read that file before proceed
 - [ ] Documentation structure created with spec templates
 - [ ] CLAUDE.md with Project Scaffold + Documentation Map sections
 - [ ] ARCHITECTURE.md summary exists
+
+## Engagement
+
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+
+- **Emits:** concerns (type: assumption, question)
+- **Scaffolding writes:** CLAUDE.md, SCOPE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, .claude/ directory
+- **Override:** this is the scaffolding creator - it creates the files other skills read. No tier detection needed (setup IS how you reach Tier 2).
+- **Nudge protocol:** not applicable (setup is the setup)
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no silent scaffolding (always confirm with user), no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
 ## Tone
 

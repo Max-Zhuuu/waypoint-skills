@@ -2,7 +2,7 @@
 name: port
 description: Migration implementation verb. Reads spec + logic doc + source, briefs subagents, reviews output, flags discrepancies. Use when /check-in proposes a migration screen to build.
 status: stable
-disable-model-invocation: true
+user-invocable: false
 inputs:
   feature-spec: docs/reference/features/{entity}.md
   logic-doc: docs/reference/logic/{entity}.md
@@ -31,8 +31,10 @@ Distinct from `/tdd` which is forward-looking: define desired behavior, test fir
 
 ## Inputs (three required)
 
-1. **Feature spec** - `docs/reference/features/{entity}.md`
-2. **Logic doc** - `docs/reference/logic/{entity}.md`
+Resolve paths via the Documentation Map in CLAUDE.md. Defaults if no map exists:
+
+1. **Feature spec** - Documentation Map "Feature reference" or `docs/reference/features/{entity}.md`
+2. **Logic doc** - Documentation Map "Logic reference" or `docs/reference/logic/{entity}.md`
 3. **Source system** - files listed in the feature spec's reference section
 
 If any input is missing, stop and report. Do not build without all three.
@@ -94,15 +96,22 @@ refs: docs/reference/features/{entity}.md
 
 These concerns are /wrapup's input.
 
-### 6. Report complete
+### 6. Before committing
 
 Run test suite - zero failures required.
+Port builds are typically stable (parity-verified). Run mini-wrapup:
+- Spec sync: does the built screen match the feature spec?
+- Term/pattern capture: did porting reveal domain terms or patterns?
+- Concern resolution: does this work resolve any open concerns?
+
+If parity is partial or uncertain, commit as provisional with `[provisional]` marker.
 Mark `[P]` in inventory.
-Suggest /wrapup to the user:
 
 ```
-Build complete. {N} concerns emitted. Run /wrapup to resolve, or continue to next entity.
+Build complete. {N} concerns emitted. /wrapup to resolve, or continue to next entity.
 ```
+
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
 
 ## Concurrency
 
@@ -116,7 +125,7 @@ Shared file changes (router config, type exports, shared components) serialize t
 
 ### Cross-session
 
-Cross-session coordination (ACTIVE-WORK tracker, file claiming, stale entry policy) is owned by the project's CLAUDE.md and hook infrastructure, not this skill.
+Cross-session coordination (CONCERNS.md Claims section, file claiming, stale entry policy) is owned by the project's CLAUDE.md and hook infrastructure, not this skill.
 /port respects whatever coordination protocol the project defines.
 
 ## UX improvements
@@ -125,39 +134,15 @@ When you spot a UX improvement during porting: write a one-liner in `docs/improv
 
 ## Engagement
 
-/port requires its three inputs (feature spec, logic doc, source) regardless of engagement tier.
-CONVENTIONS.md enhances pattern enforcement during review but is not required.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-On invocation, detect engagement tier:
-
-| Signal | Tier |
-|--------|------|
-| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
-| CONCERNS.md exists | Tier 2 - tracking |
-| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
-| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
-
-**Tier 1:** Execute the full methodology. Skip cross-referencing.
-Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
-no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
-State each adaptation once, then move on.
-
-**Tier 2:** Read CONCERNS.md at start. Note relevant open concerns.
-After work, follow the nudge protocol for discoveries. Emit as `[open]` with type, date, refs.
-
-**Tier 3:** Emit concerns without asking. Log what was emitted at session end.
-
-**Nudge protocol:**
-1. **What** - the specific discovery, concrete names
-2. **Why** - impact beyond this session
-3. **Ask** - one question, one time. If declined, do not re-offer.
-
-**Concern format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
-
-**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
-**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
-
-**Don't:** block on missing scaffolding; repeatedly mention what's missing; prompt for /setup more than once (`.claude/.setup-prompted`); create scaffolding owned by another skill; degrade silently.
+- **Emits:** concerns (type: flag, question, deferred-doc)
+- **Scaffolding writes:** none (task-layer skill)
+- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
 ## References
 

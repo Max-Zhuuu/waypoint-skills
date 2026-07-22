@@ -2,7 +2,7 @@
 name: wrapup
 description: Completion verb. Resolves concerns from implementation, cascades to shared docs, evaluates gate criteria. Run after /port or /tdd.
 status: stable
-disable-model-invocation: true
+user-invocable: false
 inputs:
   concerns: CONCERNS.md entries referencing the current entity
 outputs:
@@ -110,102 +110,15 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 
 ## Engagement
 
-If CONCERNS.md doesn't exist, /wrapup creates it with the resolved entries from this run.
-Cascade to shared docs (step 4) only fires for docs that exist.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-On invocation, detect engagement tier:
-
-| Signal | Tier |
-|--------|------|
-| No CONCERNS.md, no CLAUDE.md | Tier 1 - just working |
-| CONCERNS.md exists | Tier 2 - tracking |
-| CONCERNS.md + Documentation Map in CLAUDE.md | Tier 2+ |
-| Tier 2+ and `concerns: auto-emit` in CLAUDE.md | Tier 3 - automated |
-
-Tier 3 requires explicit opt-in in CLAUDE.md:
-
-```
-## Waypoint
-concerns: auto-emit
-```
-
-Without that marker, always ask before emitting concerns.
-
-### Tier behaviors
-
-**Tier 1:** Execute the full methodology. Skip cross-referencing.
-Substitute inline: no CONTEXT.md -> define terms inline; no CONVENTIONS.md -> infer from code;
-no SCOPE.md -> ask scope inline; no TESTING.md -> state default philosophy.
-State each adaptation once, then move on.
-
-First-invocation notice (if `.claude/.setup-prompted` doesn't exist):
-
-```
-Tip: Waypoint skills work standalone. For convention enforcement
-and cross-referencing, run /setup when you're ready.
-```
-
-Write `.claude/.setup-prompted` after showing. Never show again.
-
-**Tier 2:** Read CONCERNS.md at start. Categorize open concerns by type and age.
-After work, follow the nudge protocol. Emit as `[open]` with type, date, refs.
-Resolve concerns addressed by current work.
-
-Deepening suggestions (at most once per session, when pattern emerges):
-
-```
-You have 8 open assumptions, 3 with medium risk and no deadline.
-/setup can run a structured validation pass if you want
-to stress-test these before they become real problems.
-```
-
-**Tier 3:** Emit concerns without asking. Log emissions at session end.
-Resolve automatically when work addresses them.
-Surface only concerns needing human judgment.
-
-Automation suggestions (Tier 3 only, requires 3+ instances of same concern type):
-
-```
-You've resolved 4 spec-drift flags this week, all caught during /wrapup.
-A PostToolUse hook could catch these at write time. Want me to add it?
-```
-
-### Nudge protocol
-
-1. **What** - specific discovery, concrete names
-2. **Why** - impact beyond this session
-3. **Ask** - one question, one time. If declined, do not re-offer.
-
-### Concern emission
-
-**Format:** `### C-{next_id} [open] {description}` / `type: {question|assumption|flag} | raised: {date} | source: /{skill-name}`
-
-**Emit when:** cross-cutting, contradicts assumption, can't resolve now, time-bound risk.
-**Don't emit:** things just fixed, generic advice, duplicates, current-context-only.
-
-### Scaffolding file table
-
-| File | What it gives skills | Created by |
-|------|---------------------|------------|
-| CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge) or /setup |
-| CONTEXT.md | Term validation, glossary challenges | /grill-with-docs |
-| CONVENTIONS.md | Naming enforcement | /setup |
-| SCOPE.md | Scope boundary checks | /setup |
-| TESTING.md | Project-specific test philosophy | /setup |
-| ARCHITECTURE.md | Architecture cross-referencing | /setup |
-| docs/adr/ | Decision history | /grill-with-docs |
-| Documentation Map (in CLAUDE.md) | Indirection layer | /setup |
-
-### Prohibitions
-
-- Don't block on missing scaffolding
-- Don't repeatedly mention what's missing
-- Don't prompt for /setup more than once (`.claude/.setup-prompted`)
-- Don't create scaffolding owned by another skill
-- Don't degrade silently - state what you skipped, once
-- Don't nudge more than once per discovery
-- Don't emit at Tier 2 without the nudge protocol
-- Don't offer automation suggestions below Tier 3
+- **Emits:** flags, resolution notes, consolidated audit results
+- **Scaffolding writes:** creates CONCERNS.md if absent (seeded with this run's resolved entries)
+- **Override:** CONCERNS.md auto-creation at Tier 1. Cascade step only fires for docs that exist - does not create docs to cascade into.
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths (except CONCERNS.md), no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
 ## Tone
 

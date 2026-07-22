@@ -39,7 +39,7 @@ Project decisions:
 | Ship tier | users | SCOPE.md |
 | Testing philosophy | integration-first | SCOPE.md |
 | Architecture areas | 6 ADRs (component-arch, state-mgmt, ...) | docs/adr/ |
-| Hooks | ACTIVE-WORK (UserPromptSubmit) | .claude/settings.json |
+| Hooks | Claims (UserPromptSubmit) | .claude/settings.json |
 
 To revisit any of these, select below. Otherwise, setup is complete.
 ```

@@ -40,6 +40,11 @@ This file provides guidance to Claude Code when working in this repository.
 | Scope boundaries | SCOPE.md | Active |
 | Architecture decisions | docs/adr/ | {{status}} |
 | Architecture overview | {{architecture-path}} | {{status}} |
+| Feature specs | docs/specs/ | {{status}} |
+| Feature reference | {{feature-reference-path}} | {{status}} |
+| Logic reference | {{logic-reference-path}} | {{status}} |
+| Design docs | docs/design/ | {{status}} |
+| Cross-cutting patterns | docs/patterns/ | {{status}} |
 | Skill state | .claude/ | Active |
 
 ## Branch Workflow
@@ -52,7 +57,7 @@ This file provides guidance to Claude Code when working in this repository.
 - When to use parallel agents: independent tasks touching different file areas
 - When to work inline: main loop already has sufficient context
 - Task brief: What, Files claimed, Inputs, Output, Model (Sonnet for mechanical / Opus for judgment), Constraints
-- Concurrent agent protocol: register in `docs/local/ACTIVE-WORK.md` before modifying files, claim file areas, check for stale entries (>4 hours)
+- Concurrent agent protocol: register in the CONCERNS.md Claims section before modifying files, claim file areas, check for stale entries (>4 hours)
 
 ## Change Protocol
 

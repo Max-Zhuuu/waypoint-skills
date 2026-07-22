@@ -150,12 +150,14 @@ Pass the relevant design docs as context to the invoked skill.
 
 ## Engagement
 
-Read project maturity from SCOPE.md and existing design docs.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **No project setup** - hard gate. Need context before design.
-- **Project setup, no design docs** - greenfield mode. Enter wave 1.
-- **Design docs exist** - resume mode. Show state, offer options.
-- **Mature project with concerns** - check CONCERNS.md for design-related flags. Surface them before new work.
+- **Emits:** design decisions, design brief, token rationale
+- **Scaffolding writes:** docs/design/ directory tree
+- **Override:** requires SCOPE.md or equivalent project context. At Tier 1, prompts user for minimal context (product verb, density, primary task) inline rather than hard-gating. This is the only skill that gates on project context - see rationale in DESIGN-DECISIONS.md.
+- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
+- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
+- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
+- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
-When concerns exist that relate to visual consistency, interaction patterns, or design drift, surface them:
-"C-{id} flags design drift in {area}. Address this before extending the system?"
+When concerns exist relating to visual consistency, interaction patterns, or design drift, surface them before starting new work.

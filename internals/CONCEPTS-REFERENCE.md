@@ -203,17 +203,27 @@ When a checkpoint finds a mismatch (spec vs code, spec vs API, spec vs source sy
 Never skip to step 3 without trying steps 1 and 2.
 The cascade biases toward machine-verifiable answers before asking the human.
 
-## Single-Writer Discipline
+## Write Discipline
 
-### Content docs
+Files are classified by write semantics, not by a single-writer rule.
+See [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) section 7 for the full file classification table.
 
-Only /wrapup writes to shared content docs:
-- CONVENTIONS.md
-- CONTEXT.md
-- DESIGN-SYSTEM.md
+### Categories
 
-Other skills create only their own output artifacts.
-If a skill discovers something that should be in CONTEXT.md, it flags it for /wrapup.
+| Category | Semantics | Who writes | Conflict resolution |
+|----------|-----------|------------|-------------------|
+| **Shared-append** | Any skill adds entries; never modifies existing | Any skill | Merge by appending |
+| **Owned** | One designated writer per section | Designated skill | Owner resolves |
+| **Volatile** | Session-scoped, auto-expires | Any skill in session | Last writer wins |
+
+### The append-only contract
+
+The rule isn't "one writer" - it's "append-only during work, modifications through /wrapup."
+
+- /spec can add a term to CONTEXT.md when it discovers one during a grill
+- /diagnose can add a convention to CONVENTIONS.md when it notices a pattern
+- Neither skill can modify or delete existing entries
+- Modifications (corrections, consolidation, conflict resolution) happen in /wrapup
 
 ### Machine-readable state
 
@@ -224,17 +234,13 @@ CLAUDE.md sections have designated writers per section:
 | Project Scaffold | /setup | /check-in (timestamps only) |
 | Documentation Map | /setup | /setup (on tier transitions) |
 | Active Workflow | Workflow skill (/migrate, /buildout, /create) | /check-in (phase transitions) |
+| Canonical branch | Human (in Active Workflow table) | /reorient (flags stale designations) |
 | Prose sections (Overview, Dev, Tech Stack) | Human | Human |
 
-### Why the split
+### Default for unlisted files
 
-The original principle ("only /wrapup writes to shared docs") was imprecise.
-/setup and /check-in clearly write to CLAUDE.md.
-The content-vs-state split makes the per-section ownership explicit without weakening the principle.
-
-Content docs contain human-judgment prose (domain terms, naming rationale, design decisions).
-Machine-readable state contains structured records (current phase, file paths, dates).
-Different authoring models for different content types.
+If a file doesn't have a documented write policy, default to Owned.
+Only its creator (or /wrapup) should modify it.
 
 ## Skill State
 

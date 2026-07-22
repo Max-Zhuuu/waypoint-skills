@@ -30,7 +30,7 @@ Common detail fields (all optional - a valid concern can be just the header):
 
 | Field | Used by | Purpose |
 |-------|---------|---------|
-| `type:` | all | question, assumption, flag |
+| `type:` | all | question, assumption, flag, deferred-doc |
 | `raised:` | all | date concern was opened |
 | `refs:` | all | links to specs, ADRs, code, other concerns |
 | `risk:` | assumptions | low / medium / high |
@@ -95,6 +95,11 @@ Add `risk:` and `deadline:` when the assumption is load-bearing.
 "Mock API returns 200 for invalid IDs." / "No test seam for this bug."
 Often emitted by task-layer skills during their work.
 
+**deferred-doc** - documentation intentionally skipped at commit time.
+Emitted by the exit protocol (ENGAGEMENT-REFERENCE.md section 6) when a commit is provisional.
+Includes: what needs documenting, why it was deferred, and the commit SHA.
+Age-based pressure: /check-in escalates deferred-docs from mention (< 3 days) to flag priority (> 7 days) to top of stack (> 14 days).
+
 ## Status lifecycle
 
 ```
@@ -108,8 +113,22 @@ open --> investigating --> resolved
 - **open** - raised, not yet being worked on
 - **investigating** - someone (or something) is actively looking into it
 - **blocked** - waiting on external input, a dependency, or another concern
-- **resolved** - answered, validated, or fixed (add decision/resolution note)
+- **resolved** - answered, validated, or fixed (add decision/resolution note and commit SHAs)
 - **stale** - no activity for 2+ weeks; review or close
+
+### Resolved format
+
+When resolving a concern, include the commits that addressed it:
+
+```markdown
+### C-015 [resolved] FE not consuming real BE for Claims, Pool, Search
+type: flag | raised: 2026-07-20 | resolved: 2026-07-25
+Resolution: Wired Claims list to real API. Field mappings verified against C# source.
+Commits: abc1234, def5678
+```
+
+Concerns reference commits. Commits don't reference concerns.
+Commit messages describe what changed and why - concern IDs are project-management metadata that becomes noise in the long-term commit log.
 
 Claims skip this lifecycle. They are active or removed.
 
@@ -129,6 +148,7 @@ The concern ID is canonical within the project; the Linear ID is the external ha
 **Task-layer skills emit concerns:**
 - /diagnose: "No correct test seam exists" -> flag
 - /tdd: "Discovered undocumented business rule" -> question
+- /tdd: "Provisional commit, spec sync deferred" -> deferred-doc
 - /port: "Spec says X, reality is Y" -> flag
 - /spec: "This requirement is ambiguous" -> question
 
