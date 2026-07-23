@@ -35,7 +35,7 @@ Skip when: the edit was trivial, the user is clearly in a hurry, or the concepts
 
 ### Phase 6 - Learning notes
 
-Save to `docs/local/learning/`. Create the directory if needed.
+Save to `docs/_local/learning/`. Create the directory if needed.
 For format and rules, see [LEARN-REFERENCE.md](LEARN-REFERENCE.md#learning-notes).
 
 ## Engagement

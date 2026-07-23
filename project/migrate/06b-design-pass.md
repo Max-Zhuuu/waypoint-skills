@@ -58,8 +58,8 @@ The chosen skill owns the methodology. This phase file owns the acceptance crite
 
 When an improvement requires backend work:
 - **Tier 1 (frontend-only):** proceed.
-- **Tier 2 (API-shape change):** write design brief + data contract in docs/local/handoffs/api-contracts/. Build against mock. Don't block.
-- **Tier 3 (schema/logic change):** invoke /grill-with-docs for ADR. Write handoff in docs/local/handoffs/schema-changes/. Pause until resolved.
+- **Tier 2 (API-shape change):** write design brief + data contract in docs/_local/handoffs/api-contracts/. Build against mock. Don't block.
+- **Tier 3 (schema/logic change):** invoke /grill-with-docs for ADR. Write handoff in docs/_local/handoffs/schema-changes/. Pause until resolved.
 
 ### Feedback
 

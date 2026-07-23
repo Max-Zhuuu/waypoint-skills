@@ -9,7 +9,7 @@ Projects may customize after generation - these are starting points, not schemas
 |----------|-----------|---------|
 | CLAUDE.md | /setup Phase 1 | Project instructions with scaffold, doc map, agent coordination |
 | SCOPE.md | /setup Phase 0 | In/out/uncertain table, constraints, repositories |
-| GLOSSARY.md | /setup, /grill-with-docs | Domain glossary |
+| _GLOSSARY.md | /setup, /grill-with-docs | Domain glossary |
 | conventions-naming.md | /setup Phase 1 | Naming patterns by category (copied to `docs/program/conventions/NAMING.md`) |
 | conventions-ux.md | /setup Phase 1 | Interaction patterns (copied to `docs/program/conventions/UX.md`) |
 | TESTING.md | /setup Phase 1 | Test philosophy and tier expectations |

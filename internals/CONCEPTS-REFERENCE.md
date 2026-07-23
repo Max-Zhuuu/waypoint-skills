@@ -116,7 +116,7 @@ Project documentation organizes into three tiers, each changing at a different c
 |------|-----------|---------------|-----------------|
 | **program/** | `docs/program/` | What the system IS - architecture, conventions, testing, features | Rarely |
 | **implementation/** | `docs/implementation/` | What we're DOING - scope, concerns, specs, handoffs | Often |
-| **local/** | `docs/local/` | Working state - learnings, scratch notes | Constantly (gitignored) |
+| **_local/** | `docs/_local/` | Working state - learnings, scratch notes | Constantly (gitignored) |
 
 ### program/ structure
 
@@ -180,7 +180,7 @@ The map uses bold markers (**) to flag key docs that should be read before actin
 ## Documentation Map
 
 docs/
-  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  **_GLOSSARY.md**               # Domain glossary - canonical terms, avoid-lists
   program/                       # What the system IS
     **ARCHITECTURE.md**          # Stack, state management, data flow, deps
     STRUCTURE.md                 # Code/file layout conventions
@@ -196,7 +196,7 @@ docs/
     **CONCERNS.md**              # Questions, assumptions, issues, milestones
     specs/                       # Feature specs (flat, active)
     handoffs/                    # Cross-team requests and contracts
-  local/                         # Gitignored working state
+  _local/                        # Gitignored working state
     learnings/
     notes/
 ```
@@ -222,7 +222,7 @@ The Documentation Map grows with the project tier:
 
 | Concept | Small | Moderate | Large / Migration |
 |---------|-------|----------|-------------------|
-| Domain glossary | - | GLOSSARY.md | GLOSSARY.md |
+| Domain glossary | - | _GLOSSARY.md | _GLOSSARY.md |
 | Naming conventions | - | conventions/NAMING.md | conventions/NAMING.md |
 | UX conventions | - | conventions/UX.md | conventions/UX.md |
 | Visual design | - | - | program/DESIGN.md (optional) |

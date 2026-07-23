@@ -23,4 +23,4 @@ Check `docs/specs/` for related specs.
   A spec is a contract. Every sentence constrains scope or defines behavior.
   If a sentence does neither, cut it.
 - Phase 5 (update artifacts): new domain terms to GLOSSARY.md,
-  architecture decisions to docs/adr/, open questions to docs/local/CONCERNS.md.
+  architecture decisions to docs/adr/, open questions to docs/_local/CONCERNS.md.

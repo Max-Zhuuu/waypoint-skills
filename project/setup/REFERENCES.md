@@ -65,7 +65,7 @@ A hook injects the Claims section from CONCERNS.md into every prompt so all sess
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'FILE=\"docs/local/CONCERNS.md\"; if [ -f \"$FILE\" ]; then echo \"# Concerns\"; sed -n \"/^## Claims/,/^## [^C]/p\" \"$FILE\" | head -n -1; sed -n \"/^## Open/,//p\" \"$FILE\"; else echo \"No concerns file at $FILE\"; fi'"
+            "command": "bash -c 'FILE=\"docs/_local/CONCERNS.md\"; if [ -f \"$FILE\" ]; then echo \"# Concerns\"; sed -n \"/^## Claims/,/^## [^C]/p\" \"$FILE\" | head -n -1; sed -n \"/^## Open/,//p\" \"$FILE\"; else echo \"No concerns file at $FILE\"; fi'"
           }
         ]
       }
@@ -107,4 +107,4 @@ Adapt the hook for the project:
 
 ## Local Docs Reference
 
-See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical docs/local/ structure, file formats, scaling rules, and which skills own each file.
+See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical docs/_local/ structure, file formats, scaling rules, and which skills own each file.

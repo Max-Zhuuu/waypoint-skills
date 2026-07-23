@@ -189,7 +189,7 @@ Which concern types does this project need?
 [ ] milestone - checkpoints grouping specs and handoffs
 ```
 
-**GLOSSARY.md** (docs/, if not exists) - read [../../templates/GLOSSARY.md](../../templates/GLOSSARY.md), seed with domain terms from scoping. Follow existing GLOSSARY-FORMAT if `/grill-with-docs` format file exists.
+**_GLOSSARY.md** (docs/, if not exists) - read [../../templates/_GLOSSARY.md](../../templates/_GLOSSARY.md), seed with domain terms from scoping. Follow existing GLOSSARY-FORMAT if `/grill-with-docs` format file exists.
 
 ### Gate
 
@@ -230,11 +230,39 @@ Tier can be changed by re-running /setup (reentrant).
 After scaffolding, write the Documentation Map to CLAUDE.md.
 Tree format with bold markers (**) for key docs. Skills resolve through this map, never hardcoded paths.
 
+### Naming convention
+
+Ask via `AskUserQuestion` before generating the doc structure:
+
+**How should docs/ folders sort in your file explorer?**
+- **Underscore-prefixed (recommended)**: `_GLOSSARY.md` and `_local/` sort to the top in most file explorers and GitHub web UI. Other tiers keep clean names.
+- **Clean names**: `GLOSSARY.md` and `local/` - natural names, rely on alphabetical ordering (i < l < p already sorts correctly for tiers).
+
+Default to underscore-prefixed. Apply the chosen convention to all generated paths and the Documentation Map.
+
+### Root-level enforcement
+
+Only these entries belong at `docs/` root:
+- `_GLOSSARY.md` (or `GLOSSARY.md` with clean convention)
+- Tier folders: `program/`, `implementation/`, `_local/` (or `local/`)
+- Migration-specific: `program-legacy-{source}/`
+
+Everything else goes inside a tier. When restructuring or on re-entry, flag stray files at `docs/` root:
+```
+Found docs/foo.md outside any tier.
+  -> program/ (describes what the system IS)
+  -> implementation/ (describes what we're DOING)
+  -> delete (redundant with Documentation Map or another doc)
+Which tier?
+```
+
+### Default map (underscore convention)
+
 ```markdown
 ## Documentation Map
 
 docs/
-  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  **_GLOSSARY.md**               # Domain glossary - canonical terms, avoid-lists
   program/                       # What the system IS
     **ARCHITECTURE.md**          # Stack, state management, data flow, deps
     **TESTING.md**               # Test expectations by complexity tier
@@ -246,7 +274,7 @@ docs/
     **SCOPE.md**                 # In/out/uncertain
     **CONCERNS.md**              # Questions, assumptions, issues, milestones
     specs/                       # Feature specs (flat, active)
-  local/                         # Gitignored working state
+  _local/                        # Gitignored working state
 ```
 
 Tier-dependent: small projects may flatten (SCOPE.md at root, no program/ directory).

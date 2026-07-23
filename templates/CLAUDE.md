@@ -34,7 +34,7 @@ This file provides guidance to Claude Code when working in this repository.
 
 ```
 docs/
-  **GLOSSARY.md**                # Domain glossary
+  **_GLOSSARY.md**               # Domain glossary
   program/
     **ARCHITECTURE.md**          # Stack, state management, data flow, deps
     **TESTING.md**               # Test expectations by tier
@@ -46,7 +46,7 @@ docs/
     **SCOPE.md**                 # In/out/uncertain
     **CONCERNS.md**              # Questions, assumptions, issues, milestones
     specs/                       # Feature specs
-  local/                         # Gitignored working state
+  _local/                        # Gitignored working state
 ```
 
 ## Branch Workflow

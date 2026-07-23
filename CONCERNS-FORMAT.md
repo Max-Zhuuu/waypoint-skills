@@ -7,7 +7,7 @@ Volatile entries (claims) and persistent entries (questions, assumptions, issues
 ## The file
 
 `docs/implementation/CONCERNS.md` (tracked, versioned).
-Alternative placements: `docs/local/CONCERNS.md` (gitignored) for solo/scratch projects, or project root for flat repos.
+Alternative placements: `docs/_local/CONCERNS.md` (gitignored) for solo/scratch projects, or project root for flat repos.
 
 ## Concern format
 

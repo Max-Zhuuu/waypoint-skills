@@ -11,7 +11,7 @@ Follow the debugging methodology in @process/debugging.md - read it in full befo
 ## Before you start
 
 - If @GLOSSARY.md exists, read it for domain terms.
-- If @docs/local/CONCERNS.md exists, check for related open concerns.
+- If @docs/_local/CONCERNS.md exists, check for related open concerns.
 - If ADRs exist in @docs/adr/, check the ones in the area you are touching.
 
 ## Execution rules

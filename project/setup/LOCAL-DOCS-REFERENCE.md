@@ -1,6 +1,6 @@
 # Local Documentation Structure
 
-Canonical reference for `docs/local/` - the gitignored working state that lives alongside the project.
+Canonical reference for `docs/_local/` - the gitignored working state that lives alongside the project.
 Skills that create, read, or write these files reference this page.
 
 ## Core tracking
@@ -39,6 +39,6 @@ Not every project needs every folder.
 
 ## Lazy creation rule
 
-Any skill that needs to write to a docs/local/ file or folder that doesn't exist should create it.
+Any skill that needs to write to a docs/_local/ file or folder that doesn't exist should create it.
 Don't block on a missing file - create it, write to it, move on.
 This keeps /create and task-layer verbs lightweight while ensuring the structure materializes as needed.

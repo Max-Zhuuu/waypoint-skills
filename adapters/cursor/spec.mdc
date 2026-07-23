@@ -37,7 +37,7 @@ Output to `docs/specs/{feature-slug}.md` using the template from the methodology
 1. New domain terms -> update @GLOSSARY.md (domain terms only).
 2. Architecture decision -> suggest grilling it into an ADR in @docs/adr/.
 3. Feature tracked in inventory or roadmap -> add it.
-4. Open questions or assumptions surfaced -> add to @docs/local/CONCERNS.md if it exists.
+4. Open questions or assumptions surfaced -> add to @docs/_local/CONCERNS.md if it exists.
 
 ## Tone
 

@@ -22,7 +22,7 @@ Rules:
 
 ## Practice exercises
 
-Generate a single exercise file at `docs/local/learning/exercises/{date}-{slug}.md`.
+Generate a single exercise file at `docs/_local/learning/exercises/{date}-{slug}.md`.
 Create the directory if it does not exist.
 
 ### 1. Reference tour
@@ -84,7 +84,7 @@ If the concept has a common pitfall, call it out.
 
 ## Learning notes
 
-Save a condensed record to `docs/local/learning/` after substantial output.
+Save a condensed record to `docs/_local/learning/` after substantial output.
 
 ### When to save
 
@@ -121,7 +121,7 @@ Skip when the task was trivial or the terms block was thin.
 
 ### Rules
 
-- Create `docs/local/learning/` if it does not exist.
+- Create `docs/_local/learning/` if it does not exist.
 - Do not duplicate: same topic + same day = append, not new file.
 - Keep each file under 40 lines.
 - These are gitignored personal artifacts, not project documentation.

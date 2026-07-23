@@ -18,7 +18,7 @@ Use shell tools to build the loop:
 
 If the project has a domain glossary (check GLOSSARY.md), read it before exploring the codebase.
 If ADRs exist, check the ones in the area you are touching.
-If @docs/local/CONCERNS.md exists, check for related open concerns.
+If @docs/_local/CONCERNS.md exists, check for related open concerns.
 
 ### Phase 3 - Hypotheses
 

@@ -36,7 +36,7 @@ Example: a web app, a service with an API, a migration project.
 - ARCHITECTURE.md (architecture overview)
 - docs/adr/ (architecture decision records)
 - docs/implementation/ structure (specs, improvements, handoffs)
-- docs/local/ structure (questions, assumptions, active work)
+- docs/_local/ structure (questions, assumptions, active work)
 - Full Documentation Map
 
 **Skills available:** everything, including /check-in with full enforcement.

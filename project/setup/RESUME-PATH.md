@@ -63,8 +63,8 @@ The user picks a new value (or confirms the current one).
 **Archetypes** (multiSelect):
 - Gate: "What kind of project is this?" with product/feature/deliverable/design-system options
 - On change: update SCOPE.md frontmatter `archetypes:`
-- Cascade: if design-system added, add Design Exploration Policy and Design Archival to CLAUDE.md. If removed, warn if docs/local/design-journal.md has content before removing sections.
-- Cascade: docs/local/ structure scales by archetype (see PHASE-1.md doc structure section)
+- Cascade: if design-system added, add Design Exploration Policy and Design Archival to CLAUDE.md. If removed, warn if docs/_local/design-journal.md has content before removing sections.
+- Cascade: docs/_local/ structure scales by archetype (see PHASE-1.md doc structure section)
 
 **Ship tier**:
 - Gate: "What ship standard does this project need?" with hobby/users/growth options

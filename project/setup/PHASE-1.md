@@ -85,7 +85,7 @@ Create the three-tier documentation structure (adapt to the project):
 
 ```
 docs/
-  GLOSSARY.md                    # Domain glossary
+  _GLOSSARY.md                   # Domain glossary (underscore sorts to top)
   program/                       # What the system IS
     ARCHITECTURE.md              # Stack, state management, data flow, deps
     TESTING.md                   # Test expectations by tier
@@ -102,7 +102,7 @@ docs/
     handoffs/                    # Cross-team requests
     improvements/                # UX improvement ideas (capture, don't implement)
     archive/                     # Superseded docs
-  local/                         # Gitignored working state
+  _local/                        # Gitignored working state (underscore sorts to top)
     learnings/
     notes/
 ```
@@ -116,7 +116,7 @@ For migration projects, add `docs/program-legacy-{source}/` alongside `program/`
       _TEMPLATE.md               # Logic doc template
 ```
 
-The `docs/local/` structure is minimal: `learnings/` and `notes/`.
+The `docs/_local/` structure is minimal: `learnings/` and `notes/`.
 See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for scaling rules and which skills own each file.
 
 ## Spec templates
@@ -138,7 +138,7 @@ Tree format with bold markers (**) for key docs. Skills resolve through this map
 ## Documentation Map
 
 docs/
-  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  **_GLOSSARY.md**               # Domain glossary - canonical terms, avoid-lists
   program/                       # What the system IS
     **ARCHITECTURE.md**          # Stack, state management, data flow, deps
     **TESTING.md**               # Test expectations by complexity tier
@@ -150,7 +150,7 @@ docs/
     **SCOPE.md**                 # In/out/uncertain
     **CONCERNS.md**              # Questions, assumptions, issues, milestones
     specs/                       # Feature specs (flat, active)
-  local/                         # Gitignored working state
+  _local/                        # Gitignored working state
 ```
 
 Small tier: flatten (SCOPE.md at root, skip program/ directory).
@@ -182,7 +182,7 @@ Before each new design direction, tag the current state:
 ```
 git tag design/{nn}-{slug}
 ```
-After tagging, add a journal entry in `docs/local/design-journal.md`.
+After tagging, add a journal entry in `docs/_local/design-journal.md`.
 Tags are diff-able, restorable, and survive indefinitely. The journal tracks reasoning; tags preserve the running code.
 
 ### Enforcement

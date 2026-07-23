@@ -38,10 +38,10 @@ No scaffolding files are expected. No concern tracking is available.
 **Path resolution:** Resolve all doc paths through the Documentation Map in CLAUDE.md. Never hardcode paths in skill logic.
 When no Documentation Map exists (pre-/setup), fall back to well-known root paths.
 
-**GLOSSARY.md fallback:** Check `GLOSSARY.md` first (current name). If not found, check `CONTEXT.md` (legacy name). This fallback lives here, not in individual skills.
+**GLOSSARY.md fallback:** Check `_GLOSSARY.md` first (underscore convention, current default). If not found, check `GLOSSARY.md` (clean convention). If not found, check `CONTEXT.md` (legacy name). This fallback lives here, not in individual skills.
 
 **Cross-reference substitutions:**
-- No GLOSSARY.md (and no CONTEXT.md) -> define terms inline, don't link to a glossary
+- No _GLOSSARY.md, GLOSSARY.md, or CONTEXT.md -> define terms inline, don't link to a glossary
 - No CONVENTIONS.md (or conventions/) -> infer conventions from existing code, state what you inferred
 - No SCOPE.md -> ask scope questions inline ("is this v1 or future?")
 - No TESTING.md -> state the default test philosophy, offer to adjust
