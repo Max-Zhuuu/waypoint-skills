@@ -23,21 +23,21 @@ Structure accumulates when it helps and stays out of the way when it doesn't.
 ```
 you:   /how-to-start
 
-agent: Read: Project setup, no active workflow.
+agent: Read: Project has models, routes, and views but no spec docs.
        What are you trying to do?
        /diagnose for bugs, /spec for features, /tdd to build test-first,
        /design for visual system, /learn to understand something.
 
-you:   I need to add a news feed widget to the dashboard
+you:   I need to add notifications to the app
 
-agent: Read: No spec exists for news feed.
+agent: Read: No spec exists for notifications.
        Recommend: /spec - underspecified feature, nail down requirements
        before building.
        Proceed with /spec?
 
 you:   yes
 
-agent: [invokes /spec with "news feed widget"]
+agent: [invokes /spec with "notifications"]
 ```
 
 ### Typical daily session
@@ -45,65 +45,69 @@ agent: [invokes /spec with "news feed widget"]
 ```
 you:   /check-in
 
-agent: Phase 5 (Integration). 12 screens remaining.
-       Concerns: 3 issues (oldest: 4 days), 2 questions pending BE team
-       Next: Wire Claims list to real API - endpoint exists but FE still
-       hits mock. Recommend this because the contract is fresh and field
-       mappings should be verified now, not after they drift.
+agent: 8 endpoints and 4 screens remaining. 2 specs ready to build.
+       Concerns: 3 issues (oldest: 4 days), 1 assumption unvalidated
+       Next: Invite flow - spec is fresh, the mailer service is wired,
+       and the API contract is defined. Build now before it drifts.
 ```
 
 ### Speccing a feature
 
 ```
-you:   /spec news feed widget
+you:   /spec notifications
 
 agent: What problem does this solve?
-       My read: operators check 3 shipping news sites separately during
-       morning review. A dashboard widget saves that tab-switching.
-       Right?
+       My read: users have no way to know when something changes without
+       manually checking. Notifications close that feedback loop. Right?
 
-you:   yes, RSS feeds from industry sources
+you:   yes, in-app and email for mentions and status changes
 
 agent: Scope for v1:
-       In - RSS parsing, 3 feed sources, configurable refresh interval
-       Out - user-added feeds, search within articles, bookmarks
+       In - in-app notification feed, email delivery, mention and status
+            change triggers, read/unread state, preference toggles
+       Out - push notifications, digest batching, custom trigger rules
 
        Two trade-offs to decide:
-       1. Refresh: poll on an interval (simple) vs server-push (real-time)?
-          Recommend polling - shipping news is hourly, not second-by-second.
-       2. Parse server-side (Azure Function) or client-side (browser fetch)?
-          Recommend server-side - avoids CORS, caches across users.
+       1. Delivery: queue-based (reliable, handles spikes) vs synchronous
+          (simpler, one fewer service)?
+          Recommend queue - notifications spike on batch operations and
+          synchronous delivery blocks the request.
+       2. Storage: dedicated notifications table vs append to activity log?
+          Recommend dedicated table - different retention, different
+          indexes, simpler queries for the feed endpoint.
 
-you:   agree on both, but refresh should be every 15 min not hourly
+you:   agree on both, but add a webhook option to the spec too
 
-agent: [writes spec to docs/specs/news-feed-widget.md with acceptance criteria]
+agent: [writes spec to docs/specs/notifications.md with acceptance criteria]
 ```
 
 ### Debugging a hard bug
 
 ```
-you:   /diagnose login page throws 401 after token refresh
+you:   /diagnose order total wrong after applying a discount code
 
-agent: Building a feedback loop. Running the auth flow in the browser...
-       [reproduces the bug in 3 seconds]
+agent: Building a feedback loop...
+       [reproduces: add 3 items, apply 20% code, total shows full price
+        but the discount row appears in the breakdown]
 
        Reproduced. Three hypotheses, ranked:
-       1. Token refresh returns a new token but the interceptor still
-          sends the cached one
-       2. Refresh endpoint CORS preflight fails silently in production
-       3. Refresh token itself has expired (clock skew)
+       1. Discount is calculated but not subtracted in the total query
+       2. Total is cached and the cache isn't invalidated on discount apply
+       3. Frontend reads the pre-discount total from a stale API response
 
        Proceed with this ranking?
 
-you:   1 is most likely, we just changed the token cache layer
+you:   1 is most likely, we just refactored the pricing module
 
-agent: Testing hypothesis 1. Adding [DEBUG-a4f2] instrumentation to the
-       interceptor...
-       [confirms stale cache, writes regression test, fixes, cleans up]
+agent: Testing hypothesis 1. Adding [DEBUG-7c3a] instrumentation to the
+       order total calculation...
+       [confirms: discount row inserted but SUM query filters by
+        line_type = 'item', excluding type = 'discount']
 
-       Fixed. Root cause: token cache was keyed by URL, new refresh
-       endpoint returns a different URL.
-       Regression test at auth.spec.ts:142.
+       Fixed. Root cause: the pricing refactor introduced a line_type
+       column but the total query still used a hardcoded WHERE clause
+       that only summed item rows.
+       Regression test at order_pricing_test.py:142.
 ```
 
 ## Install
