@@ -45,8 +45,9 @@ A violation never creates a deadlock. If enforcement says "spec missing" and the
 Three layers, checked in order. Propose the first match:
 
 1. **Resolve open concerns.** Read CONCERNS.md open section.
-   - Flags first (implementation discrepancies need immediate resolution).
-   - Questions with deadlines approaching or risk: high.
+   - Issues first (implementation discrepancies need immediate resolution).
+   - Questions with validate-by dates approaching or risk: high.
+   - Milestones: check which specs are complete, propose next work toward the nearest open milestone.
    - Stale claims (>4 hours) signal interrupted work - propose resuming.
    - If a concern references an entity: propose "/wrapup on {entity}."
    - If a concern has no entity reference: propose direct resolution.

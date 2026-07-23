@@ -55,6 +55,6 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 ## Exit
 
 When proposals are written, suggest next steps:
-- If a high-priority proposal emerged -> "/spec the highest-priority one to formalize scope?"
-- If multiple proposals need prioritization -> "/check-in to rank and pick the first target?"
-- If proposals affect architecture -> "/grill-with-docs to validate with an ADR?"
+- If a high-priority proposal emerged -> "/spec to write acceptance criteria for {proposal name}."
+- If multiple proposals exist -> "Which proposal to tackle first? /spec to formalize it."
+- If proposals affect architecture -> "/grill-with-docs to stress-test the approach and write an ADR."

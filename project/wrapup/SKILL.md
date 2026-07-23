@@ -107,11 +107,20 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 - Implement features (that's the implementation verb)
 - Make architectural decisions (that's /grill-with-docs)
 
+### Milestone closure
+
+When resolving a milestone concern (type: milestone), suggest archiving its specs:
+```
+Milestone CP-01 resolved. Move its specs to resolved/?
+  docs/implementation/specs/claims-api-wiring.md -> specs/resolved/2026-07/
+```
+Offer, don't force. The user may want to keep specs flat for reference.
+
 ## Engagement
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** flags, resolution notes, consolidated audit results
+- **Emits:** issues, resolution notes, consolidated audit results
 - **Scaffolding writes:** creates CONCERNS.md if absent (seeded with this run's resolved entries)
 - **Override:** CONCERNS.md auto-creation at Tier 1. Cascade step only fires for docs that exist - does not create docs to cascade into.
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

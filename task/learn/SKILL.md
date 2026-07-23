@@ -54,8 +54,8 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 
 When the learning session ends, suggest next steps based on what was learned:
 - If the topic relates to a feature -> "/create to apply what you learned, or /spec to scope it?"
-- If the topic revealed a gap in project docs -> "/wrapup to capture it in shared docs?"
-- If the user is exploring broadly -> "/check-in for what's next?"
+- If the topic revealed a gap in project docs -> "/wrapup updates GLOSSARY.md, conventions, and specs with what you learned."
+- If the user is exploring broadly -> "Learning captured. Pick another topic, or back to building?"
 
 ## Tone
 

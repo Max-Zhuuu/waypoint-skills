@@ -159,9 +159,9 @@ Canonical branch: flags stale canonical branch designations in Active Workflow.
 ## Exit
 
 When the audit is complete, suggest next steps:
-- If priorities shifted -> "/check-in to pick up the new top priority?"
-- If concerns need resolution -> "/wrapup to cascade concern resolutions to shared docs?"
-- If scope needs revision -> "/grill-with-docs to update SCOPE.md?"
+- If priorities shifted -> "/check-in reads your open concerns and proposes what to work on next."
+- If concerns need resolution -> "/wrapup updates GLOSSARY.md, conventions, and specs to match resolved decisions."
+- If scope needs revision -> "/grill-with-docs to stress-test and update SCOPE.md."
 
 ## Tone
 

@@ -137,9 +137,9 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 ## Exit
 
 After slices are written, suggest next steps:
-- "/tdd to start building Slice 1?"
-- "/check-in to add slices to the priority stack?"
-- If Tier 3: "GitHub issues created. /check-in to triage?"
+- "Start Slice 1? It's {one-line summary of what Slice 1 does}."
+- "/tdd to build Slice 1, or come back when ready - slices are in the spec."
+- If Tier 3: "GitHub issues created. /check-in reads open issues and proposes which to start."
 
 ## Tone
 

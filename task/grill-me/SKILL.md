@@ -25,6 +25,6 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 ## Exit
 
 When the grill is complete, suggest next steps based on what was decided:
-- If the grill produced a clear design -> "/spec to formalize, or /tdd to build?"
-- If the grill resolved scope questions -> "/check-in to pick up the next priority?"
-- If decisions were logged as concerns -> "Decisions logged. /wrapup to cascade to shared docs?"
+- If the grill produced a clear design -> "/spec to write acceptance criteria, or /tdd to build?"
+- If the grill resolved scope questions -> "Scope updated. Ready to build, or park for later?"
+- If decisions were logged as concerns -> "Decisions logged. /wrapup updates GLOSSARY.md, conventions, and specs to match."

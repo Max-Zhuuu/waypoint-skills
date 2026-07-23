@@ -32,6 +32,20 @@ Missing: {list missing outputs}
 Picking up at {phase}.
 ```
 
+**Restructuring** (user explicitly asks to restructure, or docs exist but don't follow the three-tier layout): read the current Documentation Map from CLAUDE.md, diff against the canonical structure, and propose moves.
+
+```
+Current layout doesn't match the program/implementation/local structure.
+Proposed moves:
+  git mv docs/wpf-reference/ docs/program-legacy-wpf/
+  git mv CONVENTIONS.md docs/program/conventions/NAMING.md
+  git mv TESTING.md docs/program/TESTING.md
+  ...
+{N} moves total. Execute, or adjust?
+```
+
+Use `git mv` for all moves to preserve history. Create directories first, move in dependency order. After moves, rewrite the Documentation Map in CLAUDE.md to match new paths.
+
 **Reviewing** (all exist): activate the resume path. Read [RESUME-PATH.md](RESUME-PATH.md) and follow its instructions.
 The resume path lets the user review and revise project decisions without re-running setup from scratch.
 
@@ -114,17 +128,24 @@ Work through these categories. Skip any the implementer has already answered cle
 
 **SCOPE.md** - read [../../templates/SCOPE.md](../../templates/SCOPE.md), populate from grill answers.
 
-**DEPENDENCIES.md** - read [../../templates/DEPENDENCIES.md](../../templates/DEPENDENCIES.md), one row per external contract.
+**CONCERNS.md** (docs/implementation/, tracked) - read [../../templates/CONCERNS.md](../../templates/CONCERNS.md), seed with assumptions and open questions from scoping. Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md).
 
-**CONCERNS.md** (docs/local/, gitignored) - read [../../templates/CONCERNS.md](../../templates/CONCERNS.md), seed with assumptions and open questions from scoping. Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md).
+For moderate-to-large projects, offer a concern type mini-grill:
+```
+Which concern types does this project need?
+[x] question - decisions needed
+[x] assumption - theories to validate
+[x] issue - things that look wrong
+[ ] milestone - checkpoints grouping specs and handoffs
+```
 
-**GLOSSARY.md** (repo root, if not exists) - read [../../templates/GLOSSARY.md](../../templates/GLOSSARY.md), seed with domain terms from scoping. Follow existing GLOSSARY-FORMAT if `/grill-with-docs` format file exists.
+**GLOSSARY.md** (docs/, if not exists) - read [../../templates/GLOSSARY.md](../../templates/GLOSSARY.md), seed with domain terms from scoping. Follow existing GLOSSARY-FORMAT if `/grill-with-docs` format file exists.
 
 ### Gate
 
 - [ ] SCOPE.md exists and implementer has reviewed it
-- [ ] DEPENDENCIES.md has all external contracts identified
-- [ ] Uncertain scope items have decision owners and deadlines
+- [ ] External dependencies identified (in ARCHITECTURE.md or noted for later)
+- [ ] Uncertain scope items have decision owners and validate-by dates
 - [ ] GLOSSARY.md exists (even if minimal)
 - [ ] CONCERNS.md seeded with assumptions and open questions from scoping
 
@@ -157,36 +178,32 @@ Tier can be changed by re-running /setup (reentrant).
 ## Documentation Map
 
 After scaffolding, write the Documentation Map to CLAUDE.md.
-Maps logical concepts to physical file paths - skills resolve through this map, never hardcoded paths.
+Tree format with bold markers (**) for key docs. Skills resolve through this map, never hardcoded paths.
 
 ```markdown
 ## Documentation Map
 
-| Concept | Path | Status |
-|---------|------|--------|
-| Domain glossary | GLOSSARY.md | Active |
-| Naming conventions | CONVENTIONS.md | Active |
-| Test expectations | TESTING.md | Active |
-| Scope boundaries | SCOPE.md | Active |
-| Architecture decisions | docs/adr/ | Active |
-| Skill state | .claude/ | Active |
+docs/
+  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  program/                       # What the system IS
+    **ARCHITECTURE.md**          # Stack, state management, data flow, deps
+    **TESTING.md**               # Test expectations by complexity tier
+    conventions/
+      **NAMING.md**              # Variables, functions, components
+      UX.md                      # Interaction patterns, confirmations
+    adr/                         # Architecture decision records
+  implementation/                # What we're DOING
+    **SCOPE.md**                 # In/out/uncertain
+    **CONCERNS.md**              # Questions, assumptions, issues, milestones
+    specs/                       # Feature specs (flat, active)
+  local/                         # Gitignored working state
 ```
 
-Tier-dependent content varies by project size:
-
-| Concept | Small | Moderate | Large |
-|---------|-------|----------|-------|
-| Domain glossary | - | GLOSSARY.md | GLOSSARY.md |
-| Naming conventions | - | CONVENTIONS.md | conventions/naming.md |
-| Decomposition prefs | - | CONVENTIONS.md (section) | conventions/decomposition.md |
-| Test expectations | - | TESTING.md | conventions/testing.md |
-| Review standards | - | - | conventions/review.md |
-| Scope boundaries | SCOPE.md | SCOPE.md | SCOPE.md |
-| Architecture decisions | - | docs/adr/ | docs/adr/ |
-| Architecture overview | - | - | ARCHITECTURE.md |
-| Skill state | .claude/ | .claude/ | .claude/ |
+Tier-dependent: small projects may flatten (SCOPE.md at root, no program/ directory).
+Large projects add: program/STRUCTURE.md, program/DESIGN.md, program/features/, program-legacy-{source}/, implementation/handoffs/, implementation/improvements/.
 
 On re-entry, read the existing map and only update entries that changed. Don't regenerate from scratch.
+As scope scales, nudge the user to add entries for new doc areas (e.g., "You have 5 specs now - worth adding a specs/ entry to the map?").
 
 ### Skill State directory
 

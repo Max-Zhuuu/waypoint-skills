@@ -14,11 +14,27 @@ Run this once to configure the project. After setup, use `/check-in` every sessi
 
 `/setup` must have been run first. Check for:
 - SCOPE.md exists
-- DEPENDENCIES.md exists
-- CLAUDE.md exists with process definition
+- ARCHITECTURE.md exists (includes external dependencies)
+- CLAUDE.md exists with Documentation Map
 - Documentation structure exists
 
 If any are missing, tell the user to run `/setup` first.
+
+### Migration-specific structure
+
+Migration projects use `docs/program-legacy-{source}/` for the source system's reference material.
+The `{source}` suffix identifies the source system (e.g., `wpf`, `rails`, `legacy-api`).
+The Documentation Map aliases `docs/reference/` to this directory so skills resolve paths without knowing the source name.
+
+```
+docs/
+  program/                         # Target system (what we're building)
+    features/                      # Vue/React/etc. screen specs
+  program-legacy-wpf/              # Source system (what we're replacing)
+    features/                      # WPF screen specs
+    logic/                         # Business rules from source
+    inventory-plugins.md           # Plugin catalog with migration progress
+```
 
 ## Active workflow check
 
