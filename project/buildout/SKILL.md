@@ -13,7 +13,7 @@ Run this once to configure the project as a new build. After setup, use `/check-
 
 `/setup` must have been run first. Check for:
 - SCOPE.md exists
-- DEPENDENCIES.md exists
+- ARCHITECTURE.md exists (includes external dependencies)
 - CLAUDE.md exists with process definition
 - Documentation structure exists
 

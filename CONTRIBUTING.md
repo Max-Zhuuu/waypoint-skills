@@ -63,7 +63,7 @@ type: question | raised: 2026-07-18
 Legacy app confirms before status transitions. Our rebuild doesn't. Intentional or gap?
 ```
 
-Three types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **issues** (something looks wrong).
+Four types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **issues** (something looks wrong), **milestones** (checkpoints grouping specs and handoffs).
 
 Skills read from and write to this file. Humans read from and write to this file.
 It is a markdown document - no special tooling required.

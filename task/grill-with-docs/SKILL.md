@@ -26,12 +26,12 @@ Check what documentation structure exists before starting. Read the project's CL
 
 **Always look for:**
 - `GLOSSARY.md` (or `GLOSSARY-MAP.md` for multi-context repos) - domain glossary
-- `docs/adr/` - architecture decision records
+- `docs/program/adr/` (or `docs/adr/`) - architecture decision records
 - `SCOPE.md` - what's in, out, uncertain
-- `CONVENTIONS.md` - naming patterns
-- `DEPENDENCIES.md` - external system status
+- `conventions/NAMING.md` (or `CONVENTIONS.md`) - naming patterns
+- `ARCHITECTURE.md` - architecture overview and external dependencies
 - `TESTING.md` - test expectations
-- `docs/reference/features/` and `docs/reference/logic/` - per-entity specs
+- Feature specs and logic docs (resolve via Documentation Map)
 
 If none of these exist, create files lazily - only when you have something to write.
 If `GLOSSARY.md` doesn't exist, create one when the first term is resolved.
@@ -64,9 +64,9 @@ When a term is resolved, update `GLOSSARY.md` right there. Don't batch these up 
 ### Cascade to other project docs
 
 When a grill decision affects project-wide docs beyond GLOSSARY.md, update them inline too:
-- New naming pattern resolved -> update CONVENTIONS.md
+- New naming pattern resolved -> update conventions/NAMING.md or conventions/UX.md
 - Scope changed (in/out/uncertain shifted) -> update SCOPE.md
-- Dependency status changed -> update DEPENDENCIES.md
+- Dependency status changed -> update ARCHITECTURE.md (External Dependencies section)
 - Test expectations changed -> update TESTING.md
 - Entity-level decision -> update the entity's feature spec or logic doc if one exists
 

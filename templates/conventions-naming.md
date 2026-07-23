@@ -1,4 +1,4 @@
-# Conventions
+# Naming
 
 Naming patterns and coding standards for {{project-name}}.
 One line per convention. Grows during implementation as real patterns emerge.

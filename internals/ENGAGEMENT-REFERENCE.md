@@ -204,7 +204,7 @@ Never blocking. The user can always say "not now." But the debt is visible and e
 ### Mini-wrapup write authority
 
 Mini-wrapup can:
-- Append to shared-append files (GLOSSARY.md, CONVENTIONS.md, DEPENDENCIES.md)
+- Append to shared-append files (GLOSSARY.md, conventions/NAMING.md, conventions/UX.md)
 - Emit issue concerns for deferred documentation
 
 Mini-wrapup cannot:

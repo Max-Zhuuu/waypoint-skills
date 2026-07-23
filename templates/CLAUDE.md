@@ -32,20 +32,22 @@ This file provides guidance to Claude Code when working in this repository.
 
 ## Documentation Map
 
-| Concept | Path | Status |
-|---------|------|--------|
-| Domain glossary | {{glossary-path}} | {{status}} |
-| Naming conventions | {{conventions-path}} | {{status}} |
-| Test expectations | {{testing-path}} | {{status}} |
-| Scope boundaries | SCOPE.md | Active |
-| Architecture decisions | docs/adr/ | {{status}} |
-| Architecture overview | {{architecture-path}} | {{status}} |
-| Feature specs | docs/specs/ | {{status}} |
-| Feature reference | {{feature-reference-path}} | {{status}} |
-| Logic reference | {{logic-reference-path}} | {{status}} |
-| Design docs | docs/design/ | {{status}} |
-| Cross-cutting patterns | docs/patterns/ | {{status}} |
-| Skill state | .claude/ | Active |
+```
+docs/
+  **GLOSSARY.md**                # Domain glossary
+  program/
+    **ARCHITECTURE.md**          # Stack, state management, data flow, deps
+    **TESTING.md**               # Test expectations by tier
+    conventions/
+      **NAMING.md**              # Variables, functions, components
+      UX.md                      # Interaction patterns
+    adr/                         # Architecture decision records
+  implementation/
+    **SCOPE.md**                 # In/out/uncertain
+    **CONCERNS.md**              # Questions, assumptions, issues, milestones
+    specs/                       # Feature specs
+  local/                         # Gitignored working state
+```
 
 ## Branch Workflow
 

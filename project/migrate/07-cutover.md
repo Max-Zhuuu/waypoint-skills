@@ -6,7 +6,7 @@
 
 ### CP1: Pre-cutover readiness
 - **Trigger:** before cutover begins
-- **References:** all gate criteria from Phases 3-6a, DEPENDENCIES.md, SCOPE.md (parity strategy + cutover approach from G1)
+- **References:** all gate criteria from Phases 3-6a, ARCHITECTURE.md (External Dependencies), SCOPE.md (parity strategy + cutover approach from G1)
 - **Action:** verify all prior phase gates passed. Confirm no open critical concerns. Confirm all inventory items at `[V-func]` or above. Review cutover approach set during /migrate setup (strangler fig / big-bang / parallel run) and confirm it still holds.
 - **Pass:** all prior gates passed, no critical blockers, cutover approach confirmed.
 

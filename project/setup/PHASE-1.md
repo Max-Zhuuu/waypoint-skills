@@ -81,62 +81,84 @@ Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md fo
 
 ## Documentation structure
 
-Create this tree (adapt to the project):
+Create the three-tier documentation structure (adapt to the project):
 
 ```
 docs/
-  SCOPE.md
-  DEPENDENCIES.md
-  ARCHITECTURE.md
-  adr/                        # ADRs via /grill-with-docs
-  design/                     # Design system docs (created during 6b-i)
-  reference/
-    features/
-      _TEMPLATE.md            # Feature spec template
-    logic/
-      _TEMPLATE.md            # Logic doc template
-  specs/                      # Feature specs via /spec
-  improvements/               # UX improvement ideas (capture, don't implement)
-  local/                      # Gitignored - see LOCAL-DOCS-REFERENCE.md for full structure
+  GLOSSARY.md                    # Domain glossary
+  program/                       # What the system IS
+    ARCHITECTURE.md              # Stack, state management, data flow, deps
+    TESTING.md                   # Test expectations by tier
+    conventions/
+      NAMING.md                  # Variables, functions, components, files
+      UX.md                      # Interaction patterns, confirmations
+    adr/                         # ADRs via /grill-with-docs
+    features/                    # Target system feature docs
+  implementation/                # What we're DOING
+    SCOPE.md                     # In/out/uncertain
+    CONCERNS.md                  # Questions, assumptions, issues, milestones
+    specs/                       # Feature specs via /spec
+      resolved/                  # Archived specs by date (YYYY-MM/)
+    handoffs/                    # Cross-team requests
+    improvements/                # UX improvement ideas (capture, don't implement)
+    archive/                     # Superseded docs
+  local/                         # Gitignored working state
+    learnings/
+    notes/
 ```
 
-The `docs/local/` structure scales with the project intake profile.
-See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical file list, formats, scaling rules, and which skills own each file.
+For migration projects, add `docs/program-legacy-{source}/` alongside `program/`:
+```
+  program-legacy-{source}/       # Source system reference
+    features/
+      _TEMPLATE.md               # Feature spec template
+    logic/
+      _TEMPLATE.md               # Logic doc template
+```
+
+The `docs/local/` structure is minimal: `learnings/` and `notes/`.
+See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for scaling rules and which skills own each file.
 
 ## Spec templates
 
 Copy and adapt the base templates to the project's needs:
 
-**docs/reference/features/_TEMPLATE.md** - copy from [../../templates/feature-spec.md](../../templates/feature-spec.md), adapt sections based on stack.
+**Feature spec template** - copy from [../../templates/feature-spec.md](../../templates/feature-spec.md) to the appropriate features/ directory.
 
-**docs/reference/logic/_TEMPLATE.md** - copy from [../../templates/logic-doc.md](../../templates/logic-doc.md), adapt sections based on domain.
+**Logic doc template** - copy from [../../templates/logic-doc.md](../../templates/logic-doc.md) to program-legacy-{source}/logic/ (migrations) or program/features/ (new builds).
+
+**Conventions templates** - copy from [../../templates/conventions-naming.md](../../templates/conventions-naming.md) and [../../templates/conventions-ux.md](../../templates/conventions-ux.md) to program/conventions/.
 
 ## Documentation Map
 
 After generating the documentation structure above, write the Documentation Map to CLAUDE.md.
-The map tells every skill where project files live - skills resolve references through it, never hardcoded paths.
-
-Generate the map based on the selected tier (see [SCOPE-REFERENCE.md](SCOPE-REFERENCE.md) for tier details):
+Tree format with bold markers (**) for key docs. Skills resolve through this map, never hardcoded paths.
 
 ```markdown
 ## Documentation Map
 
-| Concept | Path | Status |
-|---------|------|--------|
-| Domain glossary | GLOSSARY.md | Active |
-| Naming conventions | CONVENTIONS.md | Active |
-| Test expectations | TESTING.md | Active |
-| Scope boundaries | SCOPE.md | Active |
-| Architecture decisions | docs/adr/ | Active |
-| Architecture overview | ARCHITECTURE.md | Active |
-| Skill state | .claude/ | Active |
+docs/
+  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  program/                       # What the system IS
+    **ARCHITECTURE.md**          # Stack, state management, data flow, deps
+    **TESTING.md**               # Test expectations by complexity tier
+    conventions/
+      **NAMING.md**              # Variables, functions, components
+      UX.md                      # Interaction patterns, confirmations
+    adr/                         # Architecture decision records
+  implementation/                # What we're DOING
+    **SCOPE.md**                 # In/out/uncertain
+    **CONCERNS.md**              # Questions, assumptions, issues, milestones
+    specs/                       # Feature specs (flat, active)
+  local/                         # Gitignored working state
 ```
 
-Small tier: only SCOPE.md and Skill state rows.
-Large tier: conventions/ subpaths replace CONVENTIONS.md and TESTING.md rows.
-Mark rows as "Planned" if the file will be created later (e.g., ARCHITECTURE.md during Phase 1 architecture decisions).
+Small tier: flatten (SCOPE.md at root, skip program/ directory).
+Large tier: add program/STRUCTURE.md, program/DESIGN.md, program/features/, implementation/handoffs/.
+Migration tier: add program-legacy-{source}/ with features/, logic/, TEMPLATES/.
 
 On re-entry, read the existing map and only update entries that changed.
+As scope scales, nudge the user to add entries for new doc areas.
 
 ## CLAUDE.md generation
 

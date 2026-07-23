@@ -1,4 +1,4 @@
-# Context
+# Glossary
 
 Domain glossary for {{project-name}}.
 Skills reference this file for term validation and glossary challenges.

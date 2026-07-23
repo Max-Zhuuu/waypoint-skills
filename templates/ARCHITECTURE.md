@@ -22,3 +22,11 @@ Detailed decisions live in `docs/adr/`. This file is the summary.
 ## State management
 
 {{state-management-approach}}
+
+## External Dependencies
+
+External systems and contracts this project depends on.
+
+| Dependency | Status | Owner | Notes |
+|------------|--------|-------|-------|
+| {{dependency}} | {{available/promised/unknown}} | {{owner}} | {{resolution-instructions}} |

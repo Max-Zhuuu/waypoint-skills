@@ -238,6 +238,25 @@ Structure accumulates when it helps and stays out of the way when it doesn't.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how the system works internally: the process/adapter split, concerns tracking, engagement tiers, and the skill directory structure.
 
+## Migration from v1
+
+If you used an earlier version of waypoint-skills, these are the breaking changes:
+
+| Was | Now | Notes |
+|-----|-----|-------|
+| CONTEXT.md | GLOSSARY.md | Family-wide rename. Skills check GLOSSARY.md first, fall back to CONTEXT.md. |
+| CONTEXT-FORMAT.md | GLOSSARY-FORMAT.md | Format template renamed. |
+| CONTEXT-MAP.md | GLOSSARY-MAP.md | Multi-context map renamed. |
+| Concern type `flag` | `issue` | Same semantics, clearer name. |
+| Concern type `deferred-doc` | (dropped) | Folded into `issue`. Provisional commits emit issue concerns. |
+| Concern field `deadline:` | `validate-by:` | Supports milestone names, not just dates. |
+| CONVENTIONS.md (single file) | conventions/NAMING.md + UX.md | Directory with separate files per concern. |
+| DEPENDENCIES.md | ARCHITECTURE.md section | Merged as `## External Dependencies`. |
+| Flat docs/ | program/ + implementation/ + local/ | Three-tier structure by change cadence. |
+| docs/reference/ | docs/program-legacy-{source}/ | Migration source docs with named source system. |
+
+New concepts: **milestones** (concern type for grouping specs), **external issue refs** (github:, linear:, jira:, azure-devops:), **/setup restructure path** (restructures existing docs to three-tier layout).
+
 ## Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
