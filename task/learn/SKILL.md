@@ -13,7 +13,7 @@ Execute each phase using the tools available in this environment.
 
 ### Phase 1 - Scope
 
-Read code context. Grep CONTEXT.md for domain terms relevant to this area.
+Read code context. Grep GLOSSARY.md for domain terms relevant to this area.
 If the task is trivial, say so and just do it - do not force options on a non-decision.
 
 ### Phase 2 - Present options

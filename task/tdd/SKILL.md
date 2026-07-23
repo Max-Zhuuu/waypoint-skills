@@ -15,7 +15,7 @@ Execute each phase using the tools available in this environment.
 
 ### Phase 1 - Plan
 
-Read project context first: TESTING.md, CONVENTIONS.md, CONTEXT.md.
+Read project context first: TESTING.md, CONVENTIONS.md, GLOSSARY.md.
 Check the project's domain glossary so test names match project language.
 Check ADRs in the area you are touching.
 
@@ -37,7 +37,7 @@ and [refactoring.md](refactoring.md) for refactor candidates.
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, deferred-doc)
+- **Emits:** concerns (type: issue)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
@@ -48,13 +48,13 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 ## Before committing
 
 **Mid-cycle commits** (individual test passing, incremental refactor):
-Auto-provisional. Emit deferred-doc concern silently. Commit with `[provisional]` marker.
+Auto-provisional. Emit issue concern silently. Commit with `[provisional]` marker.
 No "stable or provisional?" question - asking on every commit in a 3-8 commit session trains reflexive dismissal.
 
 **Natural boundary commits** (all slices for a feature complete, user signals "done"):
 Ask: "All slices complete. Stable enough to document, or provisional?"
 - Stable: run mini-wrapup (spec sync, term/pattern capture, concern resolution). Commit code + docs together.
-- Provisional: emit deferred-doc concern with what needs documenting. Commit with `[provisional]` marker.
+- Provisional: emit issue concern with what needs documenting. Commit with `[provisional]` marker.
 - Either way: "Next feature, or /wrapup?"
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.

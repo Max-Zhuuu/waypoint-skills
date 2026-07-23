@@ -12,7 +12,7 @@ Execute each phase using the tools available in this environment.
 
 ### Phase 1 - Scope
 
-Read any existing context first: SCOPE.md, CONTEXT.md, ARCHITECTURE.md, related specs in `docs/specs/`.
+Read any existing context first: SCOPE.md, GLOSSARY.md, ARCHITECTURE.md, related specs in `docs/specs/`.
 
 Grill inline. Print questions with your recommended answer so the user can challenge.
 Do not gate the conversation on structured prompts - inline back-and-forth lets the user redirect naturally.
@@ -31,7 +31,7 @@ Output to `docs/specs/{feature-slug}.md` using the template from the methodology
 
 ### Phase 4 - Update shared artifacts
 
-1. New domain terms -> update CONTEXT.md (domain terms only, not general programming concepts).
+1. New domain terms -> update GLOSSARY.md (domain terms only, not general programming concepts).
 2. Architecture decision -> suggest an ADR in `docs/adr/`.
 3. Feature tracked in an inventory or roadmap -> add it.
 4. Open questions or assumptions surfaced -> add to `docs/local/CONCERNS.md` if it exists.

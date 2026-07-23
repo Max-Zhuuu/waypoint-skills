@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
+description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (GLOSSARY.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
 status: stable
 ---
 
@@ -25,7 +25,7 @@ During codebase exploration, also look for existing documentation:
 Check what documentation structure exists before starting. Read the project's CLAUDE.md for the full layout.
 
 **Always look for:**
-- `CONTEXT.md` (or `CONTEXT-MAP.md` for multi-context repos) - domain glossary
+- `GLOSSARY.md` (or `GLOSSARY-MAP.md` for multi-context repos) - domain glossary
 - `docs/adr/` - architecture decision records
 - `SCOPE.md` - what's in, out, uncertain
 - `CONVENTIONS.md` - naming patterns
@@ -34,14 +34,14 @@ Check what documentation structure exists before starting. Read the project's CL
 - `docs/reference/features/` and `docs/reference/logic/` - per-entity specs
 
 If none of these exist, create files lazily - only when you have something to write.
-If `CONTEXT.md` doesn't exist, create one when the first term is resolved.
+If `GLOSSARY.md` doesn't exist, create one when the first term is resolved.
 If `docs/adr/` doesn't exist, create it when the first ADR is needed.
 
 ## During the session
 
 ### Challenge against the glossary
 
-When the user uses a term that conflicts with the existing language in `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
+When the user uses a term that conflicts with the existing language in `GLOSSARY.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
 
 ### Sharpen fuzzy language
 
@@ -55,15 +55,15 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-### Update CONTEXT.md inline
+### Update GLOSSARY.md inline
 
-When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+When a term is resolved, update `GLOSSARY.md` right there. Don't batch these up — capture them as they happen. Use the format in [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).
 
-`CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+`GLOSSARY.md` should be totally devoid of implementation details. Do not treat `GLOSSARY.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 
 ### Cascade to other project docs
 
-When a grill decision affects project-wide docs beyond CONTEXT.md, update them inline too:
+When a grill decision affects project-wide docs beyond GLOSSARY.md, update them inline too:
 - New naming pattern resolved -> update CONVENTIONS.md
 - Scope changed (in/out/uncertain shifted) -> update SCOPE.md
 - Dependency status changed -> update DEPENDENCIES.md

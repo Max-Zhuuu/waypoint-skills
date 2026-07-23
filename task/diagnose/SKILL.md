@@ -18,7 +18,7 @@ Use project tools to build the loop:
 - chrome-devtools-axi for browser-based reproduction
 - The project's test framework for failing-test loops
 
-If the project has a domain glossary (check Documentation Map or CONTEXT.md), read it before exploring the codebase.
+If the project has a domain glossary (check Documentation Map or GLOSSARY.md), read it before exploring the codebase.
 If ADRs exist, check the ones in the area you are touching.
 
 ### Phase 3 - Hypotheses
@@ -38,7 +38,7 @@ For the regression test seam assessment: if no correct seam exists and the archi
 ### Phase 7 - Learn
 
 Follow the quiz and practice protocols in [learn/LEARN-REFERENCE.md](../../task/learn/LEARN-REFERENCE.md) if the user opts in.
-Update CONTEXT.md with domain terms only (not general programming concepts).
+Update GLOSSARY.md with domain terms only (not general programming concepts).
 Link further-reading sources per [learn/REFERENCES.md](../../task/learn/REFERENCES.md#source-trust-tiers).
 
 ## Before committing
@@ -48,7 +48,7 @@ Bug fixes are typically stable commits. Run mini-wrapup:
 - Term/pattern capture: did this bug reveal an undocumented rule?
 - Concern resolution: does this fix resolve any open concerns?
 
-If the fix is a workaround or the root cause is unclear, commit as provisional with `[provisional]` marker and emit a deferred-doc concern explaining what's uncertain.
+If the fix is a workaround or the root cause is unclear, commit as provisional with `[provisional]` marker and emit an issue concern explaining what's uncertain.
 
 State next step: "/wrapup to update shared docs, or another bug?"
 
@@ -58,7 +58,7 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, question)
+- **Emits:** concerns (type: issue, question)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** none
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

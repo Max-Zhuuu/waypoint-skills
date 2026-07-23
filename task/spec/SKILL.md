@@ -31,7 +31,7 @@ Extracting acceptance criteria from the existing doc.
 
 **If no recent doc exists:**
 run the full grill.
-Read any existing context first: SCOPE.md, CONTEXT.md, ARCHITECTURE.md, related specs in `docs/specs/`.
+Read any existing context first: SCOPE.md, GLOSSARY.md, ARCHITECTURE.md, related specs in `docs/specs/`.
 Grill inline. Print questions with your recommended answer so the user can challenge.
 Do not use `AskUserQuestion` for the grilling loop - inline conversation lets the user redirect naturally.
 
@@ -53,7 +53,7 @@ Use template from Documentation Map "Feature reference" `_TEMPLATE.md` if it exi
 
 ### Phase 4 - Update shared artifacts
 
-1. New domain terms -> update CONTEXT.md (domain terms only, not general programming concepts).
+1. New domain terms -> update GLOSSARY.md (domain terms only, not general programming concepts).
 2. Architecture decision -> suggest invoking `/grill-with-docs` for an ADR.
 3. Feature tracked in an inventory or roadmap -> add it.
 

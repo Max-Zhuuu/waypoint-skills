@@ -4,7 +4,7 @@ Instructions for /setup when all outputs already exist and the user wants to rev
 
 ## When to activate
 
-/setup detects all expected outputs exist (SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree, CONVENTIONS.md, TESTING.md).
+/setup detects all expected outputs exist (SCOPE.md, GLOSSARY.md, CLAUDE.md, docs/ tree, CONVENTIONS.md, TESTING.md).
 Instead of "Resuming at {phase}", activate the resume path.
 
 ## Decision registry

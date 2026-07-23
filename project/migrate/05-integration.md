@@ -13,7 +13,7 @@
 ### Post-wire (per screen)
 - **Trigger:** when integration is complete for a screen
 - **References:** feature spec, DEPENDENCIES.md, API response shape
-- **Action:** emit any discrepancies as concerns in CONCERNS.md (type: flag, source: integration). Suggest /wrapup. Update inventory marker to `[M]`.
+- **Action:** emit any discrepancies as concerns in CONCERNS.md (type: issue, source: integration). Suggest /wrapup. Update inventory marker to `[M]`.
 - **Pass:** /wrapup resolved concerns (or concerns persist), loading/error/empty states implemented, inventory updated.
 
 ## Process

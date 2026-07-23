@@ -37,7 +37,7 @@ The three branches produce very different artifacts - getting this wrong wastes 
 **Integration points when scaffolding exists:**
 - Workflow design system phases: /prototype integrates with /buildout Phase design system and /migrate Phase 6b
 - CONVENTIONS.md: UI prototypes use the project's design tokens and naming patterns
-- CONTEXT.md: domain terms inform prototype naming and labeling
+- GLOSSARY.md: domain terms inform prototype naming and labeling
 
 **Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
 

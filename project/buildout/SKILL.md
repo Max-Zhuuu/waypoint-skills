@@ -129,7 +129,7 @@ Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs esti
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, question, assumption)
+- **Emits:** concerns (type: issue, question, assumption)
 - **Scaffolding writes:** Active Workflow record in CLAUDE.md
 - **Override:** workflow skill - writes Active Workflow on activation, clears on completion
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.
+description: Find deepening opportunities in a codebase, informed by the domain language in GLOSSARY.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.
 status: stable
 ---
 
@@ -14,7 +14,7 @@ Execute each phase using the tools available in this environment.
 ### Phase 1 - Explore
 
 Use the Agent tool with `subagent_type=Explore` to walk the codebase.
-Read the project's domain glossary (CONTEXT.md) and ADRs before exploring.
+Read the project's domain glossary (GLOSSARY.md) and ADRs before exploring.
 
 See [LANGUAGE.md](LANGUAGE.md) for the full vocabulary and principles.
 
@@ -37,14 +37,14 @@ For interface design alternatives, spawn 3+ parallel agents with different const
 See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for the sub-agent pattern.
 
 Side effects happen inline:
-- New domain term -> update CONTEXT.md (see task/grill-with-docs/CONTEXT-FORMAT.md).
+- New domain term -> update GLOSSARY.md (see task/grill-with-docs/GLOSSARY-FORMAT.md).
 - Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/ADR-FORMAT.md).
 
 ## Engagement
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, question)
+- **Emits:** concerns (type: issue, question)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** none
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

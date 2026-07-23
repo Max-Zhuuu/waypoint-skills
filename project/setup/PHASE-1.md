@@ -123,7 +123,7 @@ Generate the map based on the selected tier (see [SCOPE-REFERENCE.md](SCOPE-REFE
 
 | Concept | Path | Status |
 |---------|------|--------|
-| Domain glossary | CONTEXT.md | Active |
+| Domain glossary | GLOSSARY.md | Active |
 | Naming conventions | CONVENTIONS.md | Active |
 | Test expectations | TESTING.md | Active |
 | Scope boundaries | SCOPE.md | Active |

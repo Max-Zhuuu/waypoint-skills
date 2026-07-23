@@ -85,11 +85,11 @@ If the output has issues: direct the subagent to fix, or fix in the main context
 
 When cross-reference finds discrepancies between spec and reality:
 - DO NOT update the spec. DO NOT update shared docs.
-- Emit each discrepancy as a concern in CONCERNS.md (type: flag, source: /port, refs: entity spec):
+- Emit each discrepancy as a concern in CONCERNS.md (type: issue, source: /port, refs: entity spec):
 
 ```markdown
 ### C-{NNN} [open] Spec says field X is editable, source has it read-only in status=Closed
-type: flag | raised: {date} | source: /port
+type: issue | raised: {date} | source: /port
 refs: docs/reference/features/{entity}.md
 ```
 
@@ -135,7 +135,7 @@ When you spot a UX improvement during porting: write a one-liner in `docs/improv
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, question, deferred-doc)
+- **Emits:** concerns (type: issue, question)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

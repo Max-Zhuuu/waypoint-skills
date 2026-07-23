@@ -82,7 +82,7 @@ agent: [invokes /spec with "news feed widget"]
 you:   /check-in
 
 agent: Phase 5 (Integration). 12 screens remaining.
-       Concerns: 3 flags (oldest: 4 days), 2 questions pending BE team
+       Concerns: 3 issues (oldest: 4 days), 2 questions pending BE team
        Next: Wire Claims list to real API - endpoint exists but FE still
        hits mock. Recommend this because the contract is fresh and field
        mappings should be verified now, not after they drift.

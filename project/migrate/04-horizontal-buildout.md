@@ -12,7 +12,7 @@
 
 ### Post-build (per screen)
 - **Trigger:** when `/port` reports a screen complete
-- **References:** CONCERNS.md (entity concerns), CONVENTIONS.md, CONTEXT.md
+- **References:** CONCERNS.md (entity concerns), CONVENTIONS.md, GLOSSARY.md
 - **Action:** /port suggests /wrapup. If invoked: /wrapup resolves concerns, cascades to shared docs, updates inventory to `[P]`. If skipped: concerns persist, /check-in surfaces next session.
 - **Pass:** /wrapup resolved concerns (or concerns persist for next session).
 

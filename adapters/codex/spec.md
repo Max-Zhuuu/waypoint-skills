@@ -7,7 +7,7 @@ Follow it phase by phase.
 ## Context
 
 If `SCOPE.md` exists, read it for project boundaries.
-If `CONTEXT.md` exists, read it for domain terminology.
+If `GLOSSARY.md` exists, read it for domain terminology.
 If `ARCHITECTURE.md` exists, read it for technical decisions.
 Check `docs/specs/` for related specs.
 
@@ -22,5 +22,5 @@ Check `docs/specs/` for related specs.
 - Phase 4 (write the spec): output to `docs/specs/{feature-slug}.md`.
   A spec is a contract. Every sentence constrains scope or defines behavior.
   If a sentence does neither, cut it.
-- Phase 5 (update artifacts): new domain terms to CONTEXT.md,
+- Phase 5 (update artifacts): new domain terms to GLOSSARY.md,
   architecture decisions to docs/adr/, open questions to docs/local/CONCERNS.md.

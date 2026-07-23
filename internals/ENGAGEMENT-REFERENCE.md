@@ -36,7 +36,7 @@ The skill executes its full methodology.
 No scaffolding files are expected. No concern tracking is available.
 
 **Cross-reference substitutions:**
-- No CONTEXT.md -> define terms inline, don't link to a glossary
+- No GLOSSARY.md -> define terms inline, don't link to a glossary
 - No CONVENTIONS.md -> infer conventions from existing code, state what you inferred
 - No SCOPE.md -> ask scope questions inline ("is this v1 or future?")
 - No TESTING.md -> state the default test philosophy, offer to adjust
@@ -102,7 +102,7 @@ If the user says "stop suggesting concerns," respect it for the rest of the sess
 
 ```markdown
 ### C-{next_id} [open] {one-line description}
-type: {question|assumption|flag|deferred-doc} | raised: {date} | source: /{skill-name}
+type: {question|assumption|issue} | raised: {date} | source: /{skill-name}
 {1-3 lines of context}
 refs: {paths to relevant files or other concern IDs}
 ```
@@ -131,7 +131,7 @@ When resolving a concern, include commit references:
 
 ```markdown
 ### C-015 [resolved] FE not consuming real BE for Claims, Pool, Search
-type: flag | raised: 2026-07-20 | resolved: 2026-07-25
+type: issue | raised: 2026-07-20 | resolved: 2026-07-25
 Resolution: Wired Claims list to real API. Field mappings verified against C# source.
 Commits: abc1234, def5678
 ```
@@ -158,7 +158,7 @@ Skills that produce commits (/tdd, /create, /port, /diagnose) run this before co
 ```
 1. Is this a mid-cycle commit or a natural boundary?
    - Mid-cycle (individual test passing, incremental refactor):
-     Auto-provisional. Emit deferred-doc concern silently.
+     Auto-provisional. Emit issue concern silently.
      Commit with [provisional] marker. No question asked.
    - Natural boundary (all slices complete, user signals done):
      Ask: "Stable enough to document, or provisional?"
@@ -169,17 +169,17 @@ Skills that produce commits (/tdd, /create, /port, /diagnose) run this before co
    - Concern resolution: did this work resolve any open concerns?
    Commit code + doc updates together.
 
-3. If provisional: emit deferred-doc concern with what needs documenting.
+3. If provisional: emit issue concern with what needs documenting.
    Commit with [provisional] or [doc-deferred: <reason>] marker.
 
 4. State next step: another cycle, /wrapup, or hand off.
 ```
 
-### Deferred-doc concern format
+### Provisional commit concern format
 
 ```markdown
 ### C-NNN [open] Deferred documentation: <topic>
-type: deferred-doc | raised: <date> | source: /<skill>
+type: issue | raised: <date> | source: /<skill>
 <What needs documenting and why it was deferred.>
 Commit: <short SHA>
 refs: <spec or file that needs updating>
@@ -190,8 +190,8 @@ refs: <spec or file that needs updating>
 | Age | /check-in behavior |
 |-----|-------------------|
 | < 3 days | Mention in summary, no special treatment |
-| 3-7 days | Flag as aging: "oldest deferred doc is 5 days, context getting stale" |
-| > 7 days | Promote to flag priority: "deferred doc from 12 days ago - resolve or re-document now" |
+| 3-7 days | Note as aging: "oldest deferred doc is 5 days, context getting stale" |
+| > 7 days | Promote to issue priority: "deferred doc from 12 days ago - resolve or re-document now" |
 | > 14 days | Top of priority stack, above feature work |
 
 Never blocking. The user can always say "not now." But the debt is visible and escalates.
@@ -199,8 +199,8 @@ Never blocking. The user can always say "not now." But the debt is visible and e
 ### Mini-wrapup write authority
 
 Mini-wrapup can:
-- Append to shared-append files (CONTEXT.md, CONVENTIONS.md, DEPENDENCIES.md)
-- Emit deferred-doc concerns
+- Append to shared-append files (GLOSSARY.md, CONVENTIONS.md, DEPENDENCIES.md)
+- Emit issue concerns for deferred documentation
 
 Mini-wrapup cannot:
 - Modify owned files (spec drift fixes remain /wrapup's responsibility)
@@ -218,7 +218,7 @@ Mini-wrapup cannot:
 
 | File | Category | Writers | Constraint |
 |------|----------|---------|------------|
-| CONTEXT.md | Shared-append | Any skill resolving a term | Add new terms only. Never modify/delete existing. |
+| GLOSSARY.md | Shared-append | Any skill resolving a term | Add new terms only. Never modify/delete existing. |
 | CONVENTIONS.md | Shared-append | /grill-with-docs, /wrapup, /setup | Add new patterns only. Modifications require /wrapup. |
 | SCOPE.md | Owned | /setup (create), /grill-with-docs (scope grills) | Only during explicit scope discussions |
 | TESTING.md | Owned | /setup (create), /grill-with-docs (strategy grills) | Only during explicit testing strategy discussions |
@@ -233,7 +233,7 @@ Mini-wrapup cannot:
 ### The append-only contract
 
 The rule isn't "one writer" - it's "append-only during work, modifications through /wrapup."
-Two agents can both append to CONTEXT.md without conflict (different terms, different IDs).
+Two agents can both append to GLOSSARY.md without conflict (different terms, different IDs).
 If they append conflicting definitions, that's a merge conflict - which surfaces the disagreement.
 
 ### Before writing to any shared file
@@ -262,7 +262,7 @@ When they don't, skills substitute (see Tier 1 adaptations in section 2).
 | File | What it gives skills | Created by |
 |------|---------------------|------------|
 | CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge), /reorient, /wrapup, or /setup |
-| CONTEXT.md | Term validation, glossary challenges | /grill-with-docs |
+| GLOSSARY.md | Term validation, glossary challenges | /grill-with-docs |
 | CONVENTIONS.md | Naming enforcement | /setup |
 | SCOPE.md | Scope boundary checks | /setup |
 | TESTING.md | Project-specific test philosophy | /setup |
@@ -272,7 +272,7 @@ When they don't, skills substitute (see Tier 1 adaptations in section 2).
 | Documentation Map (in CLAUDE.md) | Indirection layer for all of the above | /setup |
 
 Skills create only their own output artifacts.
-Exception: /grill-with-docs creates CONTEXT.md and docs/adr/ because those ARE its outputs.
+Exception: /grill-with-docs creates GLOSSARY.md and docs/adr/ because those ARE its outputs.
 
 ## 10. Prohibitions
 

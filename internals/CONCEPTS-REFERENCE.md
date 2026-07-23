@@ -120,7 +120,7 @@ Skills resolve references through the map, never hardcoded paths.
 
 | Concept | Path | Status |
 |---------|------|--------|
-| Domain glossary | CONTEXT.md | Active |
+| Domain glossary | GLOSSARY.md | Active |
 | Naming conventions | CONVENTIONS.md | Active |
 | Test expectations | TESTING.md | Active |
 | Scope boundaries | SCOPE.md | Active |
@@ -150,7 +150,7 @@ The Documentation Map grows with the project tier:
 
 | Concept | Small | Moderate | Large |
 |---------|-------|----------|-------|
-| Domain glossary | - | CONTEXT.md | CONTEXT.md |
+| Domain glossary | - | GLOSSARY.md | GLOSSARY.md |
 | Naming conventions | - | CONVENTIONS.md | conventions/naming.md |
 | Decomposition prefs | - | CONVENTIONS.md (section) | conventions/decomposition.md |
 | Test expectations | - | TESTING.md | conventions/testing.md |
@@ -171,9 +171,9 @@ Suffix taxonomy for files in the skill family.
 
 | Class | Suffix | Purpose | Examples |
 |-------|--------|---------|----------|
-| User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | CONVENTIONS.md, CONTEXT.md, SCOPE.md |
+| User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | CONVENTIONS.md, GLOSSARY.md, SCOPE.md |
 | Skill-internal reference | `FOO-REFERENCE.md` | Informs skill behavior, can be surfaced to users during uncertainty | ENGAGEMENT-REFERENCE.md, LOCAL-DOCS-REFERENCE.md, TRACKER-REFERENCE.md |
-| Format template | `FOO-FORMAT.md` | Template for user-facing docs | CONTEXT-FORMAT.md, ADR-FORMAT.md |
+| Format template | `FOO-FORMAT.md` | Template for user-facing docs | GLOSSARY-FORMAT.md, ADR-FORMAT.md |
 
 ### Naming rules
 
@@ -220,7 +220,7 @@ See [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) section 7 for the full fi
 
 The rule isn't "one writer" - it's "append-only during work, modifications through /wrapup."
 
-- /spec can add a term to CONTEXT.md when it discovers one during a grill
+- /spec can add a term to GLOSSARY.md when it discovers one during a grill
 - /diagnose can add a convention to CONVENTIONS.md when it notices a pattern
 - Neither skill can modify or delete existing entries
 - Modifications (corrections, consolidation, conflict resolution) happen in /wrapup

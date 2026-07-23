@@ -18,7 +18,7 @@ Example: a CLI tool, a small API, a single-purpose library.
 **What you skip:**
 - No CONVENTIONS.md (project is too small for naming drift to matter)
 - No TESTING.md (test expectations are self-evident)
-- No CONTEXT.md (domain is simple enough to hold in your head)
+- No GLOSSARY.md (domain is simple enough to hold in your head)
 - No docs/adr/ (decisions are few and obvious)
 
 **Skills available:** all verb skills in degraded mode (no convention enforcement, no domain term cross-referencing). /create works as the workflow. /check-in works with the Active Workflow record.
@@ -32,7 +32,7 @@ Example: a web app, a service with an API, a migration project.
 - Everything from Small, plus:
 - CONVENTIONS.md (flat file, naming patterns)
 - TESTING.md (test expectations by tier)
-- CONTEXT.md (domain glossary)
+- GLOSSARY.md (domain glossary)
 - ARCHITECTURE.md (architecture overview)
 - docs/adr/ (architecture decision records)
 - docs/implementation/ structure (specs, improvements, handoffs)

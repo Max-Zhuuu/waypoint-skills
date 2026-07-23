@@ -5,7 +5,7 @@ status: stable
 inputs:
   scope-md: SCOPE.md (project context)
   conventions-md: CONVENTIONS.md (naming patterns)
-  context-md: CONTEXT.md (domain glossary)
+  context-md: GLOSSARY.md (domain glossary)
 outputs:
   workflow-record: CLAUDE.md ## Active Workflow section updated
   specs: feature specs for each feature via /spec
@@ -36,7 +36,7 @@ Print the recommendation with a plain-language explanation of why, not just the 
 
 ## On invocation
 
-1. Read existing project docs: SCOPE.md, CONVENTIONS.md, CONTEXT.md, TESTING.md, CLAUDE.md.
+1. Read existing project docs: SCOPE.md, CONVENTIONS.md, GLOSSARY.md, TESTING.md, CLAUDE.md.
 2. Check for `## Active Workflow` in CLAUDE.md:
    - **Same skill already active** (/create in progress): don't restart. Ask what feature to add next, or suggest `/check-in` to orient.
    - **Different skill active** (/migrate or /buildout in progress): warn that starting /create runs alongside that workflow, not inside it. Ask whether to proceed or fold this feature into the active workflow.
@@ -115,7 +115,7 @@ The user doesn't choose the mode explicitly - /create writes the workflow record
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: flag, question, deferred-doc)
+- **Emits:** concerns (type: issue, question)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

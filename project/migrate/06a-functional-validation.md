@@ -7,7 +7,7 @@
 ### CP1: Post-validation review (per screen)
 - **Trigger:** after a screen has been validated side-by-side against the source system
 - **References:** feature spec, source system screen, docs/improvements/ file for this entity
-- **Action:** categorize every discrepancy (bug, intentional difference, unknown). Emit discrepancies as concerns in CONCERNS.md (type: flag, source: validation). If UX improvement spotted: capture in docs/improvements/, do not implement. Suggest /wrapup.
+- **Action:** categorize every discrepancy (bug, intentional difference, unknown). Emit discrepancies as concerns in CONCERNS.md (type: issue, source: validation). If UX improvement spotted: capture in docs/improvements/, do not implement. Suggest /wrapup.
 - **Pass:** all discrepancies categorized (bugs fixed, intentional diffs documented, unknowns emitted as concerns), /wrapup resolved concerns.
 
 ## Process

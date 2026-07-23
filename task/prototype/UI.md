@@ -39,7 +39,7 @@ Before generating any variants, read the context that should inform them:
 
 **Design system:** Read the project's design tokens, CSS custom properties, component library, and any existing styled pages. The variants must look like they belong in this app, not in an AI demo.
 
-**Domain context:** Read CONTEXT.md, relevant feature specs, and any logic docs for this screen. Understand what workflow this serves, what data the user is looking at, and what actions they need to take. A vessel list for a fleet manager has different priorities than a product catalog for a shopper.
+**Domain context:** Read GLOSSARY.md, relevant feature specs, and any logic docs for this screen. Understand what workflow this serves, what data the user is looking at, and what actions they need to take. A vessel list for a fleet manager has different priorities than a product catalog for a shopper.
 
 **User workflow:** Before designing, answer: What is the user's primary task on this screen? What do they look at first? What action do they take most often? How long do they spend here - a glance or a deep session?
 

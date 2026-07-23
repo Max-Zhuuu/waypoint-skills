@@ -11,7 +11,7 @@ Framework-agnostic. Produces documentation structure, architecture decisions, sp
 
 ## On invocation
 
-Check for existing outputs: SCOPE.md, CONTEXT.md, CLAUDE.md, docs/ tree.
+Check for existing outputs: SCOPE.md, GLOSSARY.md, CLAUDE.md, docs/ tree.
 
 **Starting fresh** (none exist): print this, then start Phase 0.
 
@@ -118,14 +118,14 @@ Work through these categories. Skip any the implementer has already answered cle
 
 **CONCERNS.md** (docs/local/, gitignored) - read [../../templates/CONCERNS.md](../../templates/CONCERNS.md), seed with assumptions and open questions from scoping. Format: see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md).
 
-**CONTEXT.md** (repo root, if not exists) - read [../../templates/CONTEXT.md](../../templates/CONTEXT.md), seed with domain terms from scoping. Follow existing CONTEXT-FORMAT if `/grill-with-docs` format file exists.
+**GLOSSARY.md** (repo root, if not exists) - read [../../templates/GLOSSARY.md](../../templates/GLOSSARY.md), seed with domain terms from scoping. Follow existing GLOSSARY-FORMAT if `/grill-with-docs` format file exists.
 
 ### Gate
 
 - [ ] SCOPE.md exists and implementer has reviewed it
 - [ ] DEPENDENCIES.md has all external contracts identified
 - [ ] Uncertain scope items have decision owners and deadlines
-- [ ] CONTEXT.md exists (even if minimal)
+- [ ] GLOSSARY.md exists (even if minimal)
 - [ ] CONCERNS.md seeded with assumptions and open questions from scoping
 
 ## Tier selection
@@ -164,7 +164,7 @@ Maps logical concepts to physical file paths - skills resolve through this map, 
 
 | Concept | Path | Status |
 |---------|------|--------|
-| Domain glossary | CONTEXT.md | Active |
+| Domain glossary | GLOSSARY.md | Active |
 | Naming conventions | CONVENTIONS.md | Active |
 | Test expectations | TESTING.md | Active |
 | Scope boundaries | SCOPE.md | Active |
@@ -176,7 +176,7 @@ Tier-dependent content varies by project size:
 
 | Concept | Small | Moderate | Large |
 |---------|-------|----------|-------|
-| Domain glossary | - | CONTEXT.md | CONTEXT.md |
+| Domain glossary | - | GLOSSARY.md | GLOSSARY.md |
 | Naming conventions | - | CONVENTIONS.md | conventions/naming.md |
 | Decomposition prefs | - | CONVENTIONS.md (section) | conventions/decomposition.md |
 | Test expectations | - | TESTING.md | conventions/testing.md |

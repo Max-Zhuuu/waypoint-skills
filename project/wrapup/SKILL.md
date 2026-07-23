@@ -6,7 +6,7 @@ inputs:
   concerns: CONCERNS.md entries referencing the current entity
 outputs:
   concerns-resolved: CONCERNS.md entries marked resolved with decision lines
-  shared-docs: CONVENTIONS.md, CONTEXT.md, DESIGN-SYSTEM.md updated if cascade needed
+  shared-docs: CONVENTIONS.md, GLOSSARY.md, DESIGN-SYSTEM.md updated if cascade needed
   inventory: marker confirmed or advanced
 signals: []
 ---
@@ -50,7 +50,7 @@ This catches discrepancies the implementation verb didn't flag - a documentation
 - Status Lifecycle: do transitions match?
 - Business Rules: are declared rules enforced?
 
-Any mismatch becomes a new concern in CONCERNS.md (type: flag, source: /wrapup).
+Any mismatch becomes a new concern in CONCERNS.md (type: issue, source: /wrapup).
 
 If no feature spec or logic doc exists: "No {doc type} found. Drift check skipped." Continue.
 Do not block - this preserves /wrapup's lightweight contract for task-layer usage.
@@ -80,9 +80,9 @@ Mark each resolved concern in CONCERNS.md: change status to `[resolved]`, add `r
 
 Check whether any resolution affects shared docs:
 - New naming pattern emerged -> CONVENTIONS.md
-- New domain term resolved -> CONTEXT.md
+- New domain term resolved -> GLOSSARY.md
 - New token or design pattern -> DESIGN-SYSTEM.md (if exists)
-- Spec structure change -> flag for template review
+- Spec structure change -> issue for template review
 - Spec fully superseded -> move old to docs/local/archive/
 
 Only cascade for genuine shared-doc changes, not entity-local updates.

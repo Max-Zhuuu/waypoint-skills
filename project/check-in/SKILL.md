@@ -109,7 +109,7 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the f
 - **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
 - **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
 
-Deferred-doc pressure: surfaces deferred-doc concerns grouped by feature, with age-based escalation (see ENGAGEMENT-REFERENCE.md section 6).
+Provisional-doc pressure: surfaces issue concerns from provisional commits grouped by feature, with age-based escalation (see ENGAGEMENT-REFERENCE.md section 6).
 Stale claims: warns about Claims older than 4 hours at session start.
 
 ## Dynamic adaptation

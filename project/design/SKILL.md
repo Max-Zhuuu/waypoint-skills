@@ -26,7 +26,7 @@ Other skills consume the outputs: /prototype for visual exploration, /spec for c
 This skill requires project context. Before proceeding, check for:
 
 1. `SCOPE.md` - what the product is, its boundaries
-2. `CONTEXT.md` - domain glossary
+2. `GLOSSARY.md` - domain glossary
 3. `CONVENTIONS.md` - naming patterns
 4. Business logic docs (e.g., `docs/wpf-reference/logic/`, `docs/specs/`)
 5. Existing styles (`styles/tokens.css` or equivalent)

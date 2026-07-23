@@ -12,7 +12,7 @@ Follow the requirements methodology in @process/requirements.md - read it in ful
 
 Read any existing context:
 - @SCOPE.md for project boundaries
-- @CONTEXT.md for domain terminology
+- @GLOSSARY.md for domain terminology
 - @ARCHITECTURE.md for technical decisions
 - Related specs in @docs/specs/
 
@@ -34,7 +34,7 @@ Output to `docs/specs/{feature-slug}.md` using the template from the methodology
 
 ### Phase 4 - Update shared artifacts
 
-1. New domain terms -> update @CONTEXT.md (domain terms only).
+1. New domain terms -> update @GLOSSARY.md (domain terms only).
 2. Architecture decision -> suggest grilling it into an ADR in @docs/adr/.
 3. Feature tracked in inventory or roadmap -> add it.
 4. Open questions or assumptions surfaced -> add to @docs/local/CONCERNS.md if it exists.

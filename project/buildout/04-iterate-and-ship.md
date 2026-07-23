@@ -12,7 +12,7 @@
 
 ### CP2: Design consolidation (conditional)
 - **Trigger:** after a feedback round produces 3+ design-related observations
-- **References:** FEEDBACK.md (design-tagged entries), docs/design/references/ (if exists), CONTEXT.md
+- **References:** FEEDBACK.md (design-tagged entries), docs/design/references/ (if exists), GLOSSARY.md
 - **Action:** cluster design feedback by pattern. Synthesize: are individual complaints symptoms of a single design problem? If pattern-level problem detected: invoke research protocol (reference collection, pattern extraction, domain validation) before prototyping a fix. Classify impact (Tier 1/2/3) if cross-boundary work needed. Fold consolidated items back into re-prioritization.
 - **Pass:** design feedback clustered, pattern-level problems identified, research complete for any that need it, all items folded into MoSCoW.
 

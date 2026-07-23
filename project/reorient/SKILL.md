@@ -102,9 +102,9 @@ Based on Phases 2-4, produce a plan and emit findings.
 
 ### Emit findings to CONCERNS.md
 
-- Each drift indicator from Phase 1 -> flag concern (source: /reorient)
+- Each drift indicator from Phase 1 -> issue concern (source: /reorient)
 - Each decision from Phase 3 -> resolved concern (with decision:) or new question/assumption
-- Each "behind" or "blocking" axis rating -> flag concern if not already tracked
+- Each "behind" or "blocking" axis rating -> issue concern if not already tracked
 
 ### Next 3-5 work items
 

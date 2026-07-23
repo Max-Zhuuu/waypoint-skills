@@ -126,7 +126,7 @@ gh issue create --title "Slice 1: {name}" --body "{details}" --project "{project
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 
-- **Emits:** concerns (type: question, flag)
+- **Emits:** concerns (type: question, issue)
 - **Scaffolding writes:** none (task-layer skill)
 - **Override:** none
 - **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined

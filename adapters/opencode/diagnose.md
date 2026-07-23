@@ -16,7 +16,7 @@ Use shell tools to build the loop:
 - Terminal commands for test runners, curl scripts, CLI invocations
 - The project's test framework for failing-test loops
 
-If the project has a domain glossary (check CONTEXT.md), read it before exploring the codebase.
+If the project has a domain glossary (check GLOSSARY.md), read it before exploring the codebase.
 If ADRs exist, check the ones in the area you are touching.
 If @docs/local/CONCERNS.md exists, check for related open concerns.
 
@@ -38,5 +38,5 @@ If no correct test seam exists and the architecture is preventing the bug from b
 
 ### Phase 7 - Learn
 
-Update CONTEXT.md with domain terms only (not general programming concepts).
+Update GLOSSARY.md with domain terms only (not general programming concepts).
 Offer to explain the root cause and quiz the user if they want to deepen understanding.

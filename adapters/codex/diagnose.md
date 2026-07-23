@@ -6,7 +6,7 @@ Follow it phase by phase. Do not skip phases.
 
 ## Context
 
-If `CONTEXT.md` exists in the project root, read it first for domain terminology.
+If `GLOSSARY.md` exists in the project root, read it first for domain terminology.
 If `docs/local/CONCERNS.md` exists, check for related open concerns.
 If `docs/adr/` exists, check ADRs in the area you are touching.
 

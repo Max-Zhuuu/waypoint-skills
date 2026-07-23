@@ -30,11 +30,11 @@ Common detail fields (all optional - a valid concern can be just the header):
 
 | Field | Used by | Purpose |
 |-------|---------|---------|
-| `type:` | all | question, assumption, flag, deferred-doc |
+| `type:` | all | question, assumption, issue |
 | `raised:` | all | date concern was opened |
 | `refs:` | all | links to specs, ADRs, code, other concerns |
 | `risk:` | assumptions | low / medium / high |
-| `deadline:` | assumptions | validate by when |
+| `validate-by:` | assumptions | validate by when |
 | `source:` | flags | which skill or observation emitted it |
 | `decision:` | resolved questions | what was decided and why |
 | `resolved:` | resolved concerns | date resolved |
@@ -89,16 +89,12 @@ Keep the last ~20 resolved concerns. Archive older ones if the file gets long.
 
 **assumption** - working theory that hasn't been validated.
 "We assume Azure SQL Edge matches Azure SQL for JSON queries."
-Add `risk:` and `deadline:` when the assumption is load-bearing.
+Add `risk:` and `validate-by:` when the assumption is load-bearing.
 
-**flag** - something looks wrong or needs attention.
+**issue** - something looks wrong or needs attention.
 "Mock API returns 200 for invalid IDs." / "No test seam for this bug."
 Often emitted by task-layer skills during their work.
-
-**deferred-doc** - documentation intentionally skipped at commit time.
-Emitted by the exit protocol (ENGAGEMENT-REFERENCE.md section 6) when a commit is provisional.
-Includes: what needs documenting, why it was deferred, and the commit SHA.
-Age-based pressure: /check-in escalates deferred-docs from mention (< 3 days) to flag priority (> 7 days) to top of stack (> 14 days).
+Age-based pressure: /check-in escalates issues from mention (< 3 days) to priority (> 7 days) to top of stack (> 14 days).
 
 ## Status lifecycle
 
@@ -122,7 +118,7 @@ When resolving a concern, include the commits that addressed it:
 
 ```markdown
 ### C-015 [resolved] FE not consuming real BE for Claims, Pool, Search
-type: flag | raised: 2026-07-20 | resolved: 2026-07-25
+type: issue | raised: 2026-07-20 | resolved: 2026-07-25
 Resolution: Wired Claims list to real API. Field mappings verified against C# source.
 Commits: abc1234, def5678
 ```
@@ -146,10 +142,10 @@ The concern ID is canonical within the project; the Linear ID is the external ha
 ## How skills interact
 
 **Task-layer skills emit concerns:**
-- /diagnose: "No correct test seam exists" -> flag
+- /diagnose: "No correct test seam exists" -> issue
 - /tdd: "Discovered undocumented business rule" -> question
-- /tdd: "Provisional commit, spec sync deferred" -> deferred-doc
-- /port: "Spec says X, reality is Y" -> flag
+- /tdd: "Provisional commit, spec sync deferred" -> issue
+- /port: "Spec says X, reality is Y" -> issue
 - /spec: "This requirement is ambiguous" -> question
 
 **Project-layer skills consume concerns:**
@@ -166,7 +162,7 @@ The format works whether you invoke it through a skill, type it by hand, or past
 | Was | Becomes |
 |-----|---------|
 | QUESTIONS.md | Concerns of type `question` |
-| ASSUMPTIONS.md | Concerns of type `assumption` with `risk:` and `deadline:` |
+| ASSUMPTIONS.md | Concerns of type `assumption` with `risk:` and `validate-by:` |
 | ACTIVE-WORK.md | Claims section (volatile, session-lifetime) |
 | PROGRESS-AUDIT.md | Generated on demand by /reorient from concern stats. Not a file. |
 
@@ -178,7 +174,7 @@ Add structure when it helps you, not because the format demands it.
 **Small team:** Add `type:` for filtering. Add `raised:` so stale concerns surface.
 Add `refs:` so people find context without asking.
 
-**Large project / migration:** Add `risk:` and `deadline:` for assumptions.
+**Large project / migration:** Add `risk:` and `validate-by:` for assumptions.
 Use claims for session coordination. Track the file in git so concern history is versioned.
 Consider the Linear adapter for external visibility.
 
@@ -237,14 +233,14 @@ refs: docs/improvements/ribbon-disabled-link-tiers.md
 
 ### C-009 [open] Azure SQL Edge JSON behavior matches Azure SQL
 type: assumption | raised: 2026-07-14 | risk: medium
-deadline: before beta deployment
+validate-by: before beta deployment
 We're using JSON_VALUE in several mock queries. Need to verify
 these work identically on the real Azure SQL instance.
 
 ## Investigating
 
 ### C-010 [investigating] Mock API returns 200 for invalid entity IDs
-type: flag | raised: 2026-07-16 | source: /diagnose
+type: issue | raised: 2026-07-16 | source: /diagnose
 mock-backend/src/server.js returns empty result set, not 404.
 Real API behavior unknown - need to check Azure Functions spec.
 refs: C-009

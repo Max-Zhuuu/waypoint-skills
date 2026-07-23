@@ -55,7 +55,7 @@ Keep them as needed for routing metadata or workflow bookkeeping.
 
 ## Tracking with Concerns
 
-Skills can optionally track what a project doesn't know yet, is assuming, or has flagged as wrong - in a single file called `CONCERNS.md`:
+Skills can optionally track what a project doesn't know yet, is assuming, or has identified as wrong - in a single file called `CONCERNS.md`:
 
 ```markdown
 ### C-041 [open] Should status changes require a confirmation dialog?
@@ -63,7 +63,7 @@ type: question | raised: 2026-07-18
 Legacy app confirms before status transitions. Our rebuild doesn't. Intentional or gap?
 ```
 
-Three types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **flags** (something looks wrong).
+Three types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **issues** (something looks wrong).
 
 Skills read from and write to this file. Humans read from and write to this file.
 It is a markdown document - no special tooling required.
