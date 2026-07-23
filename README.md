@@ -129,9 +129,9 @@ npx skills add max-zhu-bv/waypoint-skills
 Either way, invoke any skill directly:
 
 ```
-/diagnose flaky-test
-/spec VesselParticulars
-/tdd CreateVessel
+/diagnose tests pass locally but fail in CI
+/spec user notifications with email and in-app
+/tdd checkout flow with discount codes
 ```
 
 ### OpenCode
