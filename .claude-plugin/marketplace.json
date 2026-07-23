@@ -5,8 +5,11 @@
     "url": "https://github.com/max-zhu-bv"
   },
   "description": "Structured engineering methodologies as agent skills - debugging, spec writing, TDD, project planning, and legacy migration.",
-  "renames": {
-    "waypoint-skills": null
-  },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "waypoint-skills",
+      "source": "./",
+      "description": "Process-first skills for debugging, spec writing, TDD, project planning, and legacy migration. Work standalone or accumulate project context across sessions."
+    }
+  ]
 }
