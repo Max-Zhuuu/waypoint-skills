@@ -35,9 +35,14 @@ These defaults apply to every skill unless overridden in the skill's tier declar
 The skill executes its full methodology.
 No scaffolding files are expected. No concern tracking is available.
 
+**Path resolution:** Resolve all doc paths through the Documentation Map in CLAUDE.md. Never hardcode paths in skill logic.
+When no Documentation Map exists (pre-/setup), fall back to well-known root paths.
+
+**GLOSSARY.md fallback:** Check `GLOSSARY.md` first (current name). If not found, check `CONTEXT.md` (legacy name). This fallback lives here, not in individual skills.
+
 **Cross-reference substitutions:**
-- No GLOSSARY.md -> define terms inline, don't link to a glossary
-- No CONVENTIONS.md -> infer conventions from existing code, state what you inferred
+- No GLOSSARY.md (and no CONTEXT.md) -> define terms inline, don't link to a glossary
+- No CONVENTIONS.md (or conventions/) -> infer conventions from existing code, state what you inferred
 - No SCOPE.md -> ask scope questions inline ("is this v1 or future?")
 - No TESTING.md -> state the default test philosophy, offer to adjust
 - No docs/adr/ -> flag when a decision might reverse a past choice, note that no ADRs exist to check
@@ -57,7 +62,7 @@ CONCERNS.md exists. Skills read from it and write to it (with permission).
 **Deepening suggestions** (at most once per session, when concern history shows a pattern):
 
 ```
-You have 8 open assumptions, 3 with medium risk and no deadline.
+You have 8 open assumptions, 3 with medium risk and no validate-by date.
 /setup can run a structured validation pass if you want
 to stress-test these before they become real problems.
 ```
@@ -219,10 +224,11 @@ Mini-wrapup cannot:
 | File | Category | Writers | Constraint |
 |------|----------|---------|------------|
 | GLOSSARY.md | Shared-append | Any skill resolving a term | Add new terms only. Never modify/delete existing. |
-| CONVENTIONS.md | Shared-append | /grill-with-docs, /wrapup, /setup | Add new patterns only. Modifications require /wrapup. |
+| conventions/NAMING.md | Shared-append | /grill-with-docs, /wrapup, /setup | Add new patterns only. Modifications require /wrapup. |
+| conventions/UX.md | Shared-append | /grill-with-docs, /wrapup, /setup | Add new patterns only. Modifications require /wrapup. |
 | SCOPE.md | Owned | /setup (create), /grill-with-docs (scope grills) | Only during explicit scope discussions |
 | TESTING.md | Owned | /setup (create), /grill-with-docs (strategy grills) | Only during explicit testing strategy discussions |
-| DEPENDENCIES.md | Shared-append | Any skill that discovers a dependency | Add entries. Status changes require /wrapup. |
+| ARCHITECTURE.md | Owned | /setup (create), /grill-with-docs (architecture grills) | Includes external dependencies section |
 | CONCERNS.md (persistent) | Shared-structured | Any skill (emit), /wrapup (resolve) | Typed entries with lifecycle. ID-based. |
 | CONCERNS.md (Claims) | Volatile | Any skill in session | Session-scoped. Stale after 4 hours. |
 | Active Workflow | Owned | Workflow skill, /check-in (phase only) | Per-section owners |
@@ -261,14 +267,15 @@ When they don't, skills substitute (see Tier 1 adaptations in section 2).
 
 | File | What it gives skills | Created by |
 |------|---------------------|------------|
-| CONCERNS.md | Concern tracking, cross-session continuity | Any skill (Tier 1 nudge), /reorient, /wrapup, or /setup |
+| CONCERNS.md | Concern tracking (questions, assumptions, issues, milestones), cross-session continuity | Any skill (Tier 1 nudge), /reorient, /wrapup, or /setup |
 | GLOSSARY.md | Term validation, glossary challenges | /grill-with-docs |
-| CONVENTIONS.md | Naming enforcement | /setup |
+| conventions/NAMING.md | Naming enforcement | /setup |
+| conventions/UX.md | Interaction pattern consistency | /setup |
 | SCOPE.md | Scope boundary checks | /setup |
 | TESTING.md | Project-specific test philosophy | /setup |
-| ARCHITECTURE.md | Architecture cross-referencing | /setup |
+| ARCHITECTURE.md | Architecture cross-referencing, external dependencies | /setup |
+| DESIGN.md | Visual convention enforcement (optional) | /design |
 | docs/adr/ | Decision history | /grill-with-docs |
-| docs/patterns/ | Cross-cutting behavioral patterns | Any skill (shared-append) |
 | Documentation Map (in CLAUDE.md) | Indirection layer for all of the above | /setup |
 
 Skills create only their own output artifacts.

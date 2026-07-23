@@ -108,25 +108,97 @@ Distinct from gates (end-of-phase go/no-go) and enforcement (per-invocation chec
 | Gate | End-of-phase | Phase transition | /check-in (gate check in priority stack) |
 | Enforcement | Per-invocation | Every /check-in run | /check-in (core rules + archetype extras) |
 
+## Directory Structure Tiers
+
+Project documentation organizes into three tiers, each changing at a different cadence:
+
+| Tier | Directory | What it holds | Change frequency |
+|------|-----------|---------------|-----------------|
+| **program/** | `docs/program/` | What the system IS - architecture, conventions, testing, features | Rarely |
+| **implementation/** | `docs/implementation/` | What we're DOING - scope, concerns, specs, handoffs | Often |
+| **local/** | `docs/local/` | Working state - learnings, scratch notes | Constantly (gitignored) |
+
+### program/ structure
+
+```
+docs/program/
+  ARCHITECTURE.md       # Stack, state management, data flow, external deps
+  STRUCTURE.md          # Code/file layout conventions
+  TESTING.md            # Test policy and expectations by tier
+  DESIGN.md             # Visual conventions (optional, created by /design)
+  features/             # Target system feature docs
+  conventions/
+    NAMING.md           # Variables, functions, components, file names
+    UX.md               # Interaction patterns, confirmations
+  adr/                  # Architecture decision records
+```
+
+### implementation/ structure
+
+```
+docs/implementation/
+  SCOPE.md              # In/out/uncertain
+  CONCERNS.md           # Questions, assumptions, issues, milestones (tracked)
+  specs/                # Feature specs (flat, active)
+    resolved/           # Archived specs by date (YYYY-MM/)
+  handoffs/             # Cross-team requests and contracts
+  improvements/         # Deferred post-parity ideas
+  archive/              # Superseded docs
+```
+
+### program-legacy-{source}/
+
+Migration projects have a parallel directory for the source system's reference material:
+
+```
+docs/program-legacy-wpf/      # example for a WPF migration
+  features/                    # Per-screen UI specs from source system
+  logic/                       # Per-entity data models and business rules
+  TEMPLATES/                   # Feature spec and logic doc templates
+  inventory-plugins.md         # Legacy plugin catalog with migration progress
+```
+
+The Documentation Map aliases `docs/reference/` to `docs/program-legacy-{source}/` so skills like /port resolve paths without knowing the source system name.
+
+### conventions/ directory
+
+Replaces the single CONVENTIONS.md file. Always contains:
+- **NAMING.md** - variables, functions, components, file names. Created by /setup.
+- **UX.md** - interaction patterns, confirmation conventions. Created by /setup, starts minimal.
+
+DESIGN.md lives at program/ level (not in conventions/) and is optional, created by /design when the project warrants it.
+
 ## Documentation Map
 
-Table in CLAUDE.md mapping logical concepts to physical file paths.
+Tree in CLAUDE.md mapping logical concepts to physical file paths.
 Skills resolve references through the map, never hardcoded paths.
+The map uses bold markers (**) to flag key docs that should be read before acting in that area.
 
 ### Format
 
 ```markdown
 ## Documentation Map
 
-| Concept | Path | Status |
-|---------|------|--------|
-| Domain glossary | GLOSSARY.md | Active |
-| Naming conventions | CONVENTIONS.md | Active |
-| Test expectations | TESTING.md | Active |
-| Scope boundaries | SCOPE.md | Active |
-| Architecture decisions | docs/adr/ | Active |
-| Architecture overview | ARCHITECTURE.md | Active |
-| Skill state | .claude/ | Active |
+docs/
+  **GLOSSARY.md**                # Domain glossary - canonical terms, avoid-lists
+  program/                       # What the system IS
+    **ARCHITECTURE.md**          # Stack, state management, data flow, deps
+    STRUCTURE.md                 # Code/file layout conventions
+    **TESTING.md**               # Test expectations by complexity tier
+    DESIGN.md                    # Visual conventions (optional)
+    features/                    # Target system feature docs
+    conventions/
+      **NAMING.md**              # Variables, functions, components
+      UX.md                      # Interaction patterns, confirmations
+    adr/                         # Architecture decision records
+  implementation/                # What we're DOING
+    **SCOPE.md**                 # In/out/uncertain
+    **CONCERNS.md**              # Questions, assumptions, issues, milestones
+    specs/                       # Feature specs (flat, active)
+    handoffs/                    # Cross-team requests and contracts
+  local/                         # Gitignored working state
+    learnings/
+    notes/
 ```
 
 ### Resolution behavior
@@ -148,16 +220,19 @@ When /check-in reads the Documentation Map and finds an entry pointing to a miss
 
 The Documentation Map grows with the project tier:
 
-| Concept | Small | Moderate | Large |
-|---------|-------|----------|-------|
+| Concept | Small | Moderate | Large / Migration |
+|---------|-------|----------|-------------------|
 | Domain glossary | - | GLOSSARY.md | GLOSSARY.md |
-| Naming conventions | - | CONVENTIONS.md | conventions/naming.md |
-| Decomposition prefs | - | CONVENTIONS.md (section) | conventions/decomposition.md |
-| Test expectations | - | TESTING.md | conventions/testing.md |
-| Review standards | - | - | conventions/review.md |
-| Scope boundaries | SCOPE.md | SCOPE.md | SCOPE.md |
-| Architecture decisions | - | docs/adr/ | docs/adr/ |
-| Architecture overview | - | - | ARCHITECTURE.md |
+| Naming conventions | - | conventions/NAMING.md | conventions/NAMING.md |
+| UX conventions | - | conventions/UX.md | conventions/UX.md |
+| Visual design | - | - | program/DESIGN.md (optional) |
+| Test expectations | - | program/TESTING.md | program/TESTING.md |
+| Scope boundaries | SCOPE.md | implementation/SCOPE.md | implementation/SCOPE.md |
+| Concerns | - | implementation/CONCERNS.md | implementation/CONCERNS.md |
+| Architecture | - | program/ARCHITECTURE.md | program/ARCHITECTURE.md |
+| Architecture decisions | - | program/adr/ | program/adr/ |
+| Feature docs | - | - | program/features/ |
+| Legacy reference | - | - | program-legacy-{source}/ |
 | Skill state | .claude/ | .claude/ | .claude/ |
 
 ### Fallback
@@ -171,7 +246,7 @@ Suffix taxonomy for files in the skill family.
 
 | Class | Suffix | Purpose | Examples |
 |-------|--------|---------|----------|
-| User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | CONVENTIONS.md, GLOSSARY.md, SCOPE.md |
+| User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | NAMING.md, GLOSSARY.md, SCOPE.md |
 | Skill-internal reference | `FOO-REFERENCE.md` | Informs skill behavior, can be surfaced to users during uncertainty | ENGAGEMENT-REFERENCE.md, LOCAL-DOCS-REFERENCE.md, TRACKER-REFERENCE.md |
 | Format template | `FOO-FORMAT.md` | Template for user-facing docs | GLOSSARY-FORMAT.md, ADR-FORMAT.md |
 
@@ -221,7 +296,7 @@ See [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) section 7 for the full fi
 The rule isn't "one writer" - it's "append-only during work, modifications through /wrapup."
 
 - /spec can add a term to GLOSSARY.md when it discovers one during a grill
-- /diagnose can add a convention to CONVENTIONS.md when it notices a pattern
+- /diagnose can add a convention to conventions/NAMING.md when it notices a pattern
 - Neither skill can modify or delete existing entries
 - Modifications (corrections, consolidation, conflict resolution) happen in /wrapup
 

@@ -1,12 +1,13 @@
 # Concerns
 
-A single tracking artifact for everything a project doesn't know yet, is assuming, or has flagged as wrong.
+A single tracking artifact for everything a project doesn't know yet, is assuming, or has identified as wrong.
 One file, one format, one scroll.
-Volatile entries (claims) and persistent entries (questions, assumptions) coexist through section ordering and clear marking.
+Volatile entries (claims) and persistent entries (questions, assumptions, issues, milestones) coexist through section ordering and clear marking.
 
 ## The file
 
-`CONCERNS.md` in `docs/local/` (gitignored) or project root (tracked), depending on whether the project wants concern history in version control.
+`docs/implementation/CONCERNS.md` (tracked, versioned).
+Alternative placements: `docs/local/CONCERNS.md` (gitignored) for solo/scratch projects, or project root for flat repos.
 
 ## Concern format
 
@@ -30,14 +31,20 @@ Common detail fields (all optional - a valid concern can be just the header):
 
 | Field | Used by | Purpose |
 |-------|---------|---------|
-| `type:` | all | question, assumption, issue |
+| `type:` | all | question, assumption, issue, milestone |
 | `raised:` | all | date concern was opened |
-| `refs:` | all | links to specs, ADRs, code, other concerns |
+| `refs:` | all | links to other concern IDs (e.g. C-015, C-017) |
 | `risk:` | assumptions | low / medium / high |
-| `validate-by:` | assumptions | validate by when |
-| `source:` | flags | which skill or observation emitted it |
+| `validate-by:` | assumptions | milestone name or date to validate by |
+| `source:` | issues | which skill or observation emitted it |
+| `specs:` | milestones | paths to specs belonging to this milestone |
+| `handoffs:` | milestones | paths to cross-team contracts |
 | `decision:` | resolved questions | what was decided and why |
 | `resolved:` | resolved concerns | date resolved |
+| `github:` | any | external ref: `owner/repo#123` |
+| `linear:` | any | external ref: `PROJ-123` |
+| `jira:` | any | external ref: `PROJ-123` |
+| `azure-devops:` | any | external ref: `org/project#123` |
 
 A solo developer might write:
 
@@ -96,6 +103,19 @@ Add `risk:` and `validate-by:` when the assumption is load-bearing.
 Often emitted by task-layer skills during their work.
 Age-based pressure: /check-in escalates issues from mention (< 3 days) to priority (> 7 days) to top of stack (> 14 days).
 
+**milestone** - a checkpoint that groups related specs and concerns.
+Milestones share the C-NNN ID space with other concerns.
+Each spec belongs to exactly one milestone (single-assignment).
+When a milestone closes, /wrapup suggests moving its specs to `specs/resolved/YYYY-MM/`.
+
+```markdown
+### CP-01 [open] Wire Claims/Pool/Search to real BE
+type: milestone | raised: 2026-07-22
+specs: docs/implementation/specs/claims-api-wiring.md
+handoffs: docs/implementation/handoffs/be-endpoint-contract.md
+refs: C-015, C-017
+```
+
 ## Status lifecycle
 
 ```
@@ -134,10 +154,21 @@ Monotonically increasing integers: C-001, C-002, C-003.
 New concern = current max ID + 1.
 
 IDs are never reused. A resolved concern keeps its ID forever.
+Milestones use a CP-NN prefix but share the same ID space (no collisions).
 Other docs reference concerns as `C-041` in prose, or `[C-041]` as a link.
 
-If exported to Linear: add `linear: PROJ-123` to the detail lines.
-The concern ID is canonical within the project; the Linear ID is the external handle.
+### External issue refs
+
+Concerns can link to external issue trackers with typed ref fields:
+
+```markdown
+### C-041 [open] Should vessel status transitions require confirmation?
+type: question | raised: 2026-07-18 | github: burmester-vogel/bv-glomaris#42
+```
+
+Supported prefixes: `github:`, `linear:`, `jira:`, `azure-devops:`.
+The concern ID is canonical within the project; the external ID is a cross-reference, not a replacement.
+Bidirectional sync is possible via adapter scripts but optional.
 
 ## How skills interact
 
@@ -175,8 +206,9 @@ Add structure when it helps you, not because the format demands it.
 Add `refs:` so people find context without asking.
 
 **Large project / migration:** Add `risk:` and `validate-by:` for assumptions.
+Use milestones to group specs and track progress toward checkpoints.
 Use claims for session coordination. Track the file in git so concern history is versioned.
-Consider the Linear adapter for external visibility.
+Consider external issue refs (`github:`, `linear:`, etc.) for cross-tool visibility.
 
 ## Adapting to your context
 
@@ -212,6 +244,22 @@ Bidirectional sync is possible but optional.
 For lightweight projects, the file is the source of truth.
 For team-scale projects, the external tracker takes over and the file becomes a local cache.
 
+## Type mini-grill
+
+/setup offers a type selection for moderate-to-large projects during initial scaffolding.
+The default set is question, assumption, issue.
+Milestone is offered when the project has multiple phases or parallel features.
+
+```
+Which concern types does this project need?
+[x] question - decisions needed
+[x] assumption - theories to validate
+[x] issue - things that look wrong
+[ ] milestone - checkpoints grouping specs and handoffs
+```
+
+Solo or small projects skip the grill - all types are available, just rarely used.
+
 ## Full example
 
 ```markdown
@@ -233,9 +281,15 @@ refs: docs/improvements/ribbon-disabled-link-tiers.md
 
 ### C-009 [open] Azure SQL Edge JSON behavior matches Azure SQL
 type: assumption | raised: 2026-07-14 | risk: medium
-validate-by: before beta deployment
+validate-by: CP-01
 We're using JSON_VALUE in several mock queries. Need to verify
 these work identically on the real Azure SQL instance.
+
+### CP-01 [open] Wire Claims/Pool/Search to real BE
+type: milestone | raised: 2026-07-22
+specs: docs/implementation/specs/claims-api-wiring.md
+handoffs: docs/implementation/handoffs/be-endpoint-contract.md
+refs: C-009, C-010
 
 ## Investigating
 
