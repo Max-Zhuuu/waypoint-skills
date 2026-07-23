@@ -4,6 +4,26 @@ A single tracking artifact for everything a project doesn't know yet, is assumin
 One file, one format, one scroll.
 Volatile entries (claims) and persistent entries (questions, assumptions, issues, milestones) coexist through section ordering and clear marking.
 
+## Summary header
+
+Line 2 of CONCERNS.md is a machine-readable summary comment:
+
+```markdown
+# Concerns
+<!-- open: 17 @L14 | investigating: 2 @L89 | blocked: 1 @L103 | resolved: 8 @L112 (142 archived) -->
+```
+
+- Counts are per-status. Omit statuses with zero entries.
+- `@L{N}` is the 1-indexed line number where that section's `## {Status}` heading starts.
+- `(N archived)` is the cumulative count of concerns moved to the archive file. Omit when zero.
+- Claims are not counted in the summary (they're volatile and injected by the hook).
+
+**Who maintains it:** any skill that adds, resolves, or moves a concern recalculates the summary line before saving.
+Recalculation is a count of `### C-` headers per section - trivial, not expensive.
+
+**Why it exists:** skills that read CONCERNS.md from disk can parse line 2 to decide which section to `offset` into, instead of reading the entire file.
+The hook injection path (section below) uses the summary line differently - it injects only Claims + the summary, not the full Open section.
+
 ## The file
 
 `docs/implementation/CONCERNS.md` (tracked, versioned).
@@ -87,7 +107,19 @@ Concerns are grouped by status, in this order:
 
 Empty sections can be omitted.
 Moving a concern between statuses means moving it between sections and changing the bracket word.
-Keep the last ~20 resolved concerns. Archive older ones if the file gets long.
+
+### Archival
+
+When the Resolved section exceeds 20 entries, /wrapup archives the oldest entries to a separate file:
+
+```
+docs/implementation/concerns/resolved-{YYYY}.md
+```
+
+One file per calendar year. Archived concerns keep their full text and IDs.
+The summary header tracks the cumulative archived count so the project's history is discoverable.
+
+/wrapup triggers archival automatically after resolving concerns. Other skills do not archive.
 
 ## Types
 
@@ -231,6 +263,18 @@ Emit new concerns during task-layer work.
 /check-in reads them to propose work. /wrapup resolves them.
 Claims section is the coordination mutex for concurrent sessions.
 
+### Hook injection (scaling for large projects)
+
+The UserPromptSubmit hook injects CONCERNS.md content into every prompt.
+For small projects (<30 open concerns), inject Claims + Open sections in full.
+
+For large projects (30+ open concerns), the hook should inject only:
+1. Claims section (always - volatile coordination data)
+2. The summary header line (counts + line offsets)
+
+Skills that need the full Open section read the file from disk using `@L` offsets from the summary.
+This caps the per-prompt token cost regardless of how many concerns exist.
+
 ### Exported to a tracker
 
 An adapter script reads CONCERNS.md, creates issues for open concerns, writes the external ID back:
@@ -264,6 +308,7 @@ Solo or small projects skip the grill - all types are available, just rarely use
 
 ```markdown
 # Concerns
+<!-- open: 3 @L10 | investigating: 1 @L30 | resolved: 2 @L36 -->
 
 ## Claims
 

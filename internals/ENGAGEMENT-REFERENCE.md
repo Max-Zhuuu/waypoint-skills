@@ -53,10 +53,14 @@ State each adaptation once, in one sentence, then move on.
 
 CONCERNS.md exists. Skills read from it and write to it (with permission).
 
-- Read CONCERNS.md at start. Note open concerns relevant to the current task.
+- Read the summary header (line 2) first. Use `@L` offsets to read only the section you need.
+- Task-layer skills: read only the Open section to check for relevant concerns.
+- /check-in, /reorient: read Open + Investigating + Blocked for the full picture. Skip Resolved.
+- /wrapup: read Open (to resolve), then Resolved (to check archival threshold).
 - After work, follow the nudge protocol (section 3) for discoveries.
 - Emit concerns as `[open]` with type, raised date, and refs.
 - Resolve concerns addressed by the current work (move to Resolved, add resolution note).
+- After any write to CONCERNS.md, recalculate the summary header (counts + line offsets).
 - When cross-referencing files exist, use them. When they don't, use Tier 1 substitutions.
 
 **Deepening suggestions** (at most once per session, when concern history shows a pattern):
@@ -114,6 +118,7 @@ refs: {paths to relevant files or other concern IDs}
 
 Read the current max ID from CONCERNS.md and increment.
 Place the new concern in the Open section.
+Recalculate the summary header after adding.
 
 ### When to emit
 
@@ -256,7 +261,13 @@ Three levels, each compensating for failures in the level above:
 | **2. Skill** | Skills read Claims/Concerns before writing | Working on an area with unresolved blockers |
 | **3. Boundary** | /wrapup and /check-in verify consistency | Drift accumulated during session |
 
-**Hook contract:** Projects with concurrent agents SHOULD install a UserPromptSubmit hook that injects the Claims section of CONCERNS.md into every prompt. The hook checks for file-area conflicts and surfaces them before the agent acts.
+**Hook contract:** Projects with concurrent agents SHOULD install a UserPromptSubmit hook that injects CONCERNS.md content into every prompt.
+
+Hook injection scales with project size:
+- **<30 open concerns:** inject Claims + full Open section.
+- **30+ open concerns:** inject Claims + summary header only. Skills read the file from disk using `@L` offsets when they need full details.
+
+The hook checks for file-area conflicts and surfaces them before the agent acts.
 
 Skills must not depend on the hook existing - they must also do their own checks (Level 2).
 

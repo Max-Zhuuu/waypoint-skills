@@ -75,6 +75,7 @@ Resolution outcomes:
 - **Intentional difference** - document in spec Change Log with rationale
 
 Mark each resolved concern in CONCERNS.md: change status to `[resolved]`, add `resolved:` date and `decision:` line, move to the Resolved section.
+Recalculate the summary header after all resolutions.
 
 ### 4. Cascade to shared docs
 
@@ -87,7 +88,20 @@ Check whether any resolution affects shared docs:
 
 Only cascade for genuine shared-doc changes, not entity-local updates.
 
-### 5. Evaluate gate
+### 5. Archive resolved concerns
+
+After resolving concerns, count the entries in the Resolved section.
+If the count exceeds 20, archive the oldest entries (beyond the most recent 20) to:
+
+```
+docs/implementation/concerns/resolved-{YYYY}.md
+```
+
+One file per calendar year. Archived entries keep their full text and IDs.
+Create the directory if it doesn't exist.
+Update the summary header's archived count after archiving.
+
+### 6. Evaluate gate
 
 Check the current phase's gate criteria:
 - How many items remain at current phase?
@@ -98,6 +112,7 @@ Report:
 
 ```
 Wrapup complete. {entity}: {N} concerns resolved, {M} escalated.
+{if archived} Archived {K} resolved concerns to concerns/resolved-{YYYY}.md.
 Gate: {X}/{Y} criteria met. Remaining: {list}.
 ```
 

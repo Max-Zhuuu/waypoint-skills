@@ -19,7 +19,11 @@ Does NOT implement. Does NOT update docs (that's /wrapup). Proposes work, then a
 
 1. Read `## Active Workflow` from CLAUDE.md. This tells you the active skill, current phase, and activation date.
 2. If no workflow record: detect project type from SCOPE.md frontmatter. Recommend /migrate, /buildout, or /create.
-3. Read CONCERNS.md (if it exists). Categorize open concerns by type and age.
+3. Read CONCERNS.md (if it exists):
+   - Parse the summary header (line 2) for counts and `@L` offsets.
+   - Read Claims section (always).
+   - Read Open, Investigating, and Blocked sections using `@L` offsets. Skip Resolved.
+   - If the hook already injected these sections, skip the disk read.
 4. Read the current phase file from the workflow skill's folder.
 5. Apply priority stack to propose next task.
 
