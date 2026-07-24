@@ -1,7 +1,7 @@
 ---
 name: breakdown
 description: "Decompose a spec into implementable slices with dependency ordering. Use when a spec needs a build plan."
-status: draft
+status: stable
 ---
 
 Each slice maps to one TDD cycle or one /create invocation.
