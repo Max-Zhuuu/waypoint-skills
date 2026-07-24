@@ -27,9 +27,9 @@ Do not block on their response - proceed with your ranking, but give the opportu
 
 ### Phase 4 - Refactor
 
-See [tests.md](tests.md) for good/bad test examples, [mocking.md](mocking.md) for mocking guidelines,
-[deep-modules.md](deep-modules.md) for interface depth, [interface-design.md](interface-design.md) for testability,
-and [refactoring.md](refactoring.md) for refactor candidates.
+See [tests.md](reference/tests.md) for good/bad test examples, [mocking.md](reference/mocking.md) for mocking guidelines,
+[deep-modules.md](reference/deep-modules.md) for interface depth, [interface-design.md](reference/interface-design.md) for testability,
+and [refactoring.md](reference/refactoring.md) for refactor candidates.
 
 ## Tone
 

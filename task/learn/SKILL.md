@@ -22,19 +22,19 @@ Mark the recommended option "(Recommended)" and list it first.
 ### Phase 3 - Bridge terminology
 
 Include the Terms in play block and Further reading in the same response as the options.
-For source trust tiers, see [REFERENCES.md](REFERENCES.md#source-trust-tiers).
+For source trust tiers, see [references.md](reference/references.md#source-trust-tiers).
 
 ### Phase 5 - Reinforce
 
 Offer via `AskUserQuestion` with `multiSelect: true`: Quiz, Practice, or skip.
-For quiz and practice protocols, see [LEARN-REFERENCE.md](LEARN-REFERENCE.md).
+For quiz and practice protocols, see [learn-reference.md](reference/learn-reference.md).
 
 Skip when: the edit was trivial, the user is clearly in a hurry, or the concepts are ones they have demonstrated mastery of this session.
 
 ### Phase 6 - Learning notes
 
 Save to `docs/_local/learning/`. Create the directory if needed.
-For format and rules, see [LEARN-REFERENCE.md](LEARN-REFERENCE.md#learning-notes).
+For format and rules, see [learn-reference.md](reference/learn-reference.md#learning-notes).
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

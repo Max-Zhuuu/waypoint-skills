@@ -12,7 +12,7 @@ Execute each phase using the tools available in this environment.
 ### Phase 1 - Feedback loop
 
 Use project tools to build the loop:
-- Bash/PowerShell for test runners, curl scripts, CLI invocations
+- Bash/PowerShell for test runners, curl scripts, CLI invocations (see [hitl-loop.template.sh](reference/hitl-loop.template.sh) for interactive reproduction)
 - chrome-devtools-axi for browser-based reproduction
 - The project's test framework for failing-test loops
 
@@ -35,9 +35,9 @@ For the regression test seam assessment: if no correct seam exists and the archi
 
 ### Phase 7 - Learn
 
-Follow the quiz and practice protocols in [learn/LEARN-REFERENCE.md](../../task/learn/LEARN-REFERENCE.md) if the user opts in.
+Follow the quiz and practice protocols in [learn/learn-reference.md](../../task/learn/reference/learn-reference.md) if the user opts in.
 Update GLOSSARY.md with domain terms only (not general programming concepts).
-Link further-reading sources per [learn/REFERENCES.md](../../task/learn/REFERENCES.md#source-trust-tiers).
+Link further-reading sources per [learn/references.md](../../task/learn/reference/references.md#source-trust-tiers).
 
 ## Exit
 
