@@ -58,7 +58,7 @@ Neutral colors should have a slight hue bias toward the accent - pure mid-gray r
 
 Every token gets a semantic name. The Design Language section in DESIGN-DECISIONS.md tracks the vocabulary.
 
-When the user uses a vague term, probe for specificity. See [REFERENCES.md](REFERENCES.md) for the vague-term resolution table.
+When the user uses a vague term, probe for specificity. See [REFERENCES.md](../reference/references.md) for the vague-term resolution table.
 Pin every resolved term to a specific, reusable name in the Design Language section.
 New resolutions discovered during the project get logged in `docs/design/TERM-LOG.md` to expand the skill's reference over time.
 

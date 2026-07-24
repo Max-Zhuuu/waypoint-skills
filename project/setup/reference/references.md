@@ -50,7 +50,7 @@ A hook injects the Claims section from CONCERNS.md into every prompt so all sess
 
 **When to offer:** Phase 1, after CLAUDE.md generation. Strongly recommended for any project that will use parallel sessions.
 
-**Claims format** lives in CONCERNS.md (see [../../CONCERNS-FORMAT.md](../../CONCERNS-FORMAT.md#claims-section)):
+**Claims format** lives in CONCERNS.md (see [../../../CONCERNS-FORMAT.md](../../../CONCERNS-FORMAT.md#claims-section)):
 - Agents register a claim before their first file modification
 - Claims are session-lifetime, stale after 4 hours
 - Claims share the C-NNN ID space with other concerns

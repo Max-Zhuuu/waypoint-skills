@@ -42,7 +42,7 @@ Adapt descriptions to the project profile per the catalog's adaptation rules. Un
 
 ## Naming conventions
 
-Read [../../templates/CONVENTIONS.md](../../templates/CONVENTIONS.md) and populate it by interrogating the implementer about their stack's conventions. Ask about:
+Read [../../../templates/CONVENTIONS.md](../../../templates/CONVENTIONS.md) and populate it by interrogating the implementer about their stack's conventions. Ask about:
 - Function naming patterns (API calls, event handlers, boolean returns)
 - Component/class naming patterns
 - Type/interface naming patterns
@@ -75,7 +75,7 @@ Before generating TESTING.md, ask via AskUserQuestion:
 
 Store as `testing-philosophy: integration-first | tdd | structural-enforcement` in SCOPE.md frontmatter. This sets the default stance - Phase 3 refines from real patterns, /setup resume path allows revisiting.
 
-Read [../../templates/TESTING.md](../../templates/TESTING.md) and populate it, emphasizing the chosen philosophy. Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
+Read [../../../templates/TESTING.md](../../../templates/TESTING.md) and populate it, emphasizing the chosen philosophy. Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
 
 Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md for patterns and expectations.`
 
@@ -123,11 +123,11 @@ See [local-docs.md](../reference/local-docs.md) for scaling rules and which skil
 
 Copy and adapt the base templates to the project's needs:
 
-**Feature spec template** - copy from [../../templates/feature-spec.md](../../templates/feature-spec.md) to the appropriate features/ directory.
+**Feature spec template** - copy from [../../../templates/feature-spec.md](../../../templates/feature-spec.md) to the appropriate features/ directory.
 
-**Logic doc template** - copy from [../../templates/logic-doc.md](../../templates/logic-doc.md) to program-legacy-{source}/logic/ (migrations) or program/features/ (new builds).
+**Logic doc template** - copy from [../../../templates/logic-doc.md](../../../templates/logic-doc.md) to program-legacy-{source}/logic/ (migrations) or program/features/ (new builds).
 
-**Conventions templates** - copy from [../../templates/conventions-naming.md](../../templates/conventions-naming.md) and [../../templates/conventions-ux.md](../../templates/conventions-ux.md) to program/conventions/.
+**Conventions templates** - copy from [../../../templates/conventions-naming.md](../../../templates/conventions-naming.md) and [../../../templates/conventions-ux.md](../../../templates/conventions-ux.md) to program/conventions/.
 
 ## Documentation Map
 
@@ -162,7 +162,7 @@ As scope scales, nudge the user to add entries for new doc areas.
 
 ## CLAUDE.md generation
 
-Read [../../templates/CLAUDE.md](../../templates/CLAUDE.md) and populate it from Phase 0 and Phase 1 answers.
+Read [../../../templates/CLAUDE.md](../../../templates/CLAUDE.md) and populate it from Phase 0 and Phase 1 answers.
 
 The template includes: Repository Overview, Development commands, Project Structure, Project Scaffold, Documentation Map, Branch Workflow, Agent Coordination, and Change Protocol.
 

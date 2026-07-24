@@ -36,7 +36,7 @@ Document findings in `docs/design/RESEARCH.md`. Include screenshots or URLs wher
 When something "doesn't feel right" later in the process, return here and investigate.
 Flag findings explicitly: "Bloomberg uses monospace for all numerical data - this prevents column misalignment when values change. Worth adopting? Reference: Bloomberg Terminal position blotter."
 
-See [REFERENCES.md](REFERENCES.md) for the competitive audit structure and reference category table.
+See [REFERENCES.md](../reference/references.md) for the competitive audit structure and reference category table.
 
 ## Step 3: Emotional range mapping
 
