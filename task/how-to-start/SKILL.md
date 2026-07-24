@@ -9,8 +9,6 @@ metadata:
   status: stable
 ---
 
-Does NOT execute work. Routes to the right skill and stops.
-
 Context-aware front door to the skill family.
 User arrives with something vague. You read project state, classify intent, recommend 1-2 skills, invoke the chosen one.
 

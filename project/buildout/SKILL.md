@@ -4,8 +4,6 @@ description: "Configure greenfield project scope with MoSCoW priorities and phas
 status: stable
 ---
 
-Does NOT replace /setup. Extends it with greenfield MoSCoW structure and phase resolution.
-
 One-time setup skill. Extends `/setup` with greenfield-specific configuration.
 Run this once to configure the project as a new build. After setup, use `/check-in` every session.
 

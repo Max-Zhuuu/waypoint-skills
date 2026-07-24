@@ -9,8 +9,6 @@ metadata:
   status: stable
 ---
 
-Does NOT write component code. Produces design tokens and system specs.
-
 Design system coordinator.
 Routes to the right wave based on project state, tracks cross-wave concerns, and manages the design document family.
 
@@ -52,6 +50,8 @@ Principled. Every token choice traces to a product decision.
 
 - /prototype to validate decisions visually.
 - /create to implement tokens in code.
+
+Does NOT write component code. Produces design tokens and system specs.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

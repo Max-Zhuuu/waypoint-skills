@@ -8,8 +8,6 @@ signals:
   proposes: implementation verb (/port, /tdd, or user-chosen methodology)
 ---
 
-Does NOT implement. Does NOT update docs (that is /wrapup). Proposes work, then asks which verb to invoke.
-
 1. Read `## Active Workflow` from CLAUDE.md. This tells you the active skill, current phase, and activation date.
 2. If no workflow record: detect project type from SCOPE.md frontmatter. Recommend /migrate, /buildout, or /create.
 3. Read CONCERNS.md (if it exists):
@@ -51,6 +49,8 @@ Read [reference/enforcement.md](reference/enforcement.md) for the enforcement ru
 
 - Invokes the chosen implementation skill (/port, /create, /tdd).
 - Session continues under the invoked skill.
+
+Does NOT implement. Does NOT update docs (that is /wrapup). Proposes work, then asks which verb to invoke.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

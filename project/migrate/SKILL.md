@@ -4,8 +4,6 @@ description: "Replace an existing system layer by layer until the new applicatio
 status: stable
 ---
 
-Does NOT replace /setup. Extends it with migration-specific phases and inventory tracking.
-
 ## Prerequisites
 
 `/setup` must have been run first. Check for:

@@ -14,8 +14,6 @@ signals:
   complete: suggests /wrapup
 ---
 
-Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
-
 Add features to an existing codebase. No phases, no inventory, no MoSCoW.
 Structured enough to ensure specs exist before building and docs get updated after.
 
@@ -69,6 +67,8 @@ Clear the Active Workflow section from CLAUDE.md (or mark as completed with date
 
 - /tdd to build slices with tests.
 - /wrapup to resolve concerns and cascade docs.
+
+Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

@@ -4,8 +4,6 @@ description: "Run a disciplined diagnosis loop for hard bugs: reproduce, hypothe
 status: stable
 ---
 
-Does NOT skip straight to a fix. Runs the full diagnosis loop.
-
 Follow the debugging methodology in [process/debugging.md](../../process/debugging.md).
 Execute each phase using the tools available in this environment.
 
@@ -57,6 +55,8 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6
 ## Tone
 
 Clinical. Follow the evidence, not the hunch.
+
+Does NOT skip straight to a fix. Runs the full diagnosis loop.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

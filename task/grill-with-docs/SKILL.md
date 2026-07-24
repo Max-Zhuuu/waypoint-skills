@@ -4,8 +4,6 @@ description: "Grill a plan against the domain model. Sharpen terminology, update
 status: stable
 ---
 
-Does NOT produce specs. Updates docs inline as decisions crystallize.
-
 <what-to-do>
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.

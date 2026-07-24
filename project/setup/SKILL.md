@@ -4,7 +4,6 @@ description: "Kickoff a project with scoping grill, architecture decisions, and 
 status: stable
 ---
 
-Does NOT build features. Creates project scaffolding and foundational decisions.
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
 Check for existing outputs: SCOPE.md, GLOSSARY.md, CLAUDE.md, docs/ tree.

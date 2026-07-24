@@ -4,8 +4,6 @@ description: "Grill scope and acceptance criteria, output a spec file. Use when 
 status: stable
 ---
 
-Does NOT implement. Produces the spec, then stops.
-
 Follow the requirements methodology in [process/requirements.md](../../process/requirements.md).
 Execute each phase using the tools available in this environment.
 

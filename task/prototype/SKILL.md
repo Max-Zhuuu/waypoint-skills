@@ -4,8 +4,6 @@ description: "Build throwaway prototypes to flesh out a design. Routes between t
 status: stable
 ---
 
-Does NOT produce production code. Throwaway only.
-
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
 ## Pick a branch

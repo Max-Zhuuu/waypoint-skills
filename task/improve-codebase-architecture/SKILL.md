@@ -4,8 +4,6 @@ description: "Find deepening opportunities informed by domain language and ADRs.
 status: stable
 ---
 
-Does NOT refactor. Identifies opportunities and proposes changes.
-
 Follow the architecture review methodology in [process/architecture-review.md](../../process/architecture-review.md).
 Execute each phase using the tools available in this environment.
 
@@ -43,6 +41,8 @@ Side effects happen inline:
 ## Tone
 
 Observational. Report what you find, propose what you would change.
+
+Does NOT refactor. Identifies opportunities and proposes changes.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

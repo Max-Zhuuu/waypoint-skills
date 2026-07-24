@@ -4,8 +4,6 @@ description: "Decompose a spec into implementable slices with dependency orderin
 status: draft
 ---
 
-Does NOT implement. Decomposes specs into build-ready slices.
-
 Each slice maps to one TDD cycle or one /create invocation.
 
 ## Inputs

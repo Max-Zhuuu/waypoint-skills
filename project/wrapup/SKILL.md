@@ -11,8 +11,6 @@ outputs:
 signals: []
 ---
 
-Does NOT implement. Resolves concerns and cascades to shared docs after implementation.
-
 The completion verb. Single reconciliation point for all doc updates after implementation.
 
 - Invoke after /port or /tdd reports complete (suggested by the verb).

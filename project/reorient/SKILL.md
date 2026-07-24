@@ -4,8 +4,6 @@ description: "Snapshot project state, surface deferred decisions, audit progress
 status: stable
 ---
 
-Does NOT implement. Audits state, surfaces deferred decisions, outputs a plan.
-
 A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
 This is not a status report - it is a course correction.
 

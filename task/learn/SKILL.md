@@ -4,8 +4,6 @@ description: "Learn through any code task with meaningfully different options, t
 status: stable
 ---
 
-Does NOT build production code. Teaches through exploration of options and trade-offs.
-
 Follow the structured learning methodology in [process/learning.md](../../process/learning.md).
 Execute each phase using the tools available in this environment.
 

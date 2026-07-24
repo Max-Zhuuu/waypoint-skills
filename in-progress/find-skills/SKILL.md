@@ -4,8 +4,6 @@ description: "Discover and recommend installable skills from the ecosystem. Use 
 status: experimental
 ---
 
-Does NOT install skills automatically. Discovers, recommends, and presents install commands.
-
 This skill helps you discover and install skills from the open agent skills ecosystem.
 
 ## When to Use This Skill

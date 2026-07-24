@@ -6,8 +6,6 @@ signals:
   - complete: suggests /wrapup
 ---
 
-Does NOT skip tests. Red-green-refactor only.
-
 Follow the TDD methodology in [process/tdd.md](../../process/tdd.md).
 Execute each phase using the tools available in this environment.
 
@@ -36,6 +34,8 @@ and [refactoring.md](refactoring.md) for refactor candidates.
 ## Tone
 
 Disciplined. One test, one implementation, no shortcuts.
+
+Does NOT skip tests. Red-green-refactor only.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

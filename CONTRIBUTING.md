@@ -68,11 +68,11 @@ CI warns at >80 and fails at >100.
 ---
 name, description, status
 ---
-Does NOT: {boundary guardrail}.
-
 {Instructions start here. Sequential. No preamble header.}
 
 ## {Skill-specific sections only where genuine logical break}
+
+Does NOT: {boundary, if non-obvious from description}
 
 ## Engagement
 {declaration only - 3-5 lines}
@@ -89,7 +89,8 @@ Does NOT: {boundary guardrail}.
 - No H1 header. Frontmatter `name` + directory is identity.
 - No `## On invocation` header. The body runs on invocation - sequential execution is assumed.
 - No opening paragraph restating the description. Frontmatter `description` is authoritative.
-- Body starts with `Does NOT:` boundary line. Every skill declares what it explicitly won't do.
+- Body opens with the first actionable instruction, not a boundary statement.
+- Boundaries ("Does NOT:") go near the bottom (before ## Engagement) and only when the boundary is non-obvious from the description. If the description says "output a spec file," you don't need "Does NOT implement."
 - `## Tone` is mandatory (1 sentence).
 - `## Exit` is mandatory (2-4 bullets) unless the skill has a natural completion message that serves as exit.
 
@@ -105,7 +106,7 @@ SKILL.md may **declare** (what this skill does differently) but never **define**
 | Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
 | Tone | SKILL.md | 1 sentence, mandatory |
 | Routing/purpose | Frontmatter description | Nothing restated in body |
-| Boundaries | SKILL.md opening line | "Does NOT: {guardrail}" mandatory |
+| Boundaries | SKILL.md near bottom | "Does NOT:" line, only when non-obvious from description |
 
 ## Directive verbs
 
