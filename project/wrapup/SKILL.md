@@ -15,13 +15,7 @@ Does NOT implement. Resolves concerns and cascades to shared docs after implemen
 
 The completion verb. Single reconciliation point for all doc updates after implementation.
 
-
-/wrapup resolves concerns raised during implementation, cascades changes to shared docs, and evaluates gate criteria.
-It is the only skill that writes to shared docs after implementation.
-
-## When to invoke
-
-- After /port or /tdd reports complete (suggested by the verb)
+- Invoke after /port or /tdd reports complete (suggested by the verb).
 - Optional: skip if confident. Unresolved concerns persist in CONCERNS.md.
 - If skipped: /check-in surfaces them next session as priority work.
 
@@ -36,23 +30,9 @@ Also include any concerns emitted by the implementation verb this session.
 
 Re-read the entity's documentation and compare against what was built.
 This catches discrepancies the implementation verb didn't flag - a documentation safety net, not a code review.
-
-**Feature spec** - check these sections against the built component:
-- Fields & Controls: is every declared field present? Any undeclared fields added?
-- Interaction Behaviors: do sortable/filterable/resizable declarations match?
-- Conditional Visibility: do show/hide rules match?
-- Navigation: do declared routes and links exist?
-
-**Logic doc** - check these sections against the built code:
-- Data Model: do field names, types, and nullability match?
-- Relationships: are declared entity references present?
-- Status Lifecycle: do transitions match?
-- Business Rules: are declared rules enforced?
-
+Follow the field-by-field checklist in [reference/spec-drift-checklist.md](reference/spec-drift-checklist.md) for both the feature spec and the logic doc.
 Any mismatch becomes a new concern in CONCERNS.md (type: issue, source: /wrapup).
-
-If no feature spec or logic doc exists: "No {doc type} found. Drift check skipped." Continue.
-Do not block - this preserves /wrapup's lightweight contract for task-layer usage.
+If no feature spec or logic doc exists: report "No {doc type} found. Drift check skipped." and continue - do not block.
 
 ### 3. Resolve each concern
 
@@ -75,30 +55,16 @@ Resolution outcomes:
 
 Mark each resolved concern in CONCERNS.md: change status to `[resolved]`, add `resolved:` date and `decision:` line, move to the Resolved section.
 Recalculate the summary header after all resolutions.
+For milestone-type concerns, follow [reference/milestone-closure.md](reference/milestone-closure.md) to offer spec archival.
 
 ### 4. Cascade to shared docs
 
-Check whether any resolution affects shared docs:
-- New naming pattern emerged -> CONVENTIONS.md
-- New domain term resolved -> GLOSSARY.md
-- New token or design pattern -> DESIGN-SYSTEM.md (if exists)
-- Spec structure change -> issue for template review
-- Spec fully superseded -> move old to docs/_local/archive/
-
+Check whether any resolution affects shared docs, cascading per [reference/cascade-rules.md](reference/cascade-rules.md).
 Only cascade for genuine shared-doc changes, not entity-local updates.
 
 ### 5. Archive resolved concerns
 
-After resolving concerns, count the entries in the Resolved section.
-If the count exceeds 20, archive the oldest entries (beyond the most recent 20) to:
-
-```
-docs/implementation/concerns/resolved-{YYYY}.md
-```
-
-One file per calendar year. Archived entries keep their full text and IDs.
-Create the directory if it doesn't exist.
-Update the summary header's archived count after archiving.
+Count the entries in the Resolved section and archive per [reference/archive-procedure.md](reference/archive-procedure.md) if the threshold is exceeded.
 
 ### 6. Evaluate gate
 
@@ -114,21 +80,6 @@ Wrapup complete. {entity}: {N} concerns resolved, {M} escalated.
 {if archived} Archived {K} resolved concerns to concerns/resolved-{YYYY}.md.
 Gate: {X}/{Y} criteria met. Remaining: {list}.
 ```
-
-## What /wrapup does NOT do
-
-- Propose next work (that's /check-in)
-- Implement features (that's the implementation verb)
-- Make architectural decisions (that's /grill-with-docs)
-
-### Milestone closure
-
-When resolving a milestone concern (type: milestone), suggest archiving its specs:
-```
-Milestone CP-01 resolved. Move its specs to resolved/?
-  docs/implementation/specs/claims-api-wiring.md -> specs/resolved/2026-07/
-```
-Offer, don't force. The user may want to keep specs flat for reference.
 
 ## Exit
 

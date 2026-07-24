@@ -15,16 +15,7 @@ Build an honest picture of where the project stands.
 Do not rely on memory, conversation history, or the user's self-assessment.
 Read actual state.
 
-### What to read
-
-1. **CONCERNS.md.** Count by type and status. Note anything open > 2 weeks.
-   If no CONCERNS.md exists, note that - it is a finding for Phase 3.
-2. **Tracking docs.** Inventory, migration status, PAGES, roadmap. Count items by status.
-   If no formal tracker exists, note that too.
-3. **Recent git history.** `git log --oneline -30`.
-   Categorize each commit into an axis: architecture, wiring/integration, design/UI, bugfix, docs, tests, chore.
-   Identify which axes got attention and which did not.
-4. **Test health.** Run the test suite (or check the most recent run).
+Read [reference/snapshot-checklist.md](reference/snapshot-checklist.md) and work through it in order: CONCERNS.md, tracking docs, recent git history, test health.
 
 ### Present the snapshot
 
@@ -59,42 +50,12 @@ If "No clear goal": make Phase 3 heavier on goal-setting.
 The point of this phase is to make the user decide things they have been deferring.
 Deferred decisions accumulate drag.
 
-### Where to find them
-
-- CONCERNS.md entries open > 1 week
-- Git log: same area touched 3+ times without a milestone advancing (rework without resolution)
-- Structural gaps: routes without views, views without data, types without consumers, mock data where real APIs exist
-- Scoping ambiguity: features built that may not be needed, features needed that have not started
-
-### How to present them
-
-Use `AskUserQuestion` for each hard question.
-Frame as a concrete decision, not an open discussion.
-Not "should we think about X?" but "X: keep, cut, or defer with a date?"
-
-Rules:
-- Limit to 3-5 questions
-- Each must be actionable in 1-2 work sessions
-- Every option must be something you would actually do
-- If you cannot find 3, the project is either very healthy or you are not looking hard enough
-
+Read [reference/hard-questions.md](reference/hard-questions.md) for where to look and how to frame each question via `AskUserQuestion`.
 Each decision becomes a concern resolution or a new concern.
 
 ## Phase 4 - Axis audit
 
-Evaluate progress across the project's key axes.
-Adapt the axes to the project.
-
-| Axis | Check | Behind signal |
-|------|-------|---------------|
-| Architecture | Component patterns, state management, type system | Ad-hoc solutions, pattern drift |
-| Wiring | API integration, data flow, route connectivity | Mock data lingering, dead routes |
-| Design | Visual consistency, layout, responsiveness | Style drift, hardcoded values |
-| Testing | Coverage, health, CI | Flaky tests, untested critical paths |
-| Docs | Spec accuracy, tracker currency | Stale specs, unmarked completions |
-
-For each axis: one sentence on status, then a rating: **ahead**, **on track**, **behind**, or **blocking**.
-Highlight the 1-2 axes furthest behind.
+Read [reference/axis-audit.md](reference/axis-audit.md) for the axis table, adapt it to the project, and rate each axis.
 
 ## Phase 5 - Reprioritize and record
 
@@ -106,42 +67,7 @@ Based on Phases 2-4, produce a plan and emit findings.
 - Each decision from Phase 3 -> resolved concern (with decision:) or new question/assumption
 - Each "behind" or "blocking" axis rating -> issue concern if not already tracked
 
-### Next 3-5 work items
-
-Ordered by impact (what unblocks the most, what retires the most risk).
-
-Each item:
-- **What**: one sentence
-- **Why now**: what it unblocks or what risk it retires
-- **Effort**: S / M / L
-- **Solo or parallel**: can an independent agent session handle this?
-
-### Explicitly deprioritized
-
-2-3 things the user might be tempted to work on that should wait.
-Say why each one should wait.
-
-### Concurrent agent plan
-
-If 2+ items are parallelizable, propose a specific split:
-- Which items go to which agent session
-- What files each session claims
-- What the coordination boundary is
-
-### Print the summary
-
-Print the full audit to the user. This is ephemeral output, not a persisted file.
-The durable state lives in CONCERNS.md entries.
-The summary is a compass reading, not a stored document.
-
-
-- Start of a work week or sprint
-- After a marathon session when you have lost the big picture
-- When jumping between unrelated tasks
-- Before spinning up parallel agents
-- After a milestone ships
-
-Canonical branch: flags stale canonical branch designations in Active Workflow.
+Read [reference/output-format.md](reference/output-format.md) for the work-items format, the deprioritized list, the concurrent agent plan, and how to print the summary.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

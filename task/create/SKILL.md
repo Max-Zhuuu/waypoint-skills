@@ -19,20 +19,7 @@ Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdo
 Add features to an existing codebase. No phases, no inventory, no MoSCoW.
 Structured enough to ensure specs exist before building and docs get updated after.
 
-
-- Adding a feature or small batch of related features to an existing project
-- The project already has SCOPE.md, CONVENTIONS.md, and a docs structure (from /setup or equivalent)
-- You know roughly what you want to build
-
-## When NOT to use - recommend alternatives
-
-- **No project docs exist:** recommend /setup first
-- **Replacing an existing system layer by layer:** recommend /migrate (parity tracking, inventory, phased cutover)
-- **Building a new product from scratch with unknown scope:** recommend /buildout (MoSCoW prioritization, MVP-first, feedback rounds)
-- **Scope is large (5+ features needing architecture decisions):** recommend /buildout - /create doesn't have gates to catch architectural drift at that scale
-
-Print the recommendation with a plain-language explanation of why, not just the skill name.
-
+If this request doesn't fit /create, see [reference/when-not-to-use.md](reference/when-not-to-use.md) and recommend the matching alternative instead of proceeding.
 
 1. Read existing project docs: SCOPE.md, CONVENTIONS.md, GLOSSARY.md, TESTING.md, CLAUDE.md.
 2. Check for `## Active Workflow` in CLAUDE.md:
@@ -40,7 +27,7 @@ Print the recommendation with a plain-language explanation of why, not just the 
    - **Different skill active** (/migrate or /buildout in progress): warn that starting /create runs alongside that workflow, not inside it. Ask whether to proceed or fold this feature into the active workflow.
    - **Completed workflow** (Status: completed): clear automatically and proceed.
 
-3. Write the workflow record to CLAUDE.md (see Workflow Record below).
+3. Write the workflow record to CLAUDE.md. Use the template in [reference/workflow-record.md](reference/workflow-record.md); see [reference/bridge-behavior.md](reference/bridge-behavior.md) for when this stays task-layer (single session, no record needed) versus project-layer (record written, /check-in picks it up).
 4. Ask what the user wants to build. Inline grill - not AskUserQuestion. Keep it conversational:
 
 ```
@@ -77,37 +64,6 @@ Workflow record cleared. Next session: /check-in to orient.
 ```
 
 Clear the Active Workflow section from CLAUDE.md (or mark as completed with date).
-
-## Workflow Record
-
-On invocation, write or update the `## Active Workflow` section in CLAUDE.md:
-
-```markdown
-## Active Workflow
-
-| Field | Value |
-|-------|-------|
-| Skill | /create |
-| Activated | {date} |
-| Scope | {one-line description of what's being added} |
-| Features | {list of feature names, updated as specs are written} |
-| Status | in progress |
-```
-
-/check-in reads this section to know what workflow is active and orient accordingly.
-When /create completes, update Status to `completed ({date})`.
-
-## Bridge behavior
-
-/create is a bridge skill: works as a single-session orchestrator by default, but can write an Active Workflow record for multi-session features.
-
-**Task-layer mode (default):** user describes a feature, /create sequences spec -> build -> wrapup in one session. No Active Workflow record needed.
-
-**Project-layer mode:** when the feature is large enough to span sessions, /create writes the Active Workflow record (step 3 in On invocation). /check-in picks it up next session.
-
-The user doesn't choose the mode explicitly - /create writes the workflow record by default (step 3). If the work completes in one session, the record is cleared at the end. If the user leaves mid-feature, /check-in finds the record and continues.
-
-**Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
 
 ## Exit
 

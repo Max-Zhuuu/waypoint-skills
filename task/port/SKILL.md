@@ -20,12 +20,7 @@ The migration implementation verb. Backward-looking: capture current behavior, r
 Distinct from `/tdd` which is forward-looking: define desired behavior, test first, build to satisfy.
 
 
-/port is an **orchestrator**, not a laborer. Its responsibilities:
-1. **Brief** - read inputs, synthesize a focused build instruction for subagents
-2. **Review** - evaluate subagent output against spec and source
-3. **Flag** - collect discrepancies as structured flags for /wrapup
-
-/port does NOT update specs or shared docs. It flags discrepancies for /wrapup to resolve.
+Orchestrator: brief subagents from inputs, review output against spec, flag discrepancies for /wrapup.
 
 ## Inputs (three required)
 
@@ -58,8 +53,6 @@ Synthesize a focused build instruction containing:
 - Patterns to follow (from CONVENTIONS.md)
 - Files to create or modify
 - Reference files the subagent can read if it needs detail
-
-The brief is a digested instruction, not a full pass-through of the inputs.
 
 ### 3. Spawn implementation subagent(s)
 
@@ -113,18 +106,7 @@ See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6
 
 ## Concurrency
 
-### Within session
-
-Multiple subagents can run in parallel IF:
-- Non-overlapping entity-local files
-- No shared file changes in the parallel set
-
-Shared file changes (router config, type exports, shared components) serialize through the main context.
-
-### Cross-session
-
-Cross-session coordination (CONCERNS.md Claims section, file claiming, stale entry policy) is owned by the project's CLAUDE.md and hook infrastructure, not this skill.
-/port respects whatever coordination protocol the project defines.
+See [reference/concurrency.md](reference/concurrency.md) for within-session and cross-session rules. Apply them when spawning or coordinating subagents.
 
 ## UX improvements
 
@@ -146,5 +128,5 @@ Writes: none
 Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
 ## References
 
-Methodology references in [REFERENCES.md](REFERENCES.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.
+Methodology references in [reference/references.md](reference/references.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.
 Apply them as judgment calls during briefing and review.

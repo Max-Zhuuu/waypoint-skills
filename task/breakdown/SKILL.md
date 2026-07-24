@@ -6,7 +6,6 @@ status: draft
 
 Does NOT implement. Decomposes specs into build-ready slices.
 
-Decompose a spec into implementable slices.
 Each slice maps to one TDD cycle or one /create invocation.
 
 ## Inputs
@@ -40,22 +39,7 @@ Each slice must be:
 Slice granularity: one slice per screen, per API endpoint, or per behavioral unit.
 If a slice touches more than ~5 files, it's too big - decompose further.
 
-Output format (written to the spec file as a new section):
-
-```markdown
-## Implementation Slices
-
-### Slice 1: {name}
-**Depends on:** none
-**Files:** {list of files this slice creates or modifies}
-**Done when:** {testable condition}
-**Notes:** {any context that helps the implementer}
-
-### Slice 2: {name}
-**Depends on:** Slice 1
-**Files:** {files}
-**Done when:** {condition}
-```
+Output format written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
 
 ### Step 3 - Validate against scope
 
@@ -71,23 +55,7 @@ If an acceptance criterion isn't covered by any slice, it's a gap:
 
 ### Step 4 - Present for review
 
-Show the decomposition:
-
-```
-Spec: {spec name}
-{N} slices, estimated {M} TDD cycles
-
-Build order:
-  1. {slice 1 name} (no dependencies)
-  2. {slice 2 name} (depends on: 1)
-  3. {slice 3 name} (depends on: 1)  <- can run in parallel with 2
-  ...
-
-Coverage: {N}/{M} acceptance criteria mapped.
-{any gaps or scope creep flagged}
-
-Write slices to spec, or adjust?
-```
+Show the decomposition - see [reference/review-format.md](reference/review-format.md) for the presentation template.
 
 ### Step 5 - Write
 
@@ -96,31 +64,9 @@ Do not modify existing spec content - slices are additive.
 
 If a previous `## Implementation Slices` section exists (re-decomposition), replace it entirely.
 
-## Tier-adapted output
+Tier-adapted output (Tier 1/2/3 differences, GitHub sub-issues at Tier 3) - see [reference/tier-output.md](reference/tier-output.md).
 
-| Tier | Output |
-|------|--------|
-| Tier 1 | Ordered list in session context, passed to /tdd |
-| Tier 2 | Written to spec file as `## Implementation Slices` section |
-| Tier 3 | Written to spec + GitHub sub-issues via `gh` CLI |
-
-At Tier 1 (no spec file infrastructure), present slices inline and pass to /tdd directly.
-At Tier 3, after writing to the spec, create GitHub sub-issues:
-
-```bash
-gh issue create --title "Slice 1: {name}" --body "{details}" --project "{project}" --parent "{parent-issue-number}"
-```
-
-## Edge cases
-
-**Spec changes after /breakdown:** if the spec has been modified since the last breakdown (compare the spec's Change Log dates against the slice section timestamp), warn:
-"Spec was updated since breakdown. Re-decompose, or keep current slices?"
-
-**Slice too big:** if a slice's file list exceeds 5 files, offer to sub-decompose.
-
-**Circular dependencies:** if the dependency graph has cycles, flag: "Slices {A} and {B} depend on each other. One must go first - which?"
-
-**No acceptance criteria in spec:** if the spec lacks acceptance criteria, the coverage check can't run. Suggest: "Spec has no acceptance criteria. /spec to add them, or skip coverage check?"
+Edge cases (spec changes after breakdown, oversized slices, circular deps, missing acceptance criteria) - see [reference/edge-cases.md](reference/edge-cases.md).
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
