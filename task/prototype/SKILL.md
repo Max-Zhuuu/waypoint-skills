@@ -42,17 +42,9 @@ The three branches produce very different artifacts - getting this wrong wastes 
 **Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: question)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** none
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: question)
+Writes: none
 ## When done
 
 The _answer_ is the only thing worth keeping from a prototype. Capture it somewhere durable (commit message, ADR via `/grill-with-docs`, spec update via `/spec`, or a `NOTES.md` next to the prototype) along with the question it was answering. If the user is around, that capture is a quick conversation; if not, leave the placeholder so they (or you, on the next pass) can fill in the verdict before deleting the prototype.

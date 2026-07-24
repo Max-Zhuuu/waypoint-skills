@@ -41,17 +41,9 @@ Side effects happen inline:
 - Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/ADR-FORMAT.md).
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: issue, question)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** none
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: issue, question)
+Writes: none
 ## Exit
 
 When proposals are written, suggest next steps:

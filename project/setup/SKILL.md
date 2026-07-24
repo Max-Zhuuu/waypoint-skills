@@ -303,17 +303,10 @@ Detailed instructions in [PHASE-1.md](PHASE-1.md). Read that file before proceed
 - [ ] ARCHITECTURE.md summary exists
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: assumption, question)
-- **Scaffolding writes:** CLAUDE.md, SCOPE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, .claude/ directory
-- **Override:** this is the scaffolding creator - it creates the files other skills read. No tier detection needed (setup IS how you reach Tier 2).
-- **Nudge protocol:** not applicable (setup is the setup)
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no silent scaffolding (always confirm with user), no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: assumption, question)
+Writes: CLAUDE.md, SCOPE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, .claude/ directory
+Override: this is the scaffolding creator - it creates the files other skills read. No tier detection needed (setup IS how you reach Tier 2).
 ## Tone
 
 Direct. This skill produces the foundation everything else builds on.

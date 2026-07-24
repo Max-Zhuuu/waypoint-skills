@@ -139,11 +139,7 @@ If the user redirects ("no, I want X"), adjust without arguing.
 - Never invoke yourself. If you can't classify, fall back to /check-in or /setup, never /how-to-start.
 
 ## Engagement
-
-No tier detection. This skill works identically regardless of project maturity.
-If CONCERNS.md exists, grep it for topic relevance. Otherwise ignore engagement tiers.
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol (this skill opts out).
-
-- **Emits:** nothing (read-only routing skill)
-- **Scaffolding writes:** none
-- **Override:** full opt-out - no tier detection, no concern emission, no nudging
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+Emits: nothing (read-only routing skill)
+Writes: none
+Override: full opt-out - no tier detection, no concern emission, no nudging

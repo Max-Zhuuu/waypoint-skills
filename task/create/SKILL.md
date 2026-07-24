@@ -112,17 +112,10 @@ The user doesn't choose the mode explicitly - /create writes the workflow record
 **Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: issue, question)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: issue, question)
+Writes: none
+Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 ## Tone
 
 Lightweight. This is the daily driver for "I need to add something."

@@ -34,17 +34,10 @@ See [tests.md](tests.md) for good/bad test examples, [mocking.md](mocking.md) fo
 and [refactoring.md](refactoring.md) for refactor candidates.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: issue)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: issue)
+Writes: none
+Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 ## Before committing
 
 **Mid-cycle commits** (individual test passing, incremental refactor):

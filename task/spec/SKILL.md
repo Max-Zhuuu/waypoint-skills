@@ -58,17 +58,9 @@ Use template from Documentation Map "Feature reference" `_TEMPLATE.md` if it exi
 3. Feature tracked in an inventory or roadmap -> add it.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: question, assumption)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** none
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: question, assumption)
+Writes: none
 ## Exit
 
 After the spec is written:

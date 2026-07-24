@@ -142,20 +142,13 @@ The summary is a compass reading, not a stored document.
 - Before spinning up parallel agents
 - After a milestone ships
 
-## Engagement
-
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** flags, audit results, concern triage
-- **Scaffolding writes:** creates CONCERNS.md if absent (seeded with this run's findings)
-- **Override:** Tier 1 behavior differs - creates CONCERNS.md rather than working without it. This is the only skill besides /wrapup with CONCERNS.md creation permission.
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths (except CONCERNS.md), no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
 Canonical branch: flags stale canonical branch designations in Active Workflow.
 
+## Engagement
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+Emits: flags, audit results, concern triage
+Writes: creates CONCERNS.md if absent (seeded with this run's findings)
+Override: Tier 1 behavior differs - creates CONCERNS.md rather than working without it. This is the only skill besides /wrapup with CONCERNS.md creation permission.
 ## Exit
 
 When the audit is complete, suggest next steps:

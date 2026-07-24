@@ -102,21 +102,14 @@ When a gate can't pass because an earlier-phase decision is invalidated:
 Selected archetypes in SCOPE.md add enforcement rules to the core set.
 If no archetypes selected: core rules only + dynamic adaptation.
 
-## Engagement
-
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** flags, session plan, priority recommendations
-- **Scaffolding writes:** writes `.claude/.setup-prompted` on first Tier 1 invocation
-- **Override:** at Tier 1 without CONCERNS.md, skips concern-based priority and falls to phase-advance layer. Does not create CONCERNS.md - that's /reorient's or /wrapup's job.
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
 Provisional-doc pressure: surfaces issue concerns from provisional commits grouped by feature, with age-based escalation (see ENGAGEMENT-REFERENCE.md section 6).
 Stale claims: warns about Claims older than 4 hours at session start.
 
+## Engagement
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+Emits: flags, session plan, priority recommendations
+Writes: writes `.claude/.setup-prompted` on first Tier 1 invocation
+Override: at Tier 1 without CONCERNS.md, skips concern-based priority and falls to phase-advance layer. Does not create CONCERNS.md - that's /reorient's or /wrapup's job.
 ## Dynamic adaptation
 
 /check-in adapts ceremony to observed complexity:

@@ -132,17 +132,10 @@ Cross-session coordination (CONCERNS.md Claims section, file claiming, stale ent
 When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: issue, question)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: issue, question)
+Writes: none
+Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
 ## References
 
 Methodology references in [REFERENCES.md](REFERENCES.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.

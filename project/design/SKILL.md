@@ -150,16 +150,10 @@ Pass the relevant design docs as context to the invoked skill.
 | `docs/design/system/DESIGN-SYSTEM.md` | Wave 3 | Unified shareholder-readable document |
 | `docs/design/archive/` | Any wave | Discarded directions, superseded decisions |
 
-## Engagement
-
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** design decisions, design brief, token rationale
-- **Scaffolding writes:** docs/design/ directory tree
-- **Override:** requires SCOPE.md or equivalent project context. At Tier 1, prompts user for minimal context (product verb, density, primary task) inline rather than hard-gating. This is the only skill that gates on project context - see rationale in DESIGN-DECISIONS.md.
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
 When concerns exist relating to visual consistency, interaction patterns, or design drift, surface them before starting new work.
+
+## Engagement
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+Emits: design decisions, design brief, token rationale
+Writes: docs/design/ directory tree
+Override: requires SCOPE.md or equivalent project context. At Tier 1, prompts user for minimal context (product verb, density, primary task) inline rather than hard-gating. This is the only skill that gates on project context - see rationale in DESIGN-DECISIONS.md.

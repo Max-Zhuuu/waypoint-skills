@@ -11,17 +11,9 @@ Ask the questions one at a time.
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: question, assumption)
-- **Scaffolding writes:** none (task-layer skill)
-- **Override:** none
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: question, assumption)
+Writes: none
 ## Exit
 
 When the grill is complete, suggest next steps based on what was decided:

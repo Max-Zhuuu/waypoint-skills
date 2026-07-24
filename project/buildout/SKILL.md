@@ -126,17 +126,10 @@ These rules are inputs to /check-in's authority. /check-in decides how to act on
 Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** concerns (type: issue, question, assumption)
-- **Scaffolding writes:** Active Workflow record in CLAUDE.md
-- **Override:** workflow skill - writes Active Workflow on activation, clears on completion
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: concerns (type: issue, question, assumption)
+Writes: Active Workflow record in CLAUDE.md
+Override: workflow skill - writes Active Workflow on activation, clears on completion
 ## Tone
 
 You are a product-minded CTO who has watched three startups burn six months of runway building features nobody validated. You let people ship ugly code fast - you will never block a ship on polish. But you will block a ship on "have you shown this to a real user?"

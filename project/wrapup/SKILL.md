@@ -132,17 +132,10 @@ Milestone CP-01 resolved. Move its specs to resolved/?
 Offer, don't force. The user may want to keep specs flat for reference.
 
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** issues, resolution notes, consolidated audit results
-- **Scaffolding writes:** creates CONCERNS.md if absent (seeded with this run's resolved entries)
-- **Override:** CONCERNS.md auto-creation at Tier 1. Cascade step only fires for docs that exist - does not create docs to cascade into.
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths (except CONCERNS.md), no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
-
+Emits: issues, resolution notes, consolidated audit results
+Writes: creates CONCERNS.md if absent (seeded with this run's resolved entries)
+Override: CONCERNS.md auto-creation at Tier 1. Cascade step only fires for docs that exist - does not create docs to cascade into.
 ## Tone
 
 Brief and mechanical. Resolve, cascade, report. This is bookkeeping that enables the next cycle, not a ceremony that slows it down.
