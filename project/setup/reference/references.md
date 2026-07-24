@@ -5,7 +5,7 @@ This file grows as new architecture areas, hooks, and coordination mechanisms ar
 
 ## Architecture Decision Catalog
 
-Areas available for the G4 gate (multiSelect AskUserQuestion in PHASE-1.md). The agent assembles 6-8 relevant areas based on Phase 0 context and marks 4 as Recommended. Descriptions adapt to the project profile.
+Areas available for the G4 gate (multiSelect AskUserQuestion in phase-1.md). The agent assembles 6-8 relevant areas based on Phase 0 context and marks 4 as Recommended. Descriptions adapt to the project profile.
 
 | Area | Base description | Surfaces when |
 |------|-----------------|---------------|
@@ -107,4 +107,4 @@ Adapt the hook for the project:
 
 ## Local Docs Reference
 
-See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for the canonical docs/_local/ structure, file formats, scaling rules, and which skills own each file.
+See [local-docs.md](local-docs.md) for the canonical docs/_local/ structure, file formats, scaling rules, and which skills own each file.

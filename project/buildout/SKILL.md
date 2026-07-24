@@ -29,16 +29,9 @@ Before setup, read `## Active Workflow` in CLAUDE.md.
 
 ## Project intake
 
-Run AskUserQuestion (multiSelect: true) to configure archetypes:
+Read [reference/archetypes-and-ship-tiers.md](reference/archetypes-and-ship-tiers.md) before running intake - it defines what each archetype and ship tier means and adds.
 
-**Which archetypes apply to this project?** (select all that fit, or none)
-
-- **Product** - multiple features, multiple user types, ongoing lifecycle. Adds: scope creep enforcement, unvalidated assumptions check, full discovery phase.
-- **Feature** - multi-screen feature within an existing product. Adds: spec coverage enforcement, reduced discovery.
-- **Deliverable** - report, tool, integration with clear scope. Adds: minimal ceremony, focused build.
-- **Design system** - design language work (tokens, patterns, density). Adds: premature design enforcement during build, design phase after functional gate.
-
-Store archetypes as frontmatter in SCOPE.md:
+Run AskUserQuestion (multiSelect: true): **"Which archetypes apply to this project?"** (Product / Feature / Deliverable / Design system - select all that fit, or none). Store as frontmatter in SCOPE.md:
 
 ```yaml
 ---
@@ -46,39 +39,11 @@ archetypes: [product, design-system]  # or [] for none
 ---
 ```
 
-Archetypes are composable - a project can be both "product" and "design-system."
-No selection = core enforcement rules only + /check-in adapts dynamically.
-The user can change archetypes mid-project without re-running setup.
-
-After archetypes, ask via AskUserQuestion:
-
-**"What ship standard does this project need?"**
-- **Hobby/side project** - deployed, README, no crashes on happy path
-- **Has real users (Recommended)** - pipeline, error handling, persistence, someone else used it
-- **May grow** - monitoring, perf, security, v2 scope
-
-Store as `ship-tier: hobby | users | growth` in SCOPE.md frontmatter. Phase 4 re-confirms before ship checklist.
+Then run AskUserQuestion: **"What ship standard does this project need?"** (Hobby/side project / Has real users (Recommended) / May grow). Store as `ship-tier: hobby | users | growth` in SCOPE.md frontmatter.
 
 ## Workflow record
 
-Write the `## Active Workflow` section to CLAUDE.md:
-
-```markdown
-## Active Workflow
-
-| Field | Value |
-|-------|-------|
-| Skill | /buildout |
-| Activated | {date} |
-| Archetypes | {selected archetypes} |
-| Ship tier | {hobby / users / growth} |
-| Current phase | Phase 2 - Discovery & Validation |
-| Status | in progress |
-```
-
-/check-in reads this to know the workflow and current phase without guessing.
-Update `Current phase` each time a phase gate passes.
-When /buildout completes (Phase 4 gate), update Status to `completed ({date})`.
+Read [reference/workflow-record-format.md](reference/workflow-record-format.md) and write the `## Active Workflow` section to CLAUDE.md using that format. Update `Current phase` each time a phase gate passes. When /buildout completes (Phase 4 gate), update Status to `completed ({date})`.
 
 ## Phase overview
 
@@ -87,9 +52,9 @@ After setup, `/check-in` reads these phase files. Archetypes control which phase
 | Phase | Name | File | Product | Feature | Deliverable |
 |-------|------|------|---------|---------|-------------|
 | 0-1 | Setup | `/setup` + this skill | full | full | full |
-| 2 | Discovery & validation | [02-discovery.md](02-discovery.md) | full | reduced | skip |
-| 3 | MVP build | [03-mvp-build.md](03-mvp-build.md) | full | full | focused |
-| 4 | Iterate & ship | [04-iterate-and-ship.md](04-iterate-and-ship.md) | full | reduced | minimal |
+| 2 | Discovery & validation | [02-discovery.md](phases/02-discovery.md) | full | reduced | skip |
+| 3 | MVP build | [03-mvp-build.md](phases/03-mvp-build.md) | full | full | focused |
+| 4 | Iterate & ship | [04-iterate-and-ship.md](phases/04-iterate-and-ship.md) | full | reduced | minimal |
 
 "Reduced" = fewer checkpoints, lighter ceremony. "Focused" = Must features only, skip Should/Could. "Minimal" = ship checklist only, skip feedback rounds.
 Design system work fires after Phase 3 gate when "design-system" archetype is selected.
@@ -104,26 +69,11 @@ If the user's request doesn't fit /buildout, recommend alternatives:
 
 ## Enforcement inputs
 
-These rules are inputs to /check-in's authority. /check-in decides how to act on them.
-
-### Core (always active)
-
-1. **Code without specs** - features built without a spec
-2. **No phase leapfrogging** - unless /check-in recognizes a regression
-3. **Stale critical concerns** - flags or questions in CONCERNS.md older than 1 week
-
-### Archetype: product (extra rules)
-
-4. **Unvalidated assumptions** - building on assumptions that haven't been tested
-5. **Scope creep** - features not in SCOPE.md showing up in code
-
-### Archetype: design-system (extra rules)
-
-6. **Premature design** - design implementation in production code before functional gate
+These rules are inputs to /check-in's authority; /check-in decides how to act on them. Read [reference/enforcement-rules.md](reference/enforcement-rules.md) for the full core + per-archetype rule set before handing off to /check-in.
 
 ## References
 
-Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
+Process references in [REFERENCES.md](reference/references.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
 
 ## Exit
 

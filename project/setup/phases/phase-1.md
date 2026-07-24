@@ -32,7 +32,7 @@ Skip this section entirely when running on a fresh project or when all existing 
 
 Invoke `/grill-with-docs` for each decision that meets the ADR threshold (hard to reverse, surprising without context, real trade-off). For obvious stack choices that don't warrant an ADR, document them in ARCHITECTURE.md directly.
 
-Assemble 6-8 relevant architecture areas from the catalog in [REFERENCES.md](REFERENCES.md#architecture-decision-catalog) based on Phase 0 context. Mark 4 as Recommended using the project-type mapping in the catalog.
+Assemble 6-8 relevant architecture areas from the catalog in [references.md](../reference/references.md#architecture-decision-catalog) based on Phase 0 context. Mark 4 as Recommended using the project-type mapping in the catalog.
 
 Present via AskUserQuestion (multiSelect: true):
 
@@ -117,7 +117,7 @@ For migration projects, add `docs/program-legacy-{source}/` alongside `program/`
 ```
 
 The `docs/_local/` structure is minimal: `learnings/` and `notes/`.
-See [LOCAL-DOCS-REFERENCE.md](LOCAL-DOCS-REFERENCE.md) for scaling rules and which skills own each file.
+See [local-docs.md](../reference/local-docs.md) for scaling rules and which skills own each file.
 
 ## Spec templates
 
@@ -198,7 +198,7 @@ After CLAUDE.md is generated, ask via `AskUserQuestion` (multiSelect: true):
 
 **Which hooks do you want to set up?**
 - **CONCERNS.md Claims (Recommended)** - UserPromptSubmit hook that injects concurrent agent tracker into every prompt. Prevents file conflicts when multiple sessions modify the codebase simultaneously.
-- **I have other hooks I want to set up** - Describe additional hooks to wire. Each gets added to `.claude/settings.json` and templated in [REFERENCES.md](REFERENCES.md#hook-catalog) for future projects.
+- **I have other hooks I want to set up** - Describe additional hooks to wire. Each gets added to `.claude/settings.json` and templated in [references.md](../reference/references.md#hook-catalog) for future projects.
 
-If Claims hook is selected, follow the "Concurrent Agent Coordination" template in [REFERENCES.md](REFERENCES.md#hook-catalog).
-If other hooks is selected, grill the user on each additional hook: what event triggers it, what it checks or injects, and what the failure mode looks like. Add each to the Hook Catalog in REFERENCES.md.
+If Claims hook is selected, follow the "Concurrent Agent Coordination" template in [references.md](../reference/references.md#hook-catalog).
+If other hooks is selected, grill the user on each additional hook: what event triggers it, what it checks or injects, and what the failure mode looks like. Add each to the Hook Catalog in references.md.

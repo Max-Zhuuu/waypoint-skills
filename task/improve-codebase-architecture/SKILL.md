@@ -16,29 +16,29 @@ Execute each phase using the tools available in this environment.
 Use the Agent tool with `subagent_type=Explore` to walk the codebase.
 Read the project's domain glossary (GLOSSARY.md) and ADRs before exploring.
 
-See [LANGUAGE.md](LANGUAGE.md) for the full vocabulary and principles.
+See [language.md](reference/language.md) for the full vocabulary and principles.
 
 ### Phase 2 - Present candidates
 
 Write a self-contained HTML report to the OS temp directory (nothing in the repo).
 Use Tailwind via CDN for layout, Mermaid via CDN for dependency/flow diagrams.
 Each candidate gets a before/after visualization as a card.
-See [HTML-REPORT.md](HTML-REPORT.md) for the HTML scaffold and styling guidance.
+See [html-report.md](reference/html-report.md) for the HTML scaffold and styling guidance.
 
 Open the file for the user and tell them the absolute path.
 Ask: "Which of these would you like to explore?"
 
 ### Phase 3 - Deepen
 
-See [DEEPENING.md](DEEPENING.md) for dependency categories and seam discipline.
+See [deepening.md](reference/deepening.md) for dependency categories and seam discipline.
 
 For interface design alternatives, spawn 3+ parallel agents with different constraints
 (minimize interface, maximize flexibility, optimize for common caller, ports & adapters).
-See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for the sub-agent pattern.
+See [interface-design.md](reference/interface-design.md) for the sub-agent pattern.
 
 Side effects happen inline:
-- New domain term -> update GLOSSARY.md (see task/grill-with-docs/GLOSSARY-FORMAT.md).
-- Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/ADR-FORMAT.md).
+- New domain term -> update GLOSSARY.md (see task/grill-with-docs/reference/glossary-format.md).
+- Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/reference/adr-format.md).
 
 ## Tone
 
