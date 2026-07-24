@@ -158,37 +158,37 @@ They are the complete methodology without any tool-specific instructions.
 
 ### Orient
 
-- **[setup](project/setup/SKILL.md)** - Project kickoff: scoping grill, architecture decisions, doc structure, CLAUDE.md generation. The foundation every other skill builds on.
-- **[how-to-start](task/how-to-start/SKILL.md)** - Context-aware skill router. Reads project state, classifies intent, recommends the right skill with a one-line reason.
+- **[setup](project/setup/SKILL.md)** - Kickoff a project with scoping grill, architecture decisions, and documentation structure.
+- **[how-to-start](task/how-to-start/SKILL.md)** - Route to the right skill based on project state and user intent.
 - **[check-in](project/check-in/SKILL.md)** - Session authority. Reads concerns, proposes next task, fires checkpoints. The daily verb.
-- **[reorient](project/reorient/SKILL.md)** - Strategic course correction. Snapshots real project state, surfaces deferred decisions, audits progress. Use when scattered or between milestones.
+- **[reorient](project/reorient/SKILL.md)** - Snapshot project state, surface deferred decisions, audit progress. Use when scattered or between milestones.
 
 ### Plan
 
-- **[spec](task/spec/SKILL.md)** - Grill requirements until they're precise, then write a spec with acceptance criteria. The gateway to building anything non-trivial.
-- **[breakdown](task/breakdown/SKILL.md)** - Decompose a spec into implementable slices with dependency ordering. Each slice maps to one TDD cycle.
-- **[grill-me](task/grill-me/SKILL.md)** - Open-ended interview on any plan or decision. Walk down each branch of the design tree, resolving dependencies one by one.
-- **[grill-with-docs](task/grill-with-docs/SKILL.md)** - Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates GLOSSARY.md and ADRs inline.
-- **[design](project/design/SKILL.md)** - Design system creation in three waves: Soul (product verb, emotional range, competitive audit), Tokens (color, type, spacing, motion), Proof (real screens stress-tested against the tokens).
+- **[spec](task/spec/SKILL.md)** - Grill scope and acceptance criteria, output a spec file.
+- **[breakdown](task/breakdown/SKILL.md)** - Decompose a spec into implementable slices with dependency ordering.
+- **[grill-me](task/grill-me/SKILL.md)** - Interview relentlessly about a plan or design until reaching shared understanding on every branch.
+- **[grill-with-docs](task/grill-with-docs/SKILL.md)** - Grill a plan against the domain model. Sharpen terminology, update GLOSSARY.md and ADRs as decisions crystallize.
+- **[design](project/design/SKILL.md)** - Create and evolve a design system through three waves: Soul, Tokens, Proof.
 
 ### Build
 
-- **[tdd](task/tdd/SKILL.md)** - Test-driven development with red-green-refactor loop. Plans slices, fires a tracer bullet, then builds incrementally.
-- **[create](task/create/SKILL.md)** - Add a feature end-to-end: spec, build, wrapup. Lighter than /buildout, structured enough to keep docs current.
-- **[port](task/port/SKILL.md)** - Migration implementation verb. Reads spec, logic doc, and source system, briefs subagents, reviews output, flags discrepancies.
-- **[diagnose](task/diagnose/SKILL.md)** - Disciplined diagnosis loop: reproduce, minimise, hypothesise, instrument, fix, regression-test. For hard bugs and performance regressions.
-- **[prototype](task/prototype/SKILL.md)** - Quick throwaway mockup. Routes between a terminal app (state/logic questions), UI variations (toggleable from one route), or a persistent design panel (visual exploration).
+- **[tdd](task/tdd/SKILL.md)** - Build features or fix bugs with red-green-refactor. Test-first, behavior-driven.
+- **[create](task/create/SKILL.md)** - Add features to an existing codebase. Ensures specs exist and docs stay current. Lighter than /buildout.
+- **[port](task/port/SKILL.md)** - Implement a migration screen from spec + logic doc + source. Brief subagents, review output, flag discrepancies.
+- **[diagnose](task/diagnose/SKILL.md)** - Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.
+- **[prototype](task/prototype/SKILL.md)** - Build throwaway prototypes to flesh out a design. Routes between terminal app, UI variations, or design panel.
 
 ### Sustain
 
-- **[wrapup](project/wrapup/SKILL.md)** - Completion verb. Resolves concerns from implementation, cascades to shared docs, evaluates gate criteria.
-- **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Surface architectural friction informed by the domain glossary and ADRs. Propose improvements, don't just list problems.
-- **[learn](task/learn/SKILL.md)** - Learning-oriented approach to any code task. Presents meaningfully different options with trade-off explanations and terminology bridging.
+- **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd.
+- **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.
+- **[learn](task/learn/SKILL.md)** - Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges.
 
 ### Workflows
 
-- **[migrate](project/migrate/SKILL.md)** - Replace an existing system layer by layer across 7 phases (docs sprint through cutover). One-time setup extending /setup, then /check-in drives daily sessions.
-- **[buildout](project/buildout/SKILL.md)** - Build a new product across 4 phases (discovery through iterate-and-ship). MoSCoW structure, phase resolution, validation depth tuning.
+- **[migrate](project/migrate/SKILL.md)** - Replace an existing system layer by layer until the new application is complete. Extends /setup for migrations.
+- **[buildout](project/buildout/SKILL.md)** - Configure greenfield project scope with MoSCoW priorities and phase resolution. Extends /setup.
 
 ## How it fits together
 
@@ -256,9 +256,22 @@ mindmap
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how the system works internally: the process/adapter split, concerns tracking, engagement tiers, and the skill directory structure.
 
+## Skill structure
+
+Each skill is a directory under `task/` or `project/` with a `SKILL.md` that Claude Code auto-loads on invocation.
+Supplementary content lives in two optional subfolders:
+
+- **`phases/`** - Files routed one-at-a-time based on current state (phase files, wave files, branch files)
+- **`reference/`** - Conditionally loaded material (priority stacks, format specs, checklists)
+
+SKILL.md targets 50-80 lines (max 100, CI enforced).
+Content ownership: SKILL.md declares what's different, never restates shared protocol.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full structural rules.
+
 ## Reference
 
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
 - [process/](process/) - Standalone methodology documents (no AI required)
+- [templates/](templates/) - Shared file templates (feature specs, logic docs, glossary)
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
 - [internals/](internals/) - System design docs (concepts, engagement model)
