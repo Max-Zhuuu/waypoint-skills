@@ -9,7 +9,7 @@ metadata:
   status: stable
 ---
 
-# /design
+Does NOT write component code. Produces design tokens and system specs.
 
 Design system coordinator.
 Routes to the right wave based on project state, tracks cross-wave concerns, and manages the design document family.
@@ -48,7 +48,6 @@ Then ask:
 
 If the user provides enough inline context without SCOPE.md, proceed. The gate is on understanding, not on file existence.
 
-## On invocation - detect mode and route
 
 Check for existing design artifacts:
 
@@ -151,6 +150,15 @@ Pass the relevant design docs as context to the invoked skill.
 | `docs/design/archive/` | Any wave | Discarded directions, superseded decisions |
 
 When concerns exist relating to visual consistency, interaction patterns, or design drift, surface them before starting new work.
+
+## Tone
+
+Principled. Every token choice traces to a product decision.
+
+## Exit
+
+- /prototype to validate decisions visually.
+- /create to implement tokens in code.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

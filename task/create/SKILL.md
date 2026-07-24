@@ -14,12 +14,11 @@ signals:
   complete: suggests /wrapup
 ---
 
-# Create
+Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
 
 Add features to an existing codebase. No phases, no inventory, no MoSCoW.
 Structured enough to ensure specs exist before building and docs get updated after.
 
-## When to use
 
 - Adding a feature or small batch of related features to an existing project
 - The project already has SCOPE.md, CONVENTIONS.md, and a docs structure (from /setup or equivalent)
@@ -34,7 +33,6 @@ Structured enough to ensure specs exist before building and docs get updated aft
 
 Print the recommendation with a plain-language explanation of why, not just the skill name.
 
-## On invocation
 
 1. Read existing project docs: SCOPE.md, CONVENTIONS.md, GLOSSARY.md, TESTING.md, CLAUDE.md.
 2. Check for `## Active Workflow` in CLAUDE.md:
@@ -110,6 +108,11 @@ When /create completes, update Status to `completed ({date})`.
 The user doesn't choose the mode explicitly - /create writes the workflow record by default (step 3). If the work completes in one session, the record is cleared at the end. If the user leaves mid-feature, /check-in finds the record and continues.
 
 **Without scaffolding:** core orchestration loop works (spec -> build -> wrapup). No SCOPE.md cross-referencing, no convention enforcement. Workflow record still written to CLAUDE.md if the file exists.
+
+## Exit
+
+- /tdd to build slices with tests.
+- /wrapup to resolve concerns and cascade docs.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

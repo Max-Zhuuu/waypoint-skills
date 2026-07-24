@@ -13,13 +13,12 @@ signals:
   complete: suggests /wrapup to user
 ---
 
-# Port
+Does NOT write specs or logic docs. Reads them and implements.
 
 The migration implementation verb. Backward-looking: capture current behavior, replicate, verify parity.
 
 Distinct from `/tdd` which is forward-looking: define desired behavior, test first, build to satisfy.
 
-## Role
 
 /port is an **orchestrator**, not a laborer. Its responsibilities:
 1. **Brief** - read inputs, synthesize a focused build instruction for subagents
@@ -130,6 +129,15 @@ Cross-session coordination (CONCERNS.md Claims section, file claiming, stale ent
 ## UX improvements
 
 When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
+
+## Tone
+
+Faithful to the source system. Deviate only when documented.
+
+## Exit
+
+- /wrapup to resolve concerns and cascade docs.
+- /check-in for next migration screen.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

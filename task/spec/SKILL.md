@@ -4,7 +4,7 @@ description: Feature-level requirements skill. Grills on scope and acceptance cr
 status: stable
 ---
 
-# Spec
+Does NOT implement. Produces the spec, then stops.
 
 Follow the requirements methodology in [process/requirements.md](../../process/requirements.md).
 Execute each phase using the tools available in this environment.

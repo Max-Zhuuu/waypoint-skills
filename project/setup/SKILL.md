@@ -4,12 +4,11 @@ description: Structured project kickoff with scoping grill, architecture decisio
 status: stable
 ---
 
-# Project Setup
+Does NOT build features. Creates project scaffolding and foundational decisions.
 
 Establishes the foundation every project needs before building starts.
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
-## On invocation
 
 Check for existing outputs: SCOPE.md, GLOSSARY.md, CLAUDE.md, docs/ tree.
 
@@ -301,6 +300,11 @@ Detailed instructions in [PHASE-1.md](PHASE-1.md). Read that file before proceed
 - [ ] Documentation structure created with spec templates
 - [ ] CLAUDE.md with Project Scaffold + Documentation Map sections
 - [ ] ARCHITECTURE.md summary exists
+
+## Exit
+
+- /check-in for first working session.
+- /breakdown to decompose the initial scope into slices.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

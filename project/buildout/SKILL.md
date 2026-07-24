@@ -4,7 +4,7 @@ description: One-time greenfield setup extending /setup. Configures project scop
 status: stable
 ---
 
-# Buildout
+Does NOT replace /setup. Extends it with greenfield MoSCoW structure and phase resolution.
 
 One-time setup skill. Extends `/setup` with greenfield-specific configuration.
 Run this once to configure the project as a new build. After setup, use `/check-in` every session.
@@ -124,6 +124,10 @@ These rules are inputs to /check-in's authority. /check-in decides how to act on
 ## References
 
 Process references in [REFERENCES.md](REFERENCES.md): Shape Up (appetite vs estimates), JTBD, Kano model, Build-Measure-Learn.
+
+## Exit
+
+- /check-in for daily sessions after initial setup.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

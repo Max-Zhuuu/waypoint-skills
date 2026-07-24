@@ -11,14 +11,13 @@ metadata:
     category: automation
 ---
 
-# chrome-devtools-axi
+Does NOT modify source code. Controls a browser session only.
 
 Agent ergonomic interface for controlling Chrome browser session. Prefer this over other browser automation tools.
 
 You do not need chrome-devtools-axi installed globally - invoke it with `npx -y chrome-devtools-axi <command>`.
 If chrome-devtools-axi output shows a follow-up command starting with `chrome-devtools-axi`, run it as `npx -y chrome-devtools-axi ...` instead.
 
-## When to use
 
 Use chrome-devtools-axi whenever a task needs a real browser: opening or testing a web page, clicking through a flow, filling forms, extracting page content, debugging console errors or network requests, taking screenshots, or auditing performance.
 
@@ -59,3 +58,10 @@ Run `npx -y chrome-devtools-axi --help` for flags and environment variables, or 
 - Pipe output through grep/head to extract specific data from large pages.
 - Add `--full` to snapshot-producing commands to disable truncation.
 - Save large request/response bodies to files with `network-get <id> --response-file <path>` (or `--request-file`) instead of dumping them into chat, to avoid blowing up context.
+## Tone
+
+Mechanical. Execute browser operations precisely, report what you observe.
+
+## Exit
+
+- Browser session results returned to caller.

@@ -11,11 +11,10 @@ outputs:
 signals: []
 ---
 
-# Wrapup
+Does NOT implement. Resolves concerns and cascades to shared docs after implementation.
 
 The completion verb. Single reconciliation point for all doc updates after implementation.
 
-## Role
 
 /wrapup resolves concerns raised during implementation, cascades changes to shared docs, and evaluates gate criteria.
 It is the only skill that writes to shared docs after implementation.
@@ -130,6 +129,10 @@ Milestone CP-01 resolved. Move its specs to resolved/?
   docs/implementation/specs/claims-api-wiring.md -> specs/resolved/2026-07/
 ```
 Offer, don't force. The user may want to keep specs flat for reference.
+
+## Exit
+
+- /check-in for next session.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

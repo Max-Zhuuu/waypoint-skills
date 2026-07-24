@@ -4,7 +4,7 @@ description: Disciplined diagnosis loop for hard bugs and performance regression
 status: stable
 ---
 
-# Diagnose
+Does NOT skip straight to a fix. Runs the full diagnosis loop.
 
 Follow the debugging methodology in [process/debugging.md](../../process/debugging.md).
 Execute each phase using the tools available in this environment.
@@ -41,7 +41,7 @@ Follow the quiz and practice protocols in [learn/LEARN-REFERENCE.md](../../task/
 Update GLOSSARY.md with domain terms only (not general programming concepts).
 Link further-reading sources per [learn/REFERENCES.md](../../task/learn/REFERENCES.md#source-trust-tiers).
 
-## Before committing
+## Exit
 
 Bug fixes are typically stable commits. Run mini-wrapup:
 - Spec sync: does the fix invalidate any spec assumptions?
@@ -53,6 +53,10 @@ If the fix is a workaround or the root cause is unclear, commit as provisional w
 State next step: "/wrapup to update shared docs, or another bug?"
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
+
+## Tone
+
+Clinical. Follow the evidence, not the hunch.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

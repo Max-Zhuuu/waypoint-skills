@@ -4,7 +4,7 @@ description: Build a throwaway prototype to flesh out a design before committing
 status: stable
 ---
 
-# Prototype
+Does NOT produce production code. Throwaway only.
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
@@ -41,10 +41,14 @@ The three branches produce very different artifacts - getting this wrong wastes 
 
 **Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
 
+## Tone
+
+Experimental. Move fast, throw things away, learn.
+
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: question)
 Writes: none
-## When done
+## Exit
 
 The _answer_ is the only thing worth keeping from a prototype. Capture it somewhere durable (commit message, ADR via `/grill-with-docs`, spec update via `/spec`, or a `NOTES.md` next to the prototype) along with the question it was answering. If the user is around, that capture is a quick conversation; if not, leave the placeholder so they (or you, on the next pass) can fill in the verdict before deleting the prototype.

@@ -4,7 +4,7 @@ description: Helps users discover and install agent skills when they ask questio
 status: experimental
 ---
 
-# Find Skills
+Does NOT install skills automatically. Discovers, recommends, and presents install commands.
 
 This skill helps you discover and install skills from the open agent skills ecosystem.
 
@@ -141,3 +141,10 @@ I can still help you with this task directly! Would you like me to proceed?
 If this is something you do often, you could create your own skill:
 npx skills init my-xyz-skill
 ```
+## Tone
+
+Concise. Skill name, one-line reason, install command.
+
+## Exit
+
+- Discovery complete. User installs selected skills or moves on.

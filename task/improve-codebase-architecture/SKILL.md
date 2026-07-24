@@ -4,7 +4,7 @@ description: Find deepening opportunities in a codebase, informed by the domain 
 status: stable
 ---
 
-# Improve Codebase Architecture
+Does NOT refactor. Identifies opportunities and proposes changes.
 
 Follow the architecture review methodology in [process/architecture-review.md](../../process/architecture-review.md).
 Execute each phase using the tools available in this environment.
@@ -39,6 +39,10 @@ See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for the sub-agent pattern.
 Side effects happen inline:
 - New domain term -> update GLOSSARY.md (see task/grill-with-docs/GLOSSARY-FORMAT.md).
 - Rejected candidate with load-bearing reason -> offer an ADR (see task/grill-with-docs/ADR-FORMAT.md).
+
+## Tone
+
+Observational. Report what you find, propose what you would change.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

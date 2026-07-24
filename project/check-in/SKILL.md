@@ -8,14 +8,13 @@ signals:
   proposes: implementation verb (/port, /tdd, or user-chosen methodology)
 ---
 
-# Check-in
+Does NOT implement. Does NOT update docs (that is /wrapup). Proposes work, then asks which verb to invoke.
 
 The session authority. Run this every time you sit down to work.
 Reads project state, proposes what to do next, fires pre-build checkpoints.
 
 Does NOT implement. Does NOT update docs (that's /wrapup). Proposes work, then asks the user which implementation verb to invoke.
 
-## On invocation
 
 1. Read `## Active Workflow` from CLAUDE.md. This tells you the active skill, current phase, and activation date.
 2. If no workflow record: detect project type from SCOPE.md frontmatter. Recommend /migrate, /buildout, or /create.
@@ -104,6 +103,11 @@ If no archetypes selected: core rules only + dynamic adaptation.
 
 Provisional-doc pressure: surfaces issue concerns from provisional commits grouped by feature, with age-based escalation (see ENGAGEMENT-REFERENCE.md section 6).
 Stale claims: warns about Claims older than 4 hours at session start.
+
+## Exit
+
+- Invokes the chosen implementation skill (/port, /create, /tdd).
+- Session continues under the invoked skill.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

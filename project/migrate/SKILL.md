@@ -4,11 +4,7 @@ description: Replace an existing system layer by layer - screens, data layers, i
 status: stable
 ---
 
-# Migrate
-
-Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete.
-One-time setup extending `/setup` with migration-specific configuration.
-Run this once to configure the project. After setup, use `/check-in` every session.
+Does NOT replace /setup. Extends it with migration-specific phases and inventory tracking.
 
 ## Prerequisites
 
@@ -171,6 +167,10 @@ The friction is intentional. Single-select.
 ## References
 
 Process references in [REFERENCES.md](REFERENCES.md): Spolsky's rewrite warning, Feathers' "legacy code is code without tests," Beck's "make the change easy."
+
+## Exit
+
+- /check-in for daily sessions after initial setup.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

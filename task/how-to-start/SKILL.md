@@ -9,7 +9,7 @@ metadata:
   status: stable
 ---
 
-# /how-to-start
+Does NOT execute work. Routes to the right skill and stops.
 
 Context-aware front door to the skill family.
 User arrives with something vague. You read project state, classify intent, recommend 1-2 skills, invoke the chosen one.
@@ -137,6 +137,14 @@ If the user redirects ("no, I want X"), adjust without arguing.
 - One clarifying question max. If you can't classify after that, default to /check-in (project exists) or /setup (no project).
 - Pass the user's original input to the invoked skill. Don't rephrase or summarize it.
 - Never invoke yourself. If you can't classify, fall back to /check-in or /setup, never /how-to-start.
+
+## Tone
+
+Brief. Recommend one skill with one reason, then stop.
+
+## Exit
+
+- Routes to the recommended skill. The routing is the exit.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

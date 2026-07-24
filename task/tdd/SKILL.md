@@ -6,7 +6,7 @@ signals:
   - complete: suggests /wrapup
 ---
 
-# Test-Driven Development
+Does NOT skip tests. Red-green-refactor only.
 
 Follow the TDD methodology in [process/tdd.md](../../process/tdd.md).
 Execute each phase using the tools available in this environment.
@@ -33,12 +33,16 @@ See [tests.md](tests.md) for good/bad test examples, [mocking.md](mocking.md) fo
 [deep-modules.md](deep-modules.md) for interface depth, [interface-design.md](interface-design.md) for testability,
 and [refactoring.md](refactoring.md) for refactor candidates.
 
+## Tone
+
+Disciplined. One test, one implementation, no shortcuts.
+
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: issue)
 Writes: none
 Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
-## Before committing
+## Exit
 
 **Mid-cycle commits** (individual test passing, incremental refactor):
 Auto-provisional. Emit issue concern silently. Commit with `[provisional]` marker.

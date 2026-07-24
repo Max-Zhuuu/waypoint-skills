@@ -4,7 +4,7 @@ description: Strategic course correction. Snapshots real project state, surfaces
 status: stable
 ---
 
-# Reorient
+Does NOT implement. Audits state, surfaces deferred decisions, outputs a plan.
 
 A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
 This is not a status report - it is a course correction.
@@ -134,7 +134,6 @@ Print the full audit to the user. This is ephemeral output, not a persisted file
 The durable state lives in CONCERNS.md entries.
 The summary is a compass reading, not a stored document.
 
-## When to use
 
 - Start of a work week or sprint
 - After a marathon session when you have lost the big picture

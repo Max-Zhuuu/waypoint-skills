@@ -4,7 +4,7 @@ description: Learning-oriented approach to any code task - new features, refacto
 status: stable
 ---
 
-# Learn
+Does NOT build production code. Teaches through exploration of options and trade-offs.
 
 Follow the structured learning methodology in [process/learning.md](../../process/learning.md).
 Execute each phase using the tools available in this environment.
