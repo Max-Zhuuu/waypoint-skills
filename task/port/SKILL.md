@@ -14,9 +14,7 @@ signals:
 ---
 
 The migration implementation verb. Backward-looking: capture current behavior, replicate, verify parity.
-
 Distinct from `/tdd` which is forward-looking: define desired behavior, test first, build to satisfy.
-
 
 Orchestrator: brief subagents from inputs, review output against spec, flag discrepancies for /wrapup.
 
@@ -34,81 +32,38 @@ If any input is missing, stop and report. Do not build without all three.
 
 ### 1. Read and synthesize
 
-Read all three inputs fully. Identify:
-- Fields, controls, and their behaviors
-- Conditional visibility rules
-- Navigation paths
-- Patterns from CONVENTIONS.md that apply
-- Whether this entity needs shared file changes (new route, new type export, new shared component)
+Read all three inputs fully. Identify fields, controls, conditional visibility, navigation paths, applicable CONVENTIONS.md patterns, and whether shared file changes are needed (route, type export, shared component).
 
 ### 2. Generate subagent brief
 
-Synthesize a focused build instruction containing:
-- Entity name and purpose (one sentence)
-- Fields table (name, type, source, editable, default)
-- Controls and behaviors (what each does)
-- Conditional visibility rules
-- Patterns to follow (from CONVENTIONS.md)
-- Files to create or modify
-- Reference files the subagent can read if it needs detail
+Synthesize a focused build instruction: entity name/purpose (one sentence), fields table (name, type, source, editable, default), controls and behaviors, conditional visibility rules, patterns to follow, files to create/modify, reference files for detail checks.
 
-### 3. Spawn implementation subagent(s)
+### 3. Spawn subagent(s)
 
-Classify the work:
-- **Entity-local only** (no shared file changes): safe to parallelize with other /port instances
-- **Touches shared files** (router, shared types, shared components): serialize
+- **Entity-local only** (no shared file changes): safe to parallelize
+- **Touches shared files** (router, types, shared components): serialize
 
-The subagent builds from the brief. It has read access to full spec/source if needed for detail checks.
+Subagent builds from the brief with read access to full spec/source for detail checks.
 
-### 4. Review subagent output
+### 4. Review and finalize
 
-After the subagent completes, review against the spec and source:
-- Fields present and correct against spec?
-- Controls match source system behavior?
-- Conditional visibility rules implemented?
-- Navigation paths work?
-- Tests pass?
+Review subagent output against spec and source using the [review protocol](reference/review-protocol.md): field/control/visibility checklist, concern emission format, and pre-commit verification.
+Fix issues directly or redirect the subagent.
 
-If the output has issues: direct the subagent to fix, or fix in the main context.
-
-### 5. Emit concerns
-
-When cross-reference finds discrepancies between spec and reality:
-- DO NOT update the spec. DO NOT update shared docs.
-- Emit each discrepancy as a concern in CONCERNS.md (type: issue, source: /port, refs: entity spec):
-
-```markdown
-### C-{NNN} [open] Spec says field X is editable, source has it read-only in status=Closed
-type: issue | raised: {date} | source: /port
-refs: docs/reference/features/{entity}.md
-```
-
-These concerns are /wrapup's input.
-
-### 6. Before committing
-
-Run test suite - zero failures required.
-Port builds are typically stable (parity-verified). Run mini-wrapup:
-- Spec sync: does the built screen match the feature spec?
-- Term/pattern capture: did porting reveal domain terms or patterns?
-- Concern resolution: does this work resolve any open concerns?
-
-If parity is partial or uncertain, commit as provisional with `[provisional]` marker.
-Mark `[P]` in inventory.
+Run test suite - zero failures required. Mark `[P]` in inventory.
+If parity is partial or uncertain, commit with `[provisional]` marker.
 
 ```
 Build complete. {N} concerns emitted. /wrapup to resolve, or continue to next entity.
 ```
 
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
-
 ## Concurrency
 
-See [reference/concurrency.md](reference/concurrency.md) for within-session and cross-session rules. Apply them when spawning or coordinating subagents.
+See [reference/concurrency.md](reference/concurrency.md) for within-session and cross-session rules.
 
 ## UX improvements
 
-When you spot a UX improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement improvements. Design work waits for Phase 6b.
+Spot an improvement during porting: write a one-liner in `docs/improvements/{entity}.md` and keep porting. Do NOT implement.
 
 ## Tone
 
@@ -122,11 +77,8 @@ Faithful to the source system. Deviate only when documented.
 Does NOT write specs or logic docs. Reads them and implements.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-Emits: concerns (type: issue, question)
-Writes: none
-Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6). Pre-condition: feature spec, logic doc, and source system access required regardless of tier.
-## References
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md). Emits: concerns (type: issue, question). Writes: none.
+Override: commit-producing skill. Pre-condition: all three inputs required.
 
-Methodology references in [reference/references.md](reference/references.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth classification.
-Apply them as judgment calls during briefing and review.
+## References
+See [reference/references.md](reference/references.md): characterization tests, Strangler Fig, seam identification, structural enforcement, review depth.
