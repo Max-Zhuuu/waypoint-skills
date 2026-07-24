@@ -6,10 +6,9 @@ status: stable
 
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
-Detect project state by checking which of these exist (use `test -f` - missing files are normal):
-SCOPE.md, _GLOSSARY.md, CLAUDE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, docs/adr/, docs/implementation/. Then route:
+Check for existing outputs: SCOPE.md, GLOSSARY.md, CLAUDE.md, docs/ tree.
 
-**Starting fresh** (none or only CLAUDE.md exist): announce two phases (scope grill, then architecture & standards), start Phase 0. After the opening block, add: `Related: /spec, /grill-with-docs, /reorient`
+**Starting fresh** (none exist): announce two phases (scope grill, then architecture & standards), start Phase 0. After the opening block, add: `Related: /spec, /grill-with-docs, /reorient`
 
 **Resuming** (some exist, some missing): list done/missing, pick up at first incomplete phase.
 
