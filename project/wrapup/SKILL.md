@@ -1,6 +1,6 @@
 ---
 name: wrapup
-description: Completion verb. Resolves concerns from implementation, cascades to shared docs, evaluates gate criteria. Run after /port or /tdd.
+description: "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd."
 status: stable
 inputs:
   concerns: CONCERNS.md entries referencing the current entity

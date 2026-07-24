@@ -1,6 +1,6 @@
 ---
 name: learn
-description: Learning-oriented approach to any code task - new features, refactors, fixes, design patterns, architecture choices. Presents meaningfully different options with trade-off explanations and a terminology bridge. Use when you want to understand why one solution beats another.
+description: "Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges."
 status: stable
 ---
 

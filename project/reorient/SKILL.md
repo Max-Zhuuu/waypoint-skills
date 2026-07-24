@@ -1,6 +1,6 @@
 ---
 name: reorient
-description: Strategic course correction. Snapshots real project state, surfaces deferred decisions, audits progress, outputs a focused plan. Use when scattered, between milestones, or before a work sprint.
+description: "Snapshot project state, surface deferred decisions, audit progress. Use when scattered or between milestones."
 status: stable
 ---
 

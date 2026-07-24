@@ -1,6 +1,6 @@
 ---
 name: buildout
-description: One-time greenfield setup extending /setup. Configures project scope via intake questions (scope, validation depth, design depth), creates MoSCoW structure, and sets phase resolution. Run once at project start, then use /check-in for daily sessions.
+description: "Configure greenfield project scope with MoSCoW priorities and phase resolution. Extends /setup, run once at start."
 status: stable
 ---
 

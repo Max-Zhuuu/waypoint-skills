@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Feature-level requirements skill. Grills on scope and acceptance criteria, outputs a spec file. Use when starting a new feature, when requirements are vague, or when the user says "spec this", "write a spec", "PRD".
+description: "Grill scope and acceptance criteria, output a spec file. Use when starting a feature or requirements are vague."
 status: stable
 ---
 

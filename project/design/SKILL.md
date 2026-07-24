@@ -1,6 +1,6 @@
 ---
 name: design
-description: "Design system creation and evolution. Three waves as separate stages: Soul (product verb, emotional range, competitive audit), Tokens (color roles, type scale, spacing, motion), Proof (real screens stress-tested against the tokens). Each wave eagerly prototypes to validate decisions visually."
+description: "Create and evolve a design system through three waves: Soul, Tokens, Proof. Prototypes to validate each wave."
 status: stable
 metadata:
   hermes:

@@ -1,6 +1,6 @@
 ---
 name: create
-description: Add features to an existing codebase. Lighter than /buildout, structured enough to ensure specs exist and docs stay current. Use when adding a feature or small batch of features to a project that already has docs and conventions.
+description: "Add features to an existing codebase. Ensures specs exist and docs stay current. Lighter than /buildout."
 status: stable
 inputs:
   scope-md: SCOPE.md (project context)

@@ -1,6 +1,6 @@
 ---
 name: migrate
-description: Replace an existing system layer by layer - screens, data layers, integrations - until the new application is complete. One-time setup extending /setup, then use /check-in for daily sessions.
+description: "Replace an existing system layer by layer until the new application is complete. Extends /setup for migrations."
 status: stable
 ---
 

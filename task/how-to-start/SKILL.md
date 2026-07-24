@@ -1,6 +1,6 @@
 ---
 name: how-to-start
-description: "Context-aware skill router. Reads project state, classifies intent, recommends the right skill with a one-line reason. Use when the user has a vague goal and doesn't know which skill fits."
+description: "Route to the right skill based on project state and user intent. Use when the goal is vague."
 status: stable
 metadata:
   hermes:
