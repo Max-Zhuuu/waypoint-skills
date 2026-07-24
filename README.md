@@ -248,6 +248,7 @@ mindmap
 
 | Version | Change |
 |---------|--------|
+| v2.5 | Reference tree restructure. SKILL.md files target 50-80 lines (CI enforced at 100). Inline content extracted to `reference/` and `phases/` subfolders. Engagement sections deduplicated to 3-5 line declarations. Descriptions sharpened. `sync-skills.ps1` now syncs `internals/`, `templates/`, `process/`. Structural rules codified in CONTRIBUTING.md. |
 | v2.1 | Naming convention picker in /setup (underscore-prefixed vs clean names). Root-level docs/ enforcement. |
 | v2.0 | Three-tier doc layout (program/ + implementation/ + _local/). CONTEXT.md renamed to _GLOSSARY.md. Concern type `flag` renamed to `issue`. `deadline:` renamed to `validate-by:`. |
 | v1.0 | Initial release. 20 skills, concerns tracking, engagement model, process/adapter split. |
