@@ -23,6 +23,6 @@ check if the file exists. If it does, infer intent from the file type and any su
 - Source file + no verb -> "What do you want to do with this file? Build on it, fix something, or understand it?"
 - Source file + action verb -> classify normally using the verb
 - Spec file (docs/specs/*.md) -> "You have a spec. /tdd to build it?"
-- Feature doc (docs/wpf-reference/features/*.md) -> "Migration target. /port to build it?"
+- Feature doc (docs/reference/features/*.md) -> "Migration target. /port to build it?"
 
 If the input doesn't match any cluster, ask one clarifying question. Not a grill - one question.

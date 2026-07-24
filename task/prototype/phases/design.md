@@ -1,6 +1,6 @@
 # Design Prototype
 
-A persistent **design toggle panel** for exploring visual variants across the whole app in-situ. Unlike [UI.md](UI.md) which creates separate variant components on a single route, this approach adds runtime switches that change the look of the entire application - shell theme, tab treatments, spacing, color palettes, etc.
+A persistent **design toggle panel** for exploring visual variants across the whole app in-situ. Unlike [ui.md](ui.md) which creates separate variant components on a single route, this approach adds runtime switches that change the look of the entire application - shell theme, tab treatments, spacing, color palettes, etc.
 
 ## When this is the right shape
 
@@ -9,8 +9,8 @@ A persistent **design toggle panel** for exploring visual variants across the wh
 - "I want to compare shadow vs flat across real screens, not just one page"
 - Any time the design question spans the whole app surface, not a single page
 
-If the question is about a single page's layout or content structure - wrong branch. Use [UI.md](UI.md).
-If the question is about logic or state - wrong branch. Use [LOGIC.md](LOGIC.md).
+If the question is about a single page's layout or content structure - wrong branch. Use [ui.md](ui.md).
+If the question is about logic or state - wrong branch. Use [logic.md](logic.md).
 
 ## How it works
 
@@ -87,7 +87,7 @@ For each new design dimension the user wants to explore:
 
 Make each variant **genuinely different** - not just slightly different hex values. The point is to feel the structural difference while using the real app.
 
-The same AI-aesthetic blocklist from [UI.md](UI.md) applies here. If your variants all converge on the same AI-default look (soft shadows, rounded everything, indigo accent), redo them.
+The same AI-aesthetic blocklist from [ui.md](ui.md) applies here. If your variants all converge on the same AI-default look (soft shadows, rounded everything, indigo accent), redo them.
 
 ### 5. When a decision is made
 
@@ -109,5 +109,5 @@ If running a design exploration branch alongside the main dev server, configure 
 - **Variants that only differ in one hex value.** That's a tweak, not a design question. Make variants structurally different.
 - **Too many dimensions at once.** More than 5-6 active toggles makes comparison impossible. Decide in batches.
 - **Forgetting to bake decisions.** A panel with 10 archived rows and no active ones should have been deleted 8 decisions ago.
-- **Using this for single-page layouts.** If the variants only affect one route, use [UI.md](UI.md) instead - it's faster to evaluate.
+- **Using this for single-page layouts.** If the variants only affect one route, use [ui.md](ui.md) instead - it's faster to evaluate.
 - **Ignoring the project's design system.** Variants must use the project's existing tokens and spacing. A variant that invents its own visual language can't be evaluated in context.

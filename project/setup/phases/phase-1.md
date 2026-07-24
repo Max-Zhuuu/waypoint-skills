@@ -42,7 +42,7 @@ Adapt descriptions to the project profile per the catalog's adaptation rules. Un
 
 ## Naming conventions
 
-Read [../../../templates/CONVENTIONS.md](../../../templates/CONVENTIONS.md) and populate it by interrogating the implementer about their stack's conventions. Ask about:
+Read [conventions-naming.md](../../../templates/conventions-naming.md) and [conventions-ux.md](../../../templates/conventions-ux.md), then populate them by interrogating the implementer about their stack's conventions. Ask about:
 - Function naming patterns (API calls, event handlers, boolean returns)
 - Component/class naming patterns
 - Type/interface naming patterns
