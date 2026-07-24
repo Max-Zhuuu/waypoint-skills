@@ -210,6 +210,33 @@ These are optional - you can start with /create and upgrade later.
 | /buildout | 4 phases (discovery through iterate-and-ship) | Building a new product |
 | /create | No phases | Adding features to an existing codebase |
 
+## Branching
+
+- `main` - stable, deployed via `sync-skills.ps1`. Plugin installs pull from here.
+- `revisions` - local development branch. Specs, drafts, and in-progress work live here.
+
+All skill changes land on `main` directly (single contributor, no PR gate).
+The `revisions` branch holds design specs (`specs/`) and working drafts that shouldn't ship.
+
+## Local development
+
+Clone the repo:
+
+```bash
+git clone git@github.com:max-zhu-bv/waypoint-skills.git
+```
+
+Deploy to `~/.claude/`:
+
+```bash
+.\sync-skills.ps1
+```
+
+The sync script copies skills (flattened from `task/`, `project/`, `in-progress/`, `third-party/` into `~/.claude/skills/`), shared infrastructure (`internals/`, `templates/`, `process/` into `~/.claude/`), and root files (`CONCERNS-FORMAT.md`, `README.md` into `~/.claude/skills/`).
+
+After editing a skill, re-run `sync-skills.ps1` to deploy.
+The CI lint check (`lint-skills.sh`) validates SKILL.md line counts: warns >80, fails >100.
+
 ## Design references
 
 - [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
