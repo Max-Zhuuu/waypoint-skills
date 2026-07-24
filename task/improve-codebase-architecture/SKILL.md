@@ -47,7 +47,7 @@ Does NOT refactor. Identifies opportunities and proposes changes.
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: issue, question)
-Writes: none
+Writes: GLOSSARY.md (shared-append), docs/adr/ (shared-append)
 ## Exit
 
 When proposals are written, suggest next steps:

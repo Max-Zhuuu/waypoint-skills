@@ -89,7 +89,7 @@ Adversarial but constructive - stress the plan against the domain model.
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: question, assumption)
-Writes: none
+Writes: GLOSSARY.md (shared-append), docs/adr/ (creates)
 ## Exit
 
 After all branches are resolved:

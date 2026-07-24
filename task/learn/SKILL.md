@@ -39,7 +39,7 @@ For format and rules, see [LEARN-REFERENCE.md](LEARN-REFERENCE.md#learning-notes
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: question)
-Writes: none
+Writes: docs/_local/learning/ (creates, gitignored)
 ## Exit
 
 When the learning session ends, suggest next steps based on what was learned:
