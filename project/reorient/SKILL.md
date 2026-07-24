@@ -71,7 +71,7 @@ Read [reference/output-format.md](reference/output-format.md) for the work-items
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: flags, audit results, concern triage
 Writes: creates CONCERNS.md if absent (seeded with this run's findings)
-Override: Tier 1 behavior differs - creates CONCERNS.md rather than working without it. This is the only skill besides /wrapup with CONCERNS.md creation permission.
+Override: Tier 1 behavior differs - creates CONCERNS.md rather than working without it.
 ## Exit
 
 When the audit is complete, suggest next steps:

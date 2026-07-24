@@ -87,7 +87,7 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: issues, resolution notes, consolidated audit results
 Writes: creates CONCERNS.md if absent (seeded with this run's resolved entries)
-Override: CONCERNS.md auto-creation at Tier 1. Cascade step only fires for docs that exist - does not create docs to cascade into.
+Override: Cascade step only fires for docs that exist - does not create docs to cascade into.
 ## Tone
 
 Brief and mechanical. Resolve, cascade, report. This is bookkeeping that enables the next cycle, not a ceremony that slows it down.

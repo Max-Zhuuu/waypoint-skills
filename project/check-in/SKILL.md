@@ -56,7 +56,7 @@ Does NOT implement. Does NOT update docs (that is /wrapup). Proposes work, then 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: flags, session plan, priority recommendations
 Writes: writes `.claude/.setup-prompted` on first Tier 1 invocation
-Override: at Tier 1 without CONCERNS.md, skips concern-based priority and falls to phase-advance layer. Does not create CONCERNS.md - that's /reorient's or /wrapup's job.
+Override: at Tier 1 without CONCERNS.md, skips concern-based priority and falls to phase-advance layer.
 
 ## Conditional invocations
 
