@@ -1,0 +1,17 @@
+name: Lint Skills
+
+on:
+  pull_request:
+    paths:
+      - 'task/**/SKILL.md'
+      - 'project/**/SKILL.md'
+      - 'in-progress/**/SKILL.md'
+      - 'third-party/**/SKILL.md'
+
+jobs:
+  skill-line-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check SKILL.md line counts
+        run: bash lint-skills.sh
