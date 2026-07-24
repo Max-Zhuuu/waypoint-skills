@@ -334,16 +334,10 @@ Every skill's `## Engagement` section uses this format:
 
 ```markdown
 ## Engagement
-
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
-
-- **Emits:** {what this skill emits - concerns, flags, audit results, nothing}
-- **Scaffolding writes:** {files this skill creates - or "none"}
-- **Override:** {any deviation from the default protocol - or "none"}
-- **Nudge protocol:** detect tier -> suggest setup/upgrade once -> back off if declined
-- **Concern format:** `### C-NNN [open] <summary>` with type, raised date, source skill
-- **Prohibitions:** no file creation outside owned paths, no silent scaffolding, no tier-skipping
-- **Before writing** to shared-append or owned files, check Claims in CONCERNS.md
+Emits: {concerns (type: ...), flags, audit results, nothing}
+Writes: {files this skill creates or appends to - or "none"}
+Override: {behavioral deviation from defaults - or omit line}
 ```
 
 Skills with overrides expand the Override field to explain the deviation.
