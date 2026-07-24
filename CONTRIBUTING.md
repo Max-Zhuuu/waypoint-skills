@@ -27,6 +27,7 @@ Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/pr
 task/           # Skills that do work (diagnose, spec, tdd, etc.)
 project/        # Skills that manage projects (check-in, wrapup, migrate, etc.)
 process/        # Tool-agnostic methodology documents
+templates/      # Shared file templates (feature specs, logic docs, glossary)
 adapters/       # Platform-specific adapters (cursor, opencode, codex)
 internals/      # System design docs (concepts, engagement model)
 ```
@@ -52,6 +53,92 @@ Omit `user-invocable` entirely for the common case where a skill is freely invoc
 
 All other frontmatter fields (`metadata.hermes`, `inputs`, `outputs`, `signals`, etc.) are optional and skill-specific.
 Keep them as needed for routing metadata or workflow bookkeeping.
+
+## SKILL.md body contract
+
+The body is what Claude Code auto-loads on skill invocation.
+Every line costs tokens on every invocation, so the body must be lean.
+
+**Line budget:** target 50-80 lines, max 100.
+CI warns at >80 and fails at >100.
+
+**Structure:**
+
+```
+---
+name, description, status
+---
+Does NOT: {boundary guardrail}.
+
+{Instructions start here. Sequential. No preamble header.}
+
+## {Skill-specific sections only where genuine logical break}
+
+## Engagement
+{declaration only - 3-5 lines}
+
+## Exit
+{2-4 bullets - handoff targets}
+
+## Tone
+{1 sentence}
+```
+
+**Rules:**
+
+- No H1 header. Frontmatter `name` + directory is identity.
+- No `## On invocation` header. The body runs on invocation - sequential execution is assumed.
+- No opening paragraph restating the description. Frontmatter `description` is authoritative.
+- Body starts with `Does NOT:` boundary line. Every skill declares what it explicitly won't do.
+- `## Tone` is mandatory (1 sentence).
+- `## Exit` is mandatory (2-4 bullets) unless the skill has a natural completion message that serves as exit.
+
+## Content ownership
+
+Every piece of instruction content has exactly one authoritative location.
+SKILL.md may **declare** (what this skill does differently) but never **define** (restate shared protocol).
+
+| Content type | Authoritative location | SKILL.md contains |
+|-------------|----------------------|-------------------|
+| Engagement protocol | ENGAGEMENT-REFERENCE.md | Declaration only (emits, writes, override) |
+| Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
+| Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
+| Tone | SKILL.md | 1 sentence, mandatory |
+| Routing/purpose | Frontmatter description | Nothing restated in body |
+| Boundaries | SKILL.md opening line | "Does NOT: {guardrail}" mandatory |
+
+## Directive verbs
+
+How SKILL.md references other files determines whether they're loaded on invocation.
+
+**Skill-specific reference** (reference/*.md, phases/*.md) - imperative directive:
+```
+Read [reference/priority-stack.md](reference/priority-stack.md) before proposing work.
+```
+The agent must read the file. Silent degradation risk is too high for optional loading.
+
+**Shared infrastructure** (internals/*.md, process/*.md) - declaration + on-demand:
+```
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+```
+The agent consults on demand when performing an engagement action, not on every invocation.
+This preserves the token savings from engagement deduplication.
+
+## Subfolder convention
+
+Skills with supplementary files organize them into exactly two subfolder types:
+
+| Subfolder | Semantic | When to use |
+|-----------|----------|-------------|
+| `phases/` | Routed one-at-a-time based on current state | Phase files, wave files, branch files |
+| `reference/` | Conditionally loaded material | Priority stacks, format specs, methodology |
+
+Concept-specific names go in the filename, not the directory.
+Design's waves become `phases/wave-1-soul.md`.
+Prototype's branches become `phases/logic.md`, `phases/ui.md`.
+Format specs (ADR, glossary) go in `reference/`.
+
+No other subfolder types (`waves/`, `branches/`, `formats/`).
 
 ## Tracking with Concerns
 
@@ -96,6 +183,21 @@ stateDiagram-v2
 **Autonomous** - concerns flow naturally. Skills emit them during work, resolve what they can, and only surface what needs your judgment.
 
 Each stage includes the previous one. Structure accumulates when it helps and stays out of the way when it doesn't.
+
+### Engagement declaration in SKILL.md
+
+The `## Engagement` section in each SKILL.md is a pure declaration - only fields where this skill diverges from the shared protocol:
+
+```markdown
+## Engagement
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+Emits: concerns (type: issue, question)
+Writes: none
+Override: commit-producing skill - follows exit protocol (section 6)
+```
+
+3-5 lines per skill. No boilerplate (nudge protocol, concern format, prohibitions, claims check).
+Those are shared protocol defined in ENGAGEMENT-REFERENCE.md.
 
 ## Multi-phase workflows
 
