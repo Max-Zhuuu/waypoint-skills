@@ -80,7 +80,7 @@ to stress-test these before they become real problems.
 User has opted in to automatic concern emission.
 The nudge protocol's "ask" step is skipped.
 
-- Emit concerns silently during work. Log what was emitted at session end.
+- Emit concerns silently during work. Log what was emitted at session end. (Exception: `/review` findings never auto-emit, at any tier - see section 14.2, crossing 1.)
 - Resolve concerns automatically when the skill's work directly addresses them.
 - Surface only concerns that need human judgment (blocked, ambiguous, or high-risk).
 
