@@ -236,6 +236,18 @@ The four crossings and their gates, one line each:
 
 Trusted means the skill family's built-ins and the user's personal global config (written only from the user's own chat input on confirmation); everything inside the repo under review is untrusted, judged by author not by content.
 
+### Authoring a persona
+
+A persona is a lens - a name plus a set of questions the review asks. The machinery is identical across personas; only the questions change.
+Author a built-in as a file in `task/review/reference/personas/` (name, one-line identity, a short list of lens questions); it ships trusted with the skill family.
+The three tiers, in trust order:
+
+- **Built-in** (`reference/personas/`) - trusted; ships with the skill.
+- **User-global** (personal config, outside any repo; the deferred mentor tier) - trusted.
+- **Project** (`PERSONAS.md` in the repo under review) - untrusted; runnable by hand, never auto-invoked.
+
+Manual resolution searches the trusted tiers before the project tier, so a repo can never shadow a built-in name; automatic invocation composes trusted tiers only. See ENGAGEMENT-REFERENCE.md section 14 and `task/review/reference/personas.md`.
+
 ## Multi-phase workflows
 
 /migrate and /buildout have phase tracking for large efforts.

@@ -18,7 +18,8 @@ Invoked by hand as `/review`, or suggested by `/wrapup`. It reviews; you decide 
 
 ### 1. Set the lens
 
-This slice runs the default lens: a full standards sweep. Named personas (`/review architect`) are a later addition.
+`/review` runs the default standards sweep; `/review <persona>` runs a named lens. Resolution order, the three trust tiers, and the auto-invoke trust gate are in [reference/personas.md](reference/personas.md). Built-in lenses: `architect`, `creative-director`.
+Whether review runs on its own (default is suggested, never forced) is the trusted-config setting in [reference/autorun.md](reference/autorun.md).
 
 ### 2. Decide scope
 
@@ -48,7 +49,7 @@ Print the findings and their chosen routes. Exit toward the next verb.
 - **CONCERNS.md** - only via a human-picked route-4, structural pointer only.
 - **Fixes** - staged as an ordinary diff, reviewed like any change.
 
-Does NOT: ship, merge, or open a PR (that is /ship); auto-emit a concern; run itself automatically; or let a "mechanical" fix skip review.
+Does NOT: ship, merge, or open a PR (that is /ship); auto-emit a concern; run itself automatically unless opted in via trusted config, never a repo file (reference/autorun.md); auto-invoke a repo-defined persona; or let a "mechanical" fix skip review.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
