@@ -83,6 +83,7 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 
 ## Exit
 
+- /review for a critic pass before shipping - and on a local project with no pipeline, it is your only conformance check. wrapup suggests, never reviews.
 - /ship to deliver this change, if DEPLOY.md names a remote adapter.
 - /check-in for next session.
 
