@@ -83,7 +83,7 @@ Read [phases/phase-1.md](phases/phase-1.md) before proceeding.
 - [ ] Project skeleton runs (dev server + tests)
 - [ ] Documentation structure created with spec templates
 - [ ] CLAUDE.md with Project Scaffold + Documentation Map sections
-- [ ] ARCHITECTURE.md summary exists
+- [ ] ARCHITECTURE.md summary exists (and DEPLOY.md, if the project has a delivery target)
 
 ## Exit
 
@@ -93,7 +93,7 @@ Read [phases/phase-1.md](phases/phase-1.md) before proceeding.
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: assumption, question)
-Writes: CLAUDE.md, SCOPE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, .claude/ directory
+Writes: CLAUDE.md, SCOPE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, DEPLOY.md (when a delivery target exists), .claude/ directory
 Override: scaffolding creator - creates the files other skills read. No tier detection needed.
 
 ## Tone

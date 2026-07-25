@@ -8,6 +8,7 @@ outputs:
   concerns-resolved: CONCERNS.md entries marked resolved with decision lines
   shared-docs: CONVENTIONS.md, GLOSSARY.md, DESIGN-SYSTEM.md updated if cascade needed
   inventory: marker confirmed or advanced
+  blocking-verdict: open blocking concerns for the change, or "none" - the authored value /ship consumes for afk gate key 1b
 signals: []
 ---
 
@@ -69,18 +70,20 @@ Count the entries in the Resolved section and archive per [reference/archive-pro
 Check the current phase's gate criteria:
 - How many items remain at current phase?
 - Are all gate conditions for completed items satisfied?
-- Are there blocking concerns?
+- Are there blocking concerns? This verdict is authoritative: /ship consumes the `Blocking:` line below for the afk gate (key 1b) and never re-derives "blocking" from raw CONCERNS.md.
 
 Report:
 
 ```
 Wrapup complete. {entity}: {N} concerns resolved, {M} escalated.
 {if archived} Archived {K} resolved concerns to concerns/resolved-{YYYY}.md.
+Blocking: {none | C-041, C-047}.
 Gate: {X}/{Y} criteria met. Remaining: {list}.
 ```
 
 ## Exit
 
+- /ship to deliver this change, if DEPLOY.md names a remote adapter.
 - /check-in for next session.
 
 ## Engagement

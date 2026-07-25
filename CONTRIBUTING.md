@@ -108,6 +108,7 @@ A skill that lacks an authoritative rendering treats the value as `hitl` rather 
 |-------------|----------------------|-------------------|
 | Engagement protocol | ENGAGEMENT-REFERENCE.md | Declaration only (emits, writes, override) |
 | Autonomy axis | ENGAGEMENT-REFERENCE.md section 13 | Citation only (render the value, never recompute it) |
+| Load-bearing globs | DEPLOY.md (per project) | Citation only (read the globs, never hardcode a danger list) |
 | Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
 | Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
 | Tone | SKILL.md | 1 sentence, mandatory |
@@ -206,6 +207,21 @@ Override: commit-producing skill - follows exit protocol (section 6)
 3-5 lines per skill. No boilerplate (nudge protocol, concern format, prohibitions, claims check).
 Those are shared protocol defined in ENGAGEMENT-REFERENCE.md.
 
+## The outbound seam
+
+Waypoint's inner loop ends at `/wrapup` - local, offline, concerns resolved.
+`/ship` is the one outbound verb: it assembles a spec-grounded PR and proposes an `afk | hitl` routing, then hands off to a delivery target.
+
+Two invariants govern anything added to this seam:
+
+- **Waypoint proposes, the target disposes.** `/ship` never holds merge authority. `afk` is necessary, not sufficient, for an unattended merge - it means only "propose the auto lane and open the PR." The delivery target's own enforcement (server-side rulesets, blocking CI, an autonomous reviewer) is the authority, evaluated on the final diff at merge time. A skill on this seam must never imply `afk` means merged.
+- **Intent is spec-derived, never diff-derived.** The PR's `## Intent` block traces to the spec, ADRs, and resolved concern decisions - never to a reading of the diff, which would grade the diff against itself.
+
+`DEPLOY.md` is the per-project delivery config, sibling to `ARCHITECTURE.md`: architecture says how the system is built, deploy says how a change reaches production.
+Its `load-bearing` glob list is the authoritative source for which paths force `hitl`; skills read it and never hardcode a danger list.
+The list is deny-only - it can force `hitl` earlier but can never grant `afk` - which is safe precisely because Waypoint holds no merge authority.
+The glob dialect is pinned in ENGAGEMENT-REFERENCE.md section 13.4; the axis it feeds is defined in section 13.
+
 ## Multi-phase workflows
 
 /migrate and /buildout have phase tracking for large efforts.
@@ -243,6 +259,14 @@ The sync script copies skills (flattened from `task/`, `project/`, `in-progress/
 
 After editing a skill, re-run `sync-skills.ps1` to deploy.
 The CI lint check (`lint-skills.sh`) validates SKILL.md line counts: warns >80, fails >100.
+
+### The flatten invariant
+
+The flatten is load-bearing and unchecked by CI (lint counts lines, not link resolution).
+A skill's `../../internals/X.md` link resolves in both the repo layout (`project/{name}/SKILL.md`) and the installed layout (`skills/{name}/SKILL.md`) only because a `SKILL.md` always sits exactly two levels above the shared-infra root.
+So: no skill may nest a `SKILL.md` deeper than `{group}/{name}/SKILL.md`, and no shared doc may move under `skills/`.
+Break either and every `../../` link in that skill silently 404s on install while still resolving in the repo, so the CI and local checks both stay green.
+A CI link-resolution check is a planned follow-up; until it exists, this invariant is enforced by convention.
 
 ## Design references
 

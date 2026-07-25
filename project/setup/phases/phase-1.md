@@ -129,6 +129,15 @@ Copy and adapt the base templates to the project's needs:
 
 **Conventions templates** - copy from [../../../templates/conventions-naming.md](../../../templates/conventions-naming.md) and [../../../templates/conventions-ux.md](../../../templates/conventions-ux.md) to program/conventions/.
 
+## Deployment doc
+
+If the project has any delivery target beyond a local checkout (a remote, a pipeline, a hosting destination), scaffold `DEPLOY.md` at the repo root.
+Copy from [../../../templates/DEPLOY.md](../../../templates/DEPLOY.md) and populate the `waypoint:deploy` fenced block from Phase 0 dependency answers (hosting, CI/CD, environments): pick the adapter, name the tiers and their promote mode, and set the `load-bearing` globs to this project's dangerous surfaces.
+`DEPLOY.md` is the sibling of ARCHITECTURE.md: architecture says how the system is built, deploy says how a change reaches production.
+`/ship` reads it; without it, `/ship` fails loud.
+For a purely local project with no delivery target, skip it - `/ship` treats a missing DEPLOY.md as a fail-loud stop (not as `adapter: local`, and never as vacuously safe).
+Add a `DEPLOY.md` entry to the Documentation Map so skills resolve it through the map.
+
 ## Documentation Map
 
 After generating the documentation structure above, write the Documentation Map to CLAUDE.md.
