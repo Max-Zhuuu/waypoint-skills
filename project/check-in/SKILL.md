@@ -17,12 +17,14 @@ signals:
    - If the hook already injected these sections, skip the disk read.
 4. Read the current phase file from the workflow skill's folder.
 5. Read [reference/priority-stack.md](reference/priority-stack.md) and apply the priority stack to propose next task.
+6. Surface the downstream view (read-only) per [reference/downstream-view.md](reference/downstream-view.md): what `/ship` staged but nobody promoted, and what the pipeline is blocking. Link, category, and status only; never act on it, never pull its text back.
 
 Print:
 
 ```
 Phase {N} ({name}). {X} items remaining.
 {open concerns summary - count by type, anything critical}
+{downstream: staged-not-promoted and blocked PRs, each a link + category + status; "downstream status unavailable" if the query could not run; omit if no DEPLOY.md}
 Next: {proposed task} - {why this one}.
 ```
 
@@ -50,7 +52,7 @@ Read [reference/enforcement.md](reference/enforcement.md) for the enforcement ru
 - Invokes the chosen implementation skill (/port, /create, /tdd).
 - Session continues under the invoked skill.
 
-Does NOT implement. Does NOT update docs (that is /wrapup). Proposes work, then asks which verb to invoke.
+Does NOT implement. Does NOT update docs (that is /wrapup). Does NOT promote (no promote verb exists; promotion is human-owned) or pull downstream text into the repo. Proposes work, then asks which verb to invoke.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
