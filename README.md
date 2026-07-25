@@ -182,6 +182,7 @@ They are the complete methodology without any tool-specific instructions.
 ### Sustain
 
 - **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd.
+- **[review](task/review/SKILL.md)** - A code critic you point at your work before shipping. Runs a lens (persona), writes a throwaway findings note, routes each finding. Suggested, never forced; never ships.
 - **[ship](project/ship/SKILL.md)** - The outbound seam. Assemble a spec-grounded PR and propose an afk/hitl routing; never holds merge authority. Run after /wrapup.
 - **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.
 - **[learn](task/learn/SKILL.md)** - Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges.
@@ -215,7 +216,7 @@ stateDiagram-v2
     orient --> plan : /spec, /design
     plan --> build : /breakdown, /tdd, /create, /port
     build --> verify : /wrapup, /check-in
-    verify --> deliver : /ship
+    verify --> deliver : /review, /ship
     deliver --> orient : /check-in surfaces downstream
     verify --> orient : gaps found
 
@@ -224,6 +225,10 @@ stateDiagram-v2
 
 Both paths lead to the same place.
 If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
+
+Before that seam sits the critic. `/review` points a lens at your work before you ship it - a "persona" like `architect` or `creative-director`, each just a different set of questions over the same machinery.
+It writes a throwaway findings note and lets you route each finding (to a spec, to /breakdown, fix it now, or record it as a concern); nothing lands without your pick.
+`/wrapup` suggests it on the way out, and on a local project with no pipeline it is your only conformance check. Reviewing is judgment, shipping is mechanical - `/review` never ships and `/ship` never critiques.
 
 Delivery is the outbound seam.
 Once a change is verified, `/ship` assembles a spec-grounded PR and proposes an afk (agent-eligible) or hitl (human-in-the-loop) routing - a proposal only; the delivery target holds merge authority, never Waypoint.
