@@ -9,6 +9,7 @@ The tier declaration is the contract; this document is the specification.
 
 The engagement tiers answer "may I act unattended right now" (a permission).
 Section 13 defines a separate axis - `autonomy`, "could this change ship unattended at all" (a capability) - and the table that composes the two.
+Section 14 defines the review safety invariant - the four points where text from a repo under review could reach a position that steers a later turn, and the gate at each.
 
 ## 1. Tier Detection
 
@@ -122,6 +123,8 @@ refs: {paths to relevant files or other concern IDs}
 Read the current max ID from CONCERNS.md and increment.
 Place the new concern in the Open section.
 Recalculate the summary header after adding.
+
+Exception: a concern sourced from a `/review` finding is never auto-emitted at any tier, including the Tier 3 silent emission above; recording one is always a human pick, and its fields carry structural refs only (section 14.2, crossing 1).
 
 ### When to emit
 
@@ -419,3 +422,44 @@ The value is authored in exactly one place per input and read everywhere else:
 No skill may recompute the axis from raw state.
 A consumer that has an authoritative rendering cites the authoring skill's output and does not re-run the derivation.
 A consumer that lacks one treats the value as `hitl`; it never computes its own.
+
+## 14. The Review Safety Invariant
+
+`/review` and the loop-back read text that Waypoint does not author: the diff of the repo under review, a reviewer's comments, a pipeline's status, a project's own `PERSONAS.md`.
+On a pull request that text can be anyone's, so it is untrusted.
+
+The one rule: untrusted text never crosses into a position where it could steer a later turn.
+A position steers if the model later reads it as instruction rather than data.
+Exactly two positions do that, and both must be fed only by trusted authors:
+
+- **Trusted context** - anything injected into the model as ground truth. `CONCERNS.md` is read on every turn, so its contents are trusted context.
+- **An auto-invoked behavior** - a persona or setting that shapes what an unattended review does, chosen without a human in that moment.
+
+Everything else (an ephemeral finding printed to the session, a diff read as data) is not a steering position and is not restricted.
+
+### 14.1 The trust tiers
+
+- **Trusted:** the personas and settings built into the skill family, and the user's personal global config (the deferred mentor tier). The global tier is written only from the user's own chat input on explicit confirmation, never from observed content.
+- **Untrusted:** anything inside the repository under review - its `PERSONAS.md`, a project settings file, the diff, reviewer comments, PR or pipeline text.
+
+The gate is the author, not the content: a well-written repo persona is still untrusted, because the next repo's could be hostile.
+
+### 14.2 The four crossings
+
+These are the four points where the repository under review could steer or short-circuit its own review. Each has one gate, and the gates are not interchangeable.
+
+- **Crossing 1 - a finding becomes a concern.** A `/review` finding is never written to `CONCERNS.md` automatically - recording one is always a human pick, at every tier, including Tier 3, whose silent auto-emission (sections 2-4) does not apply to review-sourced concerns. Every field of a recorded concern is either a structural coordinate (file path, line number) or a value from a fixed, skill-defined vocabulary (the section-4 `type` enum, a standards category); no field - including the one-line description and any context line - is ever a free-text string the finding, the code, or a reviewer comment supplied, whether quoted or paraphrased. This overrides, not extends, the free-text `{1-3 lines of context}` field of section 4: a review-sourced concern omits it. The concern is a pointer, never a copy or a summary. `CONCERNS.md` is injected as trusted context every turn, so a paraphrase is as steering as a quote.
+- **Crossing 2 - a persona is auto-invoked.** An automatically triggered review composes trusted-tier personas only. A repo-supplied `PERSONAS.md` persona can always be run by hand (an explicit human choice), but can never be the persona an auto-invoked review selects. Unknown persona name falls back to the default lens with a note; it never loads repo text as the lens.
+- **Crossing 3 - a setting escalates behavior.** A setting that changes what review does unattended (for example "run review automatically") lives in trusted config only - a skill-family built-in or the user's personal global config per 14.1 - never in a file inside the repo under review. A repo may not flip its own review into a mode that grants itself less scrutiny.
+- **Crossing 4 - a fix is applied.** Formatter and linter output (eslint, prettier, stylelint autofix) is an ordinary gated diff: it goes through the same build and the same review as any hand-written change. There is no "mechanical fix" bypass, because a lint autofix can change behavior (rewrite `==` to `===`, drop a side-effectful import, reorder CSS). A fix is a change, and changes are reviewed. This crossing guards change authority - that no unreviewed change ships - a sibling of the steering rule, not an instance of it.
+
+### 14.3 What the rule does not restrict
+
+None of this limits the human.
+You can run any persona by hand, including a repo's own, and record anything you want as a concern.
+The rule only stops the repository under review from quietly steering its own review.
+
+### 14.4 When nobody is watching
+
+If an automatic review or ship runs unattended and hits something that needs a human decision, it stops and waits for the human; it never assumes approval.
+"Nobody confirmed" is treated as "not confirmed" - the same fail-safe default the afk gate (13.3) and the downstream view use.

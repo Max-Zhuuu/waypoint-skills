@@ -109,6 +109,7 @@ A skill that lacks an authoritative rendering treats the value as `hitl` rather 
 | Engagement protocol | ENGAGEMENT-REFERENCE.md | Declaration only (emits, writes, override) |
 | Autonomy axis | ENGAGEMENT-REFERENCE.md section 13 | Citation only (render the value, never recompute it) |
 | Load-bearing globs | DEPLOY.md (per project) | Citation only (read the globs, never hardcode a danger list) |
+| Review safety invariant | ENGAGEMENT-REFERENCE.md section 14 | Citation only (obey the four crossings, never restate or weaken them) |
 | Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
 | Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
 | Tone | SKILL.md | 1 sentence, mandatory |
@@ -221,6 +222,19 @@ Two invariants govern anything added to this seam:
 Its `load-bearing` glob list is the authoritative source for which paths force `hitl`; skills read it and never hardcode a danger list.
 The list is deny-only - it can force `hitl` earlier but can never grant `afk` - which is safe precisely because Waypoint holds no merge authority.
 The glob dialect is pinned in ENGAGEMENT-REFERENCE.md section 13.4; the axis it feeds is defined in section 13.
+
+## The review safety invariant
+
+`/review` and the loop-back read text Waypoint did not author (a repo's diff, a reviewer's comments, a project `PERSONAS.md`), and on a pull request that text is untrusted.
+Any skill that touches review must obey the four-crossing rule defined in ENGAGEMENT-REFERENCE.md section 14: untrusted text never reaches a position that steers a later turn.
+The four crossings and their gates, one line each:
+
+- **Finding to concern:** never auto-written (a human pick, at every tier including Tier 3); every field is a structural coordinate (file, line) or a fixed-vocabulary value, never free text the finding supplied, quoted or paraphrased. A review-sourced concern omits section 4's free-text context field.
+- **Auto-invoked persona:** trusted-tier only (built-in or user-global); a repo `PERSONAS.md` persona runs by hand but never auto.
+- **Behavior-escalating setting** (e.g. auto-run review): trusted config only, never a file in the repo under review.
+- **Fix output:** a formatter or linter autofix is an ordinary gated diff - same build, same review; there is no mechanical bypass.
+
+Trusted means the skill family's built-ins and the user's personal global config (written only from the user's own chat input on confirmation); everything inside the repo under review is untrusted, judged by author not by content.
 
 ## Multi-phase workflows
 
