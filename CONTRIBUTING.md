@@ -99,9 +99,15 @@ Does NOT: {boundary, if non-obvious from description}
 Every piece of instruction content has exactly one authoritative location.
 SKILL.md may **declare** (what this skill does differently) but never **define** (restate shared protocol).
 
+The same single-source rule governs computed values, not just prose.
+The `autonomy` axis (afk/hitl) is defined once in ENGAGEMENT-REFERENCE.md section 13 and authored per-input by exactly one skill each (`breakdown` tags slices, `wrapup` reports blocking concerns).
+Every other skill **cites, never recomputes**: it renders the authoring skill's output and never re-runs the derivation from raw state.
+A skill that lacks an authoritative rendering treats the value as `hitl` rather than computing its own.
+
 | Content type | Authoritative location | SKILL.md contains |
 |-------------|----------------------|-------------------|
 | Engagement protocol | ENGAGEMENT-REFERENCE.md | Declaration only (emits, writes, override) |
+| Autonomy axis | ENGAGEMENT-REFERENCE.md section 13 | Citation only (render the value, never recompute it) |
 | Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
 | Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
 | Tone | SKILL.md | 1 sentence, mandatory |
