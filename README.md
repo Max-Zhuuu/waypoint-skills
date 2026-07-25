@@ -160,7 +160,7 @@ They are the complete methodology without any tool-specific instructions.
 
 - **[setup](project/setup/SKILL.md)** - Kickoff a project with scoping grill, architecture decisions, and documentation structure.
 - **[how-to-start](task/how-to-start/SKILL.md)** - Route to the right skill based on project state and user intent.
-- **[check-in](project/check-in/SKILL.md)** - Session authority. Reads concerns, proposes next task, fires checkpoints. The daily verb.
+- **[check-in](project/check-in/SKILL.md)** - Session authority. Reads concerns, proposes next task, fires checkpoints, and surfaces read-only what is staged-but-unpromoted or blocked downstream. The daily verb.
 - **[reorient](project/reorient/SKILL.md)** - Snapshot project state, surface deferred decisions, audit progress. Use when scattered or between milestones.
 
 ### Plan
@@ -182,6 +182,7 @@ They are the complete methodology without any tool-specific instructions.
 ### Sustain
 
 - **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd.
+- **[ship](project/ship/SKILL.md)** - The outbound seam. Assemble a spec-grounded PR and propose an afk/hitl routing; never holds merge authority. Run after /wrapup.
 - **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.
 - **[learn](task/learn/SKILL.md)** - Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges.
 
@@ -203,6 +204,7 @@ stateDiagram-v2
     state "Plan" as plan
     state "Build" as build
     state "Verify" as verify
+    state "Deliver" as deliver
 
     [*] --> newcomer
     [*] --> experienced
@@ -213,6 +215,8 @@ stateDiagram-v2
     orient --> plan : /spec, /design
     plan --> build : /breakdown, /tdd, /create, /port
     build --> verify : /wrapup, /check-in
+    verify --> deliver : /ship
+    deliver --> orient : /check-in surfaces downstream
     verify --> orient : gaps found
 
     experienced --> orient : system nudges
@@ -220,6 +224,11 @@ stateDiagram-v2
 
 Both paths lead to the same place.
 If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
+
+Delivery is the outbound seam.
+Once a change is verified, `/ship` assembles a spec-grounded PR and proposes an afk (agent-eligible) or hitl (human-in-the-loop) routing - a proposal only; the delivery target holds merge authority, never Waypoint.
+Next session, `/check-in` reads back, read-only, what is staged but not promoted and what the pipeline is blocking, then points you there and stops.
+There is no promote verb: promotion to production is human-owned.
 
 ## Principles
 
