@@ -47,6 +47,7 @@ When the learning session ends, suggest next steps based on what was learned:
 - If the topic revealed a gap in project docs -> "/wrapup updates GLOSSARY.md, conventions, and specs with what you learned."
 - If the user is exploring broadly -> "Learning captured. Pick another topic, or back to building?"
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 

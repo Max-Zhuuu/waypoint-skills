@@ -87,6 +87,7 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 - /ship to deliver this change, if DEPLOY.md names a remote adapter.
 - /check-in for next session.
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

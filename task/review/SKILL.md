@@ -62,6 +62,7 @@ Override: reviews only; holds no ship, merge, or auto-run authority.
 - /ship when the change is ready to go out (sibling skill; review does not ship).
 - /spec or /breakdown when a finding was routed to one of them.
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 Sharp and specific. A finding names a file, a line, and why it matters. Critique the work, never grade the diff against itself.
