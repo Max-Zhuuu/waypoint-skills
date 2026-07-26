@@ -14,6 +14,13 @@ A "preference" is usually a symptom that something has not been filed yet.
 Before anything personal is stored, the flow routes it: is this architecture, a convention, scope, or a glossary term?
 Only what survives all four routes - genuinely personal, genuinely local, belonging to no versioned doc - lands in the narrow personal note.
 
+## Remembering: the router
+
+When you ask Waypoint to remember something, it routes rather than dumps: a typed home first (architecture, convention, scope, glossary), then your host's own memory for soft cross-project working style, and only the genuine residual - personal, project-specific, uncommittable, and not a switch - lands in the narrow personal note.
+The full routing order and the write path are in [preferences-router.md](preferences-router.md).
+Every write to the note is propose-in-chat, confirm-in-chat, then write: observed content may prompt the question but only your confirmed answer is stored, and an inferred-from-repo preference is never written without a fresh chat confirmation.
+Forgetting is low-ceremony - "forget that" only ever removes what steers, so it just removes the note.
+
 ## The two homes, cut by one line: user-private, or shared
 
 | Home | Scope | Trust | Holds |
