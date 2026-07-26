@@ -36,17 +36,47 @@ So an in-repo home is unnecessary: worktree-path keying already gives you "this 
 It also avoids reopening the trust boundary: any in-tree trusted home would contradict crossing 3 outright, and making it safe would mean redefining section 14's "inside the repo is untrusted" cut - surgery this design refuses.
 "It lives in `CLAUDE.md`" was never the rule: two files can share that name, one user-global and one repo-authored, so the rule is the trust cut above, not the filename.
 
-## The schema
+## The switch registry
 
-The switches are one file: a fenced switch block followed by prose in the same document.
+The switches are one file: a fenced block of switch values, followed by prose that explains them.
+The general rule: structured key-value read together is one file, while documents that accrete independently - the personal note, reviewed-state entries - are directories, one entry per file.
 
 ```waypoint-settings
 review.autorun: suggest
+auto-learn:     suggest
+review.persona: architect
 ```
 
-Prose then explains each switch, its legal values, and its default.
-The behavior switches share one `off / suggest / auto` vocabulary with a fail-safe `suggest` default; the registry of them is part of this surface.
-The general rule: structured key-value read together is one file, while documents that accrete independently - the personal note, reviewed-state entries - are directories, one entry per file.
+### One vocabulary for every behavior switch: off / suggest / auto
+
+Every behavior switch shares one three-state vocabulary, with `suggest` the default:
+
+- **off** - do not even offer; the nudge is muted.
+- **suggest** - offer, and act only on your confirmation. This is the default.
+- **auto** - act unattended.
+
+`off` and `suggest` never act on their own; `auto` is the only state that acts unattended; the default asks first.
+So `review.autorun`, `auto-learn`, and the future chain switch all read from this one enum, rather than each cloning a slightly different shape.
+
+| Switch | Type | Values | Default | Governs |
+|---|---|---|---|---|
+| `review.autorun` | enum | `off / suggest / auto` | `suggest` | whether `/review` runs without a per-run human trigger |
+| `auto-learn` | enum | `off / suggest / auto` | `suggest` | whether `/learn`-style capture happens without being asked |
+| `review.persona` | string | a lens name | the default lens (the standards sweep) | which lens an auto-invoked review uses |
+
+`review.persona` is not a behavior switch: it names a lens, so it is a string, not this enum. A persona can never carry a switch value, and a switch can never carry a persona.
+
+### Resolution and keying
+
+Every switch resolves through the one trusted user-global home this surface defines.
+A reader consults that home when an entry is present and otherwise falls back to the switch's own fail-safe default - absent means the safe value - exactly as before this registry existed, so no reader gains a new hard dependency on the home.
+The per-project block carries each switch as one entry, keyed by the user-asserted identity above, and each switch resolves independently, so no combination of switches can contradict another.
+
+### Not a switch: `concerns: auto-emit`
+
+`concerns: auto-emit` is not in this registry.
+It is read from the repo's own `CLAUDE.md` as project tier detection (ENGAGEMENT-REFERENCE.md section 1), so it is project-scoped and repo-authored, not user-global trusted config.
+Folding it in would change its scope and its trust tier rather than alias it, so it stays exactly where it is.
 
 ## What is not here
 
