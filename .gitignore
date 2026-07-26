@@ -4,3 +4,6 @@ docs/specs/
 # Claude Code local state
 .claude/
 specs/
+
+# Per-phase TDD worktrees (build isolation, not shipped)
+.worktrees/
