@@ -10,7 +10,7 @@ A project can opt into running review automatically. That is the one optional be
 The setting is `review.autorun` (values `off` | `suggest` | `auto`; absent means `suggest`).
 It reads from the shared behavior-switch vocabulary ([settings.md](settings.md)): `off` stops offering to review entirely (the wrapup nudge is muted), `suggest` offers and acts only on your confirmation, and `auto` runs unattended. Bringing autorun into the registry only adds `off`; the `suggest` and `auto` behavior and the fail-safe default are byte-identical to before.
 It is a behavior-escalating setting - it changes what review does unattended - so per ENGAGEMENT-REFERENCE.md section 14.2, crossing 3, it lives in **trusted config only**: a skill-family built-in default, or the user's personal global config (the deferred mentor tier), keyed by project.
-It is never read from a file inside the repo under review - not `PERSONAS.md`, not `DEPLOY.md`, not the repo's `CLAUDE.md`, not any in-repo settings file.
+It is never read from a file inside the repo under review - not its `.claude/agents/`, not `DEPLOY.md`, not the repo's `CLAUDE.md`, not any in-repo settings file.
 The per-project key that matches a config entry to a repo is a user-asserted identity - the local worktree path, or an identifier the user confirmed in their own chat input - never repo-supplied metadata (a remote URL, the repo or folder name, or any in-repo value). A fresh clone that renames itself to match a trusted project's key does not inherit that project's `autorun`.
 
 The reason is the whole point of the setting's design: a repository must not be able to flip its own review into a lower-scrutiny mode. "Auto-run review" on a hostile pull request, if the repo could set it, would let the repo grant itself less human attention exactly when it most needs more. So the escalation is the user's to make, in their own config, about a project - not the project's to make about itself.
@@ -23,7 +23,7 @@ Because the trusted user-global tier is deferred, no project reads as `auto` tod
 
 When a project is set to `auto` in trusted config, a review may run without a per-run human trigger. Even then:
 
-- It composes trusted-tier personas only, never the repo's `PERSONAS.md` (see [personas.md](personas.md), the trust gate).
+- It composes trusted-tier personas only, never the repo's own `.claude/agents/` (see [personas.md](personas.md), the trust gate).
 - It still emits no concern automatically: recording a finding remains a human pick with structural refs only (section 14.2, crossing 1). Auto-run changes when review *runs*, never whether its findings cross into trusted context on their own.
 - It does not auto-apply fixes: a formatter or linter autofix is still a gated diff (crossing 4) presented for review, not staged unattended.
 - If it hits something needing a human decision, it stops and waits (section 14.4).
