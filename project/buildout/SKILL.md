@@ -76,10 +76,10 @@ Process references in [REFERENCES.md](reference/references.md): Shape Up (appeti
 ## Exit
 
 - /check-in for daily sessions after initial setup.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue, question, assumption)
 Writes: Active Workflow record in CLAUDE.md
 Override: workflow skill - writes Active Workflow on activation, clears on completion

@@ -11,7 +11,7 @@
 Selected archetypes in SCOPE.md add enforcement rules to the core set.
 If no archetypes selected: core rules only + dynamic adaptation.
 
-Provisional-doc pressure: surfaces issue concerns from provisional commits grouped by feature, with age-based escalation (see ENGAGEMENT-REFERENCE.md section 6).
+Provisional-doc pressure: surfaces issue concerns from provisional commits grouped by feature, with age-based escalation (see engagement/README.md section 6).
 Stale claims: warns about Claims older than 4 hours at session start.
 
 ## Phase regression

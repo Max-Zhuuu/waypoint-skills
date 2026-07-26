@@ -49,7 +49,7 @@ If the file already exists, append to it.
 
 1. **Spec:** invoke /spec. If a spec already exists for this entity, read it and ask whether to update or start fresh.
 2. **Build:** invoke the user's chosen implementation verb (/tdd default). If the user has a methodology preference from a previous /check-in, use that.
-3. **Before committing:** follow the exit protocol (see [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6). At natural boundaries, ask "Stable or provisional?" If the build verb is /tdd, it handles per-commit exit protocol internally.
+3. **Before committing:** follow the exit protocol (see [the engagement protocol](../../internals/engagement/README.md) section 6). At natural boundaries, ask "Stable or provisional?" If the build verb is /tdd, it handles per-commit exit protocol internally.
 4. **Wrapup:** suggest /wrapup when the verb reports complete. /wrapup runs the spec drift check, resolves flags, cascades to shared docs.
 
 ### After all features
@@ -69,13 +69,13 @@ Clear the Active Workflow section from CLAUDE.md (or mark as completed with date
 - /wrapup to resolve concerns and cascade docs.
 
 Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue, question)
 Writes: the Active Workflow record in CLAUDE.md (written on start, cleared on completion); `docs/_local/` notes as questions surface (gitignored). Specs and built features are delegated to /spec and the build verb.
-Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
+Override: commit-producing skill - follows exit protocol (engagement/README.md section 6)
 ## Tone
 
 Lightweight. This is the daily driver for "I need to add something."

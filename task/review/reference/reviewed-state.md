@@ -11,7 +11,7 @@ Reviewed-state is the one durable fact that serves both: "this exact diff was re
 ## Where it lives, and why
 
 Reviewed-state is kept in the same user-global trusted config as the switches ([settings.md](settings.md)), keyed by (project identity, diff hash), with the same key-provenance rule: a user-asserted identity, never repo-supplied metadata (see [autorun.md](autorun.md)).
-Suppressing a review is itself a scrutiny-reducing behavior, so it lives in trusted config for the same crossing-3 reason `autorun` does (ENGAGEMENT-REFERENCE.md section 14.2).
+Suppressing a review is itself a scrutiny-reducing behavior, so it lives in trusted config for the same crossing-3 reason `autorun` does ([review-safety.md](../../../internals/engagement/review-safety.md)).
 That is exactly why it cannot live in the repo: a repo-authored "already reviewed" marker would let a hostile pull request skip its own auto-review - the autorun key-provenance bug in a new costume.
 It is never read from a repo-authored marker.
 

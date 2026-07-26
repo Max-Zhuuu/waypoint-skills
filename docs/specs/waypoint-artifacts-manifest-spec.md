@@ -41,7 +41,7 @@ Rules that keep it a receipt and not a feature:
 
 ## Where it lives in the methodology
 
-It is a standard emission, described once in `internals/ENGAGEMENT-REFERENCE.md` next to the existing `concerns` emission, and referenced (not restated) by each skill.
+It is a standard emission, described once in `internals/engagement/manifest.md` next to the existing `concerns` emission, and referenced (not restated) by each skill.
 A skill already declares what it `Emits` and `Writes` in its frontmatter.
 The manifest is the human-visible echo of `Writes`: the frontmatter says what a skill is allowed to write, the manifest says what it did write this run.
 That pairing is the whole design: the manifest is `Writes`, surfaced.
@@ -70,7 +70,7 @@ Small: two slices, and the first is where all the definition lives.
 ### Slice A0 - the manifest emission, defined once
 **Depends on:** none
 **Autonomy:** hitl
-**Files:** internals/ENGAGEMENT-REFERENCE.md (a new emission subsection next to `concerns`)
+**Files:** internals/engagement/manifest.md (extracted from the engagement reference into its own file)
 **Done when:** the reference defines the manifest's fixed shape (grouped by verb, one line per path, the "no files changed" case), states that it is session-only and never a tracked file, and ties it to each skill's frontmatter `Writes` declaration as the run-time echo of it.
 **Notes:** this is a documentation-of-behavior slice; it changes no steering position and adds no crossing.
 

@@ -43,7 +43,7 @@ Works standalone; gains context when project scaffolding exists.
 A skill qualifies as a bridge when it:
 1. Has a self-contained core loop that works without any scaffolding
 2. Defines specific integration points (what project-layer data it reads or writes)
-3. Degrades gracefully per ENGAGEMENT-REFERENCE.md when integration data is missing
+3. Degrades gracefully per engagement/README.md when integration data is missing
 4. Never requires project setup to function at its core purpose
 
 ### Identified bridge skills
@@ -238,7 +238,7 @@ The Documentation Map grows with the project tier:
 ### Fallback
 
 When no Documentation Map exists (pre-/setup), skills fall back to well-known root paths.
-See ENGAGEMENT-REFERENCE.md for tier detection and fallback behavior.
+See engagement/README.md for tier detection and fallback behavior.
 
 ## Naming Classes
 
@@ -247,7 +247,7 @@ Suffix taxonomy for files in the skill family.
 | Class | Suffix | Purpose | Examples |
 |-------|--------|---------|----------|
 | User-facing doc | `FOO.md` | Project documentation authored or consumed by humans | NAMING.md, GLOSSARY.md, SCOPE.md |
-| Skill-internal reference | `FOO-REFERENCE.md` | Informs skill behavior, can be surfaced to users during uncertainty | ENGAGEMENT-REFERENCE.md, LOCAL-DOCS-REFERENCE.md, TRACKER-REFERENCE.md |
+| Skill-internal reference | `FOO-REFERENCE.md`, or a grouped subdirectory (`engagement/`, `chain/`) | Informs skill behavior, can be surfaced to users during uncertainty | CONCEPTS-REFERENCE.md; engagement/README.md, chain/reference.md |
 | Format template | `FOO-FORMAT.md` | Template for user-facing docs | GLOSSARY-FORMAT.md, ADR-FORMAT.md |
 
 ### Naming rules
@@ -281,7 +281,7 @@ The cascade biases toward machine-verifiable answers before asking the human.
 ## Write Discipline
 
 Files are classified by write semantics, not by a single-writer rule.
-See [ENGAGEMENT-REFERENCE.md](ENGAGEMENT-REFERENCE.md) section 7 for the full file classification table.
+See [engagement/README.md](engagement/README.md) section 7 for the full file classification table.
 
 ### Categories
 

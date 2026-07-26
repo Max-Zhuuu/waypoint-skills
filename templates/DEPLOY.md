@@ -50,4 +50,4 @@ load-bearing:                                        # touch any of these -> for
   The Intent block, the afk gate, and the escalate rule are adapter-independent.
   Switching adapters changes how a change ships, never what counts as shippable.
 
-The glob dialect (gitignore-style, rename/deletion handling, match-only) is pinned in `internals/ENGAGEMENT-REFERENCE.md` section 13.4.
+The glob dialect (gitignore-style, rename/deletion handling, match-only) is pinned in `internals/engagement/autonomy.md` (glob evaluation rules).

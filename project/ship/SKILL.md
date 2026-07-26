@@ -30,7 +30,7 @@ Verify the change is shippable, cheaply: Intent present and non-empty; every sli
 
 ### 4. Compose the afk gate (a proposal)
 
-The `autonomy` axis is defined once in [ENGAGEMENT-REFERENCE.md section 13](../../internals/ENGAGEMENT-REFERENCE.md). Compose the gate from already-authored inputs; never re-derive them:
+The `autonomy` axis is defined once in [autonomy.md](../../internals/engagement/autonomy.md). Compose the gate from already-authored inputs; never re-derive them:
 
 - **key 1a** - every shipped slice's `Autonomy:` tag (authored by breakdown) reads `afk`. An untagged slice counts as `hitl`.
 - **key 1b** - wrapup's `Blocking:` verdict line reads `none`. A missing verdict counts as `hitl`. Do not re-read raw CONCERNS.md to decide "blocking."
@@ -56,7 +56,7 @@ Surface reviewed-state as a non-blocking note ([reference/reviewed-state.md](../
 Does NOT: hold merge authority, run /review, or execute a deploy (DEPLOY.md destinations are routing strings, not commands).
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: none
 Writes: none - the PR is an outbound artifact, not a repo file.
 Override: needs network and an adapter; not Tier-1-offline like wrapup.
@@ -64,8 +64,8 @@ Override: needs network and an adapter; not Tier-1-offline like wrapup.
 ## Exit
 - The target holds the merge decision; /check-in surfaces staged-but-unpromoted work next session.
 - /review first if the change wants a critic pass (sibling skill).
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 Mechanical and honest. Ship proposes, the target disposes. Never imply `afk` means merged.

@@ -32,7 +32,7 @@ Run the lens and write a cheap throwaway findings note to gitignored `docs/_loca
 ### 4. Route each finding
 
 Present findings; for each, the human picks one route - spec, breakdown, apply-now, or note-as-concern. Nothing becomes permanent until a route is picked.
-The note-as-concern route is the only path into CONCERNS.md: a human pick at every tier (never automatic, even at Tier 3), storing a structural pointer only - `{file}:{line}`, fixed category, `type`, and a one-line description generated from that handle - never the finding's summary or prose (ENGAGEMENT-REFERENCE.md section 14.2, crossing 1).
+The note-as-concern route is the only path into CONCERNS.md: a human pick at every tier (never automatic, even at Tier 3), storing a structural pointer only - `{file}:{line}`, fixed category, `type`, and a one-line description generated from that handle - never the finding's summary or prose ([review-safety.md](../../internals/engagement/review-safety.md), crossing 1).
 
 ### 5. Fixes are ordinary changes
 
@@ -53,7 +53,7 @@ Print the findings and their chosen routes. Exit toward the next verb.
 Does NOT: ship, merge, or open a PR (that is /ship); auto-emit a concern; run itself automatically unless opted in via trusted config, never a repo file (reference/autorun.md); auto-invoke a repo-defined persona; or let a "mechanical" fix skip review.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: nothing automatically - a concern only on a human-picked route, with structural refs only (section 14.2).
 Writes: a throwaway findings note under gitignored `docs/_local/reviews/`; and reviewed-state (structural, in trusted config) on completing a review (reference/reviewed-state.md).
 Override: reviews only; holds no ship, merge, or auto-run authority.
@@ -61,8 +61,8 @@ Override: reviews only; holds no ship, merge, or auto-run authority.
 ## Exit
 - /ship when the change is ready to go out (sibling skill; review does not ship).
 - /spec or /breakdown when a finding was routed to one of them.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 Sharp and specific. A finding names a file, a line, and why it matters. Critique the work, never grade the diff against itself.

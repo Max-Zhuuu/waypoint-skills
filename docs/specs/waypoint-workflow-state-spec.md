@@ -214,7 +214,7 @@ Safety-first ordering: the graph and trigger are defined and proven to stop befo
 ### Slice W0 - the chain switch as a crossing-3 setting
 **Depends on:** the settings spec's switch registry (S2)
 **Autonomy:** hitl
-**Files:** internals/ENGAGEMENT-REFERENCE.md (section 14, one sentence naming the chain switch as a crossing-3 setting alongside `autorun`), the settings switch registry entry
+**Files:** internals/engagement/review-safety.md (one sentence naming the chain switch as a crossing-3 setting alongside `autorun`), the settings switch registry entry
 **Done when:** the chain switch exists in the registry with `off / suggest / auto` and default `suggest`, keyed per-project in user-global trusted config; section 14 names it as another crossing-3 setting and confirms the chain adds no new steering position and no new crossing.
 **Notes:** documentation-of-behavior slice; it stores the switch, not the graph.
 
@@ -235,7 +235,7 @@ Because it keys on the user-asserted project identity, a repo cannot write it; a
 ### Slice W3 - the dispatcher at the Exit boundary
 **Depends on:** W2, the artifacts-manifest emission (A0), and the settings reviewed-state slice (S4, for the `REVIEWED` guard)
 **Autonomy:** hitl
-**Files:** internals/ENGAGEMENT-REFERENCE.md (the standard Exit protocol gains a dispatch step after the manifest emission)
+**Files:** internals/chain/reference.md (the standard Exit protocol gains a dispatch step after the manifest emission)
 **Done when:** the shared Exit defines: derive state, resolve the guarded edge, classify, and act per the switch (`off` prints the plain suggestion, `suggest` prompts and waits, `auto` launches on clean and halts with a reason on a gate); it states that the trigger is skill-completion only, that the chain never self-wakes, and that a gate returns control to the user.
 
 ### Slice W4 - skills carry the dispatch Exit

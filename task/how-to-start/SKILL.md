@@ -76,10 +76,10 @@ Brief. Recommend one skill with one reason, then stop.
 ## Exit
 
 - Routes to the recommended skill. The routing is the exit.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: nothing (read-only routing skill)
 Writes: none
 Override: full opt-out - no tier detection, no concern emission, no nudging

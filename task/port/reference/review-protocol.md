@@ -32,4 +32,4 @@ Run mini-wrapup before committing:
 - **Term/pattern capture:** did porting reveal domain terms or patterns?
 - **Concern resolution:** does this work resolve any open concerns?
 
-See [ENGAGEMENT-REFERENCE.md](../../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
+See [the engagement protocol](../../../internals/engagement/README.md) section 6 for the full exit protocol.

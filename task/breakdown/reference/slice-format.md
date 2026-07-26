@@ -19,7 +19,7 @@ Output format (written to the spec file as a new section):
 
 ## The Autonomy tag
 
-`breakdown` authors the per-slice `autonomy` value; every downstream consumer renders it, none recomputes it (ENGAGEMENT-REFERENCE.md section 13).
+`breakdown` authors the per-slice `autonomy` value; every downstream consumer renders it, none recomputes it ([the autonomy axis](../../../internals/engagement/autonomy.md)).
 
 Tag a slice `afk` only when both hold:
 - its **Done when** is machine-verifiable (a test or check can confirm it without a human judgment call), and

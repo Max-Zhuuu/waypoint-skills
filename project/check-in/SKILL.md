@@ -53,10 +53,10 @@ Read [reference/enforcement.md](reference/enforcement.md) for the enforcement ru
 - Session continues under the invoked skill.
 
 Does NOT implement. Does NOT update docs (that is /wrapup). Does NOT promote (no promote verb exists; promotion is human-owned) or pull downstream text into the repo. Proposes work, then asks which verb to invoke.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: flags, session plan, priority recommendations
 Writes: writes `.claude/.setup-prompted` on first Tier 1 invocation
 Override: at Tier 1 without CONCERNS.md, skips concern-based priority and falls to phase-advance layer.

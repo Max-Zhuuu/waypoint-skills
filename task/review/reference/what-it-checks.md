@@ -20,7 +20,7 @@ Portable categories (the default lens sweeps all of them):
 A persona is a weighting over these categories, not a new axis: a named lens (`architect`, `creative-director`, or one you author) leans the same sweep toward the failure modes it cares about, while the default lens sweeps them evenly. A lens changes emphasis; a recorded finding still carries one of the fixed category names, so the vocabulary that crosses into a concern never changes (see [personas.md](personas.md) and [persona-grill.md](persona-grill.md)).
 
 Project conventions come from the Documentation Map: read CONVENTIONS.md / NAMING.md / UX.md and DESIGN-SYSTEM.md when they exist, and check the diff against them.
-A finding's category is one of the fixed names above, or a project-convention id that resolves to an existing entry in the convention docs and matches a fixed id token (for example `NAMING-03`); only the resolved token crosses, never a repo-authored free-text string, and if none resolves the finding falls back to a standards category. That is what keeps a recorded concern a pointer (ENGAGEMENT-REFERENCE.md section 14.2, crossing 1).
+A finding's category is one of the fixed names above, or a project-convention id that resolves to an existing entry in the convention docs and matches a fixed id token (for example `NAMING-03`); only the resolved token crosses, never a repo-authored free-text string, and if none resolves the finding falls back to a standards category. That is what keeps a recorded concern a pointer ([review-safety.md](../../../internals/engagement/review-safety.md), crossing 1).
 
 ## Intent - only when nobody downstream will
 

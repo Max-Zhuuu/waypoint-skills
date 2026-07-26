@@ -20,7 +20,7 @@ The routing is the anti-junk-drawer discipline: the earlier a route fits, the be
 
 ## The write path (into the trusted note)
 
-The personal note is trusted context (ENGAGEMENT-REFERENCE.md section 14.2, crossing 5), so a write to it is exactly the one rule:
+The personal note is trusted context ([review-safety.md](../../../internals/engagement/review-safety.md), crossing 5), so a write to it is exactly the one rule:
 
 1. **Propose in chat.** "Want me to remember X?" where X is drawn from what *you* said in this conversation.
 2. **Confirm in chat.** Confirmation is mandatory, never implied by silence.

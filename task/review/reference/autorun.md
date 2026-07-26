@@ -9,7 +9,7 @@ A project can opt into running review automatically. That is the one optional be
 
 The setting is `review.autorun` (values `off` | `suggest` | `auto`; absent means `suggest`).
 It reads from the shared behavior-switch vocabulary ([settings.md](settings.md)): `off` stops offering to review entirely (the wrapup nudge is muted), `suggest` offers and acts only on your confirmation, and `auto` runs unattended. Bringing autorun into the registry only adds `off`; the `suggest` and `auto` behavior and the fail-safe default are byte-identical to before.
-It is a behavior-escalating setting - it changes what review does unattended - so per ENGAGEMENT-REFERENCE.md section 14.2, crossing 3, it lives in **trusted config only**: a skill-family built-in default, or the user's personal global config (the deferred mentor tier), keyed by project.
+It is a behavior-escalating setting - it changes what review does unattended - so per [review-safety.md](../../../internals/engagement/review-safety.md), crossing 3, it lives in **trusted config only**: a skill-family built-in default, or the user's personal global config (the deferred mentor tier), keyed by project.
 It is never read from a file inside the repo under review - not its `.claude/agents/`, not `DEPLOY.md`, not the repo's `CLAUDE.md`, not any in-repo settings file.
 The per-project key that matches a config entry to a repo is a user-asserted identity - the local worktree path, or an identifier the user confirmed in their own chat input - never repo-supplied metadata (a remote URL, the repo or folder name, or any in-repo value). A fresh clone that renames itself to match a trusted project's key does not inherit that project's `autorun`.
 

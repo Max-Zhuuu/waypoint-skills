@@ -14,7 +14,7 @@ The grill refuses a lens that cannot answer all four:
 When all four are answered, the grill writes an agent file to `~/.claude/agents/<name>` (user-global, trusted): the name, a one-line identity, the domain, the three failure modes as lens questions, the boundary, and the citation basis.
 The persona is now runnable by name and eligible for auto-invocation, because it lives in the trusted user-global tier and is read by absolute path ([personas.md](personas.md), the trust gate).
 
-A persona is a weighting over the standard categories ([what-it-checks.md](what-it-checks.md)), not a new axis: its findings still carry one of the fixed category names, so a lens changes emphasis, never the vocabulary that crosses into a concern (ENGAGEMENT-REFERENCE.md section 14.2, crossing 1).
+A persona is a weighting over the standard categories ([what-it-checks.md](what-it-checks.md)), not a new axis: its findings still carry one of the fixed category names, so a lens changes emphasis, never the vocabulary that crosses into a concern ([review-safety.md](../../../internals/engagement/review-safety.md), crossing 1).
 
 ## What it refuses
 

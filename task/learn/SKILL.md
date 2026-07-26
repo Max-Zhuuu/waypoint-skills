@@ -37,7 +37,7 @@ Save to `docs/_local/learning/`. Create the directory if needed.
 For format and rules, see [learn-reference.md](reference/learn-reference.md#learning-notes).
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: question)
 Writes: docs/_local/learning/ (creates, gitignored)
 ## Exit
@@ -46,8 +46,8 @@ When the learning session ends, suggest next steps based on what was learned:
 - If the topic relates to a feature -> "/create to apply what you learned, or /spec to scope it?"
 - If the topic revealed a gap in project docs -> "/wrapup updates GLOSSARY.md, conventions, and specs with what you learned."
 - If the user is exploring broadly -> "Learning captured. Pick another topic, or back to building?"
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 

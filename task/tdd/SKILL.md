@@ -38,10 +38,10 @@ Disciplined. One test, one implementation, no shortcuts.
 Does NOT skip tests. Red-green-refactor only.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue)
 Writes: a per-slice done marker (structural, in trusted config) on completing a slice (reference/slice-marker.md)
-Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
+Override: commit-producing skill - follows exit protocol (engagement/README.md section 6)
 ## Exit
 
 **Mid-cycle commits** (individual test passing, incremental refactor):
@@ -56,9 +56,9 @@ Ask: "All slices complete. Stable enough to document, or provisional?"
 
 **On completing a slice** (its Done-when met, tests green): write the per-slice done marker ([reference/slice-marker.md](reference/slice-marker.md)), keyed by (project identity, slice id). This is the structural completion signal the chain reads to derive `REM` (remaining = defined minus marked); it is bookkeeping, not a position pointer, and an absent or unresolvable marker reads as remaining, never as done.
 
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
+See [the engagement protocol](../../internals/engagement/README.md) section 6 for the full exit protocol.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
 
 ## Per-cycle checklist
 

@@ -39,4 +39,4 @@ The auto-eligible label is a routing hint for a human, not a merge trigger.
 The `load-bearing` list can only ever force `hitl` earlier; it can never grant `afk`.
 That is safe because Waypoint no longer holds merge authority: the list is an advisory shift-left hint, not an auto-approve mechanism.
 For `github-pipeline`, the pipeline's own never-auto-approve list is the authority; where it is machine-readable, DEPLOY.md should point at it rather than re-enumerate it.
-Glob dialect, rename/deletion handling, and the match-only rule are pinned in ENGAGEMENT-REFERENCE.md section 13.4.
+Glob dialect, rename/deletion handling, and the match-only rule are pinned in [the autonomy axis, glob evaluation rules](../../../internals/engagement/autonomy.md).

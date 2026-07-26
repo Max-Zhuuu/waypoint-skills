@@ -68,7 +68,7 @@ Based on Phases 2-4, produce a plan and emit findings.
 Read [reference/output-format.md](reference/output-format.md) for the work-items format, the deprioritized list, the concurrent agent plan, and how to print the summary.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: flags, audit results, concern triage
 Writes: creates CONCERNS.md if absent (seeded with this run's findings)
 Override: Tier 1 behavior differs - creates CONCERNS.md rather than working without it.
@@ -78,7 +78,7 @@ When the audit is complete, suggest next steps:
 - If priorities shifted -> "/check-in reads your open concerns and proposes what to work on next."
 - If concerns need resolution -> "/wrapup updates GLOSSARY.md, conventions, and specs to match resolved decisions."
 - If scope needs revision -> "/grill-with-docs to stress-test and update SCOPE.md."
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 

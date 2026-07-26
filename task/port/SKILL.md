@@ -73,12 +73,12 @@ Faithful to the source system. Deviate only when documented.
 
 - /wrapup to resolve concerns and cascade docs.
 - /check-in for next migration screen.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 Does NOT write specs or logic docs. Reads them and implements.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md). Emits: concerns (type: issue, question). Writes: the migration inventory marker (`[P]`/`[provisional]`) and `docs/improvements/{entity}.md`; per-entity screen source via subagents, enumerated in the run manifest.
+See [the engagement protocol](../../internals/engagement/README.md). Emits: concerns (type: issue, question). Writes: the migration inventory marker (`[P]`/`[provisional]`) and `docs/improvements/{entity}.md`; per-entity screen source via subagents, enumerated in the run manifest.
 Override: commit-producing skill. Pre-condition: all three inputs required.
 
 ## References

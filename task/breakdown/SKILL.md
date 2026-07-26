@@ -68,7 +68,7 @@ Tier-adapted output (Tier 1/2/3 differences, GitHub sub-issues at Tier 3) - see 
 Edge cases (spec changes after breakdown, oversized slices, circular deps, missing acceptance criteria) - see [reference/edge-cases.md](reference/edge-cases.md).
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: question, issue)
 Writes: none
 ## Exit
@@ -77,8 +77,8 @@ After slices are written, suggest next steps:
 - "Start Slice 1? It's {one-line summary of what Slice 1 does}."
 - "/tdd to build Slice 1, or come back when ready - slices are in the spec."
 - If Tier 3: "GitHub issues created. /check-in reads open issues and proposes which to start."
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 

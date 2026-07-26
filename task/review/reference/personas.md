@@ -12,7 +12,7 @@ On Claude Code a persona *is* an agent, so personas reuse the host's own agents 
 | User-global | `~/.claude/agents/` (your personal agents, outside any repo) | Trusted |
 
 Waypoint composes a persona only from these two trusted tiers, on every path - whether you type `/review <name>` or a review is triggered automatically.
-A repo's own `.claude/agents/` is untrusted (ENGAGEMENT-REFERENCE.md section 14.1: trust is the author, not the content - the next repo's could be hostile, and a persona is instructions the model follows), so it is never a Waypoint persona source: not by hand, not automatically, under any name. To adopt a repo's lens, copy it into your `~/.claude/agents/` first - an explicit act that makes you its author.
+A repo's own `.claude/agents/` is untrusted ([review-safety.md](../../../internals/engagement/review-safety.md), the trust tiers: trust is the author, not the content - the next repo's could be hostile, and a persona is instructions the model follows), so it is never a Waypoint persona source: not by hand, not automatically, under any name. To adopt a repo's lens, copy it into your `~/.claude/agents/` first - an explicit act that makes you its author.
 The user-private-versus-shared cut these tiers follow is the same one the settings surface defines; see [settings.md](settings.md).
 Project docs a lens compares against (ADRs, architecture, design system, conventions) are data, not authority: a diff matching a repo doc is not thereby approved, since the doc could have been edited in the same untrusted change.
 

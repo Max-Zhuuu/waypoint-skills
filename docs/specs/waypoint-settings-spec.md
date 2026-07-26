@@ -55,7 +55,7 @@ A third destination, your host's native memory, holds soft preferences.
 It is not a Waypoint home and this spec does not touch it; the litmus just routes soft working style there.
 
 The cut is one question: is this user-private, or is it shared.
-Everything trusted lives in your user-global config, outside any repository, which is exactly where the review arc's safety invariant already requires a behavior-escalating setting to live (ENGAGEMENT-REFERENCE.md section 14.2, crossing 3: trusted config only, "never in a file inside the repo under review").
+Everything trusted lives in your user-global config, outside any repository, which is exactly where the review arc's safety invariant already requires a behavior-escalating setting to live (internals/engagement/review-safety.md, crossing 3: trusted config only, "never in a file inside the repo under review").
 A committed in-repo file (a repo's own `.claude/CLAUDE.md`, its `.claude/agents/`, `DEPLOY.md`) is shared, a pull request can ship one, so it stays untrusted, exactly as `PERSONAS.md` was in personas.md.
 
 ### Per-project without an in-repo file
@@ -152,7 +152,7 @@ That is a change to a shipped switch, but the registry refactor already touches 
 `review.persona` is not a behavior switch; it names a lens, so it is a string, not this enum.
 
 One thing that is **not** a switch and does not move here: `concerns: auto-emit`.
-It is read from the repo's own `CLAUDE.md` as project tier detection (ENGAGEMENT-REFERENCE.md section 1), so it is project-scoped and repo-authored, not user-global trusted config.
+It is read from the repo's own `CLAUDE.md` as project tier detection (internals/engagement/README.md, tier detection), so it is project-scoped and repo-authored, not user-global trusted config.
 Folding it in would change its scope and its trust tier, not alias it, so it stays exactly where it is.
 (The loop-back spec, lines 236-237, loosely called it a "global marker"; that is the wording this corrects.)
 
@@ -183,7 +183,7 @@ Every slice is `hitl`: this layer is the methodology's own trusted-context and s
 ### Slice S0 - the invariant
 **Depends on:** none
 **Autonomy:** hitl
-**Files:** internals/ENGAGEMENT-REFERENCE.md (section 14), CONTRIBUTING.md
+**Files:** internals/engagement/review-safety.md, CONTRIBUTING.md
 **Done when:** section 14 names the personal note as a second position-1 trusted-context source (alongside `CONCERNS.md`, not a new kind of position) and adds the one new crossing (observed content becoming a trusted note) that 14.2 does not yet enumerate; it records that the switches need no new position because a behavior-escalating setting is already crossing-3 material with the trusted user-global home crossing 3 already mandates; it cites (does not re-add) the chat-confirmation write rule already in 14.1; CONTRIBUTING carries the one-line rule for the user-global trusted config and cites section 14. The persona crossing-2 wording is not touched here; it changes in S3, with the retirement it describes.
 **Regrill:** the load-bearing pass - the wording must forbid every non-chat source for the personal note unambiguously, and must make the note's integrity legibly equal to crossing 3's.
 
@@ -199,13 +199,13 @@ Every slice is `hitl`: this layer is the methodology's own trusted-context and s
 **Autonomy:** hitl
 **Files:** settings.md; autorun.md
 **Done when:** the behavior switches (`review.autorun`, `auto-learn`, and later the chain switch) all read from one `off/suggest/auto` enum defaulting to `suggest`, so `autorun` gains an explicit `off` while its live behavior for `suggest` and `auto` stays byte-identical to today; `review.persona` stays a string (a lens name, not the enum); all resolve through the user-global home this spec builds (realizing autorun.md's already-deferred home, not aliasing an existing entry); the per-project block carries each switch as one entry keyed by user-asserted identity, resolved independently so no combination contradicts; no reader gains a new hard dependency.
-**Out of scope:** `concerns: auto-emit` does not move here (project tier-detection marker, ENGAGEMENT-REFERENCE.md section 1, repo-authored and project-scoped).
+**Out of scope:** `concerns: auto-emit` does not move here (project tier-detection marker, internals/engagement/README.md tier detection, repo-authored and project-scoped).
 **Regrill:** adding `off` to autorun does not change its `suggest`/`auto` behavior or its fail-safe default; no reader hard-depends on the new home; a persona can never carry a switch; and the project tier marker is untouched.
 
 ### Slice S3 - personas as per-user agents, and the authoring grill
 **Depends on:** S1
 **Autonomy:** hitl
-**Files:** personas.md (resolution rewritten onto the agents directory, shared `PERSONAS.md` retired); what-it-checks.md (a persona is a weighting over the standard categories); CONTRIBUTING.md (the "Authoring a persona" section, lines 239-249, rewritten to the agents model with no shared persona file); internals/ENGAGEMENT-REFERENCE.md (section 14 crossing 2: rewritten to trusted-only sourcing on every path - the repo tier is dropped, not relocated); task/review/reference/persona-grill.md (new); task/review/SKILL.md (offer "create a lens", one line)
+**Files:** personas.md (resolution rewritten onto the agents directory, shared `PERSONAS.md` retired); what-it-checks.md (a persona is a weighting over the standard categories); CONTRIBUTING.md (the "Authoring a persona" section, lines 239-249, rewritten to the agents model with no shared persona file); internals/engagement/review-safety.md (crossing 2: rewritten to trusted-only sourcing on every path - the repo tier is dropped, not relocated); task/review/reference/persona-grill.md (new); task/review/SKILL.md (offer "create a lens", one line)
 **Done when:** `/review <name>` runs the matching agent; the trusted tiers are the built-in `reference/personas/` question-files plus `~/.claude/agents/`, and Waypoint sources a persona only from these two, on every path; a repo's `.claude/agents/` is never a Waypoint persona source under any name, by hand or automatically, enforced by resolution reading the persona from a trusted absolute path (`~/.claude/agents/<name>` or a built-in) rather than dispatching a bare name through host resolution; crossing 2 is rewritten (superseding the earlier rename-to-repo draft) so the repo tier is dropped rather than relocated, and the crossing stays live and stricter (trusted-only on both paths); there is no shared `PERSONAS.md` anywhere and personas.md, CONTRIBUTING.md, and section 14 all reflect its retirement; an unknown name falls back to the default lens with a note; the authoring grill forces domain, three failure modes, lens boundary, and citation basis, writes an agent file to `~/.claude/agents/`, and refuses an ungrounded vibe lens.
 **Regrill:** a repo persona is never a Waypoint review lens - not auto-invoked and not hand-resolved through `/review` - guaranteed by the trusted absolute path Waypoint reads, not by the host's resolution order; section 14 is not edited ahead of the retirement it describes.
 **Notes:** the built-in `reference/personas/` folder stays portable question-files, unaffected by the agents-directory reuse, so built-ins work on adapters with no agents directory.

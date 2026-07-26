@@ -100,16 +100,16 @@ Every piece of instruction content has exactly one authoritative location.
 SKILL.md may **declare** (what this skill does differently) but never **define** (restate shared protocol).
 
 The same single-source rule governs computed values, not just prose.
-The `autonomy` axis (afk/hitl) is defined once in ENGAGEMENT-REFERENCE.md section 13 and authored per-input by exactly one skill each (`breakdown` tags slices, `wrapup` reports blocking concerns).
+The `autonomy` axis (afk/hitl) is defined once in engagement/autonomy.md and authored per-input by exactly one skill each (`breakdown` tags slices, `wrapup` reports blocking concerns).
 Every other skill **cites, never recomputes**: it renders the authoring skill's output and never re-runs the derivation from raw state.
 A skill that lacks an authoritative rendering treats the value as `hitl` rather than computing its own.
 
 | Content type | Authoritative location | SKILL.md contains |
 |-------------|----------------------|-------------------|
-| Engagement protocol | ENGAGEMENT-REFERENCE.md | Declaration only (emits, writes, override) |
-| Autonomy axis | ENGAGEMENT-REFERENCE.md section 13 | Citation only (render the value, never recompute it) |
+| Engagement protocol | engagement/README.md | Declaration only (emits, writes, override) |
+| Autonomy axis | engagement/autonomy.md | Citation only (render the value, never recompute it) |
 | Load-bearing globs | DEPLOY.md (per project) | Citation only (read the globs, never hardcode a danger list) |
-| Review safety invariant | ENGAGEMENT-REFERENCE.md section 14 | Citation only (obey the five crossings, never restate or weaken them) |
+| Review safety invariant | engagement/review-safety.md | Citation only (obey the five crossings, never restate or weaken them) |
 | Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
 | Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
 | Tone | SKILL.md | 1 sentence, mandatory |
@@ -128,7 +128,7 @@ The agent must read the file. Silent degradation risk is too high for optional l
 
 **Shared infrastructure** (internals/*.md, process/*.md) - declaration + on-demand:
 ```
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 ```
 The agent consults on demand when performing an engagement action, not on every invocation.
 This preserves the token savings from engagement deduplication.
@@ -199,19 +199,19 @@ The `## Engagement` section in each SKILL.md is a pure declaration - only fields
 
 ```markdown
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue, question)
 Writes: none
-Override: commit-producing skill - follows exit protocol (section 6)
+Override: commit-producing skill - follows exit protocol (README.md section 6)
 ```
 
 3-5 lines per skill. No boilerplate (nudge protocol, concern format, prohibitions, claims check).
-Those are shared protocol defined in ENGAGEMENT-REFERENCE.md.
+Those are shared protocol defined in the engagement protocol (engagement/README.md).
 
-The `Writes:` line is lint-enforced (`lint-skills.sh`), because it is the frontmatter half of the section 15 manifest and a dishonest one lets a skill skip its receipt:
+The `Writes:` line is lint-enforced (`lint-skills.sh`), because it is the frontmatter half of the artifacts manifest (engagement/manifest.md) and a dishonest one lets a skill skip its receipt:
 - `Writes: none` is only valid when the skill writes no repo files. If frontmatter `outputs:` names any artifact other than `concerns` (an inventory marker, a workflow record, a doc), `Writes:` must name it too.
-- Any skill whose `Writes:` is not `none` must cite section 15 from its Exit, or its manifest never fires at run time.
-Concern emission is declared under `Emits:`, not `Writes:` - appending a concern is not a repo-file write for manifest purposes (ENGAGEMENT-REFERENCE.md section 15.2).
+- Any skill whose `Writes:` is not `none` must cite engagement/manifest.md from its Exit, or its manifest never fires at run time.
+Concern emission is declared under `Emits:`, not `Writes:` - appending a concern is not a repo-file write for manifest purposes (engagement/manifest.md, the empty case).
 
 ## The outbound seam
 
@@ -226,12 +226,12 @@ Two invariants govern anything added to this seam:
 `DEPLOY.md` is the per-project delivery config, sibling to `ARCHITECTURE.md`: architecture says how the system is built, deploy says how a change reaches production.
 Its `load-bearing` glob list is the authoritative source for which paths force `hitl`; skills read it and never hardcode a danger list.
 The list is deny-only - it can force `hitl` earlier but can never grant `afk` - which is safe precisely because Waypoint holds no merge authority.
-The glob dialect is pinned in ENGAGEMENT-REFERENCE.md section 13.4; the axis it feeds is defined in section 13.
+The glob dialect is pinned in engagement/autonomy.md (glob evaluation rules); the axis it feeds is defined in the same file.
 
 ## The review safety invariant
 
 `/review` and the loop-back read text Waypoint did not author (a repo's diff, a reviewer's comments, a repo's own `.claude/agents/`), and on a pull request that text is untrusted.
-Any skill that touches review must obey the five-crossing rule defined in ENGAGEMENT-REFERENCE.md section 14: untrusted text never reaches a position that steers a later turn.
+Any skill that touches review must obey the five-crossing rule defined in engagement/review-safety.md: untrusted text never reaches a position that steers a later turn.
 The five crossings and their gates, one line each:
 
 - **Finding to concern:** never auto-written (a human pick, at every tier including Tier 3); every field is a structural coordinate (file, line) or a fixed-vocabulary value, never free text the finding supplied, quoted or paraphrased. A review-sourced concern omits section 4's free-text context field.
@@ -241,7 +241,7 @@ The five crossings and their gates, one line each:
 - **Observed content to note:** the user's personal note in the trusted global config is written only from the user's own chat input on confirmation, never from observed content (a repo file, diff, comment, page, or tool result); a preference inferred from the material under review never enters it without a fresh confirmation.
 
 Trusted means the skill family's built-ins and the user's personal global config (written only from the user's own chat input on confirmation); everything inside the repo under review is untrusted, judged by author not by content.
-The same chat-confirmed rule governs everything you author in that user-global trusted config - switches, reviewed-state, personas, and the personal note - so nothing there is ever set from a repo (ENGAGEMENT-REFERENCE.md section 14.1).
+The same chat-confirmed rule governs everything you author in that user-global trusted config - switches, reviewed-state, personas, and the personal note - so nothing there is ever set from a repo (engagement/review-safety.md, the trust tiers).
 
 ### Authoring a persona
 
@@ -253,7 +253,7 @@ Waypoint ships no shared persona document: there is no `PERSONAS.md`. The two ti
 - **Built-in** (`reference/personas/`) - trusted; ships with the skill.
 - **User-global** (`~/.claude/agents/`, outside any repo) - trusted.
 
-Waypoint composes a persona only from these two tiers, by absolute path, on every path - manual or automatic - so a repo's own `.claude/agents/` can never become a review lens (a repo shares the agents directory name, so Waypoint never dispatches a bare name for the host to resolve). A repo's lens is untrusted; to use one, copy it into `~/.claude/agents/`. See ENGAGEMENT-REFERENCE.md section 14 and `task/review/reference/personas.md`.
+Waypoint composes a persona only from these two tiers, by absolute path, on every path - manual or automatic - so a repo's own `.claude/agents/` can never become a review lens (a repo shares the agents directory name, so Waypoint never dispatches a bare name for the host to resolve). A repo's lens is untrusted; to use one, copy it into `~/.claude/agents/`. See engagement/review-safety.md and `task/review/reference/personas.md`.
 
 ## Multi-phase workflows
 
@@ -306,4 +306,9 @@ A CI link-resolution check is a planned follow-up; until it exists, this invaria
 ## Design references
 
 - [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [internals/ENGAGEMENT-REFERENCE.md](internals/ENGAGEMENT-REFERENCE.md) - Tier detection, nudge protocol, concern emission rules
+- [internals/engagement/README.md](internals/engagement/README.md) - Tier detection, nudge protocol, concern emission rules (the shared spine)
+- [internals/engagement/manifest.md](internals/engagement/manifest.md) - the artifacts manifest emission
+- [internals/engagement/autonomy.md](internals/engagement/autonomy.md) - the autonomy axis (afk/hitl)
+- [internals/engagement/review-safety.md](internals/engagement/review-safety.md) - the review safety invariant (the five crossings)
+- [internals/chain/reference.md](internals/chain/reference.md) - the chain dispatcher and the graph it walks
+- [internals/chain/validation.md](internals/chain/validation.md) - the chain validation harness

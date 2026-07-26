@@ -85,7 +85,7 @@ If any of the three is missing, skip the ADR. Use the format in [adr-format.md](
 Adversarial but constructive - stress the plan against the domain model.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: question, assumption)
 Writes: GLOSSARY.md (shared-append), docs/adr/ (creates)
 ## Exit
@@ -94,6 +94,6 @@ After all branches are resolved:
 - "Decisions resolved and docs updated. /breakdown to decompose into implementation slices, or /spec to extract acceptance criteria from the updated doc."
 
 /spec detects recently-grilled docs and skips its own grill phase, so the chain is non-redundant either way.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 </supporting-info>

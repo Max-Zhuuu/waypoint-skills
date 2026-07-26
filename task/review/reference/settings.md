@@ -32,7 +32,7 @@ A third destination, your host's native memory, holds soft preferences.
 It is not a Waypoint home; the litmus just routes soft working style there.
 
 The cut is one question: is this user-private, or is it shared.
-Everything trusted you configure lives in your user-global config, outside any repository - which is exactly where the review safety invariant already requires a behavior-escalating setting to live (ENGAGEMENT-REFERENCE.md section 14.2, crossing 3: trusted config only, "never in a file inside the repo under review").
+Everything trusted you configure lives in your user-global config, outside any repository - which is exactly where the review safety invariant already requires a behavior-escalating setting to live ([review-safety.md](../../../internals/engagement/review-safety.md), crossing 3: trusted config only, "never in a file inside the repo under review").
 A committed in-repo file is shared - a pull request can ship one - so it stays untrusted, exactly as a repo's own `.claude/agents/` is in [personas.md](personas.md).
 
 ## Per-project without an in-repo file
@@ -84,7 +84,7 @@ The per-project block carries each switch as one entry, keyed by the user-assert
 ### Not a switch: `concerns: auto-emit`
 
 `concerns: auto-emit` is not in this registry.
-It is read from the repo's own `CLAUDE.md` as project tier detection (ENGAGEMENT-REFERENCE.md section 1), so it is project-scoped and repo-authored, not user-global trusted config.
+It is read from the repo's own `CLAUDE.md` as project tier detection ([the engagement protocol](../../../internals/engagement/README.md), tier detection), so it is project-scoped and repo-authored, not user-global trusted config.
 Folding it in would change its scope and its trust tier rather than alias it, so it stays exactly where it is.
 
 ## What is not here

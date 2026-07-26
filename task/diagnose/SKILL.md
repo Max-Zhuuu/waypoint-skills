@@ -50,8 +50,8 @@ If the fix is a workaround or the root cause is unclear, commit as provisional w
 
 State next step: "/wrapup to update shared docs, or another bug?"
 
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+See [the engagement protocol](../../internals/engagement/README.md) section 6 for the full exit protocol.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 
@@ -60,6 +60,6 @@ Clinical. Follow the evidence, not the hunch.
 Does NOT skip straight to a fix. Runs the full diagnosis loop.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
+See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue, question)
 Writes: none

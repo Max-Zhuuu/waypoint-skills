@@ -30,7 +30,7 @@ For each finding, the human picks exactly one route. Nothing becomes permanent u
 
 ## The concern route is gated and structural
 
-Route 4 is the only path from a finding into CONCERNS.md, and it is a human pick, never automatic - at every tier, including Tier 3 (ENGAGEMENT-REFERENCE.md section 14.2, crossing 1).
+Route 4 is the only path from a finding into CONCERNS.md, and it is a human pick, never automatic - at every tier, including Tier 3 ([review-safety.md](../../../internals/engagement/review-safety.md), crossing 1).
 Every field of the concern is a structural pointer: the `{file}:{line}` coordinate, the fixed category, and the section-4 `type`.
 The section-4 header's mandatory `{one-line description}` is generated from that handle (for example `{category} finding at {file}:{line}`), never lifted from the finding's wording, and the free-text context field is omitted.
 All of the finding's prose - both its one-line summary (`## F-N ...`) and its why-it-matters lines - stays in the throwaway note; none of it is copied or paraphrased into the concern body, because CONCERNS.md is injected as trusted context every turn.

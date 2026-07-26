@@ -14,4 +14,4 @@ Apply the tracker label rendered from the slice's `Autonomy:` tag (`afk` -> `rea
 gh issue create --title "Slice 1: {name}" --body "{details}" --label "ready-for-agent" --project "{project}" --parent "{parent-issue-number}"
 ```
 
-The label renders the same `autonomy` value `/ship` reads; it is never recomputed here (ENGAGEMENT-REFERENCE.md section 13.1).
+The label renders the same `autonomy` value `/ship` reads; it is never recomputed here ([the autonomy axis](../../../internals/engagement/autonomy.md)).

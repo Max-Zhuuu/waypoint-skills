@@ -8,7 +8,7 @@ Until every check here passes on a real engagement, `auto` stays experimental: t
 
 Three things must hold on a real flow, not just on paper:
 
-1. Every guard predicate is exercised - both branches of each - and resolves the edge the table ([CHAIN-REFERENCE.md](CHAIN-REFERENCE.md)) says it should.
+1. Every guard predicate is exercised - both branches of each - and resolves the edge the table ([reference.md](reference.md)) says it should.
 2. Every gate actually halts and returns control to the human.
 3. R1's equivalence property holds: an `auto` run of a flow is identical to a hand-run of the same flow, minus the typing.
 
