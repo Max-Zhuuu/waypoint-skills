@@ -536,7 +536,7 @@ The trigger is the one moment that already exists in every skill: the skill-comp
 4. It acts per the `chain` switch:
    - **off** - print the plain next-step suggestion (today's Exit line) and stop.
    - **suggest** - print the resolved next hop as a prompt and wait for the human.
-   - **auto** - on a clean edge, launch the next skill in the same flow via the host's skill invocation; on a gate edge, halt and print the reason.
+   - **auto** - on a clean edge, launch the next skill in the same flow via the host's skill invocation; on a gate edge, halt and print the reason. `auto` is experimental: it prints a one-line experimental notice when it first engages in a session, and stays experimental until the validation harness passes ([CHAIN-VALIDATION.md](CHAIN-VALIDATION.md)).
 
 The guards read the derived homes, not the manifest: the manifest is the receipt, the homes are the truth.
 

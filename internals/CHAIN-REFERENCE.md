@@ -5,6 +5,8 @@ This reference defines the graph it walks: the guards, the eight edges, and the 
 It is trusted built-in reference and is never read from any repo under review.
 The switch that turns the chain on is `chain` in the settings registry ([../task/review/reference/settings.md](../task/review/reference/settings.md)); the dispatcher that reads this graph at each skill's Exit is defined in the shared Exit protocol (ENGAGEMENT-REFERENCE.md).
 
+`auto` is experimental until the validation harness ([CHAIN-VALIDATION.md](CHAIN-VALIDATION.md)) passes on a real engagement: the default `suggest` changes nothing about today's behavior, `off` is a genuine mute, and `auto` is an explicit, experimental opt-in.
+
 ## The master invariant
 
 The chain is a dispatcher, not an executor.
