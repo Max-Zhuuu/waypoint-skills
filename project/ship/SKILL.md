@@ -45,6 +45,7 @@ Route per the 2x3 engagement table (section 13.5). Open-vs-hold is set by engage
 ### 6. Present, then act
 
 Print the compact session digest and the clickable link before anything opens. Then open or hold, and report.
+Surface reviewed-state as a non-blocking note ([reference/reviewed-state.md](../../task/review/reference/reviewed-state.md)): say whether this exact diff was already reviewed, but never gate shipping on it - ship does not review.
 
 ## Output surfaces
 

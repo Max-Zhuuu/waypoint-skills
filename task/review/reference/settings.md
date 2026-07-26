@@ -83,4 +83,4 @@ Folding it in would change its scope and its trust tier rather than alias it, so
 Personas are not settings and do not live in this file: they are agents, resolved in [personas.md](personas.md).
 This surface only names the default review lens - the trusted standards sweep in [what-it-checks.md](what-it-checks.md); it holds no persona definitions.
 Every write to anything trusted here obeys section 14.1's one rule: it is written only from your own chat input, on explicit confirmation, and never from observed content.
-The write path is propose-in-chat, confirm-in-chat, then write; reviewed-state is the one skill-authored exception, because its payload is purely structural (section 14.2, crossing 1's reasoning).
+The write path is propose-in-chat, confirm-in-chat, then write; reviewed-state sits outside that rule (not as an exception to it), because it carries no user content - only a diff hash and a user-asserted key ([reviewed-state.md](reviewed-state.md)).
