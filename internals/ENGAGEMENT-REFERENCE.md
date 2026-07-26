@@ -515,3 +515,34 @@ A `Writes: none` skill still prints the header, the `no files changed` line, and
 
 This section is the single definition of the manifest's shape.
 Each writing skill emits the manifest by citing this section from its Exit rather than restating the format, so the block is byte-uniform across skills.
+
+## 16. The Chain Dispatcher
+
+The chain auto-advances a confident user across the skill flow's clean hops and stops at every gate.
+It is off by default: the `chain` switch (the settings registry) is `off / suggest / auto`, default `suggest`, and the graph it walks - the guards, the eight edges, and the clean-or-gate classification - is the trusted built-in reference [CHAIN-REFERENCE.md](CHAIN-REFERENCE.md), never read from any repo under review.
+This section defines only the dispatch step every skill runs at its Exit; it adds no steering position and no crossing (the switch is crossing-3, section 14.2).
+
+### 16.1 The trigger is skill completion
+
+There is no daemon, no poll, no watcher.
+The trigger is the one moment that already exists in every skill: the skill-completion boundary.
+"Trigger" and "evaluate" are the same event - a skill exiting - so the dispatcher is one more step in the shared Exit, immediately after the manifest emission (section 15).
+
+### 16.2 The sequence at every skill's end
+
+1. The skill finishes its work and applies its own gated writes; crossing 4 and the rest have already fired inside it.
+2. It emits the artifacts manifest (section 15), its receipt.
+3. The dispatcher runs: derive the current structural state from the typed homes (whether a spec exists, the open-concern count, the reviewed-state hash, the per-slice done markers), resolve the one outgoing edge whose guard holds, and classify it clean or gate (CHAIN-REFERENCE.md).
+4. It acts per the `chain` switch:
+   - **off** - print the plain next-step suggestion (today's Exit line) and stop.
+   - **suggest** - print the resolved next hop as a prompt and wait for the human.
+   - **auto** - on a clean edge, launch the next skill in the same flow via the host's skill invocation; on a gate edge, halt and print the reason.
+
+The guards read the derived homes, not the manifest: the manifest is the receipt, the homes are the truth.
+
+### 16.3 What the trigger guarantees
+
+- **A gate returns control to the user.** On any gate edge the dispatcher stops and hands back, in every mode; `auto` walks a user to the gate, never through it.
+- **No self-wakeup.** The trigger is a within-session skill completion, and a gate returns control, so the chain dies at the first gate and never restarts on its own. A cold session the next morning launches nothing: the human re-enters by invoking a skill, and the dispatcher re-engages from that skill's Exit. An `auto` chain is a within-turn continuation, not an autonomous loop - the runtime proof of the derived spine, since there is no chain object to resume.
+- **It is not autorun.** The chain fires on skill completion (a continuation); autorun fires on an external event such as a commit (a trigger). Different entry conditions and mechanisms, so they stay separate switches and compose only at the review node (edge 6: `review.autorun` wins there, R3).
+- **Auto-launch is safe by R1.** Firing the next skill is never itself irreversible: launching `breakdown` or entering `review` only reads and analyzes, and launching `tdd` still gates its diffs inside crossing 4. The dispatcher selects and launches; it never executes a gated action.
