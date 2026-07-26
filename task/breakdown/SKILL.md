@@ -78,6 +78,7 @@ After slices are written, suggest next steps:
 - "/tdd to build Slice 1, or come back when ready - slices are in the spec."
 - If Tier 3: "GitHub issues created. /check-in reads open issues and proposes which to start."
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
+- On exit, after the manifest, run the chain dispatcher for the next hop, per [ENGAGEMENT-REFERENCE.md section 16](../../internals/ENGAGEMENT-REFERENCE.md); a gate (or no clean edge) stops and hands back.
 
 ## Tone
 
