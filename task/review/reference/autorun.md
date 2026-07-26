@@ -1,13 +1,14 @@
 # The auto-run setting
 
 By default `/review` is suggested, not forced (wrapup nudges it, you can always run it by hand). This matches every other Waypoint skill: the default leaves you in control.
-A project can opt into running review automatically. That is the one optional setting this slice adds, and it is deliberately constrained.
+A project can opt into running review automatically. That is the one optional behavior switch on the settings surface, and it is deliberately constrained.
 
 ## Where it lives, and why
 
 `review.autorun` is one switch on the settings surface: [settings.md](settings.md) states the litmus, the two homes, and the keying rule that every switch follows, and this section covers only what is specific to auto-run.
 
-The setting is `review.autorun` (values `suggest` | `auto`; absent means `suggest`).
+The setting is `review.autorun` (values `off` | `suggest` | `auto`; absent means `suggest`).
+It reads from the shared behavior-switch vocabulary ([settings.md](settings.md)): `off` stops offering to review entirely (the wrapup nudge is muted), `suggest` offers and acts only on your confirmation, and `auto` runs unattended. Bringing autorun into the registry only adds `off`; the `suggest` and `auto` behavior and the fail-safe default are byte-identical to before.
 It is a behavior-escalating setting - it changes what review does unattended - so per ENGAGEMENT-REFERENCE.md section 14.2, crossing 3, it lives in **trusted config only**: a skill-family built-in default, or the user's personal global config (the deferred mentor tier), keyed by project.
 It is never read from a file inside the repo under review - not `PERSONAS.md`, not `DEPLOY.md`, not the repo's `CLAUDE.md`, not any in-repo settings file.
 The per-project key that matches a config entry to a repo is a user-asserted identity - the local worktree path, or an identifier the user confirmed in their own chat input - never repo-supplied metadata (a remote URL, the repo or folder name, or any in-repo value). A fresh clone that renames itself to match a trusted project's key does not inherit that project's `autorun`.
