@@ -37,7 +37,8 @@ Each slice must be:
 Slice granularity: one slice per screen, per API endpoint, or per behavioral unit.
 If a slice touches more than ~5 files, it's too big - decompose further.
 
-Output format written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
+Tag every slice `Autonomy: afk | hitl` - `afk` only when its Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface; untagged is treated as `hitl` downstream.
+Output format and the tagging rule written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
 
 ### Step 3 - Validate against scope
 
