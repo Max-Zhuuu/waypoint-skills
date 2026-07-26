@@ -225,12 +225,12 @@ The glob dialect is pinned in ENGAGEMENT-REFERENCE.md section 13.4; the axis it 
 
 ## The review safety invariant
 
-`/review` and the loop-back read text Waypoint did not author (a repo's diff, a reviewer's comments, a project `PERSONAS.md`), and on a pull request that text is untrusted.
+`/review` and the loop-back read text Waypoint did not author (a repo's diff, a reviewer's comments, a repo's own `.claude/agents/`), and on a pull request that text is untrusted.
 Any skill that touches review must obey the five-crossing rule defined in ENGAGEMENT-REFERENCE.md section 14: untrusted text never reaches a position that steers a later turn.
 The five crossings and their gates, one line each:
 
 - **Finding to concern:** never auto-written (a human pick, at every tier including Tier 3); every field is a structural coordinate (file, line) or a fixed-vocabulary value, never free text the finding supplied, quoted or paraphrased. A review-sourced concern omits section 4's free-text context field.
-- **Auto-invoked persona:** trusted-tier only (built-in or user-global); a repo `PERSONAS.md` persona runs by hand but never auto.
+- **Auto-invoked persona:** trusted-tier only (built-in or user-global `~/.claude/agents/`), read by absolute path; a repo's own `.claude/agents/` persona runs by hand but never auto.
 - **Behavior-escalating setting** (e.g. auto-run review): trusted config only, never a file in the repo under review.
 - **Fix output:** a formatter or linter autofix is an ordinary gated diff - same build, same review; there is no mechanical bypass.
 - **Observed content to note:** the user's personal note in the trusted global config is written only from the user's own chat input on confirmation, never from observed content (a repo file, diff, comment, page, or tool result); a preference inferred from the material under review never enters it without a fresh confirmation.
@@ -240,15 +240,16 @@ The same chat-confirmed rule governs everything you author in that user-global t
 
 ### Authoring a persona
 
-A persona is a lens - a name plus a set of questions the review asks. The machinery is identical across personas; only the questions change.
+A persona is a lens - a name plus a set of questions the review asks, a weighting over the standard categories. The machinery is identical across personas; only the questions change.
 Author a built-in as a file in `task/review/reference/personas/` (name, one-line identity, a short list of lens questions); it ships trusted with the skill family.
-The three tiers, in trust order:
+A personal lens is an agent in your `~/.claude/agents/`, authored through the grill (`task/review/reference/persona-grill.md`), which forces a domain, three failure modes, a lens boundary, and a citation basis and refuses an ungrounded vibe lens.
+Waypoint ships no shared persona document: there is no `PERSONAS.md`. The three tiers, in trust order:
 
 - **Built-in** (`reference/personas/`) - trusted; ships with the skill.
-- **User-global** (personal config, outside any repo; the deferred mentor tier) - trusted.
-- **Project** (`PERSONAS.md` in the repo under review) - untrusted; runnable by hand, never auto-invoked.
+- **User-global** (`~/.claude/agents/`, outside any repo) - trusted.
+- **Project** (a repo's own `.claude/agents/`) - untrusted; runnable by hand, never auto-invoked.
 
-Manual resolution searches the trusted tiers before the project tier, so a repo can never shadow a built-in name; automatic invocation composes trusted tiers only. See ENGAGEMENT-REFERENCE.md section 14 and `task/review/reference/personas.md`.
+Manual resolution searches the trusted tiers before the project tier, so a repo can never shadow a built-in name; automatic invocation composes trusted tiers only, read by absolute path (never a bare name the host might resolve to a repo file). See ENGAGEMENT-REFERENCE.md section 14 and `task/review/reference/personas.md`.
 
 ## Multi-phase workflows
 

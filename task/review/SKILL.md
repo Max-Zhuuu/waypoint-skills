@@ -18,7 +18,7 @@ Invoked by hand as `/review`, or suggested by `/wrapup`. It reviews; you decide 
 
 ### 1. Set the lens
 
-`/review` runs the default standards sweep; `/review <persona>` runs a named lens. Resolution order, the three trust tiers, and the auto-invoke trust gate are in [reference/personas.md](reference/personas.md). Built-in lenses: `architect`, `creative-director`.
+`/review` runs the default standards sweep; `/review <persona>` runs a named lens. Resolution order, the three trust tiers, and the auto-invoke trust gate are in [reference/personas.md](reference/personas.md). Built-in lenses: `architect`, `creative-director`. Author your own with `/review create <name>`, a grounded grill ([reference/persona-grill.md](reference/persona-grill.md)) that writes an agent to `~/.claude/agents/`.
 Whether review runs on its own (default is suggested, never forced) is the trusted-config setting in [reference/autorun.md](reference/autorun.md).
 
 ### 2. Decide scope

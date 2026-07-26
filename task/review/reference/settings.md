@@ -26,7 +26,7 @@ It is not a Waypoint home; the litmus just routes soft working style there.
 
 The cut is one question: is this user-private, or is it shared.
 Everything trusted you configure lives in your user-global config, outside any repository - which is exactly where the review safety invariant already requires a behavior-escalating setting to live (ENGAGEMENT-REFERENCE.md section 14.2, crossing 3: trusted config only, "never in a file inside the repo under review").
-A committed in-repo file is shared - a pull request can ship one - so it stays untrusted, exactly as `PERSONAS.md` is in [personas.md](personas.md).
+A committed in-repo file is shared - a pull request can ship one - so it stays untrusted, exactly as a repo's own `.claude/agents/` is in [personas.md](personas.md).
 
 ## Per-project without an in-repo file
 
