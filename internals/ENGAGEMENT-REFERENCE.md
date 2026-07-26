@@ -9,7 +9,7 @@ The tier declaration is the contract; this document is the specification.
 
 The engagement tiers answer "may I act unattended right now" (a permission).
 Section 13 defines a separate axis - `autonomy`, "could this change ship unattended at all" (a capability) - and the table that composes the two.
-Section 14 defines the review safety invariant - the four points where text from a repo under review could reach a position that steers a later turn, and the gate at each.
+Section 14 defines the review safety invariant - the five points where untrusted text could reach a position that steers a later turn, and the gate at each.
 
 ## 1. Tier Detection
 
@@ -434,7 +434,7 @@ The one rule: untrusted text never crosses into a position where it could steer 
 A position steers if the model later reads it as instruction rather than data.
 Exactly two positions do that, and both must be fed only by trusted authors:
 
-- **Trusted context** - anything injected into the model as ground truth. `CONCERNS.md` is read on every turn, so its contents are trusted context.
+- **Trusted context** - anything injected into the model as ground truth. `CONCERNS.md` is read on every turn, so its contents are trusted context. The user's personal note in the global config (14.1) is a second source of this same position: it too is injected as ground truth, so it is trusted context, not a new kind of position.
 - **An auto-invoked behavior** - a persona or setting that shapes what an unattended review does, chosen without a human in that moment.
 
 Everything else (an ephemeral finding printed to the session, a diff read as data) is not a steering position and is not restricted.
@@ -446,14 +446,17 @@ Everything else (an ephemeral finding printed to the session, a diff read as dat
 
 The gate is the author, not the content: a well-written repo persona is still untrusted, because the next repo's could be hostile.
 
-### 14.2 The four crossings
+### 14.2 The five crossings
 
-These are the four points where the repository under review could steer or short-circuit its own review. Each has one gate, and the gates are not interchangeable.
+These are the five points where untrusted content could steer or short-circuit review, or plant a preference that steers a later turn. Each has one gate, and the gates are not interchangeable.
 
 - **Crossing 1 - a finding becomes a concern.** A `/review` finding is never written to `CONCERNS.md` automatically - recording one is always a human pick, at every tier, including Tier 3, whose silent auto-emission (sections 2-4) does not apply to review-sourced concerns. Every field of a recorded concern is either a structural coordinate (file path, line number) or a value from a fixed, skill-defined vocabulary (the section-4 `type` enum, a standards category); no field - including the one-line description and any context line - is ever a free-text string the finding, the code, or a reviewer comment supplied, whether quoted or paraphrased. This overrides, not extends, the free-text `{1-3 lines of context}` field of section 4: a review-sourced concern omits it. The concern is a pointer, never a copy or a summary. `CONCERNS.md` is injected as trusted context every turn, so a paraphrase is as steering as a quote.
 - **Crossing 2 - a persona is auto-invoked.** An automatically triggered review composes trusted-tier personas only. A repo-supplied `PERSONAS.md` persona can always be run by hand (an explicit human choice), but can never be the persona an auto-invoked review selects. Unknown persona name falls back to the default lens with a note; it never loads repo text as the lens.
 - **Crossing 3 - a setting escalates behavior.** A setting that changes what review does unattended (for example "run review automatically") lives in trusted config only - a skill-family built-in or the user's personal global config per 14.1 - never in a file inside the repo under review. A repo may not flip its own review into a mode that grants itself less scrutiny.
 - **Crossing 4 - a fix is applied.** Formatter and linter output (eslint, prettier, stylelint autofix) is an ordinary gated diff: it goes through the same build and the same review as any hand-written change. There is no "mechanical fix" bypass, because a lint autofix can change behavior (rewrite `==` to `===`, drop a side-effectful import, reorder CSS). A fix is a change, and changes are reviewed. This crossing guards change authority - that no unreviewed change ships - a sibling of the steering rule, not an instance of it.
+- **Crossing 5 - observed content becomes a trusted note.** The user's personal note in the global config (14.1) is trusted context (position 1), so it is a steering position, exactly as a behavior-escalating setting is under crossing 3. It is written only from the user's own chat input on explicit confirmation, never from observed content: a repo file, a diff, a reviewer or PR comment, a fetched page, or any tool result may prompt the question, but only the user's confirmed answer is stored. This is the write rule already stated for the global tier in 14.1, applied to the note; the author is the user in chat, never the material being reviewed or read. A preference inferred from a repo cannot enter the note without a fresh chat confirmation, so the note's integrity is the equal of crossing 3's: neither can be set by the content under review.
+
+The behavior switches the settings layer adds (`review.autorun`, the chain switch) need no new position and no new crossing. A setting that escalates unattended behavior is exactly crossing 3, which already requires the trusted user-global home; the switches only populate a home this invariant already mandates.
 
 ### 14.3 What the rule does not restrict
 
