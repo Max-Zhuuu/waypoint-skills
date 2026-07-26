@@ -152,6 +152,8 @@ Resolution: Wired Claims list to real API. Field mappings verified against C# so
 Commits: abc1234, def5678
 ```
 
+Concern emission is one of two run emissions a skill can make; the other is the artifacts manifest (section 15), the receipt of what the run actually wrote.
+
 ## 5. First-Invocation Notice
 
 On first-ever invocation in a project without scaffolding (Tier 1), if `.claude/.setup-prompted` does not exist:
@@ -463,3 +465,50 @@ The rule only stops the repository under review from quietly steering its own re
 
 If an automatic review or ship runs unattended and hits something that needs a human decision, it stops and waits for the human; it never assumes approval.
 "Nobody confirmed" is treated as "not confirmed" - the same fail-safe default the afk gate (13.3) and the downstream view use.
+
+## 15. The Artifacts Manifest Emission
+
+Concern emission (section 4) is one of two run emissions a skill can make.
+The other is the artifacts manifest: a compact receipt of what the run wrote, printed at the end of any skill that creates or modifies files.
+It is the run-time echo of the skill's `Writes` frontmatter declaration (section 12): the frontmatter says what a skill is allowed to write, and the manifest says what it actually wrote this run.
+
+### 15.1 Format
+
+A trailing block, one line per path, grouped by verb, and nothing else:
+
+```
+Waypoint · /spec
+  created   docs/specs/auth.md
+  modified  GLOSSARY.md          (+2 terms)
+  concern   1 question open
+```
+
+- Grouped by verb: `created` and `modified` carry file paths; a single `concern` line carries the count the run opened or resolved, never one line per concern.
+- One line per path. No prose, no rationale, no diff.
+- A write that does not reach the repo - into the user-global trusted config (`~/.claude/`) or any gitignored area - carries a trailing `(local)` tag, so the reader can tell what will and will not reach the commit.
+- The header is `Waypoint · /<skill-name>`.
+
+### 15.2 The empty case
+
+A skill that wrote no files prints the empty manifest rather than inventing activity:
+
+```
+Waypoint · /review
+  no files changed
+  concern   2 issues open
+```
+
+The manifest is present on every run of a writing-capable skill, so its absence never has to be interpreted.
+A `Writes: none` skill still prints the header, the `no files changed` line, and its concern count when it has one.
+
+### 15.3 What it is, and what it is not
+
+- Deterministic. It is the exact set of paths the skill wrote this run, read back after the fact, never a guess and never a summary of intent.
+- Session-only. It is printed to the conversation and is never a tracked file. There is no `MANIFEST.md`. A stored manifest would mirror the files and drift; the files themselves remain the record, and the manifest only points at them.
+- No judgment. It does not decide whether a write was correct, wise, or in the right place; that routing happens before the write, not in the receipt.
+- No new crossing. It reads no trusted config and escalates no behavior, so it introduces no section 14 crossing and touches no steering position.
+
+### 15.4 Where it is declared
+
+This section is the single definition of the manifest's shape.
+Each writing skill emits the manifest by citing this section from its Exit rather than restating the format, so the block is byte-uniform across skills.
