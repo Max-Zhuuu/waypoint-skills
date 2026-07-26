@@ -51,6 +51,7 @@ The general rule: structured key-value read together is one file, while document
 ```waypoint-settings
 review.autorun: suggest
 auto-learn:     suggest
+chain:          suggest
 review.persona: architect
 ```
 
@@ -63,12 +64,13 @@ Every behavior switch shares one three-state vocabulary, with `suggest` the defa
 - **auto** - act unattended.
 
 `off` and `suggest` never act on their own; `auto` is the only state that acts unattended; the default asks first.
-So `review.autorun`, `auto-learn`, and the future chain switch all read from this one enum, rather than each cloning a slightly different shape.
+So `review.autorun`, `auto-learn`, and `chain` all read from this one enum, rather than each cloning a slightly different shape.
 
 | Switch | Type | Values | Default | Governs |
 |---|---|---|---|---|
 | `review.autorun` | enum | `off / suggest / auto` | `suggest` | whether `/review` runs without a per-run human trigger |
 | `auto-learn` | enum | `off / suggest / auto` | `suggest` | whether `/learn`-style capture happens without being asked |
+| `chain` | enum | `off / suggest / auto` | `suggest` | whether a completed skill auto-advances to the next in the flow (the chain) |
 | `review.persona` | string | a lens name | the default lens (the standards sweep) | which lens an auto-invoked review uses |
 
 `review.persona` is not a behavior switch: it names a lens, so it is a string, not this enum. A persona can never carry a switch value, and a switch can never carry a persona.
