@@ -179,7 +179,7 @@ The guards read trusted or derived state, with one repo-authored input, the `aut
 By R1 the chain performs no gated action, so it introduces no new crossing.
 
 The one new trusted thing is the switch, and turning `off -> auto` is a setting escalating behavior, which is crossing 3 already, the same slot the settings spec puts `autorun` in.
-So S0 names the chain switch as another crossing-3 setting and stops there; no new crossing, no surgery to the two positions or the four crossings.
+So S0 names the chain switch as another crossing-3 setting and stops there; no new crossing, no surgery to the two positions or the five crossings.
 
 ## Experimental
 

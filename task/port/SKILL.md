@@ -78,7 +78,7 @@ Faithful to the source system. Deviate only when documented.
 Does NOT write specs or logic docs. Reads them and implements.
 
 ## Engagement
-See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md). Emits: concerns (type: issue, question). Writes: none.
+See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md). Emits: concerns (type: issue, question). Writes: the migration inventory marker (`[P]`/`[provisional]`) and `docs/improvements/{entity}.md`; per-entity screen source via subagents, enumerated in the run manifest.
 Override: commit-producing skill. Pre-condition: all three inputs required.
 
 ## References

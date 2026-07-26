@@ -9,9 +9,9 @@ on:
       - 'third-party/**/SKILL.md'
 
 jobs:
-  skill-line-budget:
+  skill-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check SKILL.md line counts
+      - name: Check SKILL.md line budget and Writes/manifest convention
         run: bash lint-skills.sh

@@ -208,6 +208,11 @@ Override: commit-producing skill - follows exit protocol (section 6)
 3-5 lines per skill. No boilerplate (nudge protocol, concern format, prohibitions, claims check).
 Those are shared protocol defined in ENGAGEMENT-REFERENCE.md.
 
+The `Writes:` line is lint-enforced (`lint-skills.sh`), because it is the frontmatter half of the section 15 manifest and a dishonest one lets a skill skip its receipt:
+- `Writes: none` is only valid when the skill writes no repo files. If frontmatter `outputs:` names any artifact other than `concerns` (an inventory marker, a workflow record, a doc), `Writes:` must name it too.
+- Any skill whose `Writes:` is not `none` must cite section 15 from its Exit, or its manifest never fires at run time.
+Concern emission is declared under `Emits:`, not `Writes:` - appending a concern is not a repo-file write for manifest purposes (ENGAGEMENT-REFERENCE.md section 15.2).
+
 ## The outbound seam
 
 Waypoint's inner loop ends at `/wrapup` - local, offline, concerns resolved.
@@ -287,7 +292,9 @@ Deploy to `~/.claude/`:
 The sync script copies skills (flattened from `task/`, `project/`, `in-progress/`, `third-party/` into `~/.claude/skills/`), shared infrastructure (`internals/`, `templates/`, `process/` into `~/.claude/`), and root files (`CONCERNS-FORMAT.md`, `README.md` into `~/.claude/skills/`).
 
 After editing a skill, re-run `sync-skills.ps1` to deploy.
-The CI lint check (`lint-skills.sh`) validates SKILL.md line counts: warns >80, fails >100.
+The CI lint check (`lint-skills.sh`) validates two things:
+- Line counts: warns >80, fails >100.
+- The `Writes:`/manifest convention (see "Engagement declaration in SKILL.md"): a declaration must be honest and manifest-linked, so a nonstandard one can never silently skip the section 15 manifest.
 
 ### The flatten invariant
 

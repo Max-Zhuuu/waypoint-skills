@@ -74,7 +74,7 @@ Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdo
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: issue, question)
-Writes: none
+Writes: the Active Workflow record in CLAUDE.md (written on start, cleared on completion); `docs/_local/` notes as questions surface (gitignored). Specs and built features are delegated to /spec and the build verb.
 Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 ## Tone
 
