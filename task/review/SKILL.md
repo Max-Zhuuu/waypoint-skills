@@ -48,13 +48,14 @@ Print the findings and their chosen routes. Exit toward the next verb.
 - **Findings note** - throwaway, gitignored, drives routing this session; not a committed record.
 - **CONCERNS.md** - only via a human-picked route-4, structural pointer only.
 - **Fixes** - staged as an ordinary diff, reviewed like any change.
+- **Reviewed-state** - on completing a review of the current diff, records the structural fact "this diff was reviewed" in trusted config (the double-review guard, [reference/reviewed-state.md](reference/reviewed-state.md)); an explicit `/review` always runs regardless.
 
 Does NOT: ship, merge, or open a PR (that is /ship); auto-emit a concern; run itself automatically unless opted in via trusted config, never a repo file (reference/autorun.md); auto-invoke a repo-defined persona; or let a "mechanical" fix skip review.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: nothing automatically - a concern only on a human-picked route, with structural refs only (section 14.2).
-Writes: a throwaway findings note under gitignored `docs/_local/reviews/`.
+Writes: a throwaway findings note under gitignored `docs/_local/reviews/`; and reviewed-state (structural, in trusted config) on completing a review (reference/reviewed-state.md).
 Override: reviews only; holds no ship, merge, or auto-run authority.
 
 ## Exit

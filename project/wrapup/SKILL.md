@@ -83,7 +83,7 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 
 ## Exit
 
-- /review for a critic pass before shipping - and on a local project with no pipeline, it is your only conformance check. wrapup suggests, never reviews.
+- /review for a critic pass before shipping - and on a local project with no pipeline, it is your only conformance check. wrapup suggests, never reviews; when this exact diff is already reviewed ([reviewed-state](../../task/review/reference/reviewed-state.md)) it offers a re-review rather than nudging, and re-opens the nudge when the diff changes.
 - /ship to deliver this change, if DEPLOY.md names a remote adapter.
 - /check-in for next session.
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
