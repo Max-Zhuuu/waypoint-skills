@@ -81,6 +81,7 @@ Process references in [references.md](reference/references.md): Spolsky's rewrit
 ## Exit
 
 /check-in for daily sessions after initial setup.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.

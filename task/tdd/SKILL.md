@@ -55,6 +55,7 @@ Ask: "All slices complete. Stable enough to document, or provisional?"
 - Either way: "Next feature, or /wrapup?"
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Per-cycle checklist
 

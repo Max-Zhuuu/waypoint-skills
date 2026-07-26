@@ -63,6 +63,7 @@ Override: needs network and an adapter; not Tier-1-offline like wrapup.
 ## Exit
 - The target holds the merge decision; /check-in surfaces staged-but-unpromoted work next session.
 - /review first if the change wants a critic pass (sibling skill).
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 Mechanical and honest. Ship proposes, the target disposes. Never imply `afk` means merged.

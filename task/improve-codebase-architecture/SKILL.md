@@ -54,3 +54,4 @@ When proposals are written, suggest next steps:
 - If a high-priority proposal emerged -> "/spec to write acceptance criteria for {proposal name}."
 - If multiple proposals exist -> "Which proposal to tackle first? /spec to formalize it."
 - If proposals affect architecture -> "/grill-with-docs to stress-test the approach and write an ADR."
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.

@@ -24,3 +24,4 @@ When the grill is complete, suggest next steps based on what was decided:
 - If the grill produced a clear design -> "/spec to write acceptance criteria, or /tdd to build?"
 - If the grill resolved scope questions -> "Scope updated. Ready to build, or park for later?"
 - If decisions were logged as concerns -> "Decisions logged. /wrapup updates GLOSSARY.md, conventions, and specs to match."
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.

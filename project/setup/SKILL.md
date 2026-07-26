@@ -6,8 +6,7 @@ status: stable
 
 Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
 
-Detect project state by checking which of these exist (use `test -f` - missing files are normal):
-SCOPE.md, _GLOSSARY.md, CLAUDE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, docs/adr/, docs/implementation/. Then route:
+Detect project state by checking which of these exist (use `test -f` - missing files are normal): SCOPE.md, _GLOSSARY.md, CLAUDE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, docs/adr/, docs/implementation/. Then route:
 
 **Starting fresh** (none or only CLAUDE.md exist): announce two phases (scope grill, then architecture & standards), start Phase 0. After the opening block, add: `Related: /spec, /grill-with-docs, /reorient`
 
@@ -89,6 +88,7 @@ Read [phases/phase-1.md](phases/phase-1.md) before proceeding.
 
 - /check-in for first working session.
 - /breakdown to decompose initial scope into slices.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
