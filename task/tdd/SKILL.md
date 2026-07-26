@@ -40,7 +40,7 @@ Does NOT skip tests. Red-green-refactor only.
 ## Engagement
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) for the full protocol.
 Emits: concerns (type: issue)
-Writes: none
+Writes: a per-slice done marker (structural, in trusted config) on completing a slice (reference/slice-marker.md)
 Override: commit-producing skill - follows exit protocol (ENGAGEMENT-REFERENCE.md section 6)
 ## Exit
 
@@ -53,6 +53,8 @@ Ask: "All slices complete. Stable enough to document, or provisional?"
 - Stable: run mini-wrapup (spec sync, term/pattern capture, concern resolution). Commit code + docs together.
 - Provisional: emit issue concern with what needs documenting. Commit with `[provisional]` marker.
 - Either way: "Next feature, or /wrapup?"
+
+**On completing a slice** (its Done-when met, tests green): write the per-slice done marker ([reference/slice-marker.md](reference/slice-marker.md)), keyed by (project identity, slice id). This is the structural completion signal the chain reads to derive `REM` (remaining = defined minus marked); it is bookkeeping, not a position pointer, and an absent or unresolvable marker reads as remaining, never as done.
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
 - On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.

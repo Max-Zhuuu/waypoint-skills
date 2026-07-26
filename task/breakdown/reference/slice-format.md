@@ -29,3 +29,10 @@ Otherwise tag it `hitl`.
 Every slice carries a tag.
 An untagged slice is treated as `hitl` everywhere downstream (fail-safe), so tag deliberately rather than leaving it to the default.
 When DEPLOY.md is absent, the load-bearing condition is unresolved, so the slice cannot be `afk` - tag it `hitl` and note the load-bearing check was unavailable.
+
+## Completion is recorded, not stored here
+
+A slice has no done or status field, and it never gets one: the format above is the slice's *definition*, not its state.
+When `/tdd` completes a slice it records that out-of-band, as a per-slice done marker in trusted config ([task/tdd/reference/slice-marker.md](../../tdd/reference/slice-marker.md)), keyed by (project identity, slice id).
+The spec stays the definition; the marker is the record.
+Position is derived - remaining equals the slices defined here minus the ones marked done - so the spec is never edited to reflect progress, and nothing in the repo tracks "where you are".
