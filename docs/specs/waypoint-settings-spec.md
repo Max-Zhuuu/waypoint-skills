@@ -99,23 +99,23 @@ It is injected as trusted context, so it is a *second source* under position 1, 
 So the extension is small and precise: name the personal note as a position-1 trusted-context source, and add the one new crossing (observed content becoming a trusted note) that 14.2 does not yet enumerate.
 The chat-confirmation write rule that crossing needs is already stated in 14.1, so S0 cites it rather than re-adding it.
 
-The persona work (S3) also touches section 14, but it does not shrink it.
-Retiring the shared `PERSONAS.md` renames the untrusted persona tier to a repo's own `.claude/agents/`; it does not remove it.
-So S3 migrates crossing 2's wording (`PERSONAS.md` becomes repo `.claude/agents/`) and the crossing stays live: an untrusted repo-side persona tier still exists and crossing 2 still gates it.
+The persona work (S3) also touches section 14. Its final form (superseding an earlier rename-the-tier draft) drops the repo persona tier entirely: a repo's own `.claude/agents/` is never a Waypoint persona source, on any path.
+Retiring the shared `PERSONAS.md` therefore does not relocate the untrusted persona tier to a repo's own `.claude/agents/` - it removes that tier from Waypoint's sourcing altogether.
+So S3 rewrites crossing 2 and the crossing stays live and gets stricter: a review composes a persona only from the two trusted tiers (built-in, `~/.claude/agents/`), read by absolute path, whether triggered by hand or automatically. A repo's `.claude/agents/` remains untrusted repo content, but Waypoint never resolves a persona from it.
 
 ## Personas: per-user agents, the shared file retired
 
 A persona is a review lens.
 On Claude Code it *is* an agent, so personas reuse the host's own agents directory instead of a new Waypoint folder:
 
-- `~/.claude/agents/` is user-global and **trusted**, so an auto-invoked review may compose a persona there (personas.md, the trust gate).
-- A repo's own `.claude/agents/` is **untrusted**: it can be run by hand, but it is never auto-invoked under any name.
+- Built-in `reference/personas/` and `~/.claude/agents/` (user-global) are **trusted**: a review composes a persona only from these two tiers, whether by hand or auto-invoked (personas.md, the trust gate).
+- A repo's own `.claude/agents/` is **untrusted** and is not a Waypoint persona source under any name, by hand or automatically. To use a repo's lens, copy it into `~/.claude/agents/`.
 
 The mechanism matters here, because the files now live in a directory the host also reads.
 Auto-invoke does not dispatch a persona by bare name and let the host resolve it, since a host commonly lets a repo's `.claude/agents/` shadow the user's.
 It reads the persona only from a trusted absolute path - `~/.claude/agents/<name>` or a built-in `reference/personas/` file - and never from a name the host might resolve to a repo file.
 The trust gate is enforced by the path Waypoint reads, not by trusting the host's resolution order.
-Reusing the agents *directory* for storage does not delegate *resolution* to the host; the guarantee personas.md already makes ("never consults the project tier") is kept by construction.
+Reusing the agents *directory* for storage does not delegate *resolution* to the host; the guarantee personas.md already makes ("never consults a repo's `.claude/agents/`") is kept by construction.
 
 Waypoint ships **no shared persona document**.
 The old `PERSONAS.md` (a committed, shared file) is retired, not moved: a review lens is personal, and a shared, version-controlled lens is exactly the untrusted-auto-invoke hazard the trust gate exists to stop.
@@ -123,7 +123,7 @@ This resolves the open fork the build review surfaced: there is no "coexist" que
 
 The built-in lenses stay portable.
 They remain `reference/personas/` question-files inside the methodology, so they work on every adapter (Cursor, Codex, OpenCode), not just hosts with an agents directory.
-"Reuse the agents directory" is therefore a statement about the two trust-bearing tiers (your user-global personas and a repo's hand-run ones), not about the built-ins.
+"Reuse the agents directory" is therefore a statement about the user-global tier (your personal personas), not about the built-ins and never about a repo's own agents.
 
 Authoring a persona is a grill, not a vibe.
 The authoring flow forces a domain, three concrete failure modes the lens is meant to catch, a lens boundary (what it deliberately ignores), and a citation basis, then writes an agent file.
@@ -205,9 +205,9 @@ Every slice is `hitl`: this layer is the methodology's own trusted-context and s
 ### Slice S3 - personas as per-user agents, and the authoring grill
 **Depends on:** S1
 **Autonomy:** hitl
-**Files:** personas.md (resolution rewritten onto the agents directory, shared `PERSONAS.md` retired); what-it-checks.md (a persona is a weighting over the standard categories); CONTRIBUTING.md (the "Authoring a persona" section, lines 239-249, rewritten to the agents model with no shared persona file); internals/ENGAGEMENT-REFERENCE.md (section 14 crossing 2: migrate `PERSONAS.md` wording to a repo's `.claude/agents/`); task/review/reference/persona-grill.md (new); task/review/SKILL.md (offer "create a lens", one line)
-**Done when:** `/review <name>` runs the matching agent; the trusted tiers are the built-in `reference/personas/` question-files plus `~/.claude/agents/`; a repo's `.claude/agents/` is hand-run only and never auto-invoked under any name, enforced by auto-invoke reading the persona from a trusted absolute path (`~/.claude/agents/<name>` or a built-in) rather than dispatching a bare name through host resolution; crossing 2's wording is migrated from `PERSONAS.md` to a repo's `.claude/agents/` in this same slice (not S0), so the invariant is edited only when the change lands and the crossing stays live rather than being recorded as removed; there is no shared `PERSONAS.md` anywhere and personas.md, CONTRIBUTING.md, and section 14 all reflect its retirement; an unknown name falls back to the default lens with a note; the authoring grill forces domain, three failure modes, lens boundary, and citation basis, writes an agent file, and refuses an ungrounded vibe lens.
-**Regrill:** a repo persona can be run by hand but can never be the lens of an auto-invoked review - guaranteed by the trusted absolute path Waypoint reads, not by the host's resolution order - and section 14 is not edited ahead of the retirement it describes.
+**Files:** personas.md (resolution rewritten onto the agents directory, shared `PERSONAS.md` retired); what-it-checks.md (a persona is a weighting over the standard categories); CONTRIBUTING.md (the "Authoring a persona" section, lines 239-249, rewritten to the agents model with no shared persona file); internals/ENGAGEMENT-REFERENCE.md (section 14 crossing 2: rewritten to trusted-only sourcing on every path - the repo tier is dropped, not relocated); task/review/reference/persona-grill.md (new); task/review/SKILL.md (offer "create a lens", one line)
+**Done when:** `/review <name>` runs the matching agent; the trusted tiers are the built-in `reference/personas/` question-files plus `~/.claude/agents/`, and Waypoint sources a persona only from these two, on every path; a repo's `.claude/agents/` is never a Waypoint persona source under any name, by hand or automatically, enforced by resolution reading the persona from a trusted absolute path (`~/.claude/agents/<name>` or a built-in) rather than dispatching a bare name through host resolution; crossing 2 is rewritten (superseding the earlier rename-to-repo draft) so the repo tier is dropped rather than relocated, and the crossing stays live and stricter (trusted-only on both paths); there is no shared `PERSONAS.md` anywhere and personas.md, CONTRIBUTING.md, and section 14 all reflect its retirement; an unknown name falls back to the default lens with a note; the authoring grill forces domain, three failure modes, lens boundary, and citation basis, writes an agent file to `~/.claude/agents/`, and refuses an ungrounded vibe lens.
+**Regrill:** a repo persona is never a Waypoint review lens - not auto-invoked and not hand-resolved through `/review` - guaranteed by the trusted absolute path Waypoint reads, not by the host's resolution order; section 14 is not edited ahead of the retirement it describes.
 **Notes:** the built-in `reference/personas/` folder stays portable question-files, unaffected by the agents-directory reuse, so built-ins work on adapters with no agents directory.
 
 ### Slice S4 - reviewed-state, the double-review guard
