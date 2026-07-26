@@ -51,6 +51,7 @@ If the fix is a workaround or the root cause is unclear, commit as provisional w
 State next step: "/wrapup to update shared docs, or another bug?"
 
 See [ENGAGEMENT-REFERENCE.md](../../internals/ENGAGEMENT-REFERENCE.md) section 6 for the full exit protocol.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 

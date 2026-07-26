@@ -20,8 +20,6 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 During codebase exploration, also look for existing documentation:
 
-### Documentation landscape
-
 Check what documentation structure exists before starting. Read the project's CLAUDE.md for the full layout.
 
 **Always look for:**
@@ -96,5 +94,6 @@ After all branches are resolved:
 - "Decisions resolved and docs updated. /breakdown to decompose into implementation slices, or /spec to extract acceptance criteria from the updated doc."
 
 /spec detects recently-grilled docs and skips its own grill phase, so the chain is non-redundant either way.
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 </supporting-info>

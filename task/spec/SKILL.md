@@ -63,6 +63,7 @@ Writes: none
 
 After the spec is written:
 - "Spec written. /breakdown to decompose into slices, or /tdd to build directly?"
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 

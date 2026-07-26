@@ -77,6 +77,7 @@ After slices are written, suggest next steps:
 - "Start Slice 1? It's {one-line summary of what Slice 1 does}."
 - "/tdd to build Slice 1, or come back when ready - slices are in the spec."
 - If Tier 3: "GitHub issues created. /check-in reads open issues and proposes which to start."
+- On exit, emit the artifacts manifest for the paths this run wrote, per [ENGAGEMENT-REFERENCE.md section 15](../../internals/ENGAGEMENT-REFERENCE.md); a run that wrote nothing prints the empty manifest.
 
 ## Tone
 
