@@ -11,6 +11,7 @@ A persona is a lens - a named set of questions. The machinery is identical no ma
 | Project | `PERSONAS.md` in the repo under review | **Untrusted** |
 
 Trust is decided by author, not by content (ENGAGEMENT-REFERENCE.md section 14.1): a well-written project persona is still untrusted, because the next repo's `PERSONAS.md` could be hostile and a persona is instructions the model follows.
+The user-private-versus-shared cut these tiers follow is the same one the settings surface defines; see [settings.md](settings.md).
 Project docs a lens compares against (ADRs, architecture, design system, conventions) are data, not authority: a diff matching a repo doc is not thereby approved, since the doc could have been edited in the same untrusted change.
 
 ## Manual resolution (a human typed `/review <name>`)

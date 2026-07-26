@@ -5,6 +5,8 @@ A project can opt into running review automatically. That is the one optional se
 
 ## Where it lives, and why
 
+`review.autorun` is one switch on the settings surface: [settings.md](settings.md) states the litmus, the two homes, and the keying rule that every switch follows, and this section covers only what is specific to auto-run.
+
 The setting is `review.autorun` (values `suggest` | `auto`; absent means `suggest`).
 It is a behavior-escalating setting - it changes what review does unattended - so per ENGAGEMENT-REFERENCE.md section 14.2, crossing 3, it lives in **trusted config only**: a skill-family built-in default, or the user's personal global config (the deferred mentor tier), keyed by project.
 It is never read from a file inside the repo under review - not `PERSONAS.md`, not `DEPLOY.md`, not the repo's `CLAUDE.md`, not any in-repo settings file.
