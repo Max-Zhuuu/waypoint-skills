@@ -29,6 +29,7 @@
     "./task/port",
     "./task/prototype",
     "./task/spec",
+    "./task/review",
     "./task/tdd",
     "./project/buildout",
     "./project/check-in",
@@ -36,6 +37,7 @@
     "./project/migrate",
     "./project/reorient",
     "./project/setup",
+    "./project/ship",
     "./project/wrapup",
     "./in-progress/find-skills",
     "./third-party/chrome-devtools-axi"
