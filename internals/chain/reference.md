@@ -74,7 +74,7 @@ All read trusted or derived state except one: `NEXT_HITL` reads the repo-authore
                                               ▼                       ▼ (GATE)
                                         loop back:                 ship
                                         human routes            stop/ask
-                                        (spec? tdd?)
+                                        (wrapup? spec? breakdown?)
 ```
 
 The edge table, authored here as trusted built-in reference and never in any repo under review. A `clean` edge may be auto-traversed; a `gate` edge halts and returns control to the human.

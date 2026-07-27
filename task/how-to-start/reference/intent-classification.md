@@ -4,7 +4,7 @@ Map the user's input to one of these clusters. If ambiguous, pick the most likel
 |---------------------|---------|-------------|----------------|
 | broken, wrong, failing, error, bug, flaky, regression | /diagnose | /reorient (if systemic, multi-area) | - |
 | build, add, implement, create, feature, wire up | /create | /spec (if underspecified) | If no spec exists for the topic, mention it |
-| replace, migrate, port, legacy, old system | /port | /migrate (if no Active Workflow) | Needs Active Workflow + feature spec |
+| replace, migrate, port, legacy, old system | /tdd | /migrate (if no Active Workflow) | Needs Active Workflow + feature spec. See port checklist under /migrate reference. |
 | what next, what should I, pick up, continue, resume | /check-in | /reorient (if disoriented) | - |
 | stress-test, review, challenge, grill, is this right | /grill-me | /grill-with-docs (if project docs exist) | - |
 | understand, learn, explain, how does, teach me | /learn | /improve-arch (if about structure) | - |

@@ -59,6 +59,7 @@ Writes: a throwaway findings note under gitignored `docs/_local/reviews/`; and r
 Override: reviews only; holds no ship, merge, or auto-run authority.
 
 ## Exit
+- /wrapup to resolve concerns and cascade to docs.
 - /ship when the change is ready to go out (sibling skill; review does not ship).
 - /spec or /breakdown when a finding was routed to one of them.
 - On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.

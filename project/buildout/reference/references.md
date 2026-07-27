@@ -36,7 +36,7 @@ When a change is hard, don't force it. First, refactor until the change is easy 
 
 ## Testing (acceptance criteria only)
 
-Testing methodology belongs to the implementation verbs (/tdd, /port), not this process layer.
+Testing methodology belongs to the implementation verbs (/tdd), not this process layer.
 
 Phase files specify acceptance criteria:
 - Phase 2: no code tests needed (validate with conversations, prototypes, landing pages)

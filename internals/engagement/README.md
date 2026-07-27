@@ -178,7 +178,7 @@ The tier declaration inherits this behavior automatically.
 
 ## 6. Exit Protocol (Commit-Producing Skills)
 
-Skills that produce commits (/tdd, /create, /port, /diagnose) run this before committing:
+Skills that produce commits (/tdd, /create, /diagnose) run this before committing:
 
 ```
 1. Is this a mid-cycle commit or a natural boundary?
