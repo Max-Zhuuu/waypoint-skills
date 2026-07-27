@@ -55,13 +55,15 @@ Each dimension gets a type/enum, a default matching the current production state
 
 ## Process
 
-### 1. Check for existing infrastructure
+### 1. Check for existing infrastructure and ground the design
 
-Look for an existing design store and panel in the project.
+**Taste profile:** Identify which taste profile (consumer-indulgent, brutal-minimalist, institutional) matches this project. State the assumption. The profile's reference anchors inform what "baseline" means for each variant - a shell theme variant for a trading desk looks nothing like one for a consumer app.
+
+**Existing panel:** Look for an existing design store and panel in the project.
 
 If **both exist**: read them, understand what toggles are already wired, then add your new dimension(s) by extending the store and the panel template. Skip to step 4.
 
-If **neither exists**: create them from scratch (steps 2-3).
+If **neither exists**: offer to create them. "No design panel found. Create one? (default: yes)" If the user has accepted design panel creation before in this project, skip the ask on subsequent invocations. If declined, proceed without a panel (variant switcher only, per [ui.md](ui.md)). Otherwise, create from scratch (steps 2-3).
 
 If **only the store exists** (panel was cleaned up after a decision): recreate the panel and wire it into the root layout.
 
@@ -94,20 +96,27 @@ The same AI-aesthetic blocklist from [ui.md](ui.md) applies here. If your varian
 When the user picks a winner:
 
 1. **Bake the decision** - hard-code the winning variant's CSS into the production styles. Remove the dynamic class binding if only one variant survives.
-2. **Remove the toggle row** from the panel.
+2. **Archive the dimension** - move it to a collapsed "Decided" section in the panel. Record: dimension name, winning variant, date, and one-line rationale (e.g. "shellTheme: shadow - 2026-07-26 - depth without visual weight"). This section is collapsed by default so it doesn't clutter active exploration.
 3. **Update the store** - remove the decided dimension's type/field/setter.
-4. **If all decisions are made** - delete the panel component, remove it from the root layout, simplify the store back to production-only code.
+4. **If all dimensions are decided** - capture the archival content in a commit message or ADR on the integration branch (the decision trail must not vanish with the panel). Then delete the panel component, remove it from the root layout, simplify the store back to production-only code.
 
-Capture the decision in the commit message or an ADR: "Adopt pill card tabs (over underline/raised/inset/compact)".
+## Worktree lifecycle
 
-## Dev server note
+The design panel is exploration infrastructure - it lives on design worktrees, never on the integration branch (e.g. `beta`). The workflow:
 
-If running a design exploration branch alongside the main dev server, configure a different port to avoid conflicts. Add this as a project-specific note in CLAUDE.md or the prototype's README, not here.
+1. **Create or reuse** a design worktree for exploration. Run the dev server on a dedicated port.
+2. **Explore** - add dimensions, flip variants, live with them across real screens.
+3. **Decide** - when a dimension is settled, bake the winning CSS and archive the dimension in the panel.
+4. **Merge decisions, not the panel.** When merging to the integration branch, cherry-pick or rebase only the baked CSS changes and the decision record (ADR or commit message). The panel component, store, and mount point stay on the worktree. The integration branch never carries prototype infrastructure.
+5. **Keep the worktree alive** for ongoing exploration. Periodically merge the parent branch to keep docs and domain knowledge current. Tag before each new direction per the project's design archival policy.
+
+If the project has no worktree convention, the panel can live on a short-lived feature branch with the same rule: panel never merges, only decisions do.
 
 ## Anti-patterns
 
 - **Variants that only differ in one hex value.** That's a tweak, not a design question. Make variants structurally different.
 - **Too many dimensions at once.** More than 5-6 active toggles makes comparison impossible. Decide in batches.
-- **Forgetting to bake decisions.** A panel with 10 archived rows and no active ones should have been deleted 8 decisions ago.
+- **Merging the panel to the integration branch.** The panel is worktree-scoped. Only baked CSS and decision records merge.
+- **Forgetting to bake decisions.** A panel with 10 archived rows and no active ones should have been cleaned up 8 decisions ago.
 - **Using this for single-page layouts.** If the variants only affect one route, use [ui.md](ui.md) instead - it's faster to evaluate.
 - **Ignoring the project's design system.** Variants must use the project's existing tokens and spacing. A variant that invents its own visual language can't be evaluated in context.

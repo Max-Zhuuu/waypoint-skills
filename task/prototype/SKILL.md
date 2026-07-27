@@ -12,7 +12,7 @@ Identify which question is being answered - from the user's prompt, the surround
 
 - **"Does this logic / state model feel right?"** - [LOGIC.md](phases/logic.md). Build a tiny interactive terminal app that pushes the state machine through cases that are hard to reason about on paper.
 - **"What should this look like?"** - [UI.md](phases/ui.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
-- **"What should the app feel like?"** - [DESIGN.md](phases/design.md). Add toggles to a persistent design panel for exploring visual variants (shell themes, tab styles, spacing, color palettes) across the whole app in-situ. Check for an existing design panel first and extend it; create one if it doesn't exist.
+- **"What should the app feel like?"** - [DESIGN.md](phases/design.md). Add toggles to a persistent design panel for exploring visual variants (shell themes, tab styles, spacing, color palettes) across the whole app in-situ. Check for an existing design panel first and extend it; if none exists, offer to create one (default: yes).
 
 The three branches produce very different artifacts - getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module - logic; a single page - UI; cross-app visual treatment - design) and state the assumption at the top of the prototype.
 
@@ -36,8 +36,9 @@ The three branches produce very different artifacts - getting this wrong wastes 
 - Workflow design system phases: /prototype integrates with /buildout Phase design system and /migrate Phase 6b
 - CONVENTIONS.md: UI prototypes use the project's design tokens and naming patterns
 - GLOSSARY.md: domain terms inform prototype naming and labeling
+- Design sensibility companion doc: UI and design prototypes infer the project's taste profile (consumer-indulgent, brutal-minimalist, or institutional) from project context and state the assumption. Variant generation uses that profile's reference anchors as baseline; cross-profile borrowing is called out explicitly.
 
-**Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens.
+**Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens. Without a companion doc, taste profile defaults to the brutal-minimalist register (densest, least opinionated).
 
 ## Tone
 
