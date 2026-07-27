@@ -58,6 +58,11 @@ Before writing any code, establish:
    Everything inside the boundary is real code, not mocks.
    Everything outside is a mock or test double.
 
+4. **How will you know this works in production?**
+   What signals will tell you it is broken, and are they already instrumented?
+   If the project defines SLIs (check ARCHITECTURE.md or SLOs.md), verify instrumentation covers this change per [process/observability.md](observability.md) Phase 2.
+   If no SLIs exist, ask the question and move on.
+
 ### Interface design for testability
 
 Three principles make testing natural:

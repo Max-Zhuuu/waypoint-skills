@@ -36,6 +36,8 @@ Print questions inline with your recommended answer. Do not use `AskUserQuestion
 
 **Constraints:** Compliance (SOC II, ISO 27001, WCAG 2.1 AA, GDPR). Performance requirements. Browser/device support. Timeline and milestones.
 
+**Operational health:** What are the key SLIs for this service - latency, availability, error rate? (If unknown or not yet applicable, say so and move on. See [process/observability.md](../../process/observability.md) Phase 1.)
+
 **Risks:** What worries you most? What domain knowledge exists only in people's heads?
 
 ### Outputs

@@ -12,7 +12,7 @@ Portable categories (the default lens sweeps all of them):
 - **auth** - authn/authz boundaries, session handling, privilege checks.
 - **security** - input validation, injection surfaces, secret handling.
 - **data handling** - persistence, migrations, serialization, PII.
-- **operations** - logging, error surfacing, retries, observability.
+- **operations** - logging, error surfacing, retries, observability. For critical paths: can you debug this in production without deploying new instrumentation? If the project defines SLIs (ARCHITECTURE.md or SLOs.md), check that modified paths have corresponding spans or structured events.
 - **architecture** - module boundaries, coupling, testability seams.
 - **theming** - design-token use, no hard-coded style values.
 - **internationalization** - no hard-coded user-facing strings, locale-safe formatting.
