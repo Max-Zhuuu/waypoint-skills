@@ -17,6 +17,7 @@ Each skill has two layers:
 | [process/tdd.md](process/tdd.md) | Test-driven development | /tdd |
 | [process/architecture-review.md](process/architecture-review.md) | Architecture assessment | /improve-codebase-architecture |
 | [process/learning.md](process/learning.md) | Structured technical learning | /learn |
+| [process/observability.md](process/observability.md) | Production debuggability | (cross-referenced by /tdd, /review, /setup) |
 
 Not every skill has a process doc.
 Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/prototype has three execution branches that depend on the agent model).
