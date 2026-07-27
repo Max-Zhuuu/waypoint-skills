@@ -114,24 +114,27 @@ agent: Testing hypothesis 1. Adding [DEBUG-7c3a] instrumentation to the
 
 ### Claude Code
 
-**Plugin** (managed, auto-updates):
+**Marketplace plugin** (managed, auto-updates):
 
 ```bash
-claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
+claude plugin marketplace add max-zhu-bv/waypoint-skills
+claude plugin install waypoint-skills@max-zhu-bv
 ```
 
-**skills.sh** (copies into your project, editable):
-
-```bash
-npx skills add max-zhu-bv/waypoint-skills
-```
-
-Either way, invoke any skill directly:
+Then invoke any skill directly:
 
 ```
 /diagnose tests pass locally but fail in CI
 /spec user notifications with email and in-app
 /tdd checkout flow with discount codes
+```
+
+To update after a new release:
+
+```bash
+claude plugin marketplace update max-zhu-bv
+claude plugin uninstall waypoint-skills@max-zhu-bv
+claude plugin install waypoint-skills@max-zhu-bv
 ```
 
 ### OpenCode
@@ -262,10 +265,8 @@ mindmap
 
 | Version | Change |
 |---------|--------|
-| v2.5 | Reference tree restructure. SKILL.md files target 50-80 lines (CI enforced at 100). Inline content extracted to `reference/` and `phases/` subfolders. Engagement sections deduplicated to 3-5 line declarations. Descriptions sharpened. `sync-skills.ps1` now syncs `internals/`, `templates/`, `process/`. Structural rules codified in CONTRIBUTING.md. |
-| v2.1 | Naming convention picker in /setup (underscore-prefixed vs clean names). Root-level docs/ enforcement. |
-| v2.0 | Three-tier doc layout (program/ + implementation/ + _local/). CONTEXT.md renamed to _GLOSSARY.md. Concern type `flag` renamed to `issue`. `deadline:` renamed to `validate-by:`. |
-| v1.0 | Initial release. 20 skills, concerns tracking, engagement model, process/adapter split. |
+| 2.0.0 | The quality loop. New skills: /review (persona-based code critic), /ship (outbound PR seam). Chain dispatcher for skill-to-skill handoff. Settings surface with trusted-config model. Engagement reference split into `internals/engagement/` directory. Artifacts manifest emission. Autonomy axis. Persona trust gate (two-tier, user-global only). Prototype skill: taste profile grounding, shell-swap default, HTML artifact output, worktree-scoped design panel with archival. Plugin manifest for marketplace install. |
+| 1.0.0 | Initial plugin release. 21 skills. Reference tree restructure (SKILL.md 50-80 lines, CI enforced at 100). Three-tier doc layout. Concerns tracking. Engagement model. Process/adapter split. Structural rules in CONTRIBUTING.md. |
 
 ## Contributing
 

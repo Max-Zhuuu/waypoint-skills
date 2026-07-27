@@ -1,6 +1,6 @@
 {
   "name": "waypoint-skills",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Structured methodologies for debugging, spec writing, TDD, project planning, and legacy migration. Process-first skills that work standalone or accumulate project context across sessions.",
   "author": {
     "name": "Max Zhu",
