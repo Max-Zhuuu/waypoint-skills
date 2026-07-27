@@ -36,9 +36,9 @@ The three branches produce very different artifacts - getting this wrong wastes 
 - Workflow design system phases: /prototype integrates with /buildout Phase design system and /migrate Phase 6b
 - CONVENTIONS.md: UI prototypes use the project's design tokens and naming patterns
 - GLOSSARY.md: domain terms inform prototype naming and labeling
-- Design sensibility companion doc: UI and design prototypes infer the project's taste profile (consumer-indulgent, brutal-minimalist, or institutional) from project context and state the assumption. Variant generation uses that profile's reference anchors as baseline; cross-profile borrowing is called out explicitly.
+- Design sensibility (`~/.claude/design-sensibility.md`): UI and design prototypes infer the project's taste profile (consumer-indulgent, brutal-minimalist, or institutional) from project context and state the assumption. Variant generation uses that profile's reference anchors as baseline; cross-profile borrowing is called out explicitly.
 
-**Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens. Without a companion doc, taste profile defaults to the brutal-minimalist register (densest, least opinionated).
+**Without scaffolding:** all three prototype branches work. UI prototypes use sensible defaults instead of project tokens. Without a design sensibility file, taste profile defaults to the brutal-minimalist register (densest, least opinionated).
 
 ## Tone
 
@@ -47,7 +47,7 @@ Experimental. Move fast, throw things away, learn.
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: question)
-Writes: none
+Writes: docs/implementation/artifacts/ (creates, gitignored)
 ## Exit
 
 The _answer_ is the only thing worth keeping from a prototype. Capture it somewhere durable (commit message, ADR via `/grill-with-docs`, spec update via `/spec`, or a `NOTES.md` next to the prototype) along with the question it was answering. If the user is around, that capture is a quick conversation; if not, leave the placeholder so they (or you, on the next pass) can fill in the verdict before deleting the prototype.

@@ -63,7 +63,7 @@ Each dimension gets a type/enum, a default matching the current production state
 
 If **both exist**: read them, understand what toggles are already wired, then add your new dimension(s) by extending the store and the panel template. Skip to step 4.
 
-If **neither exists**: offer to create them. "No design panel found. Create one? (default: yes)" If the user has accepted design panel creation before in this project, skip the ask on subsequent invocations. If declined, proceed without a panel (variant switcher only, per [ui.md](ui.md)). Otherwise, create from scratch (steps 2-3).
+If **neither exists**: offer to create them. "No design panel found. Create one? (default: yes)" If declined, proceed without a panel (variant switcher only, per [ui.md](ui.md)). Otherwise, create from scratch (steps 2-3).
 
 If **only the store exists** (panel was cleaned up after a decision): recreate the panel and wire it into the root layout.
 
@@ -98,25 +98,19 @@ When the user picks a winner:
 1. **Bake the decision** - hard-code the winning variant's CSS into the production styles. Remove the dynamic class binding if only one variant survives.
 2. **Archive the dimension** - move it to a collapsed "Decided" section in the panel. Record: dimension name, winning variant, date, and one-line rationale (e.g. "shellTheme: shadow - 2026-07-26 - depth without visual weight"). This section is collapsed by default so it doesn't clutter active exploration.
 3. **Update the store** - remove the decided dimension's type/field/setter.
-4. **If all dimensions are decided** - capture the archival content in a commit message or ADR on the integration branch (the decision trail must not vanish with the panel). Then delete the panel component, remove it from the root layout, simplify the store back to production-only code.
+4. **If all dimensions are decided** - capture the archival content in a commit message or ADR on the canonical branch (the decision trail must not vanish with the panel). Then delete the panel component, remove it from the root layout, simplify the store back to production-only code.
 
 ## Worktree lifecycle
 
-The design panel is exploration infrastructure - it lives on design worktrees, never on the integration branch (e.g. `beta`). The workflow:
+The design panel is exploration infrastructure - it lives on worktrees, never on the canonical branch. See the [engagement protocol's worktree section](../../internals/engagement/README.md) for the general convention. The prototype-specific rule:
 
-1. **Create or reuse** a design worktree for exploration. Run the dev server on a dedicated port.
-2. **Explore** - add dimensions, flip variants, live with them across real screens.
-3. **Decide** - when a dimension is settled, bake the winning CSS and archive the dimension in the panel.
-4. **Merge decisions, not the panel.** When merging to the integration branch, cherry-pick or rebase only the baked CSS changes and the decision record (ADR or commit message). The panel component, store, and mount point stay on the worktree. The integration branch never carries prototype infrastructure.
-5. **Keep the worktree alive** for ongoing exploration. Periodically merge the parent branch to keep docs and domain knowledge current. Tag before each new direction per the project's design archival policy.
-
-If the project has no worktree convention, the panel can live on a short-lived feature branch with the same rule: panel never merges, only decisions do.
+**Merge decisions, not the panel.** Cherry-pick or rebase only the baked CSS changes and the decision record (ADR or commit message). The panel component, store, and mount point stay on the worktree. Tag before each new direction per the project's design archival policy.
 
 ## Anti-patterns
 
 - **Variants that only differ in one hex value.** That's a tweak, not a design question. Make variants structurally different.
 - **Too many dimensions at once.** More than 5-6 active toggles makes comparison impossible. Decide in batches.
-- **Merging the panel to the integration branch.** The panel is worktree-scoped. Only baked CSS and decision records merge.
+- **Merging the panel to the canonical branch.** The panel is worktree-scoped. Only baked CSS and decision records merge.
 - **Forgetting to bake decisions.** A panel with 10 archived rows and no active ones should have been cleaned up 8 decisions ago.
 - **Using this for single-page layouts.** If the variants only affect one route, use [ui.md](ui.md) instead - it's faster to evaluate.
 - **Ignoring the project's design system.** Variants must use the project's existing tokens and spacing. A variant that invents its own visual language can't be evaluated in context.

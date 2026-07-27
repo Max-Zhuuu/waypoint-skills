@@ -66,7 +66,7 @@ Each variant is defending a **thesis about how the user works**. If you can't st
 
 ### 3. Generate variants
 
-**Output mode:** By default, generate variants as real components on the route (sub-shape A). As a lightweight alternative, offer HTML artifact output: self-contained HTML files stored in `docs/implementation/artifacts/{prototype-name}.html` (directory is gitignored). When the environment supports the Artifact tool, use it. State the tradeoff: artifacts are faster to produce and compare but lack real app context - layout, data, density, and adjacent components are all absent. Artifacts suit early-stage exploration; real components suit decision-grade evaluation.
+**Output mode:** By default, generate variants as real components on the route (sub-shape A). As a lightweight alternative, offer HTML artifact output: self-contained HTML files stored in `docs/implementation/artifacts/{prototype-name}.html` (directory is gitignored). State the tradeoff: artifacts are faster to produce and compare but lack real app context - layout, data, density, and adjacent components are all absent. Artifacts suit early-stage exploration; real components suit decision-grade evaluation.
 
 Hold each variant to:
 
