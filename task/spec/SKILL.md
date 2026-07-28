@@ -33,6 +33,10 @@ Read any existing context first: SCOPE.md, GLOSSARY.md, ARCHITECTURE.md, related
 Grill inline. Print questions with your recommended answer so the user can challenge.
 Do not use `AskUserQuestion` for the grilling loop - inline conversation lets the user redirect naturally.
 
+**Workflow-shaped check.**
+If the feature is a fan-out over many roughly homogeneous components each validated against a source of truth (N endpoints, screens, or entities; a horizontal buildout; an explicit parallel build), it is workflow-shaped.
+Run the verifiable-workflow elicitation (the parallelization, metric, validation, and documentation questions) as part of the grill and carry the answers into Phase 3. See [verifiable workflows](../../process/verifiable-workflows.md).
+
 ### Phase 2 - Acceptance criteria
 
 **Reduced mode** (existing doc found in Phase 1):
@@ -49,6 +53,8 @@ Mark the recommendation and state why. The user picks or challenges.
 Output to Documentation Map "Feature specs" path or `docs/specs/{feature-slug}.md`.
 Use template from Documentation Map "Feature reference" `_TEMPLATE.md` if it exists, otherwise [../../templates/feature-spec.md](../../templates/feature-spec.md).
 
+If the feature is workflow-shaped (Phase 1), also write three sections from the elicited answers: **Parallelization Plan** (unit, count, shared vs isolated, source of truth), **Success Metric** (target pass-rate and error budget, per-unit criteria, zero-error definition), and **Validation Protocol** (how the validator gets expected independently, required evidence class, where discrepancies go). These are spec-file sections only; the ledger itself is written later by the execution phase. See [verifiable workflows](../../process/verifiable-workflows.md).
+
 ### Phase 4 - Update shared artifacts
 
 1. New domain terms -> update GLOSSARY.md (domain terms only, not general programming concepts).
@@ -62,9 +68,8 @@ Writes: none
 ## Exit
 
 After the spec is written:
-- "Spec written. /breakdown to decompose into slices, or /tdd to build directly?"
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+- Recommend the next method (breakdown vs direct tdd) as a reasoned pick, never a bare menu: cite the spec's quantifiable signal (file/domain span, acceptance-criteria count) and the output-quality and documentation deltas, per [method selection](../../process/method-selection.md).
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Tone
 

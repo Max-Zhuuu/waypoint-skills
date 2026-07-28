@@ -5,7 +5,7 @@ status: stable
 inputs: {}
 outputs: {}
 signals:
-  proposes: implementation verb (/port, /tdd, or user-chosen methodology)
+  proposes: implementation verb (/tdd, /create, or user-chosen methodology)
 ---
 
 1. Read `## Active Workflow` from CLAUDE.md. This tells you the active skill, current phase, and activation date.
@@ -15,9 +15,10 @@ signals:
    - Read Claims section (always).
    - Read Open, Investigating, and Blocked sections using `@L` offsets. Skip Resolved.
    - If the hook already injected these sections, skip the disk read.
-4. Read the current phase file from the workflow skill's folder.
-5. Read [reference/priority-stack.md](reference/priority-stack.md) and apply the priority stack to propose next task.
-6. Surface the downstream view (read-only) per [reference/downstream-view.md](reference/downstream-view.md): what `/ship` staged but nobody promoted, and what the pipeline is blocking. Link, category, and status only; never act on it, never pull its text back.
+4. Check `docs/_local/handoffs/` for recent handoff docs (sorted by date prefix). If one exists, read it - it contains continuity context from a prior session: unfinished work, decisions, and a suggested next action.
+5. Read the current phase file from the workflow skill's folder.
+6. Read [reference/priority-stack.md](reference/priority-stack.md) and apply the priority stack to propose next task.
+7. Surface the downstream view (read-only) per [reference/downstream-view.md](reference/downstream-view.md): what `/ship` staged but nobody promoted, and what the pipeline is blocking. Link, category, and status only; never act on it, never pull its text back.
 
 Print:
 
@@ -49,11 +50,11 @@ Read [reference/enforcement.md](reference/enforcement.md) for the enforcement ru
 
 ## Exit
 
-- Invokes the chosen implementation skill (/port, /create, /tdd).
+- Invokes the chosen implementation skill (/tdd, /create).
 - Session continues under the invoked skill.
 
 Does NOT implement. Does NOT update docs (that is /wrapup). Does NOT promote (no promote verb exists; promotion is human-owned) or pull downstream text into the repo. Proposes work, then asks which verb to invoke.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.

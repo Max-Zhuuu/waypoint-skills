@@ -34,7 +34,7 @@ Present picks with justification, then gate with AskUserQuestion:
 
 ### Build end-to-end
 
-For each screen, invoke `/port` (or chosen implementation verb). Cross-reference against source system side-by-side.
+For each screen, invoke `/tdd` with the [port checklist](../reference/port-checklist.md) as reference. Cross-reference against source system side-by-side.
 
 ### Architecture checkpoint
 

@@ -59,10 +59,10 @@ Writes: a throwaway findings note under gitignored `docs/_local/reviews/`; and r
 Override: reviews only; holds no ship, merge, or auto-run authority.
 
 ## Exit
+- /wrapup to resolve concerns and cascade to docs.
 - /ship when the change is ready to go out (sibling skill; review does not ship).
 - /spec or /breakdown when a finding was routed to one of them.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Tone
 Sharp and specific. A finding names a file, a line, and why it matters. Critique the work, never grade the diff against itself.

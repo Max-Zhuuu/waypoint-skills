@@ -2,7 +2,8 @@
 
 Process-layer references for `/migrate` phase files. These inform *when to decide* and *what criteria to apply* - they do not prescribe implementation methodology.
 
-Testing methodology (characterization tests, structural enforcement, contract tests, visual regression, snapshots) and architecture methodology (Strangler Fig, branch by abstraction, seam identification, expand-contract) belong to the implementation verbs (/port, /tdd) and are applied by those skills as judgment calls.
+Testing methodology and architecture methodology are applied by implementation verbs (/tdd, or the [port checklist](port-checklist.md)) as judgment calls.
+See below for the full catalog.
 
 ## Process References
 
@@ -28,3 +29,52 @@ These are requirements (what must be true), not methodology (how to achieve it):
 | 4 - Horizontal buildout | Every ported screen has tests. Full suite passes. No regressions in previously-ported screens. |
 | 5 - Integration | All screens consume real API (or documented exceptions). Loading/error/empty states implemented. |
 | 6a - Functional validation | All screens validated side-by-side. All discrepancies categorized (bug, intentional, unknown). |
+
+## Architecture Patterns
+
+### Strangler Fig (Fowler)
+Build the new system alongside the old one, routing traffic gradually from legacy to replacement.
+Replace one capability at a time, keep both running, shift traffic when the new path is proven.
+**When to apply:** Phase 2-4, when deciding how to cut over from legacy to new.
+
+### Branch by Abstraction (Fowler)
+Introduce an abstraction layer between consumers and the implementation you want to replace.
+Swap the implementation behind the abstraction without changing callers.
+**When to apply:** Phase 4-5, when migrating shared infrastructure that many screens depend on.
+
+### Parallel Change / Expand-Contract (Beck)
+Three steps: expand (add new alongside old), migrate (move callers), contract (remove old).
+Never remove something in the same change that introduces its replacement.
+**When to apply:** Phase 5 integration, any API shape change, any shared component replacement.
+
+### Seam Identification (Feathers)
+A seam is a place where you can alter behavior without editing the code at that point.
+In legacy code, find the seams first - they're where you can inject tests, swap implementations, or redirect flow.
+**When to apply:** Phase 3 vertical slice, when deciding where to cut boundaries between migrated and unmigrated code.
+
+## Testing Techniques
+
+### Characterization Tests / Golden Master (Feathers)
+Capture the legacy system's actual output for a set of inputs.
+Don't assert what the output *should* be - assert what it *is*.
+Discrepancies are either bugs in the migration or intentional improvements - categorize each one.
+**When to apply:** Phase 3-4, especially for screens with complex calculations or business rules where the spec may be incomplete.
+
+### Structural Enforcement Tests
+Automated tests that verify project conventions, not business logic.
+Catches structural drift during horizontal buildout when many agents work in parallel.
+**When to apply:** Phase 4 horizontal buildout at scale.
+
+### Contract Tests (Pact-style)
+Consumer-driven contracts: the frontend describes what it expects from the API.
+The backend runs the same contract against its implementation.
+**When to apply:** Phase 5 integration, when frontend and backend teams work on different timelines.
+
+### Approval Tests / Snapshot Tests
+Render a component, serialize the output, save as the "approved" version.
+Complements characterization tests: golden master captures legacy behavior, snapshots capture migrated behavior.
+**When to apply:** Phase 4-6a, after a screen is ported so later changes don't silently break it.
+
+### Visual Regression Testing
+Automated screenshot comparison between source and target, or between target's previous and current state.
+**When to apply:** Phase 6a functional validation at scale (30+ screens).

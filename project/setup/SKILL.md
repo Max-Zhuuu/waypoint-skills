@@ -4,9 +4,7 @@ description: "Kickoff a project with scoping grill, architecture decisions, and 
 status: stable
 ---
 
-Framework-agnostic. Produces documentation structure, architecture decisions, spec templates, and process definition.
-
-Detect project state by checking which of these exist (use `test -f` - missing files are normal): SCOPE.md, _GLOSSARY.md, CLAUDE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, docs/adr/, docs/implementation/. Then route:
+Framework-agnostic. Detect project state by checking which of these exist (use `test -f` - missing files are normal): SCOPE.md, _GLOSSARY.md, CLAUDE.md, CONVENTIONS.md, TESTING.md, ARCHITECTURE.md, docs/adr/, docs/implementation/. Then route:
 
 **Starting fresh** (none or only CLAUDE.md exist): announce two phases (scope grill, then architecture & standards), start Phase 0. After the opening block, add: `Related: /spec, /grill-with-docs, /reorient`
 
@@ -35,6 +33,8 @@ Print questions inline with your recommended answer. Do not use `AskUserQuestion
 **Dependencies:** Backend API (exists fully/partially/not at all, who builds, contract, timeline). Design assets (mockups, design system, brand). Infrastructure (hosting, CI/CD, environments). Domain expertise (who knows the rules, availability).
 
 **Constraints:** Compliance (SOC II, ISO 27001, WCAG 2.1 AA, GDPR). Performance requirements. Browser/device support. Timeline and milestones.
+
+**Operational health:** What are the key SLIs for this service - latency, availability, error rate? (If unknown or not yet applicable, say so and move on. See [process/observability.md](../../process/observability.md) Phase 1.)
 
 **Risks:** What worries you most? What domain knowledge exists only in people's heads?
 
@@ -88,7 +88,7 @@ Read [phases/phase-1.md](phases/phase-1.md) before proceeding.
 
 - /check-in for first working session.
 - /breakdown to decompose initial scope into slices.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.

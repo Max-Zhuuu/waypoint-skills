@@ -1,6 +1,6 @@
 ---
 name: wrapup
-description: "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd."
+description: "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb."
 status: stable
 inputs:
   concerns: CONCERNS.md entries referencing the current entity
@@ -14,7 +14,7 @@ signals: []
 
 The completion verb. Single reconciliation point for all doc updates after implementation.
 
-- Invoke after /port or /tdd reports complete (suggested by the verb).
+- Invoke after /tdd or any implementation verb reports complete (suggested by the verb).
 - Optional: skip if confident. Unresolved concerns persist in CONCERNS.md.
 - If skipped: /check-in surfaces them next session as priority work.
 
@@ -83,16 +83,17 @@ Gate: {X}/{Y} criteria met. Remaining: {list}.
 
 ## Exit
 
-- /review for a critic pass before shipping - and on a local project with no pipeline, it is your only conformance check. wrapup suggests, never reviews; when this exact diff is already reviewed ([reviewed-state](../../task/review/reference/reviewed-state.md)) it offers a re-review rather than nudging, and re-opens the nudge when the diff changes.
+- /review for a critic pass before shipping. On a local project with no pipeline, this is your only conformance check.
+  - When this exact diff is already reviewed ([reviewed-state](../../task/review/reference/reviewed-state.md)), offer a re-review rather than nudging. Re-open the nudge when the diff changes. Wrapup suggests review; it never reviews itself.
 - /ship to deliver this change, if DEPLOY.md names a remote adapter.
 - /check-in for next session.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+- **Ending the session?** Two activation paths: (1) the user signals they are done for now ("I'm wrapping up", "last thing", "heading out"), or (2) invoked with "handoff" in args (`/wrapup handoff`). Either way, run the handoff mode: [phases/handoff.md](phases/handoff.md). Writes a continuity doc and outputs a boot prompt for the next agent.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: issues, resolution notes, consolidated audit results
-Writes: creates CONCERNS.md if absent (seeded with this run's resolved entries)
+Writes: creates CONCERNS.md if absent (seeded with this run's resolved entries); handoff mode writes docs/_local/handoffs/ OR docs/implementation/handoffs/
 Override: Cascade step only fires for docs that exist - does not create docs to cascade into.
 ## Tone
 

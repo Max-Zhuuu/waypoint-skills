@@ -111,6 +111,12 @@ Tag every debug log with a unique prefix, e.g. `[DEBUG-a4f2]`.
 Cleanup at the end becomes a single grep.
 Untagged logs survive; tagged logs die.
 
+### Production bugs in observable systems
+
+For systems with observability instrumentation (see [process/observability.md](observability.md)), the telemetry data IS the instrumentation.
+Phase 4 becomes "slice and dice existing events" rather than "add temporary probes."
+The Core Analysis Loop in process/observability.md Phase 4 is this phase specialized for high-cardinality production data.
+
 ### Performance bugs
 
 For performance regressions, logs are usually the wrong tool.

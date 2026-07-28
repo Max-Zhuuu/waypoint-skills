@@ -158,7 +158,7 @@ docs/program-legacy-wpf/      # example for a WPF migration
   inventory-plugins.md         # Legacy plugin catalog with migration progress
 ```
 
-The Documentation Map aliases `docs/reference/` to `docs/program-legacy-{source}/` so skills like /port resolve paths without knowing the source system name.
+The Documentation Map aliases `docs/reference/` to `docs/program-legacy-{source}/` so skills resolve paths without knowing the source system name.
 
 ### conventions/ directory
 

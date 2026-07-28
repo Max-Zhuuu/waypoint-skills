@@ -36,9 +36,11 @@ Each slice must be:
 
 Slice granularity: one slice per screen, per API endpoint, or per behavioral unit.
 If a slice touches more than ~5 files, it's too big - decompose further.
+That >5-file threshold is the method-selection signal to escalate decomposition; recommend the finer split with the count as the reason, not a vibe (see [method selection](../../process/method-selection.md)).
 
 Tag every slice `Autonomy: afk | hitl` - `afk` only when its Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface; untagged is treated as `hitl` downstream.
-Output format and the tagging rule written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
+When the spec carries a Parallelization Plan (a workflow-shaped feature), also tag each slice with its lane and its acceptance-criteria count n, seeding the ledger's per-component denominator that the execution phase reads - see [verifiable workflows](../../process/verifiable-workflows.md).
+Output format and the tagging rules written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
 
 ### Step 3 - Validate against scope
 
@@ -63,6 +65,8 @@ Do not modify existing spec content - slices are additive.
 
 If a previous `## Implementation Slices` section exists (re-decomposition), replace it entirely.
 
+If the slices are many near-identical components each checked against a source of truth, recommend the verifiable-workflow path (a ledger and a metric) over sequential /tdd when you present them, citing the component count as the reason (see [method selection](../../process/method-selection.md)).
+
 Tier-adapted output (Tier 1/2/3 differences, GitHub sub-issues at Tier 3) - see [reference/tier-output.md](reference/tier-output.md).
 
 Edge cases (spec changes after breakdown, oversized slices, circular deps, missing acceptance criteria) - see [reference/edge-cases.md](reference/edge-cases.md).
@@ -77,8 +81,7 @@ After slices are written, suggest next steps:
 - "Start Slice 1? It's {one-line summary of what Slice 1 does}."
 - "/tdd to build Slice 1, or come back when ready - slices are in the spec."
 - If Tier 3: "GitHub issues created. /check-in reads open issues and proposes which to start."
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Tone
 
