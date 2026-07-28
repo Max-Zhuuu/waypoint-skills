@@ -30,10 +30,8 @@ Extracting acceptance criteria from the existing doc.
 **If no recent doc exists:**
 run the full grill.
 Read any existing context first: SCOPE.md, GLOSSARY.md, ARCHITECTURE.md, related specs in `docs/specs/`.
-Grill inline, one question at a time.
-Ask a single question, give the short context that makes it answerable (why it matters, what depends on the answer), and include your recommended answer so the user can challenge; wait for the reply before asking the next.
-Do not dump the whole question list at once - a wall of questions gets shallow answers, and each answer reshapes what to ask next.
-Do not use `AskUserQuestion` for the grilling loop - inline conversation lets the user redirect naturally.
+Grill inline, one question at a time. Do not use `AskUserQuestion`.
+At the start of each loop, ask a single question, give the short context that makes it answerable (why it matters, what depends on the answer), and include your recommended answer so the user can challenge; wait for the reply before asking the next.
 
 **Workflow-shaped check.**
 If the feature is a fan-out over many roughly homogeneous components each validated against a source of truth (N endpoints, screens, or entities; a horizontal buildout; an explicit parallel build), it is workflow-shaped.
