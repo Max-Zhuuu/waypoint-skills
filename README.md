@@ -233,14 +233,13 @@ stateDiagram-v2
     experienced --> orient : system nudges
 ```
 
-Both paths end up in the same place.
-Skip the orientation and jump straight to building - that's fine.
-When it starts to matter, the skills notice what's missing (a term nobody defined, an assumption nobody checked, a spec that no longer matches the code) and point you back.
+Both paths converge.
+Skip orientation and jump straight to building, and the skills flag what's missing when it matters - an undefined term, an unchecked assumption, a spec that has drifted from the code - and point you back.
 
-Before you ship, `/review` reads over your work like a second pair of eyes.
-It writes up what it found and hands you each item to deal with - fold it into a spec, break it down, fix it now, or just note it for later - and nothing happens until you say so.
-`/wrapup` offers a review on the way out, and if you're working locally with no pipeline, it's your last check before calling something done.
-Reviewing and shipping stay separate on purpose: `/review` only gives feedback, and `/ship` only ships.
+Before you ship, `/review` looks over your work, writes up what it finds, and hands you each item to route: fold it into a spec, break it down, fix it now, or note it for later.
+Nothing changes until you decide.
+`/wrapup` offers a review on the way out; with no pipeline, it is your last check before done.
+`/review` and `/ship` stay separate by design: one gives feedback, the other ships.
 
 Delivery is the outbound seam.
 Once a change is verified, `/ship` assembles a spec-grounded PR and proposes an afk (agent-eligible) or hitl (human-in-the-loop) routing - a proposal only; the delivery target holds merge authority, never Waypoint.
