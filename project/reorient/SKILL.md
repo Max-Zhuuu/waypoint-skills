@@ -7,6 +7,9 @@ status: stable
 A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
 This is not a status report - it is a course correction.
 
+Throughout, reorient surfaces and records; it does not fix.
+When the snapshot turns up a bug, a failing test, or a broken build, capture it as a finding and propose it as next work - do not repair it mid-audit, which turns a compass check into an unplanned debugging session.
+
 ## Phase 1 - Snapshot the landscape
 
 Build an honest picture of where the project stands.

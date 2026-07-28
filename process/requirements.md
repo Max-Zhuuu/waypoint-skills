@@ -216,6 +216,7 @@ Use the AI to draft the spec structure, but own the scope decisions.
 ### AI agent
 
 The agent runs all phases, presenting options at decision points.
-Questions should include the agent's recommended answer so the human can challenge rather than generate.
+Ask questions one at a time, each carrying the context that makes it answerable and the agent's recommended answer, so the human can challenge rather than generate.
+A batch of questions dumped at once gets shallow answers and ignores that each answer reshapes the next question.
 The agent outputs the spec file and updates shared artifacts.
 When scaffolding docs exist (glossary, scope, conventions), the agent cross-references against them and flags discrepancies.
