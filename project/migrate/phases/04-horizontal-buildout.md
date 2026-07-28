@@ -11,9 +11,9 @@
 - **Pass:** feature spec and logic doc exist, are cross-referenced against source, and no related assumptions in CONCERNS.md are past their resolution deadline.
 
 ### Post-build (per screen)
-- **Trigger:** when `/port` reports a screen complete
+- **Trigger:** when `/tdd` reports a screen complete
 - **References:** CONCERNS.md (entity concerns), CONVENTIONS.md, GLOSSARY.md
-- **Action:** /port suggests /wrapup. If invoked: /wrapup resolves concerns, cascades to shared docs, updates inventory to `[P]`. If skipped: concerns persist, /check-in surfaces next session.
+- **Action:** /tdd suggests /wrapup. If invoked: /wrapup resolves concerns, cascades to shared docs, updates inventory to `[P]`. If skipped: concerns persist, /check-in surfaces next session.
 - **Pass:** /wrapup resolved concerns (or concerns persist for next session).
 
 ## Process
@@ -22,7 +22,7 @@ Order by dependency (parents before children).
 
 ### Per-screen process
 
-Invoke `/port` for each screen. `/port` handles:
+Invoke `/tdd` for each screen, using the [port checklist](../reference/port-checklist.md) as reference. The process:
 1. Read feature spec + logic doc + source system
 2. Generate subagent brief
 3. Spawn implementation subagent(s)
@@ -45,7 +45,7 @@ At horizontal buildout scale:
 - The full test suite passes after each screen is added
 - No regressions in previously-ported screens
 
-Testing methodology (structural enforcement, snapshots, characterization tests) is owned by /port, not this phase file.
+Testing methodology (structural enforcement, snapshots, characterization tests) is owned by the implementation verb, not this phase file. See [references.md](../reference/references.md) for the catalog.
 
 ## Gate
 

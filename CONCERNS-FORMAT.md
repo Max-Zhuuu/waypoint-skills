@@ -208,7 +208,7 @@ Bidirectional sync is possible via adapter scripts but optional.
 - /diagnose: "No correct test seam exists" -> issue
 - /tdd: "Discovered undocumented business rule" -> question
 - /tdd: "Provisional commit, spec sync deferred" -> issue
-- /port: "Spec says X, reality is Y" -> issue
+- /tdd (migration): "Spec says X, reality is Y" -> issue
 - /spec: "This requirement is ambiguous" -> question
 
 **Project-layer skills consume concerns:**

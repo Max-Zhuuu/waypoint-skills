@@ -5,5 +5,8 @@ docs/specs/
 .claude/
 specs/
 
+# Session-local working state
+docs/_local/
+
 # Per-phase TDD worktrees (build isolation, not shipped)
 .worktrees/

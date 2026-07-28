@@ -114,24 +114,27 @@ agent: Testing hypothesis 1. Adding [DEBUG-7c3a] instrumentation to the
 
 ### Claude Code
 
-**Plugin** (managed, auto-updates):
+**Marketplace plugin** (managed, auto-updates):
 
 ```bash
-claude plugin install --source https://github.com/max-zhu-bv/waypoint-skills
+claude plugin marketplace add max-zhu-bv/waypoint-skills
+claude plugin install waypoint-skills@max-zhu-bv
 ```
 
-**skills.sh** (copies into your project, editable):
-
-```bash
-npx skills add max-zhu-bv/waypoint-skills
-```
-
-Either way, invoke any skill directly:
+Then invoke any skill directly:
 
 ```
 /diagnose tests pass locally but fail in CI
 /spec user notifications with email and in-app
 /tdd checkout flow with discount codes
+```
+
+To update after a new release:
+
+```bash
+claude plugin marketplace update max-zhu-bv
+claude plugin uninstall waypoint-skills@max-zhu-bv
+claude plugin install waypoint-skills@max-zhu-bv
 ```
 
 ### OpenCode
@@ -175,13 +178,12 @@ They are the complete methodology without any tool-specific instructions.
 
 - **[tdd](task/tdd/SKILL.md)** - Build features or fix bugs with red-green-refactor. Test-first, behavior-driven.
 - **[create](task/create/SKILL.md)** - Add features to an existing codebase. Ensures specs exist and docs stay current. Lighter than /buildout.
-- **[port](task/port/SKILL.md)** - Implement a migration screen from spec + logic doc + source. Brief subagents, review output, flag discrepancies.
 - **[diagnose](task/diagnose/SKILL.md)** - Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.
 - **[prototype](task/prototype/SKILL.md)** - Build throwaway prototypes to flesh out a design. Routes between terminal app, UI variations, or design panel.
 
 ### Sustain
 
-- **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /port or /tdd.
+- **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb.
 - **[review](task/review/SKILL.md)** - A code critic you point at your work before shipping. Runs a lens (persona), writes a throwaway findings note, routes each finding. Suggested, never forced; never ships.
 - **[ship](project/ship/SKILL.md)** - The outbound seam. Assemble a spec-grounded PR and propose an afk/hitl routing; never holds merge authority. Run after /wrapup.
 - **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.
@@ -214,7 +216,7 @@ stateDiagram-v2
     experienced --> build : /diagnose, /tdd, /create
 
     orient --> plan : /spec, /design
-    plan --> build : /breakdown, /tdd, /create, /port
+    plan --> build : /breakdown, /tdd, /create
     build --> verify : /wrapup, /check-in
     verify --> deliver : /review, /ship
     deliver --> orient : /check-in surfaces downstream
@@ -262,10 +264,9 @@ mindmap
 
 | Version | Change |
 |---------|--------|
-| v2.5 | Reference tree restructure. SKILL.md files target 50-80 lines (CI enforced at 100). Inline content extracted to `reference/` and `phases/` subfolders. Engagement sections deduplicated to 3-5 line declarations. Descriptions sharpened. `sync-skills.ps1` now syncs `internals/`, `templates/`, `process/`. Structural rules codified in CONTRIBUTING.md. |
-| v2.1 | Naming convention picker in /setup (underscore-prefixed vs clean names). Root-level docs/ enforcement. |
-| v2.0 | Three-tier doc layout (program/ + implementation/ + _local/). CONTEXT.md renamed to _GLOSSARY.md. Concern type `flag` renamed to `issue`. `deadline:` renamed to `validate-by:`. |
-| v1.0 | Initial release. 20 skills, concerns tracking, engagement model, process/adapter split. |
+| 2.1.0 | Handoff mode in /wrapup (continuity doc + boot prompt for next agent). /port demoted to reference checklist under /migrate. Exit wording sharpened across tdd, review, wrapup. Check-in reads handoff docs. Chain graph labels corrected. Breaking: `/port` no longer invocable by name - use `/migrate` + `/tdd` with the port checklist. |
+| 2.0.0 | The quality loop. New skills: /review (persona-based code critic), /ship (outbound PR seam). Chain dispatcher for skill-to-skill handoff. Settings surface with trusted-config model. Engagement reference split into `internals/engagement/` directory. Artifacts manifest emission. Autonomy axis. Persona trust gate (two-tier, user-global only). Prototype skill: taste profile grounding, shell-swap default, HTML artifact output, worktree-scoped design panel with archival. Plugin manifest for marketplace install. |
+| 1.0.0 | Initial plugin release. 21 skills. Reference tree restructure (SKILL.md 50-80 lines, CI enforced at 100). Three-tier doc layout. Concerns tracking. Engagement model. Process/adapter split. Structural rules in CONTRIBUTING.md. |
 
 ## Contributing
 

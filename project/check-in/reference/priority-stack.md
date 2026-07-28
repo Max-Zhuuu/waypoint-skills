@@ -20,7 +20,7 @@ Three layers, checked in order. Propose the first match:
 
 When proposing implementation work, ask the user which verb to invoke via AskUserQuestion:
 
-- For migration screens: /port (default)
+- For migration screens: /tdd (default, with port checklist as reference)
 - For new features: /tdd (default)
 - For design work: /design or user's chosen methodology
 

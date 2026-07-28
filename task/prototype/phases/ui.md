@@ -11,9 +11,9 @@ If the question is about logic/state rather than what something looks like - wro
 - "Try a different layout for the settings screen."
 - Any time the user would otherwise spend a day picking between three vague mockups in their head.
 
-## Two sub-shapes - strongly prefer sub-shape A
+## Two sub-shapes - sub-shape A is the default
 
-A UI prototype is much easier to judge when it's **butting up against the rest of the app** - real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
+A UI prototype is much easier to judge when it's **butting up against the rest of the app** - real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. **Always use sub-shape A** unless the prototype genuinely has no existing page to live inside. Sub-shape B requires explicit justification - log the reason in the prototype's notes or commit message.
 
 ### Sub-shape A - adjustment to an existing page (preferred)
 
@@ -21,9 +21,9 @@ The route already exists. Variants are rendered **on the same route**, gated by 
 
 If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow) - that's still sub-shape A. Mount the variants inside the host page.
 
-### Sub-shape B - a new page (last resort)
+### Sub-shape B - a new page (requires justification)
 
-Only use this when the thing being prototyped genuinely has no existing page to live inside - e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible.
+Only use this when the thing being prototyped genuinely has no existing page to live inside - e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible. **Log the reason** you chose sub-shape B in the prototype's notes or commit message.
 
 Create a **throwaway route** following whatever routing convention the project already uses - don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Same `?variant=` pattern.
 
@@ -36,6 +36,8 @@ In both sub-shapes the floating bottom bar is identical.
 ### 1. Ground the design
 
 Before generating any variants, read the context that should inform them:
+
+**Taste profile:** Identify which of the three taste profiles (consumer-indulgent, brutal-minimalist, institutional) matches this project. Infer from project context - CLAUDE.md, existing code, domain type - and state the assumption. The companion doc's reference anchors for that profile are the baseline for variant generation. If a variant borrows from a different profile (e.g. an institutional data grid inside a consumer-indulgent app), call it out explicitly.
 
 **Design system:** Read the project's design tokens, CSS custom properties, component library, and any existing styled pages. The variants must look like they belong in this app, not in an AI demo.
 
@@ -63,6 +65,8 @@ Write down the plan, including what thesis each variant defends:
 Each variant is defending a **thesis about how the user works**. If you can't state the thesis, the variant doesn't have one and you're just rearranging boxes.
 
 ### 3. Generate variants
+
+**Output mode:** By default, generate variants as real components on the route (sub-shape A). As a lightweight alternative, offer HTML artifact output: self-contained HTML files stored in `docs/implementation/artifacts/{prototype-name}.html` (directory is gitignored). State the tradeoff: artifacts are faster to produce and compare but lack real app context - layout, data, density, and adjacent components are all absent. Artifacts suit early-stage exploration; real components suit decision-grade evaluation.
 
 Hold each variant to:
 

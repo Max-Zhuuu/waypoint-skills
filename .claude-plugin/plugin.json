@@ -1,6 +1,6 @@
 {
   "name": "waypoint-skills",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Structured methodologies for debugging, spec writing, TDD, project planning, and legacy migration. Process-first skills that work standalone or accumulate project context across sessions.",
   "author": {
     "name": "Max Zhu",
@@ -26,9 +26,9 @@
     "./task/how-to-start",
     "./task/improve-codebase-architecture",
     "./task/learn",
-    "./task/port",
     "./task/prototype",
     "./task/spec",
+    "./task/review",
     "./task/tdd",
     "./project/buildout",
     "./project/check-in",
@@ -36,6 +36,7 @@
     "./project/migrate",
     "./project/reorient",
     "./project/setup",
+    "./project/ship",
     "./project/wrapup",
     "./in-progress/find-skills",
     "./third-party/chrome-devtools-axi"
