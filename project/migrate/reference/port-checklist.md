@@ -39,12 +39,17 @@ Review subagent output against spec and source using this checklist:
 - Navigation paths work?
 - Tests pass?
 
+Grade each check by how independently the expected answer was obtained, not by whether the output looks right: a value confirmed against the source system or a re-run assertion outranks an inspection, and an inspection outranks a pattern-match.
+See the evidence hierarchy in [verifiable workflows](../../../process/verifiable-workflows.md).
+
 When cross-reference finds discrepancies between spec and reality:
 - DO NOT update the spec. DO NOT update shared docs.
 - Emit each discrepancy as a concern in CONCERNS.md (type: issue, refs: entity spec).
 
-Run test suite - zero failures required. Mark `[P]` in inventory.
-If parity is partial or uncertain, commit with `[provisional]` marker.
+Run test suite - zero failures required.
+When this phase runs under a reconciliation ledger, write this screen's row: status, criteria k/n with the unmet ones named, the evidence rank and named oracle, and any discrepancy pointers.
+A screen is done only when its row Passes - k equals n, tests green, no open discrepancy, evidence at rank 1-5; mark `[P]` in inventory only then.
+A partial or rank-6-7-only result stays Partial, spends the error budget with a logged reason, and commits with a `[provisional]` marker.
 
 ## Concurrency
 

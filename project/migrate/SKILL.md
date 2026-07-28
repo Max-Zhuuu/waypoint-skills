@@ -86,7 +86,7 @@ Process references in [references.md](reference/references.md): Spolsky's rewrit
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
 Emits: concerns (type: issue, question, assumption)
-Writes: Active Workflow record in CLAUDE.md
+Writes: Active Workflow record in CLAUDE.md; the reconciliation ledger at docs/workflows/{name}/ledger.md when the horizontal buildout is workflow-shaped
 Override: workflow skill - writes Active Workflow on activation, clears on completion
 
 ## Tone

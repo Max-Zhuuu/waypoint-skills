@@ -39,7 +39,8 @@ If a slice touches more than ~5 files, it's too big - decompose further.
 That >5-file threshold is the method-selection signal to escalate decomposition; recommend the finer split with the count as the reason, not a vibe (see [method selection](../../process/method-selection.md)).
 
 Tag every slice `Autonomy: afk | hitl` - `afk` only when its Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface; untagged is treated as `hitl` downstream.
-Output format and the tagging rule written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
+When the spec carries a Parallelization Plan (a workflow-shaped feature), also tag each slice with its lane and its acceptance-criteria count n, seeding the ledger's per-component denominator that the execution phase reads - see [verifiable workflows](../../process/verifiable-workflows.md).
+Output format and the tagging rules written to the spec file as a new section - see [reference/slice-format.md](reference/slice-format.md).
 
 ### Step 3 - Validate against scope
 

@@ -20,6 +20,14 @@
 
 Order by dependency (parents before children).
 
+### Reconciliation ledger
+
+When the in-scope screens are a homogeneous fan-out checked against the source system, this phase owns a reconciliation ledger ([verifiable workflows](../../../process/verifiable-workflows.md)) built from [the ledger template](../../../templates/workflow-ledger.md) at `docs/workflows/{migration-name}/ledger.md`.
+Create it at phase start with one row per in-scope entity, seeded from the breakdown's lane and criteria-count tags, every row `not-started`.
+Each [port checklist](../reference/port-checklist.md) run fills its own row with an evidence-graded verdict; the row, not the reviewer's say-so, is what marks a screen done.
+The header metric (pass-rate against the spec's target, criterion completeness, and a clean error-budget log with zero rank-6-7-only passes) is computed from the rows and read by the gate below.
+This is the structural fix for the squash: forty screens can no longer collapse into one "done", because each demands its own row with a named oracle before it counts.
+
 ### Per-screen process
 
 Invoke `/tdd` for each screen, using the [port checklist](../reference/port-checklist.md) as reference. The process:
@@ -52,6 +60,7 @@ Testing methodology (structural enforcement, snapshots, characterization tests) 
 ## Gate
 
 - [ ] All in-scope entities at `[P]`
+- [ ] Under a reconciliation ledger: pass-rate meets the spec's target with a clean error-budget log, and no component Passed on rank-6-7 evidence alone
 - [ ] Test suite: zero failures
 - [ ] No process violations (all /wrapup runs passed or flags documented)
 - [ ] Inventory current and accurate
