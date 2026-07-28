@@ -60,6 +60,8 @@ For each Must feature from the MoSCoW list:
 
 Order by dependency chain, then by risk.
 
+When the remaining Must features are many near-identical components validated against a source of truth, recommend the parallel verifiable-workflow path (a reconciliation ledger and a success metric) over building them one by one, with the component count as the reason (see [method selection](../../../process/method-selection.md) and [verifiable workflows](../../../process/verifiable-workflows.md)). A handful of heterogeneous features stays sequential.
+
 ### Concurrency
 
 If working with multiple agents, each agent claims features via the Claims section in CONCERNS.md (see [../../../CONCERNS-FORMAT.md](../../../CONCERNS-FORMAT.md#claims-section) for format). No two agents build the same feature. Each agent reads the spec before building.

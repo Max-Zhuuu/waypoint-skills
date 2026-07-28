@@ -54,7 +54,7 @@ Read [reference/enforcement.md](reference/enforcement.md) for the enforcement ru
 - Session continues under the invoked skill.
 
 Does NOT implement. Does NOT update docs (that is /wrapup). Does NOT promote (no promote verb exists; promotion is human-owned) or pull downstream text into the repo. Proposes work, then asks which verb to invoke.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.

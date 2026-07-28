@@ -78,7 +78,7 @@ When the audit is complete, suggest next steps:
 - If priorities shifted -> "/check-in reads your open concerns and proposes what to work on next."
 - If concerns need resolution -> "/wrapup updates GLOSSARY.md, conventions, and specs to match resolved decisions."
 - If scope needs revision -> "/grill-with-docs to stress-test and update SCOPE.md."
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Tone
 

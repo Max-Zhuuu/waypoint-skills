@@ -357,3 +357,23 @@ Override: {behavioral deviation from defaults - or omit line}
 
 Skills with overrides expand the Override field to explain the deviation.
 Skills that opt out entirely (e.g., /how-to-start) state the opt-out and reason.
+
+## 13. Exit Sequence
+
+Every skill ends with the same two-step sequence, after it has applied its own gated writes.
+This sequence is shared protocol: a skill's `## Exit` cites it in one line and lists only its own unique handoffs, never restating the two steps.
+
+1. **Emit the artifacts manifest** ([manifest.md](manifest.md)) - the run-time receipt of what the run wrote. A run that wrote nothing prints the empty manifest.
+2. **Run the chain dispatcher** ([../chain/reference.md](../chain/reference.md)) for the next hop, immediately after the manifest. On a clean edge it advances; on a gate, or when there is no clean outgoing edge, it stops and hands back, so for a skill off the chain spine this step is a no-op hand-back.
+
+The one-line citation each skill's `## Exit` carries:
+
+```markdown
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
+```
+
+### Conditional handoffs
+
+A skill's unique Exit handoffs may be conditional - a tier-specific line, a workflow-shaped recommendation.
+When a condition plainly does not hold, skip its handoff silently.
+Do not narrate the skip, and do not spend attention evaluating a conditional whose trigger is obviously absent.

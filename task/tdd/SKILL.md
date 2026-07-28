@@ -57,8 +57,7 @@ Ask: "All slices complete. Stable enough to document, or provisional?"
 **On completing a slice** (its Done-when met, tests green): write the per-slice done marker ([reference/slice-marker.md](reference/slice-marker.md)), keyed by (project identity, slice id). This is the structural completion signal the chain reads to derive `REM` (remaining = defined minus marked); it is bookkeeping, not a position pointer, and an absent or unresolvable marker reads as remaining, never as done.
 
 See [the engagement protocol](../../internals/engagement/README.md) section 6 for the full exit protocol.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Per-cycle checklist
 

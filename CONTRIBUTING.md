@@ -18,6 +18,8 @@ Each skill has two layers:
 | [process/architecture-review.md](process/architecture-review.md) | Architecture assessment | /improve-codebase-architecture |
 | [process/learning.md](process/learning.md) | Structured technical learning | /learn |
 | [process/observability.md](process/observability.md) | Production debuggability | (cross-referenced by /tdd, /review, /setup) |
+| [process/method-selection.md](process/method-selection.md) | Recommend-with-a-reason at a method fork | (cited by the fork-presenting skills: /spec, /breakdown, /create, /buildout, /migrate) |
+| [process/verifiable-workflows.md](process/verifiable-workflows.md) | Evidence-graded parallel validation with a reconciliation ledger | /spec branch (reused by /breakdown, /migrate, /buildout) |
 
 Not every skill has a process doc.
 Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/prototype has three execution branches that depend on the agent model).
@@ -211,7 +213,7 @@ Those are shared protocol defined in the engagement protocol (engagement/README.
 
 The `Writes:` line is lint-enforced (`lint-skills.sh`), because it is the frontmatter half of the artifacts manifest (engagement/manifest.md) and a dishonest one lets a skill skip its receipt:
 - `Writes: none` is only valid when the skill writes no repo files. If frontmatter `outputs:` names any artifact other than `concerns` (an inventory marker, a workflow record, a doc), `Writes:` must name it too.
-- Any skill whose `Writes:` is not `none` must cite engagement/manifest.md from its Exit, or its manifest never fires at run time.
+- Any skill whose `Writes:` is not `none` must link the manifest from its Exit, or its manifest never fires at run time. The canonical way is the one-line exit-sequence citation (engagement/README.md section 13, which emits the manifest as step 1); citing engagement/manifest.md directly also satisfies it.
 Concern emission is declared under `Emits:`, not `Writes:` - appending a concern is not a repo-file write for manifest purposes (engagement/manifest.md, the empty case).
 
 ## The outbound seam

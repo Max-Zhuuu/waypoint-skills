@@ -51,10 +51,14 @@ for f in $files; do
   fi
 
   cites_manifest=no
-  grep -qiE 'artifacts manifest|section 15' "$f" && cites_manifest=yes
+  # A writing skill links the manifest either directly (older phrasing) or via
+  # the shared exit sequence (README section 13), which emits the manifest as
+  # its step 1. Either citation satisfies the linkage.
+  grep -qiE 'artifacts manifest|section 15|exit sequence' "$f" && cites_manifest=yes
 
-  # Check B - manifest linkage: a writing skill must cite section 15 at its
-  # Exit, or its manifest is silently skipped at run time (section 15.4).
+  # Check B - manifest linkage: a writing skill must cite the manifest at its
+  # Exit (directly or through the shared exit sequence), or its manifest is
+  # silently skipped at run time (section 15.4).
   if [ "$writes_none" = "no" ] && [ "$cites_manifest" = "no" ]; then
     echo "  FAIL: $skill declares Writes but never cites the section 15 manifest (manifest would be silently skipped) - $f"
     exit_code=1

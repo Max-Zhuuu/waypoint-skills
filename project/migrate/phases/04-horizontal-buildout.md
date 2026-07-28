@@ -33,7 +33,9 @@ Invoke `/tdd` for each screen, using the [port checklist](../reference/port-chec
 
 ### Concurrency
 
-Primary fan-out opportunity. Multiple agents can build different screens IF:
+This is the primary fan-out: recommend the parallel verifiable-workflow path (a reconciliation ledger and a success metric) whenever the in-scope screens are homogeneous components checked against the source system, with the screen count as the reason (see [method selection](../../../process/method-selection.md) and [verifiable workflows](../../../process/verifiable-workflows.md)).
+
+Multiple agents can build different screens IF:
 - Non-overlapping entities claimed in CONCERNS.md (see [../../../CONCERNS-FORMAT.md](../../../CONCERNS-FORMAT.md#claims-section) for format)
 - Shared infra changes (router, shared components, types) are single-threaded
 - One agent proposes shared changes, merges; others pull
