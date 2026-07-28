@@ -34,6 +34,9 @@ Next: {proposed task} - {why this one}.
 /check-in is the authority, not a dispatcher.
 Phase files define *what* to check. /check-in decides *when and how* to act.
 
+It proposes work; it does not do the work.
+A bug or failing test found while reading state becomes the proposed next task, not something /check-in fixes inline - orient and hand off, do not jump into the repair.
+
 Enforcement violations surface in the report as context.
 The priority stack still proposes work, including resolution of violations.
 A violation never creates a deadlock. If enforcement says "spec missing" and the stack says "build next entity," /check-in proposes: "Write the spec first, then build."

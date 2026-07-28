@@ -18,6 +18,13 @@ Three concerns that once lived here as sections now sit beside this file, each c
 - [manifest.md](manifest.md) - the artifacts manifest emission: the run-time receipt of what a skill wrote, the sibling of concern emission (section 4).
 - [../chain/reference.md](../chain/reference.md) - the chain dispatcher and the graph it walks, run at each skill's Exit after the manifest.
 
+## Multiple skills invoked at once
+
+When the user names more than one skill in a single request (`/spec then /breakdown`, "reorient and check in", a comma-separated list), do not start executing in the order written and do not silently pick one.
+Stop and confirm the order first: restate the skills you detected, propose a sequence with a one-line reason (usually the chain's natural precedence - orient before plan, spec before breakdown, plan before build), and ask the user to confirm or reorder.
+Then run them one at a time, carrying each skill's output into the next, never interleaving their phases.
+A compound invocation is a request to sequence work, not to run everything at once.
+
 ## 1. Tier Detection
 
 On invocation, determine the engagement tier by reading project state.
