@@ -126,23 +126,23 @@ agent: Testing hypothesis 1. Adding [DEBUG-7c3a] instrumentation to the
 
 ```bash
 claude plugin marketplace add max-zhu-bv/waypoint-skills
-claude plugin install waypoint-skills@max-zhu-bv
+claude plugin install wp@max-zhu-bv
 ```
 
-Then invoke any skill directly:
+Skills are namespaced under the `wp:` prefix, so autocomplete surfaces them as `wp:tdd`, `wp:spec`, and so on:
 
 ```
-/diagnose tests pass locally but fail in CI
-/spec user notifications with email and in-app
-/tdd checkout flow with discount codes
+/wp:diagnose tests pass locally but fail in CI
+/wp:spec user notifications with email and in-app
+/wp:tdd checkout flow with discount codes
 ```
 
 To update after a new release:
 
 ```bash
 claude plugin marketplace update max-zhu-bv
-claude plugin uninstall waypoint-skills@max-zhu-bv
-claude plugin install waypoint-skills@max-zhu-bv
+claude plugin uninstall wp@max-zhu-bv
+claude plugin install wp@max-zhu-bv
 ```
 
 ### OpenCode
@@ -273,6 +273,7 @@ mindmap
 
 | Version | Change |
 |---------|--------|
+| 3.0.0 | Breaking: plugin renamed `waypoint-skills` -> `wp` for shorter, autocompletable invocation (`/wp:tdd`). Existing installs do not auto-migrate: run `claude plugin uninstall waypoint-skills@max-zhu-bv` then `claude plugin install wp@max-zhu-bv`. Marketplace add command (`max-zhu-bv/waypoint-skills`) is unchanged. |
 | 2.1.0 | Handoff mode in /wrapup (continuity doc + boot prompt for next agent). /port demoted to reference checklist under /migrate. Exit wording sharpened across tdd, review, wrapup. Check-in reads handoff docs. Chain graph labels corrected. Breaking: `/port` no longer invocable by name - use `/migrate` + `/tdd` with the port checklist. |
 | 2.0.0 | The quality loop. New skills: /review (persona-based code critic), /ship (outbound PR seam). Chain dispatcher for skill-to-skill handoff. Settings surface with trusted-config model. Engagement reference split into `internals/engagement/` directory. Artifacts manifest emission. Autonomy axis. Persona trust gate (two-tier, user-global only). Prototype skill: taste profile grounding, shell-swap default, HTML artifact output, worktree-scoped design panel with archival. Plugin manifest for marketplace install. |
 | 1.0.0 | Initial plugin release. 21 skills. Reference tree restructure (SKILL.md 50-80 lines, CI enforced at 100). Three-tier doc layout. Concerns tracking. Engagement model. Process/adapter split. Structural rules in CONTRIBUTING.md. |
