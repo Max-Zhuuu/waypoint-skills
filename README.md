@@ -5,9 +5,9 @@ Understand what you're building before you build it.
 Most AI-assisted development starts with a prompt and ends with code.
 What's missing is the middle - understanding the system you're changing, deciding what to build before building it, and verifying that what you built matches what you decided.
 
-Waypoint skills enforce that middle.
-Every skill reads project state before acting and writes decisions down before moving on.
-The result is a codebase where decisions are traceable, specs are grillable, and context survives between sessions.
+Waypoint skills enforce that middle by building a durable layer of documentation alongside the code - a glossary of domain terms, ADRs for the trade-offs you settled, specs you can grill, and a running log of open concerns.
+Every skill reads that state before acting and writes its decisions back before moving on, so the next session - yours or another agent's - starts from what the last one learned instead of from a blank prompt.
+The code is what any tool gives you; the written-down decisions and the context that survives between sessions are what Waypoint adds.
 
 ## Getting started
 
@@ -20,25 +20,33 @@ Structure accumulates when it helps and stays out of the way when it doesn't.
 
 ### New to this?
 
+A brand-new project starts with `/setup`.
+One scoping grill lays down the documentation the rest of the family reads - scope, a glossary, and the open-questions log - so every later session has something to stand on.
+
 ```
-you:   /how-to-start
+you:   /setup
 
-agent: Read: Project has models, routes, and views but no spec docs.
-       What are you trying to do?
-       /diagnose for bugs, /spec for features, /tdd to build test-first,
-       /design for visual system, /learn to understand something.
+agent: No scaffolding yet - starting fresh. Two phases: scope grill,
+       then architecture & standards.
 
-you:   I need to add notifications to the app
+       What problem does this solve, and for whom?
+       My read: fixture tracking for charter operators who live in
+       spreadsheets today. Right?
 
-agent: Read: No spec exists for notifications.
-       Recommend: /spec - underspecified feature, nail down requirements
-       before building.
-       Proceed with /spec?
+you:   yes, and it has to sync with our existing fleet API
 
-you:   yes
+agent: Scope for v1:
+       In  - fixture list, status tracking, fleet API sync
+       Out - invoicing, multi-org, mobile
+       Uncertain - who owns the API contract? (decide by Fri)
 
-agent: [invokes /spec with "notifications"]
+       Wrote SCOPE.md, seeded _GLOSSARY.md with 6 domain terms, and
+       logged the API-contract owner as an open concern.
+       Phase 0 gate passed. Next: /check-in reads these back and
+       proposes the first task.
 ```
+
+Not starting fresh? `/how-to-start` reads existing project state and routes you to the right skill.
 
 ### Typical daily session
 
@@ -225,12 +233,13 @@ stateDiagram-v2
     experienced --> orient : system nudges
 ```
 
-Both paths lead to the same place.
-If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
+Both paths converge.
+Skip orientation and jump straight to building, and the skills flag what's missing when it matters - an undefined term, an unchecked assumption, a spec that has drifted from the code - and point you back.
 
-Before that seam sits the critic. `/review` points a lens at your work before you ship it - a "persona" like `architect` or `creative-director`, each just a different set of questions over the same machinery.
-It writes a throwaway findings note and lets you route each finding (to a spec, to /breakdown, fix it now, or record it as a concern); nothing lands without your pick.
-`/wrapup` suggests it on the way out, and on a local project with no pipeline it is your only conformance check. Reviewing is judgment, shipping is mechanical - `/review` never ships and `/ship` never critiques.
+Before you ship, `/review` looks over your work, writes up what it finds, and hands you each item to route: fold it into a spec, break it down, fix it now, or note it for later.
+Nothing changes until you decide.
+`/wrapup` offers a review on the way out; with no pipeline, it is your last check before done.
+`/review` and `/ship` stay separate by design: one gives feedback, the other ships.
 
 Delivery is the outbound seam.
 Once a change is verified, `/ship` assembles a spec-grounded PR and proposes an afk (agent-eligible) or hitl (human-in-the-loop) routing - a proposal only; the delivery target holds merge authority, never Waypoint.
