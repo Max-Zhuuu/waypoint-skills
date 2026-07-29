@@ -7,7 +7,7 @@
   "description": "Structured engineering methodologies as agent skills - debugging, spec writing, TDD, project planning, and legacy migration.",
   "plugins": [
     {
-      "name": "waypoint-skills",
+      "name": "wp",
       "source": "./",
       "description": "Process-first skills for debugging, spec writing, TDD, project planning, and legacy migration. Work standalone or accumulate project context across sessions."
     }
