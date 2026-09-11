@@ -9,6 +9,9 @@ status: deprecated
 A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
 This is not a status report - it is a course correction.
 
+Throughout, reorient surfaces and records; it does not fix.
+When the snapshot turns up a bug, a failing test, or a broken build, capture it as a finding and propose it as next work - do not repair it mid-audit, which turns a compass check into an unplanned debugging session.
+
 ## Phase 1 - Snapshot the landscape
 
 Build an honest picture of where the project stands.
@@ -80,7 +83,7 @@ When the audit is complete, suggest next steps:
 - If priorities shifted -> "/check-in reads your open concerns and proposes what to work on next."
 - If concerns need resolution -> "/wrapup updates GLOSSARY.md, conventions, and specs to match resolved decisions."
 - If scope needs revision -> "/grill-with-docs to stress-test and update SCOPE.md."
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Tone
 

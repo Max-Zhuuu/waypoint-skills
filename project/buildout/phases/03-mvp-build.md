@@ -60,6 +60,9 @@ For each Must feature from the MoSCoW list:
 
 Order by dependency chain, then by risk.
 
+When the remaining Must features are many near-identical components validated against a source of truth, recommend the parallel verifiable-workflow path (a reconciliation ledger and a success metric) over building them one by one, with the component count as the reason (see [method selection](../../../process/method-selection.md) and [verifiable workflows](../../../process/verifiable-workflows.md)). A handful of heterogeneous features stays sequential.
+When that path is taken, this phase owns the ledger ([the template](../../../templates/workflow-ledger.md) at `docs/workflows/{buildout-name}/ledger.md`): one row per feature seeded from the breakdown's lane and criteria-count tags, each filled with an evidence-graded verdict, and the phase gate reads its metric rather than a single "all built" judgment.
+
 ### Concurrency
 
 If working with multiple agents, each agent claims features via the Claims section in CONCERNS.md (see [../../../CONCERNS-FORMAT.md](../../../CONCERNS-FORMAT.md#claims-section) for format). No two agents build the same feature. Each agent reads the spec before building.
@@ -74,5 +77,6 @@ Working, demoable, and solving the core problem.
 
 - [ ] Vertical slice complete and architecture validated (CP2 passed)
 - [ ] All Must features built and working
+- [ ] Under a reconciliation ledger: pass-rate meets the spec's target with a clean error-budget log, and no component Passed on rank-6-7 evidence alone ([verifiable workflows](../../../process/verifiable-workflows.md))
 - [ ] No architectural concerns deferred
 - [ ] Can demo the product to someone and they understand what it does

@@ -55,6 +55,14 @@ If a source system exists, check whether this feature exists there.
 If yes: is this a parity port or an enhancement?
 Enhancements should be proposed and deferred until parity is met, unless the enhancement is required for the port to function.
 
+### Workflow-shaped check
+
+If the feature fans out over many roughly homogeneous components that are each validated against a source of truth (N endpoints, screens, or entities), it is workflow-shaped.
+Elicit the parallelization (unit, count, what is shared vs isolated, the source of truth), the success metric (target pass-rate and why not 100%, per-unit criteria, the zero-error definition), and the validation design (how expected is obtained independently of the implementer, the required evidence, where discrepancies go).
+These answers become the spec's Parallelization Plan, Success Metric, and Validation Protocol sections.
+This is the recommend-with-reasoning discipline applied to verification: a component is unverified until it produces evidence from a named oracle, so incorrect output is flagged rather than assumed correct.
+See [verifiable-workflows.md](verifiable-workflows.md).
+
 ## Phase 2 - Define acceptance criteria
 
 For each behavior in scope, write a Given/When/Then acceptance criterion.
@@ -103,6 +111,8 @@ Structure each option:
 State your recommendation and why.
 A recommendation without reasoning is an opinion.
 An opinion without reasoning is a guess.
+
+Method selection follows the same recommend-with-reasoning discipline: a fork between a lighter and a heavier method names a method and cites a quantifiable signal, never a bare menu (see [method-selection.md](method-selection.md)).
 
 ### How to decide
 
@@ -206,6 +216,7 @@ Use the AI to draft the spec structure, but own the scope decisions.
 ### AI agent
 
 The agent runs all phases, presenting options at decision points.
-Questions should include the agent's recommended answer so the human can challenge rather than generate.
+Ask questions one at a time, each carrying the context that makes it answerable and the agent's recommended answer, so the human can challenge rather than generate.
+A batch of questions dumped at once gets shallow answers and ignores that each answer reshapes the next question.
 The agent outputs the spec file and updates shared artifacts.
 When scaffolding docs exist (glossary, scope, conventions), the agent cross-references against them and flags discrepancies.

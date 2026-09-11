@@ -71,7 +71,7 @@ Clear the Active Workflow section from CLAUDE.md (or mark as completed with date
 - /wrapup to resolve concerns and cascade docs.
 
 Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.

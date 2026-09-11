@@ -1,7 +1,7 @@
 {
-  "name": "waypoint-skills",
+  "name": "wp",
   "version": "3.0.0",
-  "description": "JSON-first skill suite for strict, tested, enterprise-grade development. Each skill has a skill.json (machine-readable steps, checklists, chain edges, capabilities) and a thin SKILL.md bootloader. Includes structural test suite.",
+  "description": "JSON-first skill suite for strict, tested, enterprise-grade development. skill.json steps with checklists, chain edges, and capabilities. Thin SKILL.md bootloaders. Structural test suite.",
   "author": {
     "name": "Max Zhu",
     "url": "https://github.com/max-zhu-bv"

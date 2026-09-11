@@ -30,6 +30,17 @@ Every slice carries a tag.
 An untagged slice is treated as `hitl` everywhere downstream (fail-safe), so tag deliberately rather than leaving it to the default.
 When DEPLOY.md is absent, the load-bearing condition is unresolved, so the slice cannot be `afk` - tag it `hitl` and note the load-bearing check was unavailable.
 
+## The lane and criteria-count tags (workflow-shaped specs)
+
+When the spec carries a Parallelization Plan, the feature is a fan-out and the execution phase builds a reconciliation ledger from these slices ([verifiable workflows](../../../process/verifiable-workflows.md)).
+So each slice in a workflow-shaped spec carries two more tags that the execution phase reads:
+
+- **Lane:** the fan-out unit this slice belongs to (the endpoint, screen, or entity), which becomes the ledger's row identity.
+- **Criteria:** `n`, the count of acceptance criteria this slice must satisfy, which seeds the ledger's per-component denominator (the `total_i` in criterion completeness).
+
+`breakdown` authors these two values; the execution phase renders them into ledger rows and never recomputes them, exactly as it renders the autonomy tag.
+Omit both tags for ordinary specs that carry no Parallelization Plan.
+
 ## Completion is recorded, not stored here
 
 A slice has no done or status field, and it never gets one: the format above is the slice's *definition*, not its state.
