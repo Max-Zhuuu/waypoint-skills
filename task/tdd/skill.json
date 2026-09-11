@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "tdd",
+  "status": "stable",
+  "description": "Build features or fix bugs with red-green-refactor. Test-first, behavior-driven, no shortcuts.",
+
+  "chain": {
+    "from": ["breakdown"],
+    "to": [
+      { "target": "review", "type": "clean", "guard": "¬REM" },
+      { "target": "tdd", "type": "clean", "guard": "REM·¬NEXT_HITL" },
+      { "target": "tdd", "type": "gate", "guard": "REM·NEXT_HITL" },
+      { "target": "wrapup", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "plan",
+      "name": "Plan",
+      "reads": ["TESTING.md", "CONVENTIONS.md", "GLOSSARY.md"],
+      "process": "process/tdd.md#plan",
+      "instruction": "Read project context. Check ADRs in the area you are touching. Confirm the behavior list and interface design with the user before writing code.",
+      "checklist": [
+        "Project context read (TESTING.md, CONVENTIONS.md, GLOSSARY.md)",
+        "ADRs checked in touched area",
+        "Behavior list confirmed with user",
+        "Interface design confirmed with user"
+      ]
+    },
+    {
+      "id": "endpoint-check",
+      "name": "Endpoint scope check",
+      "enterprise": true,
+      "reads": ["contracts/*-endpoints.json"],
+      "instruction": "Verify the slice covers every endpoint it should per the registry. Read the issue tracker issue (Linear/GitHub) if one exists for this slice and check acceptance criteria.",
+      "checklist": [
+        "Endpoint registry checked - every 'in' endpoint for this slice is covered",
+        "Issue tracker issue read if it exists",
+        "Acceptance criteria noted"
+      ]
+    },
+    {
+      "id": "tracer",
+      "name": "Tracer bullet",
+      "process": "process/tdd.md#tracer",
+      "instruction": "Write one end-to-end test that exercises the happy path through the public interface. It must fail (red).",
+      "checklist": [
+        "One E2E test written",
+        "Test exercises happy path through public interface",
+        "Test fails (red)"
+      ]
+    },
+    {
+      "id": "loop",
+      "name": "Incremental loop",
+      "process": "process/tdd.md#loop",
+      "instruction": "For each behavior: write a failing test (red), implement the minimum code to pass (green), then refactor. Show the user each test before writing implementation. Proceed with your ranking but give the opportunity to redirect.",
+      "per_cycle_checklist": [
+        "Test describes behavior, not implementation",
+        "Test uses public interface only",
+        "Test would survive internal refactor",
+        "Code is minimal for this test",
+        "No speculative features added"
+      ]
+    },
+    {
+      "id": "refactor",
+      "name": "Refactor",
+      "references": [
+        "reference/tests.md",
+        "reference/mocking.md",
+        "reference/deep-modules.md",
+        "reference/interface-design.md",
+        "reference/refactoring.md"
+      ],
+      "process": "process/tdd.md#refactor",
+      "instruction": "Clean up implementation and tests. Consult reference docs for patterns. Check slice-marker.md for done-marker semantics when the slice is complete.",
+      "checklist": [
+        "No new test smells introduced",
+        "Interfaces are deep (few methods, rich behavior)",
+        "Duplication eliminated",
+        "Slice done marker written if slice complete (reference/slice-marker.md)"
+      ]
+    },
+    {
+      "id": "convention-check",
+      "name": "Convention enforcement",
+      "enterprise": true,
+      "reads": ["process/convention-enforcement.md"],
+      "instruction": "Verify convention-enforcement tests pass if the project has them. If a new convention or repeating pattern emerged during refactor, offer to create a convention test for it.",
+      "checklist": [
+        "Convention-enforcement tests pass (if they exist)",
+        "New conventions offered as tests if detected during refactor"
+      ]
+    }
+  ],
+
+  "safety_rails": {
+    "banned_ops": ["git rebase", "git push --force", "az", "aws", "gcloud"],
+    "on_banned": "print_for_user"
+  },
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": true,
+    "convention_enforcement": true,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": ["per-slice done marker"],
+    "override": "commit-producing",
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Disciplined. One test, one implementation, no shortcuts."
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "spec",
+  "status": "stable",
+  "description": "Grill scope and acceptance criteria, output a spec file. Use when starting a feature or requirements are vague.",
+
+  "chain": {
+    "from": ["triage"],
+    "to": [
+      { "target": "breakdown", "type": "clean", "guard": "SPEC" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "context",
+      "name": "Read project context",
+      "reads": ["SCOPE.md", "CONVENTIONS.md", "GLOSSARY.md", "CLAUDE.md"],
+      "instruction": "Read project context. Check if a recently grilled doc exists for this topic (from /grill-with-docs). If found and still current, skip the grill step - reuse the grilled doc as input.",
+      "checklist": [
+        "SCOPE.md read (if exists)",
+        "CONVENTIONS.md read (if exists)",
+        "GLOSSARY.md read (if exists)",
+        "Checked for recent grilled doc on this topic"
+      ]
+    },
+    {
+      "id": "grill",
+      "name": "Grill requirements",
+      "process": "process/requirements.md",
+      "reads": ["SCOPE.md"],
+      "instruction": "Follow process/requirements.md. Grill scope, acceptance criteria, and trade-offs. Check SCOPE.md for scope protection rules - never recommend cutting features or endpoints without explicit user approval. Every acceptance criterion must be testable.",
+      "checklist": [
+        "Scope grilled - what's in, out, uncertain",
+        "Acceptance criteria defined - each is testable",
+        "Trade-offs surfaced and decided",
+        "Scope protection checked - no features cut without user approval"
+      ]
+    },
+    {
+      "id": "j1-check",
+      "name": "Check output location",
+      "enterprise": true,
+      "reads": ["CLAUDE.md", "architecture-rule-catalogue.md"],
+      "instruction": "Check for J1-type rules (code-as-documentation, no spec files outside ADRs). If active: spec output goes to issue tracker (Linear/GitHub), not docs/specs/. If no J1 rule: write to docs/specs/ as normal.",
+      "checklist": [
+        "J1 rule presence checked",
+        "Output location decided (issue tracker or docs/specs/)"
+      ]
+    },
+    {
+      "id": "write",
+      "name": "Write spec",
+      "instruction": "Write the spec to the decided location. Update shared artifacts: GLOSSARY.md if new terms resolved, SCOPE.md if scope changed, CONVENTIONS.md if new patterns emerged. Do not create docs just to cascade into them.",
+      "checklist": [
+        "Spec written to correct location",
+        "Shared artifacts updated (if changes warranted)",
+        "All acceptance criteria traceable"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": true,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Thorough. Every acceptance criterion is testable. No vague requirements."
+}

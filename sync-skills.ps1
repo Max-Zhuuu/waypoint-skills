@@ -1,10 +1,13 @@
 # Sync waypoint skills to ~/.claude/skills/ (flattened)
-# Also syncs shared infrastructure: internals/, templates/, process/, and root files.
+# Also syncs shared infrastructure: internals/, templates/, process/, schemas/, tests/, and root files.
 #
 # The repo organizes skills under task/ and project/ for readability.
 # Claude Code discovers skills one level deep in ~/.claude/skills/.
 # This script bridges the gap: find every SKILL.md, copy its directory
 # to ~/.claude/skills/{name}/, then sync shared directories.
+#
+# v3: Added schemas/ (JSON schemas for skill validation and output formats)
+#     and tests/ (structural test suite) to the sync.
 #
 # Usage: .\sync-skills.ps1 [-RepoPath <path>] [-DryRun]
 
@@ -54,7 +57,7 @@ foreach ($dir in $skillDirs) {
 
 # --- Shared infrastructure (peer directories) ---
 
-$sharedDirs = @("internals", "templates", "process")
+$sharedDirs = @("internals", "templates", "process", "schemas", "tests")
 $sharedCount = 0
 
 foreach ($dir in $sharedDirs) {

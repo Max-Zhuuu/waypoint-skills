@@ -1,0 +1,85 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "triage",
+  "status": "stable",
+  "description": "Read a backlog (Linear, GitHub, PRs, or a list), categorize, prioritize, and route each item to the right verb.",
+
+  "chain": {
+    "from": [],
+    "to": [
+      { "target": "spec", "type": "clean", "guard": "TRIAGED" },
+      { "target": "diagnose", "type": "clean", "guard": "TRIAGED·BUG" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "read-backlog",
+      "name": "Read backlog",
+      "reads": ["CLAUDE.md"],
+      "instruction": "Auto-detect backlog source from CLAUDE.md (Linear workflow section, GitHub issues config) or accept a user-provided list. Parse issues, PRs, or items. For each: extract title, description, labels, status, assignee.",
+      "checklist": [
+        "Backlog source identified",
+        "Items parsed with title, description, labels"
+      ]
+    },
+    {
+      "id": "categorize",
+      "name": "Categorize",
+      "instruction": "For each item: categorize as feature, bug, tech debt, or question. Extract acceptance criteria if present. Note dependency links between items.",
+      "checklist": [
+        "Every item has a category (feature/bug/tech-debt/question)",
+        "Acceptance criteria extracted where present",
+        "Dependencies between items noted"
+      ]
+    },
+    {
+      "id": "enterprise-crossref",
+      "name": "Enterprise cross-reference",
+      "enterprise": true,
+      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "docs/implementation/parity/*.csv"],
+      "instruction": "Cross-reference backlog against endpoint registry: uncovered 'in' endpoints are implicit high-priority items. Check scope docs for items that may conflict with scope protection. Check parity systems (entity registries, endpoint maps) for uncovered entities.",
+      "checklist": [
+        "Endpoint registry cross-referenced (uncovered 'in' endpoints surfaced)",
+        "Scope conflicts flagged",
+        "Parity gaps surfaced (if parity system exists)"
+      ]
+    },
+    {
+      "id": "prioritize",
+      "name": "Prioritize",
+      "instruction": "Rank items by: blocking status (blockers first), dependency order (prerequisites before dependents), severity, age. For migration projects: route migration screens to /tdd with port-checklist as reference.",
+      "checklist": [
+        "Items ranked by blocking status, deps, severity, age",
+        "Migration screens routed with port-checklist reference (if migration project)"
+      ]
+    },
+    {
+      "id": "route",
+      "name": "Route to verb",
+      "instruction": "Present ranked list with recommended verb per item: feature without spec -> /spec, feature with spec -> /breakdown (or /tdd if already decomposed), bug -> /diagnose, tech debt -> /tdd direct, question or ambiguity -> /grill-with-docs. User picks one. Hand off to the chosen verb.",
+      "checklist": [
+        "Ranked list presented with verb per item",
+        "User has picked an item",
+        "Handed off to chosen verb"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": true,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": false,
+    "chain_dispatch": false
+  },
+
+  "tone": "Brief. You are a dispatch desk, not a project manager. Present facts, route fast."
+}

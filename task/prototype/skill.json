@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "prototype",
+  "status": "stable",
+  "description": "Build throwaway prototypes to flesh out a design. Duplicate existing components, wire to variant switcher.",
+
+  "chain": {
+    "from": [],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "detect-branch",
+      "name": "Detect prototype branch",
+      "reads": ["CONVENTIONS.md", "ARCHITECTURE.md"],
+      "instruction": "Determine which prototype branch to use. Logic: purely functional behavior to validate (build a TUI or CLI app). UI: visual/layout changes to compare (duplicate existing components, wire to variant switcher). Design: design token or theme exploration (toggle panel). Read the project's taste profile if available.",
+      "references": ["phases/logic.md", "phases/ui.md", "phases/design.md"],
+      "checklist": [
+        "Branch selected (logic/ui/design)",
+        "Existing components identified for duplication (if UI branch)"
+      ]
+    },
+    {
+      "id": "scaffold",
+      "name": "Scaffold prototype",
+      "instruction": "Never create standalone artifacts or isolated files when existing components can be duplicated. For UI prototypes: find the existing component(s) being redesigned, duplicate them in-place (or in a prototype directory alongside the originals), and wire to a variant switcher so all design variations can be toggled and compared in context. The variant switcher pattern: a single control that swaps between original and N prototype variants, rendered in the actual app layout. For logic prototypes: throwaway script or TUI. For design: toggle panel with token overrides.",
+      "checklist": [
+        "Existing components duplicated (not standalone artifacts)",
+        "Variant switcher wired (UI branch)",
+        "Prototype runs in actual app context",
+        "All variations toggleable for comparison"
+      ]
+    },
+    {
+      "id": "iterate",
+      "name": "Iterate and compare",
+      "instruction": "Build out the prototype variations. Each variation should be meaningfully different - not just color tweaks but structural alternatives. Present side-by-side via the variant switcher. Capture what was learned. The prototype is throwaway - don't polish, don't test, don't document.",
+      "checklist": [
+        "Multiple meaningful variations built",
+        "Variations compared in context",
+        "Decision captured (which variant, why)"
+      ]
+    },
+    {
+      "id": "extract-or-discard",
+      "name": "Extract or discard",
+      "instruction": "If a variant is chosen: extract it as the new implementation, remove the variant switcher and other variants. If learning was the goal: discard all variants, document what was learned. Clean up prototype artifacts.",
+      "checklist": [
+        "Chosen variant extracted (or all discarded)",
+        "Variant switcher removed",
+        "Prototype artifacts cleaned up"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": true,
+    "chain_dispatch": false
+  },
+
+  "tone": "Fast and rough. Prototypes validate ideas, not ship code."
+}

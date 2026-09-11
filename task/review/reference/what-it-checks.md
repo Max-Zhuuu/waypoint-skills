@@ -31,3 +31,22 @@ Resolve DEPLOY.md's adapter: when it names a remote pipeline (`github-pipeline`,
 When the adapter is `local`, or there is no DEPLOY.md, nobody downstream will check intent, so `/review` runs the Intent pass too: trace each slice to its acceptance criterion, spec-derived (never grade the diff against itself).
 
 State which mode ran in the findings note, so the reader knows whether intent was checked here or deferred to the pipeline.
+
+## Catalogue cross-check - when a rule catalogue exists
+
+When the project has an architecture rule catalogue (`architecture-rule-catalogue.md` or similar), cross-check findings against it.
+
+1. Read the catalogue. Note rule families, severities, execution tiers.
+2. For each finding, check if it maps to a catalogue rule family:
+   - Style -> A family. File placement -> B. Contracts -> E. Coverage -> F. Tests -> G. Hardcoded strings -> H. Multitenancy -> I.
+   - If the finding maps to a BLOCK rule, elevate to BLOCK regardless of the review's own severity.
+3. Check scope compliance:
+   - If an endpoint registry exists: every "in" endpoint touched by this diff must be implemented.
+   - Diff removes coverage of an "in" endpoint -> BLOCK finding.
+   - Diff adds endpoint not in registry -> flag for registry update.
+4. Check contract parity (E-family):
+   - Generated files must match source of truth. No hand-edits to generated files.
+   - Breaking changes require version bump and ADR reference.
+5. For convention-enforcement violations, prioritize persistent checker tests over one-time fixes.
+
+The catalogue cross-check category is `catalogue-rule` (extends the fixed category vocabulary above).

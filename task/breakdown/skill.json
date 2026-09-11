@@ -1,0 +1,95 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "breakdown",
+  "status": "stable",
+  "description": "Decompose a spec into implementable slices with dependency ordering. Use when a spec needs a build plan.",
+
+  "chain": {
+    "from": ["spec"],
+    "to": [
+      { "target": "tdd", "type": "clean", "guard": "SLICED·REM·¬NEXT_HITL" },
+      { "target": "tdd", "type": "gate", "guard": "SLICED·REM·NEXT_HITL" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "read-spec",
+      "name": "Read and understand",
+      "reads": ["SCOPE.md", "CONVENTIONS.md"],
+      "instruction": "Read the spec file (resolve via Documentation Map or docs/specs/{feature}.md). Identify entities, behaviors, dependencies, and scope boundaries. If no spec exists, suggest /spec first. Do not add features the spec does not describe. Flag ambiguity as a concern, do not fill the gap.",
+      "checklist": [
+        "Spec file located and read",
+        "Entities identified",
+        "Behaviors identified",
+        "Dependencies mapped",
+        "Scope boundaries checked against SCOPE.md (if it exists)"
+      ]
+    },
+    {
+      "id": "scope-guard",
+      "name": "Scope guard",
+      "enterprise": true,
+      "reads": ["SCOPE.md", "CLAUDE.md", "contracts/*-endpoints.json"],
+      "instruction": "Check scope documents before decomposing. Every endpoint with status 'in' in the registry must trace to at least one slice. Never recommend cutting an endpoint or feature without explicit user approval. Complexity and development cost are not reasons to cut. Flag, don't decide.",
+      "checklist": [
+        "SCOPE.md scope protection directives checked",
+        "CLAUDE.md project constraints checked",
+        "Endpoint registry read - all 'in' endpoints noted",
+        "Every 'in' endpoint traceable to at least one planned slice",
+        "No features cut without explicit user approval"
+      ]
+    },
+    {
+      "id": "decompose",
+      "name": "Decompose into slices",
+      "instruction": "Each slice must be implementable (built and tested in one session), testable (clear done condition), scoped (bounded file set, ~5 files max), and ordered (explicit dependencies). Granularity: one slice per screen, API endpoint, or behavioral unit. Tag every slice Autonomy: afk|hitl - afk only when Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface. Untagged is treated as hitl downstream.",
+      "checklist": [
+        "Every slice is implementable in one session",
+        "Every slice has a clear done condition",
+        "Every slice touches a bounded set of files",
+        "Dependencies between slices are explicit",
+        "Every slice tagged afk or hitl"
+      ]
+    },
+    {
+      "id": "validate",
+      "name": "Validate against scope",
+      "instruction": "Check each slice against the spec's acceptance criteria. Every criterion must be covered by at least one slice. Every slice must trace back to at least one criterion. Flag uncovered criteria as gaps. Flag untraceable slices as scope creep.",
+      "checklist": [
+        "Every acceptance criterion covered by at least one slice",
+        "Every slice traces to at least one acceptance criterion",
+        "Gaps flagged to user",
+        "Scope creep flagged to user"
+      ]
+    },
+    {
+      "id": "write",
+      "name": "Write slices",
+      "instruction": "Check the project's slice storage convention. If CLAUDE.md has J1-type rules (code-as-documentation, no spec files outside ADRs) or says slices live in the issue tracker: create Linear/GitHub issues with parent epic, acceptance criteria checkboxes, autonomy tags, dependency links, and ADR references. Otherwise: append ## Implementation Slices to the spec file. Do not modify existing spec content. If re-decomposing, replace the previous slices section entirely. Tier-adapted output: Tier 1/2 = spec file or issues, Tier 3 = GitHub sub-issues with project board.",
+      "checklist": [
+        "Slice storage convention checked (J1 rules, CLAUDE.md, issue tracker preference)",
+        "Slices written to correct destination",
+        "Existing spec content not modified",
+        "Output format matches project tier"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": true,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Precise. Each slice is a contract for the implementer."
+}

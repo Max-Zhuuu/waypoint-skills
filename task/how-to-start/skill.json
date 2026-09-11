@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "how-to-start",
+  "status": "stable",
+  "description": "Route to the right skill based on project state and user intent. Use when the goal is vague.",
+
+  "chain": {
+    "from": [],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "quick-scan",
+      "name": "Quick scan",
+      "references": ["reference/quick-scan.md"],
+      "instruction": "Check for project files: presence/absence only, don't read contents beyond frontmatter. Speed constraint: under 10 seconds total.",
+      "checklist": [
+        "Project files scanned (presence only)",
+        "Under 10 seconds"
+      ]
+    },
+    {
+      "id": "classify-and-route",
+      "name": "Classify intent and route",
+      "references": ["reference/intent-classification.md", "reference/routing-edge-cases.md", "reference/opinion-checks.md"],
+      "instruction": "Map user input to intent cluster. If ambiguous, pick most likely and name alternative. Check opinion context. Present: project state summary, recommended skill with reason, alternative with condition. Urgency detection: if urgent, skip recommendation and invoke immediately. Normal pace: present and wait for confirmation. One clarifying question max.",
+      "checklist": [
+        "Intent classified",
+        "Recommendation presented (or skill invoked if urgent)",
+        "User's original input passed to invoked skill"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": [],
+    "writes": [],
+    "override": "full opt-out - no tier detection, no concern emission, no nudging",
+    "manifest": true,
+    "chain_dispatch": false
+  },
+
+  "tone": "Brief. Recommend one skill with one reason, then stop."
+}

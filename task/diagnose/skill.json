@@ -1,0 +1,112 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "diagnose",
+  "status": "stable",
+  "description": "Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.",
+
+  "chain": {
+    "from": ["triage"],
+    "to": [
+      { "target": "review", "type": "gate" },
+      { "target": "wrapup", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "feedback-loop",
+      "name": "Establish feedback loop",
+      "process": "process/debugging.md#feedback-loop",
+      "instruction": "Set up the fastest possible feedback loop. Find or create the minimal reproduction path. Target: under 30 seconds from change to observed result.",
+      "checklist": [
+        "Feedback loop established",
+        "Reproduction path identified",
+        "Cycle time under 30 seconds"
+      ]
+    },
+    {
+      "id": "reproduce",
+      "name": "Reproduce the bug",
+      "process": "process/debugging.md#reproduce",
+      "instruction": "Reproduce the bug in an E2E setting as closely aligned with how an end user would encounter it. Write a failing test that captures the bug. If the bug can't be reproduced, document what was tried and escalate.",
+      "checklist": [
+        "Bug reproduced in E2E setting",
+        "Failing test written",
+        "Reproduction is deterministic"
+      ]
+    },
+    {
+      "id": "hypothesize",
+      "name": "Form hypothesis",
+      "process": "process/debugging.md#hypothesize",
+      "instruction": "Form a specific, falsifiable hypothesis about the root cause. Write it down. Do not start fixing until the hypothesis is tested.",
+      "checklist": [
+        "Hypothesis written (specific and falsifiable)",
+        "Hypothesis distinguishes this bug from similar-looking bugs"
+      ]
+    },
+    {
+      "id": "instrument",
+      "name": "Instrument and verify",
+      "process": "process/debugging.md#instrument",
+      "instruction": "Add instrumentation to test the hypothesis. Logging, breakpoints, assertions. Observe the actual behavior. Confirm or reject the hypothesis. If rejected, form a new one.",
+      "checklist": [
+        "Instrumentation added",
+        "Hypothesis confirmed or rejected",
+        "Root cause identified"
+      ]
+    },
+    {
+      "id": "fix",
+      "name": "Fix",
+      "process": "process/debugging.md#fix",
+      "instruction": "Fix the root cause. The previously-failing test must now pass. Run the full test suite to check for regressions. Remove instrumentation.",
+      "checklist": [
+        "Fix applied to root cause (not symptoms)",
+        "Failing test now passes",
+        "No regressions in test suite",
+        "Instrumentation removed"
+      ]
+    },
+    {
+      "id": "cleanup",
+      "name": "Cleanup",
+      "process": "process/debugging.md#cleanup",
+      "instruction": "Clean up the fix. Ensure the test is well-named and documents the bug scenario. Remove any temporary code.",
+      "checklist": [
+        "Test is well-named and documents the scenario",
+        "No temporary code remains",
+        "Fix is minimal and focused"
+      ]
+    },
+    {
+      "id": "learn",
+      "name": "Learn",
+      "process": "process/debugging.md#learn",
+      "instruction": "What caused this bug to be possible? Is there a class of similar bugs? Could a convention test or structural check prevent recurrence? If so, offer to create one.",
+      "checklist": [
+        "Root cause class identified",
+        "Prevention strategy considered",
+        "Convention test offered (if applicable)"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "override": "commit-producing",
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Methodical. Hypothesis first, fix second. No shotgun debugging."
+}

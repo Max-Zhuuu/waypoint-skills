@@ -1,8 +1,10 @@
 ---
 name: buildout
 description: "Configure greenfield project scope with MoSCoW priorities and phase resolution. Extends /setup, run once at start."
-status: stable
+status: deprecated
 ---
+
+> **Deprecated.** Unique steps absorbed into `/setup`. Use `/setup` instead.
 
 One-time setup skill. Extends `/setup` with greenfield-specific configuration.
 Run this once to configure the project as a new build. After setup, use `/check-in` every session.

@@ -1,0 +1,81 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "improve-codebase-architecture",
+  "status": "stable",
+  "description": "Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.",
+
+  "chain": {
+    "from": [],
+    "to": [
+      { "target": "spec", "type": "gate" },
+      { "target": "grill-with-docs", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "explore",
+      "name": "Explore",
+      "process": "process/architecture-review.md#explore",
+      "reads": ["GLOSSARY.md", "docs/adr/", "docs/decisions/"],
+      "references": ["reference/language.md"],
+      "instruction": "Use Agent tool with Explore to walk the codebase. Read domain glossary and ADRs first.",
+      "checklist": [
+        "Glossary and ADRs read",
+        "Codebase explored",
+        "Candidate opportunities identified"
+      ]
+    },
+    {
+      "id": "present-candidates",
+      "name": "Present candidates",
+      "process": "process/architecture-review.md#present",
+      "references": ["reference/html-report.md"],
+      "instruction": "Write a self-contained HTML report to OS temp directory (Tailwind + Mermaid CDN). Each candidate gets a before/after card. Open for user and ask which to explore.",
+      "checklist": [
+        "HTML report written to temp directory",
+        "Each candidate has before/after visualization",
+        "User asked which to explore"
+      ]
+    },
+    {
+      "id": "deepen",
+      "name": "Deepen",
+      "process": "process/architecture-review.md#deepen",
+      "references": ["reference/deepening.md", "reference/interface-design.md"],
+      "instruction": "For chosen candidate: spawn 3+ parallel agents with different constraints (minimize interface, maximize flexibility, optimize for common caller, ports & adapters). Side effects inline: new domain term -> update GLOSSARY.md, rejected candidate with reason -> offer ADR.",
+      "checklist": [
+        "Multiple interface alternatives explored",
+        "GLOSSARY.md updated (if new terms)",
+        "ADR offered (if rejected candidate has load-bearing reason)"
+      ]
+    },
+    {
+      "id": "record",
+      "name": "Record decisions",
+      "process": "process/architecture-review.md#record",
+      "instruction": "Write proposals with concrete file paths and interface changes. Record any ADRs decided during deepening.",
+      "checklist": [
+        "Proposals written with concrete paths",
+        "ADRs recorded"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": ["GLOSSARY.md", "docs/adr/"],
+    "manifest": true,
+    "chain_dispatch": false
+  },
+
+  "tone": "Observational. Report what you find, propose what you would change."
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "learn",
+  "status": "stable",
+  "description": "Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges.",
+
+  "chain": {
+    "from": [],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "scope",
+      "name": "Scope",
+      "process": "process/learning.md#scope",
+      "reads": ["GLOSSARY.md"],
+      "instruction": "Read code context. Grep GLOSSARY.md for relevant domain terms. If the task is trivial, just do it - do not force options on a non-decision.",
+      "checklist": [
+        "Code context read",
+        "Domain terms identified",
+        "Task complexity assessed (trivial or decision-worthy)"
+      ]
+    },
+    {
+      "id": "present-options",
+      "name": "Present options",
+      "process": "process/learning.md#present",
+      "instruction": "Present 3 meaningfully different options with code diff previews via AskUserQuestion. Mark recommended option first with '(Recommended)'. Include Terms in play block and Further reading.",
+      "references": ["reference/references.md"],
+      "checklist": [
+        "3 meaningfully different options presented",
+        "Each option has code diff preview",
+        "Recommended option marked",
+        "Terms and further reading included"
+      ]
+    },
+    {
+      "id": "apply",
+      "name": "Apply chosen option",
+      "process": "process/learning.md#apply",
+      "instruction": "Implement the chosen option. Explain trade-offs of the choice as you build.",
+      "checklist": [
+        "Chosen option implemented",
+        "Trade-offs explained"
+      ]
+    },
+    {
+      "id": "reinforce",
+      "name": "Reinforce",
+      "process": "process/learning.md#reinforce",
+      "references": ["reference/learn-reference.md"],
+      "instruction": "Offer Quiz, Practice, or skip via AskUserQuestion (multiSelect). Skip when trivial, user is in a hurry, or concepts already mastered. Save learning notes to docs/_local/learning/.",
+      "checklist": [
+        "Reinforcement offered (or skipped with reason)",
+        "Learning notes saved"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": ["docs/_local/learning/"],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Brisk. This is a 60-second decision point, not a lecture."
+}

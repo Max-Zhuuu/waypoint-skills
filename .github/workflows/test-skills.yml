@@ -1,0 +1,44 @@
+name: Test Skills
+
+on:
+  pull_request:
+    paths:
+      - 'task/**'
+      - 'project/**'
+      - 'in-progress/**'
+      - 'process/**'
+      - 'internals/**'
+      - 'schemas/**'
+      - 'templates/**'
+      - 'tests/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Validate skill.json files
+        run: bash tests/test-skill-json.sh
+
+      - name: Check link resolution
+        run: bash tests/test-links.sh
+
+      - name: Check chain consistency
+        run: bash tests/test-chain.sh
+
+      - name: Check line budgets
+        run: bash tests/test-line-budget.sh
+
+      - name: Check engagement declarations
+        run: bash tests/test-engagement.sh
+
+      - name: Check enterprise capabilities
+        run: bash tests/test-enterprise.sh
+
+      - name: Check process doc references
+        run: bash tests/test-process-docs.sh

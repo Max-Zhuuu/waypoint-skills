@@ -11,6 +11,8 @@ Check for pre-existing docs that overlap with what Phase 1 produces:
 - **TESTING.md or equivalent** (test strategy doc, CI config with documented expectations)
 - **CLAUDE.md or AGENTS.md** (existing agent instructions)
 - **docs/adr/ or similar decision records**
+- **architecture-rule-catalogue.md** (rule families, severity tiers, execution tiers)
+- **contracts/*-endpoints.json** (endpoint registries)
 
 If found: read them, extract what's still valid, and fold it into the generated output.
 Don't ask the user to re-decide things the existing docs already answer.
@@ -30,7 +32,34 @@ Skip this section entirely when running on a fresh project or when all existing 
 
 ## Architecture decisions
 
-Invoke `/grill-with-docs` for each decision that meets the ADR threshold (hard to reverse, surprising without context, real trade-off). For obvious stack choices that don't warrant an ADR, document them in ARCHITECTURE.md directly.
+Three paths based on what exists.
+
+### Path A - Architecture rule catalogue exists
+
+When the project has an `architecture-rule-catalogue.md` (or similar governance document with rule families, severity tiers, execution tiers):
+
+1. Read the catalogue. Parse rule families, severity distribution (BLOCK/RATCHET/WARN), execution tiers (T0-T3), and any open items section.
+2. For each rule family, initialize a grill checklist item: family ID, name, rule count, open items.
+3. Invoke `/grill-with-docs` to grill each family systematically - one family at a time, depth-first. Follow the methodology in [catalogue-grill.md](../../task/grill-with-docs/reference/catalogue-grill.md).
+4. Cross-reference against existing ADRs. Identify families with no ADR coverage - these are grill priorities.
+5. Open items in the catalogue are high-priority grill targets. For each: what are the options, what blocks the decision, what's the recommended position.
+6. Produce consolidated decision-tree ADRs: each answers a root question with branching sub-decisions. Target 6-8 ADRs for a complex project.
+7. For API-consuming projects: check for endpoint registries (`contracts/*-endpoints.json`). If absent, offer to scaffold one from `../../templates/endpoint-registry.json`.
+
+### Path B - No catalogue, moderate/large project
+
+When no rule catalogue exists but the project tier is moderate or large:
+
+1. Offer to bootstrap: "This project's complexity warrants an architecture rule catalogue. Want me to create one?"
+2. If accepted: start with severity definitions (BLOCK = correctness/security, RATCHET = coverage metrics, WARN = convention drift) and execution tiers (T0 <2s on save, T1 <20s pre-commit, T2 <8min CI, T3 unbounded nightly).
+3. Seed rule families from the grill, not from a template. Ask: "What rule families does this project need?" Common starters: Style, File placement, Contracts/schemas, Testing coverage, Config/hardcoded strings, Auth/security.
+4. Mark all initial rules as WARN. Let the team ratchet up severity as conventions mature.
+5. Follow the bootstrapping section in [catalogue-grill.md](../../task/grill-with-docs/reference/catalogue-grill.md).
+6. Then proceed as Path A with the new catalogue.
+
+### Path C - Small project, no catalogue
+
+Fall back to the existing area catalog.
 
 Assemble 6-8 relevant architecture areas from the catalog in [references.md](../reference/references.md#architecture-decision-catalog) based on Phase 0 context. Mark 4 as Recommended using the project-type mapping in the catalog.
 
@@ -39,6 +68,10 @@ Present via AskUserQuestion (multiSelect: true):
 **"Which architecture areas need decisions?"** (select all that apply)
 
 Adapt descriptions to the project profile per the catalog's adaptation rules. Unselected areas can be deferred to Phase 3 (surfaced by /check-in as pre-build checkpoint items) or skipped entirely.
+
+### All paths
+
+Invoke `/grill-with-docs` for each decision that meets the ADR threshold (hard to reverse, surprising without context, real trade-off). For obvious stack choices that don't warrant an ADR, document them in ARCHITECTURE.md directly.
 
 ## Naming conventions
 
@@ -78,6 +111,36 @@ Store as `testing-philosophy: integration-first | tdd | structural-enforcement` 
 Read [../../../templates/TESTING.md](../../../templates/TESTING.md) and populate it, emphasizing the chosen philosophy. Keep it short. This file is refined during Phase 3 (vertical slice or MVP build) when real test patterns emerge from actual code.
 
 Add one line to the generated CLAUDE.md: `When writing tests, read TESTING.md for patterns and expectations.`
+
+## Convention enforcement scaffolding
+
+Offer to create an initial suite of convention-enforcement tests. These are tests that verify conventions are followed, not feature tests. Read [convention-enforcement.md](../../process/convention-enforcement.md) for the full methodology.
+
+Present via AskUserQuestion (multiSelect: true):
+
+**"Which convention tests should I scaffold?"**
+- **Structure tests (Recommended)** - verify file placement matches the project's canonical taxonomy
+- **Import tests** - no cross-domain imports outside barrel files, no circular dependencies
+- **Auth coverage tests** - every registered route has authentication enforcement
+- **None for now** - skip, add later via `/tdd` Phase 4
+
+Register scaffolded tests at the appropriate execution tier:
+- Structure and import tests: T1 (pre-commit, <20s)
+- Auth coverage: T2 (CI on PR, <8min)
+
+## Hook scaffolding
+
+Offer to configure `.claude/settings.json` with enforcement hooks. Read the hook-based enforcement section in [convention-enforcement.md](../../process/convention-enforcement.md).
+
+Present via AskUserQuestion (multiSelect: true):
+
+**"Which hooks do you want to set up?"**
+- **Safety deny lists (Recommended)** - block destructive git operations (`git rebase`, `git push --force`) and cloud CLI (`az`, `aws`, `gcloud`) in `.claude/settings.local.json`
+- **CONCERNS.md injection** - UserPromptSubmit hook that loads unresolved concerns into every prompt
+- **Doc-sync reminders** - PostToolUse hooks that remind when related docs need updating after file edits
+- **Concurrent agent coordination** - Claims tracker for multi-session work. Follow the template in [references.md](../reference/references.md#hook-catalog).
+
+If additional hooks are described, grill the user on each: trigger event, what it checks, failure mode. Add to `.claude/settings.json`.
 
 ## Documentation structure
 
@@ -196,18 +259,7 @@ Tags are diff-able, restorable, and survive indefinitely. The journal tracks rea
 
 ### Enforcement
 Identify which rules need hooks (deterministic enforcement) vs CLAUDE.md (advisory):
-- Hooks: branch protection, test-before-push, forbidden file patterns
+- Hooks: branch protection, test-before-push, forbidden file patterns, safety deny lists
 - Advisory: template compliance, brief format, documentation currency
 
-Generate project-specific hooks where identified.
-
-### Concurrent agent coordination (strongly recommended)
-
-After CLAUDE.md is generated, ask via `AskUserQuestion` (multiSelect: true):
-
-**Which hooks do you want to set up?**
-- **CONCERNS.md Claims (Recommended)** - UserPromptSubmit hook that injects concurrent agent tracker into every prompt. Prevents file conflicts when multiple sessions modify the codebase simultaneously.
-- **I have other hooks I want to set up** - Describe additional hooks to wire. Each gets added to `.claude/settings.json` and templated in [references.md](../reference/references.md#hook-catalog) for future projects.
-
-If Claims hook is selected, follow the "Concurrent Agent Coordination" template in [references.md](../reference/references.md#hook-catalog).
-If other hooks is selected, grill the user on each additional hook: what event triggers it, what it checks or injects, and what the failure mode looks like. Add each to the Hook Catalog in references.md.
+Generate project-specific hooks where identified. If convention-enforcement tests were scaffolded above, add their execution tier to the appropriate hook or CI step.

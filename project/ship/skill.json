@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "ship",
+  "status": "draft",
+  "description": "Assemble a spec-grounded PR and propose an afk/hitl routing. The outbound seam from local completion to a delivery pipeline. Run after /wrapup.",
+
+  "chain": {
+    "from": ["review"],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "compose-intent",
+      "name": "Compose Intent block",
+      "reads": ["DEPLOY.md"],
+      "references": ["reference/adapters.md", "reference/intent-template.md"],
+      "instruction": "Resolve DEPLOY.md adapter. Write ## Intent from spec, ADR delta, and resolved concern decision lines. Never read the diff to describe the change (diff-derived Intent grades itself). Mark block 'spec-derived'.",
+      "checklist": [
+        "DEPLOY.md adapter resolved",
+        "Intent block written from spec (not diff)",
+        "Intent marked spec-derived"
+      ]
+    },
+    {
+      "id": "assess-autonomy",
+      "name": "Assess autonomy and preconditions",
+      "instruction": "Precondition check: Intent present, every slice traces to acceptance criterion, tests green, no open blocking concern. Compose afk gate from 3 keys: (1a) every slice tagged afk, (1b) wrapup blocking verdict is 'none', (2) no diff path matches load-bearing glob. Propose afk iff all three hold; any failure -> hitl.",
+      "checklist": [
+        "Intent present and non-empty",
+        "Slice-to-criterion tracing verified",
+        "Tests green (or reported unverified)",
+        "No open blocking concerns",
+        "Autonomy gate composed (afk or hitl)"
+      ]
+    },
+    {
+      "id": "route-and-open",
+      "name": "Route and open PR",
+      "references": ["reference/adapters.md"],
+      "instruction": "Route per 2x3 engagement table. Print compact session digest and clickable link. Open or hold based on engagement tier. Surface reviewed-state as non-blocking note. Ship proposes, the target disposes.",
+      "checklist": [
+        "Session digest printed",
+        "PR opened or held per engagement",
+        "Reviewed-state surfaced"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": [],
+    "writes": [],
+    "override": "needs network and adapter; not Tier-1-offline",
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Mechanical and honest. Ship proposes, the target disposes. Never imply afk means merged."
+}

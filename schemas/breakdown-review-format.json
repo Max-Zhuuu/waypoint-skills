@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "breakdown-review-format.json",
+  "title": "Breakdown Review",
+  "description": "Presentation format for a breakdown decomposition review.",
+  "type": "object",
+  "required": ["slices", "trace_matrix", "scope_gaps", "scope_creep"],
+  "additionalProperties": false,
+  "properties": {
+    "slices": {
+      "type": "array",
+      "items": { "$ref": "slice-format.json" }
+    },
+    "trace_matrix": {
+      "type": "object",
+      "description": "Maps acceptance criterion text to the slice numbers that cover it.",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "scope_gaps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Acceptance criteria not covered by any slice."
+    },
+    "scope_creep": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Slices that don't trace to any acceptance criterion."
+    }
+  }
+}

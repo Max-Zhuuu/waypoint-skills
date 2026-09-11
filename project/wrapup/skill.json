@@ -1,0 +1,101 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "wrapup",
+  "status": "stable",
+  "description": "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb.",
+
+  "chain": {
+    "from": ["tdd"],
+    "to": [
+      { "target": "review", "type": "gate" },
+      { "target": "ship", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "gather-concerns",
+      "name": "Gather concerns",
+      "reads": ["CONCERNS.md"],
+      "instruction": "Read CONCERNS.md. Filter open concerns that reference the current entity (by refs: field or entity name in description). Also include any concerns emitted by the implementation verb this session.",
+      "checklist": [
+        "CONCERNS.md read",
+        "Entity-related concerns filtered",
+        "Session-emitted concerns included"
+      ]
+    },
+    {
+      "id": "spec-drift",
+      "name": "Spec drift check",
+      "instruction": "Re-read the entity's documentation (feature spec, logic doc). Compare field-by-field against what was built. Check: field count matches, field types match, edge cases handled, error states covered, naming consistent with GLOSSARY.md. Any mismatch becomes a new concern (type: issue, source: /wrapup). If no spec/logic doc exists: report 'No {doc type} found. Drift check skipped.' and continue.",
+      "checklist": [
+        "Entity docs re-read",
+        "Field-by-field comparison done",
+        "Mismatches logged as concerns",
+        "Or: drift check skipped (no docs)"
+      ]
+    },
+    {
+      "id": "resolve",
+      "name": "Resolve each concern",
+      "instruction": "For each concern, apply the resolution cascade: (1) read the authoritative source for ground truth, (2) write or run a test to prove which side is correct, (3) escalate to user with specifics only if source and tests are ambiguous. Never skip to step 3. Resolution: update spec, fix code, or both. Intentional differences go in spec Change Log with rationale. Mark resolved in CONCERNS.md: status [resolved], resolved: date, decision: line. Move to Resolved section. Recalculate summary header.",
+      "checklist": [
+        "Each concern resolved via cascade (source -> test -> escalate)",
+        "CONCERNS.md updated with resolutions",
+        "Summary header recalculated"
+      ]
+    },
+    {
+      "id": "scope-validation",
+      "name": "Scope validation",
+      "enterprise": true,
+      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "CLAUDE.md"],
+      "instruction": "If endpoint registries or scope docs exist, verify completed work covers all 'in' items it should. Missing coverage is a new concern (type: issue, severity: BLOCK). Check SCOPE.md scope protection rules. Check endpoint registries for 'in' endpoints that should be covered by this entity.",
+      "checklist": [
+        "Endpoint registry checked for 'in' coverage",
+        "SCOPE.md protection rules verified",
+        "Missing coverage logged as BLOCK concern"
+      ]
+    },
+    {
+      "id": "cascade",
+      "name": "Cascade to shared docs",
+      "reads": ["CONVENTIONS.md", "SCOPE.md", "ARCHITECTURE.md", "TESTING.md"],
+      "instruction": "Check whether any resolution affects shared docs. Cascade: naming changes -> CONVENTIONS.md, scope changes -> SCOPE.md, dependency changes -> ARCHITECTURE.md, test expectations -> TESTING.md. Only cascade to docs that exist - do not create docs just to cascade into them. For milestone-type concerns, offer spec archival.",
+      "checklist": [
+        "Cascade targets identified",
+        "Affected shared docs updated",
+        "Milestone concerns offered archival"
+      ]
+    },
+    {
+      "id": "evaluate-gate",
+      "name": "Evaluate gate and report",
+      "instruction": "Check current phase's gate criteria: items remaining, gate conditions satisfied, blocking concerns. The Blocking: verdict is authoritative - /ship consumes it for the afk gate (key 1b) and never re-derives from raw CONCERNS.md. Archive resolved concerns if Resolved section exceeds threshold. Report: '{entity}: {N} concerns resolved, {M} escalated. Blocking: {none | C-041, C-047}. Gate: {X}/{Y} criteria met. Remaining: {list}.'",
+      "checklist": [
+        "Gate criteria evaluated",
+        "Blocking verdict authored",
+        "Resolved concerns archived (if threshold exceeded)",
+        "Report printed"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": true,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["issues", "resolution notes"],
+    "writes": ["CONCERNS.md (creates if absent)", "docs/_local/handoffs/ (handoff mode)"],
+    "override": "cascade only fires for docs that exist",
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Brief and mechanical. Resolve, cascade, report."
+}

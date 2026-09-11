@@ -1,7 +1,7 @@
 ---
 name: create
 description: "Add features to an existing codebase. Ensures specs exist and docs stay current. Lighter than /buildout."
-status: stable
+status: deprecated
 inputs:
   scope-md: SCOPE.md (project context)
   conventions-md: CONVENTIONS.md (naming patterns)
@@ -13,6 +13,8 @@ outputs:
 signals:
   complete: suggests /wrapup
 ---
+
+> **Deprecated.** Use `/triage` -> `/spec` -> `/breakdown` -> `/tdd` workflow instead.
 
 Add features to an existing codebase. No phases, no inventory, no MoSCoW.
 Structured enough to ensure specs exist before building and docs get updated after.

@@ -1,314 +1,279 @@
 # Contributing
 
 How waypoint-skills works internally.
-Read this if you want to understand the architecture, add a skill, or modify the tracking system.
+Read this to understand the architecture, add a skill, or modify the system.
 
-## Process and adapter split
+## Architecture: JSON-first (v3)
 
-Each skill has two layers:
+Every skill has two files:
 
-1. **Process document** (`process/*.md`) - the methodology, tool-agnostic. Works as a human checklist, a team playbook, or an AI instruction set.
-2. **Adapter** (`task/{skill}/SKILL.md`, `project/{skill}/SKILL.md`, or `adapters/{tool}/`) - thin file that references the process doc and adds tool-specific execution notes.
+1. **`skill.json`** - the source of truth. Steps, checklists, chain edges, capabilities, engagement declarations, safety rails. Machine-readable, test-validated.
+2. **`SKILL.md`** - the bootloader. ~15-20 lines loaded by Claude Code on invocation. Points to skill.json, declares boundaries, engagement block, exit targets, tone.
 
-| Process document | Methodology | Adapter skills |
-|-----------------|-------------|----------------|
-| [process/debugging.md](process/debugging.md) | 7-phase debugging discipline | /diagnose |
-| [process/requirements.md](process/requirements.md) | Requirements grilling and spec writing | /spec |
-| [process/tdd.md](process/tdd.md) | Test-driven development | /tdd |
-| [process/architecture-review.md](process/architecture-review.md) | Architecture assessment | /improve-codebase-architecture |
-| [process/learning.md](process/learning.md) | Structured technical learning | /learn |
+A third layer - **process docs** (`process/*.md`) - holds tool-agnostic methodology. Not every skill has one.
 
-Not every skill has a process doc.
-Some are too thin (/grill-me is a 13-line instruction) or too tool-specific (/prototype has three execution branches that depend on the agent model).
+| Layer | What it holds | Authoritative for |
+|-------|--------------|-------------------|
+| `skill.json` | Steps, checklists, chain, capabilities, engagement | Structure, dependencies, enterprise features |
+| `SKILL.md` | Frontmatter, bootstrap, boundaries, tone | Identity, invocation, human context |
+| `process/*.md` | Methodology (debugging, TDD, requirements) | How the work is done, tool-agnostic |
 
 ## Directory structure
 
 ```
-task/           # Skills that do work (diagnose, spec, tdd, etc.)
-project/        # Skills that manage projects (check-in, wrapup, migrate, etc.)
+task/           # Skills that do work (triage, spec, breakdown, tdd, diagnose, review, etc.)
+project/        # Skills that manage projects (setup, check-in, wrapup)
 process/        # Tool-agnostic methodology documents
+schemas/        # JSON schemas (skill validation, output formats, safety rails)
+tests/          # Test suite (7 scripts + helpers)
 templates/      # Shared file templates (feature specs, logic docs, glossary)
+internals/      # System design docs (engagement model, chain dispatcher, concepts)
 adapters/       # Platform-specific adapters (cursor, opencode, codex)
-internals/      # System design docs (concepts, engagement model)
+deprecated/     # Retired skill SKILL.md files (phase/reference docs may stay in original location)
 ```
 
-Task skills work standalone with no project context.
-Project skills become more useful when project docs (SCOPE.md, CONCERNS.md, etc.) exist.
+## skill.json schema
 
-## Frontmatter Schema
+Every `skill.json` validates against `schemas/skill.schema.json`.
+Required fields:
 
-Every `SKILL.md` must declare exactly these required fields:
+```jsonc
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "skill-name",        // kebab-case, must match directory name
+  "status": "stable",          // stable | draft | experimental | deprecated
+  "description": "One line.",  // must match SKILL.md frontmatter
+
+  "chain": {
+    "from": ["upstream-skill"],
+    "to": [{ "target": "downstream", "type": "clean", "guard": "GUARD_EXPR" }]
+  },
+
+  "steps": [{
+    "id": "step-id",           // kebab-case, unique within skill
+    "name": "Human name",
+    "instruction": "What the agent does.",
+    "enterprise": false,       // true = skip when no enterprise artefacts
+    "reads": ["FILE.md"],      // project-relative or skill-relative
+    "process": "process/X.md", // shared-infra-relative
+    "references": ["reference/X.md"],  // skill-directory-relative
+    "checklist": ["Item to verify before advancing"],
+    "per_cycle_checklist": ["Item checked on every iteration"]
+  }],
+
+  "safety_rails": { "banned_ops": [...], "on_banned": "print_for_user" },
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": ["artifact name"],
+    "override": "commit-producing",
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "One sentence."
+}
+```
+
+## SKILL.md bootloader contract
+
+~15-20 lines. CI warns >80, fails >100. Every token costs on every invocation.
+
+```markdown
+---
+name: skill-name
+description: "One line."
+status: stable
+---
+
+Read [skill.json](./skill.json). Initialize checklists. Execute steps sequentially.
+Process methodology: [process/X.md](../../process/X.md).
+
+Does NOT: {boundary, only if non-obvious}
+
+## Engagement
+See [the engagement protocol](../../internals/engagement/README.md).
+Emits: {from skill.json}
+Writes: {from skill.json}
+Override: {if declared}
+
+## Exit
+- {2-4 handoff targets from skill.json chain}
+
+## Tone
+{from skill.json}
+```
+
+**Rules:**
+- No H1 header. Frontmatter `name` + directory is identity.
+- Body opens with `Read [skill.json]` - the bootstrap instruction.
+- All structural content (steps, checklists, reads) lives in skill.json.
+- `## Engagement`, `## Exit`, `## Tone` are mandatory.
+- Frontmatter `status` must match skill.json `status` (test-enforced).
+
+## Frontmatter schema
 
 ```yaml
 ---
 name: skill-name                    # Required. Kebab-case.
-description: "One-line description" # Required. Used for routing and discovery.
-status: stable | draft | experimental  # Required.
+description: "One-line description" # Required.
+status: stable | draft | experimental | deprecated  # Required.
 user-invocable: true | false        # Optional. Default: true.
 ---
 ```
 
-`user-invocable: false` marks a skill that should not be triggered directly by user request or model inference - typically a utility skill that another skill orchestrates internally.
-Omit `user-invocable` entirely for the common case where a skill is freely invocable - it defaults to `true`.
+## Reference doc policy
 
-All other frontmatter fields (`metadata.hermes`, `inputs`, `outputs`, `signals`, etc.) are optional and skill-specific.
-Keep them as needed for routing metadata or workflow bookkeeping.
+| Category | Where it lives | Example |
+|----------|---------------|---------|
+| Methodology (how to do X) | `reference/*.md` as prose | tests.md, mocking.md, personas.md, catalogue-grill.md |
+| Format specs (output shapes) | `schemas/*.json` | slice-format.json, glossary-format.json |
+| Procedures (step-by-step) | Inlined into skill.json `steps[].instruction` and `checklist` | archive procedure, cascade rules |
+| Routed conditionals (one-at-a-time) | `phases/*.md` or `reference/*.md` | phase-1.md, restructuring.md, resume-path.md |
+| Trust-critical (shared by multiple skills) | `reference/*.md` as prose | settings.md, slice-marker.md |
 
-## SKILL.md body contract
+Process docs use `../../process/` from SKILL.md.
+Per-skill references use `reference/` from SKILL.md.
+Both resolve in repo and installed layouts because SKILL.md sits exactly two levels above shared-infra root (the flatten invariant).
+**Process docs cannot reference `../../templates/`** in installed layout - templates referenced from SKILL.md only.
 
-The body is what Claude Code auto-loads on skill invocation.
-Every line costs tokens on every invocation, so the body must be lean.
+## Chain
 
-**Line budget:** target 50-80 lines, max 100.
-CI warns at >80 and fails at >100.
+Edge data lives in each skill.json `chain` field.
+`internals/chain/reference.md` defines guard vocabulary, dispatch semantics, and three hardening rules.
+`tests/test_chain.py` assembles the full graph and validates it.
 
-**Structure:**
-
+**Core chain (v3):**
 ```
----
-name, description, status
----
-{Instructions start here. Sequential. No preamble header.}
-
-## {Skill-specific sections only where genuine logical break}
-
-Does NOT: {boundary, if non-obvious from description}
-
-## Engagement
-{declaration only - 3-5 lines}
-
-## Exit
-{2-4 bullets - handoff targets}
-
-## Tone
-{1 sentence}
+triage -> spec -> breakdown -> tdd -> review
+            \-> diagnose (bugs)           |-> wrapup
 ```
 
-**Rules:**
+**Guard vocabulary:** `SPEC`, `SLICED`, `REM`, `NEXT_HITL`, `TRIAGED`, `BUG`, `CONC`, `REVIEWED`.
+**Edge types:** `clean` (auto-advance possible), `gate` (always stops for human).
+**Hardening:** R1 (backward edges = gates), R2 (repo tags add caution only), R3 (review entry clean, exit always gate).
 
-- No H1 header. Frontmatter `name` + directory is identity.
-- No `## On invocation` header. The body runs on invocation - sequential execution is assumed.
-- No opening paragraph restating the description. Frontmatter `description` is authoritative.
-- Body opens with the first actionable instruction, not a boundary statement.
-- Boundaries ("Does NOT:") go near the bottom (before ## Engagement) and only when the boundary is non-obvious from the description. If the description says "output a spec file," you don't need "Does NOT implement."
-- `## Tone` is mandatory (1 sentence).
-- `## Exit` is mandatory (2-4 bullets) unless the skill has a natural completion message that serves as exit.
+## Enterprise auto-detect
+
+Steps with `"enterprise": true` are skipped when no enterprise artefacts exist.
+Enterprise artefacts: architecture rule catalogues, endpoint registries, parity verification systems, SCOPE.md scope-protection directives, CLAUDE.md phase-aware constraints.
+Detection is per-step, not per-skill. A skill can mix enterprise and non-enterprise steps.
 
 ## Content ownership
 
-Every piece of instruction content has exactly one authoritative location.
-SKILL.md may **declare** (what this skill does differently) but never **define** (restate shared protocol).
+Every piece of content has exactly one authoritative location.
+skill.json declares structure. SKILL.md declares identity and human context.
+Neither restates the other. Tests enforce the match.
 
-The same single-source rule governs computed values, not just prose.
-The `autonomy` axis (afk/hitl) is defined once in engagement/autonomy.md and authored per-input by exactly one skill each (`breakdown` tags slices, `wrapup` reports blocking concerns).
-Every other skill **cites, never recomputes**: it renders the authoring skill's output and never re-runs the derivation from raw state.
-A skill that lacks an authoritative rendering treats the value as `hitl` rather than computing its own.
+| Content | Authoritative location | Tests verify |
+|---------|----------------------|-------------|
+| Steps, checklists | skill.json | test-skill-json |
+| Chain edges | skill.json | test-chain |
+| Capabilities | skill.json | test-enterprise |
+| Engagement fields | skill.json (SKILL.md declares for invocation) | test-engagement |
+| Status | skill.json = SKILL.md frontmatter | test-skill-json |
+| Tone, boundaries, exit | SKILL.md | (human review) |
+| Guard semantics | internals/chain/reference.md | (human review) |
+| Review safety | internals/engagement/review-safety.md | (human review) |
+| Autonomy axis | internals/engagement/autonomy.md | (human review) |
 
-| Content type | Authoritative location | SKILL.md contains |
-|-------------|----------------------|-------------------|
-| Engagement protocol | engagement/README.md | Declaration only (emits, writes, override) |
-| Autonomy axis | engagement/autonomy.md | Citation only (render the value, never recompute it) |
-| Load-bearing globs | DEPLOY.md (per project) | Citation only (read the globs, never hardcode a danger list) |
-| Review safety invariant | engagement/review-safety.md | Citation only (obey the five crossings, never restate or weaken them) |
-| Skill hints mechanic | CONCEPTS-REFERENCE.md | Integration point ("during Step N") |
-| Exit handoffs | SKILL.md | 2-4 bullets, unique per skill |
-| Tone | SKILL.md | 1 sentence, mandatory |
-| Routing/purpose | Frontmatter description | Nothing restated in body |
-| Boundaries | SKILL.md near bottom | "Does NOT:" line, only when non-obvious from description |
+## Test suite
 
-## Directive verbs
+Replaces `lint-skills.sh`. All scripts in `tests/`, use `json_query.py` (Python stdlib, no external deps).
 
-How SKILL.md references other files determines whether they're loaded on invocation.
+| Script | What it checks |
+|--------|---------------|
+| `test-skill-json.sh` | Every skill dir has skill.json, required fields present, name/status match SKILL.md |
+| `test-links.sh` | All reference paths in skill.json resolve in repo layout |
+| `test-chain.sh` | Graph assembled from skill.json is connected, targets exist, no clean-edge cycles |
+| `test-line-budget.sh` | SKILL.md: warn >80, fail >100 |
+| `test-engagement.sh` | SKILL.md engagement block present, manifest/chain citations when declared |
+| `test-enterprise.sh` | Capability=true implies enterprise steps exist with reads |
+| `test-process-docs.sh` | All process doc refs in skill.json resolve on disk |
 
-**Skill-specific reference** (reference/*.md, phases/*.md) - imperative directive:
-```
-Read [reference/priority-stack.md](reference/priority-stack.md) before proposing work.
-```
-The agent must read the file. Silent degradation risk is too high for optional loading.
+Run locally: `for t in tests/test-*.sh; do bash "$t"; done`
+CI: `.github/workflows/test-skills.yml` triggers on PRs touching skill/schema/test/process files.
 
-**Shared infrastructure** (internals/*.md, process/*.md) - declaration + on-demand:
-```
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-```
-The agent consults on demand when performing an engagement action, not on every invocation.
-This preserves the token savings from engagement deduplication.
+## Skill topology (v3)
 
-## Subfolder convention
-
-Skills with supplementary files organize them into exactly two subfolder types:
-
-| Subfolder | Semantic | When to use |
-|-----------|----------|-------------|
-| `phases/` | Routed one-at-a-time based on current state | Phase files, wave files, branch files |
-| `reference/` | Conditionally loaded material | Priority stacks, format specs, methodology |
-
-Concept-specific names go in the filename, not the directory.
-Design's waves become `phases/wave-1-soul.md`.
-Prototype's branches become `phases/logic.md`, `phases/ui.md`.
-Format specs (ADR, glossary) go in `reference/`.
-
-No other subfolder types (`waves/`, `branches/`, `formats/`).
-
-## Tracking with Concerns
-
-Skills can optionally track what a project doesn't know yet, is assuming, or has identified as wrong - in a single file called `CONCERNS.md`:
-
-```markdown
-### C-041 [open] Should status changes require a confirmation dialog?
-type: question | raised: 2026-07-18
-Legacy app confirms before status transitions. Our rebuild doesn't. Intentional or gap?
-```
-
-Four types of concern: **questions** (need a decision), **assumptions** (working theories to validate), **issues** (something looks wrong), **milestones** (checkpoints grouping specs and handoffs).
-
-Skills read from and write to this file. Humans read from and write to this file.
-It is a markdown document - no special tooling required.
-
-You don't need CONCERNS.md to use the skills.
-Task skills work standalone.
-Project skills become more useful when concerns exist to operate on.
-
-See [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) for the full specification.
+| Skill | Role | Status |
+|-------|------|--------|
+| `/triage` | Read backlog, categorize, route to verb | **new** |
+| `/check-in` | Load context, report state, --deep mode | repurposed (absorbs /reorient) |
+| `/spec` | Requirements grill | active |
+| `/grill-with-docs` | Domain grilling, catalogue-driven when catalogue exists | active |
+| `/breakdown` | Decompose into slices | active |
+| `/tdd` | Test-first development | active |
+| `/diagnose` | Bug debugging | active |
+| `/review` | Code critic | active |
+| `/wrapup` | Completion, scope validation | active |
+| `/setup` | Project kickoff (fresh, migration, resume) | active (absorbs /migrate) |
+| `/prototype` | Throwaway prototypes, variant switcher | active |
+| `/create` | - | **deprecated** |
+| `/buildout` | - | **deprecated** |
+| `/reorient` | - | **deprecated** (in /check-in --deep) |
+| `/migrate` | - | **deprecated** (in /setup migration mode) |
 
 ## Engagement model
 
-How the system deepens over time:
+How the system deepens over time (unchanged from v2):
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> OnDemand : pick a skill
-    OnDemand --> OnDemand : /diagnose, /spec, /tdd, /learn
-    OnDemand --> Connected : "worth tracking?" - yes
-    Connected --> Connected : /check-in -> work -> /wrapup
-    Connected --> Autonomous : concerns flow naturally
-    Autonomous --> Autonomous : skills emit, resolve, surface decisions
-```
+**On demand** - invoke a skill, it does the work, done.
+**Connected** - concerns flow, `/check-in` reads what's open.
+**Autonomous** - skills emit, resolve, surface decisions.
 
-**On demand** - invoke a skill, it does the work, done. No setup, no project context needed.
-
-**Connected** - a skill discovers something worth remembering across sessions. You say yes, it writes a line to `CONCERNS.md`. Now `/check-in` reads what's open and proposes work. `/wrapup` resolves concerns after implementation. Sessions link together.
-
-**Autonomous** - concerns flow naturally. Skills emit them during work, resolve what they can, and only surface what needs your judgment.
-
-Each stage includes the previous one. Structure accumulates when it helps and stays out of the way when it doesn't.
-
-### Engagement declaration in SKILL.md
-
-The `## Engagement` section in each SKILL.md is a pure declaration - only fields where this skill diverges from the shared protocol:
-
-```markdown
-## Engagement
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-Emits: concerns (type: issue, question)
-Writes: none
-Override: commit-producing skill - follows exit protocol (README.md section 6)
-```
-
-3-5 lines per skill. No boilerplate (nudge protocol, concern format, prohibitions, claims check).
-Those are shared protocol defined in the engagement protocol (engagement/README.md).
-
-The `Writes:` line is lint-enforced (`lint-skills.sh`), because it is the frontmatter half of the artifacts manifest (engagement/manifest.md) and a dishonest one lets a skill skip its receipt:
-- `Writes: none` is only valid when the skill writes no repo files. If frontmatter `outputs:` names any artifact other than `concerns` (an inventory marker, a workflow record, a doc), `Writes:` must name it too.
-- Any skill whose `Writes:` is not `none` must cite engagement/manifest.md from its Exit, or its manifest never fires at run time.
-Concern emission is declared under `Emits:`, not `Writes:` - appending a concern is not a repo-file write for manifest purposes (engagement/manifest.md, the empty case).
+The `## Engagement` section in SKILL.md is a pure declaration (3-5 lines). Shared protocol lives in `internals/engagement/README.md`.
+The `Writes:` line is enforced by test: if skill.json `engagement.writes` is non-empty, SKILL.md `Writes:` must not say `none`.
 
 ## The outbound seam
 
-Waypoint's inner loop ends at `/wrapup` - local, offline, concerns resolved.
-`/ship` is the one outbound verb: it assembles a spec-grounded PR and proposes an `afk | hitl` routing, then hands off to a delivery target.
+`/ship` (deprioritized) is the one outbound verb. Two invariants:
+- Waypoint proposes, the target disposes. `/ship` never holds merge authority.
+- Intent is spec-derived, never diff-derived.
 
-Two invariants govern anything added to this seam:
+## Review safety invariant
 
-- **Waypoint proposes, the target disposes.** `/ship` never holds merge authority. `afk` is necessary, not sufficient, for an unattended merge - it means only "propose the auto lane and open the PR." The delivery target's own enforcement (server-side rulesets, blocking CI, an autonomous reviewer) is the authority, evaluated on the final diff at merge time. A skill on this seam must never imply `afk` means merged.
-- **Intent is spec-derived, never diff-derived.** The PR's `## Intent` block traces to the spec, ADRs, and resolved concern decisions - never to a reading of the diff, which would grade the diff against itself.
-
-`DEPLOY.md` is the per-project delivery config, sibling to `ARCHITECTURE.md`: architecture says how the system is built, deploy says how a change reaches production.
-Its `load-bearing` glob list is the authoritative source for which paths force `hitl`; skills read it and never hardcode a danger list.
-The list is deny-only - it can force `hitl` earlier but can never grant `afk` - which is safe precisely because Waypoint holds no merge authority.
-The glob dialect is pinned in engagement/autonomy.md (glob evaluation rules); the axis it feeds is defined in the same file.
-
-## The review safety invariant
-
-`/review` and the loop-back read text Waypoint did not author (a repo's diff, a reviewer's comments, a repo's own `.claude/agents/`), and on a pull request that text is untrusted.
-Any skill that touches review must obey the five-crossing rule defined in engagement/review-safety.md: untrusted text never reaches a position that steers a later turn.
-The five crossings and their gates, one line each:
-
-- **Finding to concern:** never auto-written (a human pick, at every tier including Tier 3); every field is a structural coordinate (file, line) or a fixed-vocabulary value, never free text the finding supplied, quoted or paraphrased. A review-sourced concern omits section 4's free-text context field.
-- **Auto-invoked persona:** trusted-tier only (built-in or user-global `~/.claude/agents/`), read by absolute path. Waypoint sources personas from the trusted tiers on every path; a repo's own `.claude/agents/` is never a Waypoint persona source, by hand or auto.
-- **Behavior-escalating setting** (e.g. auto-run review): trusted config only, never a file in the repo under review.
-- **Fix output:** a formatter or linter autofix is an ordinary gated diff - same build, same review; there is no mechanical bypass.
-- **Observed content to note:** the user's personal note in the trusted global config is written only from the user's own chat input on confirmation, never from observed content (a repo file, diff, comment, page, or tool result); a preference inferred from the material under review never enters it without a fresh confirmation.
-
-Trusted means the skill family's built-ins and the user's personal global config (written only from the user's own chat input on confirmation); everything inside the repo under review is untrusted, judged by author not by content.
-The same chat-confirmed rule governs everything you author in that user-global trusted config - switches, reviewed-state, personas, and the personal note - so nothing there is ever set from a repo (engagement/review-safety.md, the trust tiers).
-
-### Authoring a persona
-
-A persona is a lens - a name plus a set of questions the review asks, a weighting over the standard categories. The machinery is identical across personas; only the questions change.
-Author a built-in as a file in `task/review/reference/personas/` (name, one-line identity, a short list of lens questions); it ships trusted with the skill family.
-A personal lens is an agent in your `~/.claude/agents/`, authored through the grill (`task/review/reference/persona-grill.md`), which forces a domain, three failure modes, a lens boundary, and a citation basis and refuses an ungrounded vibe lens.
-Waypoint ships no shared persona document: there is no `PERSONAS.md`. The two tiers Waypoint sources, both trusted:
-
-- **Built-in** (`reference/personas/`) - trusted; ships with the skill.
-- **User-global** (`~/.claude/agents/`, outside any repo) - trusted.
-
-Waypoint composes a persona only from these two tiers, by absolute path, on every path - manual or automatic - so a repo's own `.claude/agents/` can never become a review lens (a repo shares the agents directory name, so Waypoint never dispatches a bare name for the host to resolve). A repo's lens is untrusted; to use one, copy it into `~/.claude/agents/`. See engagement/review-safety.md and `task/review/reference/personas.md`.
-
-## Multi-phase workflows
-
-/migrate and /buildout have phase tracking for large efforts.
-These are optional - you can start with /create and upgrade later.
-
-| Workflow | Phases | When to use |
-|----------|--------|-------------|
-| /migrate | 7 phases (docs sprint through cutover) | Replacing an existing system |
-| /buildout | 4 phases (discovery through iterate-and-ship) | Building a new product |
-| /create | No phases | Adding features to an existing codebase |
+Five crossings prevent untrusted repo text from steering later turns.
+Defined in `internals/engagement/review-safety.md`. Every skill touching review must obey them.
 
 ## Branching
 
-- `main` - stable, deployed via `sync-skills.ps1`. Plugin installs pull from here.
-- `revisions` - local development branch. Specs, drafts, and in-progress work live here.
-
-All skill changes land on `main` directly (single contributor, no PR gate).
-The `revisions` branch holds design specs (`specs/`) and working drafts that shouldn't ship.
+- `main` - stable, deployed via `sync-skills.ps1`.
+- `revisions` - local development, specs, drafts.
 
 ## Local development
 
-Clone the repo:
-
 ```bash
 git clone git@github.com:max-zhu-bv/waypoint-skills.git
+.\sync-skills.ps1    # deploy to ~/.claude/
+for t in tests/test-*.sh; do bash "$t"; done  # run test suite
 ```
 
-Deploy to `~/.claude/`:
-
-```bash
-.\sync-skills.ps1
-```
-
-The sync script copies skills (flattened from `task/`, `project/`, `in-progress/`, `third-party/` into `~/.claude/skills/`), shared infrastructure (`internals/`, `templates/`, `process/` into `~/.claude/`), and root files (`CONCERNS-FORMAT.md`, `README.md` into `~/.claude/skills/`).
-
-After editing a skill, re-run `sync-skills.ps1` to deploy.
-The CI lint check (`lint-skills.sh`) validates two things:
-- Line counts: warns >80, fails >100.
-- The `Writes:`/manifest convention (see "Engagement declaration in SKILL.md"): a declaration must be honest and manifest-linked, so a nonstandard one can never silently skip the section 15 manifest.
+The sync script copies skills (flattened from `task/`, `project/`, `in-progress/` into `~/.claude/skills/`), shared infrastructure (`internals/`, `templates/`, `process/`, `schemas/` into `~/.claude/`), and root files into `~/.claude/skills/`.
 
 ### The flatten invariant
 
-The flatten is load-bearing and unchecked by CI (lint counts lines, not link resolution).
-A skill's `../../internals/X.md` link resolves in both the repo layout (`project/{name}/SKILL.md`) and the installed layout (`skills/{name}/SKILL.md`) only because a `SKILL.md` always sits exactly two levels above the shared-infra root.
-So: no skill may nest a `SKILL.md` deeper than `{group}/{name}/SKILL.md`, and no shared doc may move under `skills/`.
-Break either and every `../../` link in that skill silently 404s on install while still resolving in the repo, so the CI and local checks both stay green.
-A CI link-resolution check is a planned follow-up; until it exists, this invariant is enforced by convention.
+A skill's `../../internals/X.md` link resolves in both repo and installed layouts only because SKILL.md sits exactly two levels above the shared-infra root.
+No skill may nest deeper than `{group}/{name}/SKILL.md`.
+`tests/test-links.sh` enforces link resolution in the repo layout; installed-layout validation is a planned follow-up.
 
 ## Design references
 
-- [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, Single-Writer, naming classes
-- [internals/engagement/README.md](internals/engagement/README.md) - Tier detection, nudge protocol, concern emission rules (the shared spine)
-- [internals/engagement/manifest.md](internals/engagement/manifest.md) - the artifacts manifest emission
-- [internals/engagement/autonomy.md](internals/engagement/autonomy.md) - the autonomy axis (afk/hitl)
-- [internals/engagement/review-safety.md](internals/engagement/review-safety.md) - the review safety invariant (the five crossings)
-- [internals/chain/reference.md](internals/chain/reference.md) - the chain dispatcher and the graph it walks
-- [internals/chain/validation.md](internals/chain/validation.md) - the chain validation harness
+- [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, naming classes
+- [internals/engagement/README.md](internals/engagement/README.md) - Tier detection, concern emission, shared spine
+- [internals/engagement/manifest.md](internals/engagement/manifest.md) - Artifacts manifest
+- [internals/engagement/autonomy.md](internals/engagement/autonomy.md) - Autonomy axis (afk/hitl)
+- [internals/engagement/review-safety.md](internals/engagement/review-safety.md) - Review safety (five crossings)
+- [internals/chain/reference.md](internals/chain/reference.md) - Chain dispatcher (guard vocabulary, hardening rules)
+- [internals/enforcement-core.md](internals/enforcement-core.md) - Phase regression, gate override patterns
+- [process/convention-enforcement.md](process/convention-enforcement.md) - Test-enforced conventions, ratchets, hooks
+- [schemas/skill.schema.json](schemas/skill.schema.json) - skill.json validation schema
+- [schemas/safety-rails.json](schemas/safety-rails.json) - Banned operations, branch rules

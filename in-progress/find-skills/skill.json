@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "find-skills",
+  "status": "experimental",
+  "description": "Discover and recommend installable skills from the ecosystem. Use when asking how to do X or extending capabilities.",
+
+  "chain": {
+    "from": [],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "search",
+      "name": "Search for skills",
+      "references": ["reference/categories.md"],
+      "instruction": "Identify the domain and task. Check skills.sh leaderboard first. If not covered, run 'npx skills find [query]' with specific keywords. Try alternative terms if first query misses.",
+      "checklist": [
+        "Domain and task identified",
+        "Leaderboard checked",
+        "Search executed with specific keywords"
+      ]
+    },
+    {
+      "id": "recommend",
+      "name": "Verify and recommend",
+      "references": ["reference/examples.md"],
+      "instruction": "Verify quality: install count (prefer 1K+, cautious under 100), source reputation (official > unknown), GitHub stars (<100 deserves skepticism). Present: name, what it does, install count, source, install command. Install with 'npx skills add <owner/repo@skill> -g -y' if user agrees. If nothing found: acknowledge gap, offer direct help, mention 'npx skills init' for custom skills.",
+      "checklist": [
+        "Quality verified (install count, source, stars)",
+        "Recommendation presented with install command",
+        "Installed (if user agrees)"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": [],
+    "writes": [],
+    "manifest": false,
+    "chain_dispatch": false
+  },
+
+  "tone": "Concise. Skill name, one-line reason, install command."
+}

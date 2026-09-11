@@ -1,0 +1,111 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "grill-with-docs",
+  "status": "stable",
+  "description": "Grill a plan against the domain model. Sharpen terminology, update GLOSSARY.md and ADRs as decisions crystallize.",
+
+  "chain": {
+    "from": [],
+    "to": [
+      { "target": "spec", "type": "clean", "guard": "SPEC" },
+      { "target": "breakdown", "type": "clean", "guard": "SPEC" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "scan-docs",
+      "name": "Scan documentation",
+      "reads": [
+        "CLAUDE.md",
+        "GLOSSARY.md",
+        "_GLOSSARY.md",
+        "docs/adr/",
+        "docs/decisions/",
+        "SCOPE.md",
+        "CONVENTIONS.md",
+        "ARCHITECTURE.md",
+        "TESTING.md"
+      ],
+      "instruction": "Check what documentation structure exists. Read the project's CLAUDE.md for the full layout. Scan for: GLOSSARY.md (or GLOSSARY-MAP.md), docs/adr/ or docs/decisions/, SCOPE.md, CONVENTIONS.md, ARCHITECTURE.md, TESTING.md, architecture rule catalogue (architecture-rule-catalogue.md or similar), endpoint registries (contracts/*-endpoints.json). Create files lazily - only when you have something to write.",
+      "checklist": [
+        "CLAUDE.md read for documentation layout",
+        "Existing docs identified",
+        "Architecture rule catalogue presence noted",
+        "Endpoint registries presence noted"
+      ]
+    },
+    {
+      "id": "catalogue-grill",
+      "name": "Catalogue-driven grill",
+      "enterprise": true,
+      "reads": [
+        "architecture-rule-catalogue.md",
+        "contracts/*-endpoints.json"
+      ],
+      "references": [
+        "reference/catalogue-grill.md"
+      ],
+      "instruction": "If an architecture rule catalogue exists, follow reference/catalogue-grill.md: initialize a per-family checklist, grill each family systematically (one at a time, depth-first). Produce consolidated decision-tree ADRs (one per root question with branching sub-decisions), not granular per-decision docs. Target 6-8 ADRs for complex projects. Cross-reference against the catalogue's open items. Check SCOPE.md and endpoint registries before recommending any changes - never cut features or endpoints without explicit user approval.",
+      "checklist": [
+        "Rule families enumerated as checklist",
+        "Each family grilled systematically",
+        "Open items from catalogue addressed",
+        "Scope protection checked before recommendations",
+        "ADRs consolidated (decision-tree style)"
+      ]
+    },
+    {
+      "id": "interview",
+      "name": "Interview",
+      "instruction": "Interview relentlessly about every aspect of the plan. One question at a time, waiting for feedback before continuing. For each question, provide a recommended answer. If a question can be answered by exploring the codebase, explore instead of asking. Challenge against the glossary: when a term conflicts with GLOSSARY.md, call it out immediately. Sharpen fuzzy language: propose precise canonical terms for vague or overloaded words. Discuss concrete scenarios that probe edge cases. Cross-reference with code: if the user states how something works, check whether the code agrees.",
+      "checklist": [
+        "Every design branch walked depth-first",
+        "Terms validated against glossary",
+        "Vague terms sharpened to canonical names",
+        "Edge cases stress-tested with scenarios",
+        "Code cross-referenced where possible"
+      ]
+    },
+    {
+      "id": "update-docs",
+      "name": "Update docs inline",
+      "instruction": "Update GLOSSARY.md inline when a term is resolved - don't batch. GLOSSARY.md must be devoid of implementation details; it is a glossary and nothing else. Cascade to other project docs when decisions affect them: naming pattern -> conventions/NAMING.md, scope change -> SCOPE.md, dependency change -> ARCHITECTURE.md, test expectations -> TESTING.md. Only cascade when the doc exists and the change is genuine.",
+      "checklist": [
+        "Resolved terms written to GLOSSARY.md immediately",
+        "Cascades applied to affected existing docs",
+        "No docs created just to cascade into"
+      ]
+    },
+    {
+      "id": "offer-adrs",
+      "name": "Offer ADRs sparingly",
+      "instruction": "Only offer an ADR when all three hold: (1) hard to reverse - cost of changing later is meaningful, (2) surprising without context - future reader will wonder why, (3) result of a real trade-off - genuine alternatives existed. If any is missing, skip the ADR. Consolidate related decisions into a single ADR. Each answers a root question with branching sub-decisions.",
+      "checklist": [
+        "Three-gate test applied to every ADR candidate",
+        "Related decisions consolidated into single ADRs",
+        "ADR format from schemas/adr-format.json used"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": true,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": true
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [
+      "GLOSSARY.md",
+      "docs/adr/"
+    ],
+    "manifest": true,
+    "chain_dispatch": false
+  },
+
+  "tone": "Adversarial but constructive - stress the plan against the domain model."
+}

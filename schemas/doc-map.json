@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "doc-map.json",
+  "title": "Documentation Map",
+  "description": "Structure for the project documentation map.",
+  "type": "object",
+  "required": ["tiers"],
+  "additionalProperties": false,
+  "properties": {
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tier", "files"],
+        "additionalProperties": false,
+        "properties": {
+          "tier": { "type": "string", "enum": ["program", "implementation", "local"] },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path", "description"],
+              "additionalProperties": false,
+              "properties": {
+                "path": { "type": "string" },
+                "description": { "type": "string" },
+                "owner_skill": { "type": "string", "description": "Skill that owns/creates this file." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

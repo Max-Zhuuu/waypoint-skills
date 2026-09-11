@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "findings-note-format.json",
+  "title": "Review Findings Note",
+  "description": "Format for throwaway review findings notes.",
+  "type": "object",
+  "required": ["date", "lens", "findings"],
+  "additionalProperties": false,
+  "properties": {
+    "date": { "type": "string" },
+    "lens": { "type": "string", "description": "Name of the review lens (e.g. 'standards', 'architect', 'creative-director')." },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "line", "category", "severity", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "category": {
+            "type": "string",
+            "enum": ["auth", "security", "data-handling", "operations", "architecture", "theming", "i18n", "catalogue-rule"]
+          },
+          "severity": { "type": "string", "enum": ["block", "warn", "note"] },
+          "summary": { "type": "string", "minLength": 1 },
+          "routes": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["spec", "breakdown", "apply-now", "note-as-concern"] }
+          }
+        }
+      }
+    }
+  }
+}

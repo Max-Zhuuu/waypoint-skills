@@ -45,10 +45,18 @@ agent: [invokes /spec with "notifications"]
 ```
 you:   /check-in
 
-agent: 8 endpoints and 4 screens remaining. 2 specs ready to build.
-       Concerns: 3 issues (oldest: 4 days), 1 assumption unvalidated
-       Next: Invite flow - spec is fresh, the mailer service is wired,
-       and the API contract is defined. Build now before it drifts.
+agent: Phase 3 (MVP build). 3 open concerns (1 critical).
+       Enterprise: rule catalogue detected, 2 WARN violations in touched area.
+       Worktree: 1 stale (feature/old-branch, merged 3 days ago).
+       Ready. /triage to pick next task, or tell me what you're working on.
+
+you:   /triage
+
+agent: Read 6 Linear issues. Ranked:
+       1. [BUG] Order total wrong after discount - /diagnose
+       2. [FEATURE] Notification preferences - needs spec - /spec
+       3. [TECH DEBT] Extract shared validation - /tdd direct
+       Pick one, or tell me what you're working on.
 ```
 
 ### Speccing a feature
@@ -161,38 +169,37 @@ They are the complete methodology without any tool-specific instructions.
 
 ### Orient
 
-- **[setup](project/setup/SKILL.md)** - Kickoff a project with scoping grill, architecture decisions, and documentation structure.
+- **[setup](project/setup/SKILL.md)** - Kickoff a project with scoping grill, architecture decisions, and documentation structure. Handles fresh builds, migrations, and resumptions.
+- **[triage](task/triage/SKILL.md)** - Read a backlog (Linear, GitHub, PRs), categorize items, prioritize, and route to the right verb.
 - **[how-to-start](task/how-to-start/SKILL.md)** - Route to the right skill based on project state and user intent.
-- **[check-in](project/check-in/SKILL.md)** - Session authority. Reads concerns, proposes next task, fires checkpoints, and surfaces read-only what is staged-but-unpromoted or blocked downstream. The daily verb.
-- **[reorient](project/reorient/SKILL.md)** - Snapshot project state, surface deferred decisions, audit progress. Use when scattered or between milestones.
+- **[check-in](project/check-in/SKILL.md)** - Context loader. Reads concerns, detects enterprise artefacts, reports worktree state. Use `--deep` for course correction (absorbs former /reorient).
 
 ### Plan
 
-- **[spec](task/spec/SKILL.md)** - Grill scope and acceptance criteria, output a spec file.
-- **[breakdown](task/breakdown/SKILL.md)** - Decompose a spec into implementable slices with dependency ordering.
+- **[spec](task/spec/SKILL.md)** - Grill scope and acceptance criteria, output a spec file (or issue when J1 rules apply).
+- **[breakdown](task/breakdown/SKILL.md)** - Decompose a spec into implementable slices with dependency ordering. Scope guard enforces endpoint coverage.
 - **[grill-me](task/grill-me/SKILL.md)** - Interview relentlessly about a plan or design until reaching shared understanding on every branch.
-- **[grill-with-docs](task/grill-with-docs/SKILL.md)** - Grill a plan against the domain model. Sharpen terminology, update GLOSSARY.md and ADRs as decisions crystallize.
-- **[design](project/design/SKILL.md)** - Create and evolve a design system through three waves: Soul, Tokens, Proof.
+- **[grill-with-docs](task/grill-with-docs/SKILL.md)** - Grill a plan against the domain model. Catalogue-driven interrogation when a rule catalogue exists. Sharpen terminology, update GLOSSARY.md and ADRs.
 
 ### Build
 
-- **[tdd](task/tdd/SKILL.md)** - Build features or fix bugs with red-green-refactor. Test-first, behavior-driven.
-- **[create](task/create/SKILL.md)** - Add features to an existing codebase. Ensures specs exist and docs stay current. Lighter than /buildout.
+- **[tdd](task/tdd/SKILL.md)** - Build features or fix bugs with red-green-refactor. Convention enforcement test creation in the refactor step.
 - **[diagnose](task/diagnose/SKILL.md)** - Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.
-- **[prototype](task/prototype/SKILL.md)** - Build throwaway prototypes to flesh out a design. Routes between terminal app, UI variations, or design panel.
+- **[prototype](task/prototype/SKILL.md)** - Build throwaway prototypes. Duplicates existing components and wires to a variant switcher for side-by-side comparison.
 
 ### Sustain
 
-- **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb.
-- **[review](task/review/SKILL.md)** - A code critic you point at your work before shipping. Runs a lens (persona), writes a throwaway findings note, routes each finding. Suggested, never forced; never ships.
-- **[ship](project/ship/SKILL.md)** - The outbound seam. Assemble a spec-grounded PR and propose an afk/hitl routing; never holds merge authority. Run after /wrapup.
-- **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs. Consolidate modules, improve testability.
+- **[wrapup](project/wrapup/SKILL.md)** - Resolve concerns, validate scope coverage, cascade to shared docs, evaluate gate criteria.
+- **[review](task/review/SKILL.md)** - A code critic. Runs a lens (persona), cross-checks against rule catalogue, writes findings note, routes each finding. Never ships.
 - **[learn](task/learn/SKILL.md)** - Learn through any code task with meaningfully different options, trade-off explanations, and terminology bridges.
+- **[improve-codebase-architecture](task/improve-codebase-architecture/SKILL.md)** - Find deepening opportunities informed by domain language and ADRs.
 
-### Workflows
+### Deprecated
 
-- **[migrate](project/migrate/SKILL.md)** - Replace an existing system layer by layer until the new application is complete. Extends /setup for migrations.
-- **[buildout](project/buildout/SKILL.md)** - Configure greenfield project scope with MoSCoW priorities and phase resolution. Extends /setup.
+- **[create](task/create/SKILL.md)** - Use triage -> spec -> breakdown -> tdd instead.
+- **[buildout](project/buildout/SKILL.md)** - Absorbed into /setup.
+- **[migrate](project/migrate/SKILL.md)** - Absorbed into /setup migration mode.
+- **[reorient](project/reorient/SKILL.md)** - Absorbed into /check-in --deep.
 
 ## How it fits together
 
@@ -200,42 +207,22 @@ They are the complete methodology without any tool-specific instructions.
 stateDiagram-v2
     direction LR
 
-    state "New to this project" as newcomer
-    state "Know the codebase" as experienced
-
     state "Orient" as orient
     state "Plan" as plan
     state "Build" as build
     state "Verify" as verify
-    state "Deliver" as deliver
 
-    [*] --> newcomer
-    [*] --> experienced
-
-    newcomer --> orient : /setup, /how-to-start
-    experienced --> build : /diagnose, /tdd, /create
-
-    orient --> plan : /spec, /design
-    plan --> build : /breakdown, /tdd, /create
-    build --> verify : /wrapup, /check-in
-    verify --> deliver : /review, /ship
-    deliver --> orient : /check-in surfaces downstream
+    [*] --> orient : /setup, /check-in
+    orient --> plan : /triage, /spec
+    plan --> build : /breakdown, /tdd
+    build --> verify : /wrapup, /review
     verify --> orient : gaps found
-
-    experienced --> orient : system nudges
+    verify --> plan : /triage picks next
 ```
 
-Both paths lead to the same place.
-If you skip orientation and jump to building, the system catches gaps and nudges you back when it matters - missing domain glossary, unresolved assumptions, specs that drifted from the code.
-
-Before that seam sits the critic. `/review` points a lens at your work before you ship it - a "persona" like `architect` or `creative-director`, each just a different set of questions over the same machinery.
-It writes a throwaway findings note and lets you route each finding (to a spec, to /breakdown, fix it now, or record it as a concern); nothing lands without your pick.
-`/wrapup` suggests it on the way out, and on a local project with no pipeline it is your only conformance check. Reviewing is judgment, shipping is mechanical - `/review` never ships and `/ship` never critiques.
-
-Delivery is the outbound seam.
-Once a change is verified, `/ship` assembles a spec-grounded PR and proposes an afk (agent-eligible) or hitl (human-in-the-loop) routing - a proposal only; the delivery target holds merge authority, never Waypoint.
-Next session, `/check-in` reads back, read-only, what is staged but not promoted and what the pipeline is blocking, then points you there and stops.
-There is no promote verb: promotion to production is human-owned.
+The core chain is `triage -> spec -> breakdown -> tdd -> review`.
+`/check-in` loads context at session start; `/triage` reads your backlog and routes each item to the right verb.
+`/review` cross-checks against the project's rule catalogue when one exists; `/wrapup` validates scope coverage before closing.
 
 ## Principles
 
@@ -264,6 +251,7 @@ mindmap
 
 | Version | Change |
 |---------|--------|
+| 3.0.0 | JSON-first architecture. Every skill gets `skill.json` (steps, checklists, chain edges, capabilities). SKILL.md reduced to ~20-line bootloader. 7-script test suite replaces lint-skills.sh. Enterprise auto-detect: rule catalogues, endpoint registries, parity systems, scope protection. New: /triage (backlog reader). /check-in repurposed as context loader (absorbs /reorient --deep). /setup absorbs /migrate. /prototype enforces variant switcher. Convention enforcement test creation in /setup + /tdd. Catalogue-driven architecture grill in setup Phase 1. 8 JSON schemas. Breaking: /create, /buildout, /reorient, /migrate deprecated. |
 | 2.1.0 | Handoff mode in /wrapup (continuity doc + boot prompt for next agent). /port demoted to reference checklist under /migrate. Exit wording sharpened across tdd, review, wrapup. Check-in reads handoff docs. Chain graph labels corrected. Breaking: `/port` no longer invocable by name - use `/migrate` + `/tdd` with the port checklist. |
 | 2.0.0 | The quality loop. New skills: /review (persona-based code critic), /ship (outbound PR seam). Chain dispatcher for skill-to-skill handoff. Settings surface with trusted-config model. Engagement reference split into `internals/engagement/` directory. Artifacts manifest emission. Autonomy axis. Persona trust gate (two-tier, user-global only). Prototype skill: taste profile grounding, shell-swap default, HTML artifact output, worktree-scoped design panel with archival. Plugin manifest for marketplace install. |
 | 1.0.0 | Initial plugin release. 21 skills. Reference tree restructure (SKILL.md 50-80 lines, CI enforced at 100). Three-tier doc layout. Concerns tracking. Engagement model. Process/adapter split. Structural rules in CONTRIBUTING.md. |
@@ -274,20 +262,25 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how the system works internally: the 
 
 ## Skill structure
 
-Each skill is a directory under `task/` or `project/` with a `SKILL.md` that Claude Code auto-loads on invocation.
-Supplementary content lives in two optional subfolders:
+Each skill is a directory under `task/` or `project/` with two files:
 
-- **`phases/`** - Files routed one-at-a-time based on current state (phase files, wave files, branch files)
-- **`reference/`** - Conditionally loaded material (priority stacks, format specs, checklists)
+- **`skill.json`** - Machine-readable source of truth: steps with checklists, chain edges, capabilities, engagement declarations. Validated by `schemas/skill.schema.json` and the test suite.
+- **`SKILL.md`** - ~20-line bootloader that Claude Code auto-loads on invocation. Points to skill.json, declares engagement/exit/tone.
 
-SKILL.md targets 50-80 lines (max 100, CI enforced).
-Content ownership: SKILL.md declares what's different, never restates shared protocol.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full structural rules.
+Supplementary content:
+
+- **`phases/`** - Files routed one-at-a-time based on current state
+- **`reference/`** - Methodology docs loaded during specific steps
+- **`schemas/`** - JSON schemas for format validation (glossary, ADR, slice, findings)
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full structural rules and test suite.
 
 ## Reference
 
+- [schemas/](schemas/) - JSON schemas for skill validation and output formats
+- [tests/](tests/) - 7-script test suite (run: `for t in tests/test-*.sh; do bash "$t"; done`)
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
 - [process/](process/) - Standalone methodology documents (no AI required)
-- [templates/](templates/) - Shared file templates (feature specs, logic docs, glossary)
+- [templates/](templates/) - Shared file templates
 - [adapters/](adapters/) - Cursor, OpenCode, and Codex adapter files
-- [internals/](internals/) - System design docs (concepts, engagement model)
+- [internals/](internals/) - System design docs (concepts, engagement model, chain)

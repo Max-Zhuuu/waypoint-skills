@@ -2,100 +2,23 @@
 name: wrapup
 description: "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb."
 status: stable
-inputs:
-  concerns: CONCERNS.md entries referencing the current entity
-outputs:
-  concerns-resolved: CONCERNS.md entries marked resolved with decision lines
-  shared-docs: CONVENTIONS.md, GLOSSARY.md, DESIGN-SYSTEM.md updated if cascade needed
-  inventory: marker confirmed or advanced
-  blocking-verdict: open blocking concerns for the change, or "none" - the authored value /ship consumes for afk gate key 1b
-signals: []
 ---
 
-The completion verb. Single reconciliation point for all doc updates after implementation.
+Read [skill.json](./skill.json). Initialize checklists. Execute steps sequentially.
+Single reconciliation point for all doc updates after implementation.
+Ending the session? Say "I'm wrapping up" or invoke with `handoff` to write a continuity doc and boot prompt.
 
-- Invoke after /tdd or any implementation verb reports complete (suggested by the verb).
-- Optional: skip if confident. Unresolved concerns persist in CONCERNS.md.
-- If skipped: /check-in surfaces them next session as priority work.
-
-## Process
-
-### 1. Gather concerns
-
-Read CONCERNS.md. Filter open concerns that reference the current entity (by `refs:` field or entity name in the description).
-Also include any concerns emitted by the implementation verb this session.
-
-### 2. Spec drift check
-
-Re-read the entity's documentation and compare against what was built.
-This catches discrepancies the implementation verb didn't flag - a documentation safety net, not a code review.
-Follow the field-by-field checklist in [reference/spec-drift-checklist.md](reference/spec-drift-checklist.md) for both the feature spec and the logic doc.
-Any mismatch becomes a new concern in CONCERNS.md (type: issue, source: /wrapup).
-If no feature spec or logic doc exists: report "No {doc type} found. Drift check skipped." and continue - do not block.
-
-### 3. Resolve each concern
-
-Apply the resolution cascade:
-
-1. **Read the authoritative source for ground truth.**
-   Example: spec says 12 fields, source system screen shows 14.
-2. **Write or run a test that proves which side is correct.**
-   If test passes, spec is outdated. If test fails, source doc is wrong.
-3. **Escalate to the user with specifics if source and tests are ambiguous.**
-   Present the concrete mismatch, not a vague question.
-
-Never skip to step 3 without trying steps 1 and 2.
-
-Resolution outcomes:
-- **Spec was wrong** - update the spec, add Change Log entry
-- **Build was wrong** - fix the code (or note as follow-up)
-- **Both need updating** - update spec, fix code
-- **Intentional difference** - document in spec Change Log with rationale
-
-Mark each resolved concern in CONCERNS.md: change status to `[resolved]`, add `resolved:` date and `decision:` line, move to the Resolved section.
-Recalculate the summary header after all resolutions.
-For milestone-type concerns, follow [reference/milestone-closure.md](reference/milestone-closure.md) to offer spec archival.
-
-### 4. Cascade to shared docs
-
-Check whether any resolution affects shared docs, cascading per [reference/cascade-rules.md](reference/cascade-rules.md).
-Only cascade for genuine shared-doc changes, not entity-local updates.
-
-### 5. Archive resolved concerns
-
-Count the entries in the Resolved section and archive per [reference/archive-procedure.md](reference/archive-procedure.md) if the threshold is exceeded.
-
-### 6. Evaluate gate
-
-Check the current phase's gate criteria:
-- How many items remain at current phase?
-- Are all gate conditions for completed items satisfied?
-- Are there blocking concerns? This verdict is authoritative: /ship consumes the `Blocking:` line below for the afk gate (key 1b) and never re-derives "blocking" from raw CONCERNS.md.
-
-Report:
-
-```
-Wrapup complete. {entity}: {N} concerns resolved, {M} escalated.
-{if archived} Archived {K} resolved concerns to concerns/resolved-{YYYY}.md.
-Blocking: {none | C-041, C-047}.
-Gate: {X}/{Y} criteria met. Remaining: {list}.
-```
-
-## Exit
-
-- /review for a critic pass before shipping. On a local project with no pipeline, this is your only conformance check.
-  - When this exact diff is already reviewed ([reviewed-state](../../task/review/reference/reviewed-state.md)), offer a re-review rather than nudging. Re-open the nudge when the diff changes. Wrapup suggests review; it never reviews itself.
-- /ship to deliver this change, if DEPLOY.md names a remote adapter.
-- /check-in for next session.
-- **Ending the session?** Two activation paths: (1) the user signals they are done for now ("I'm wrapping up", "last thing", "heading out"), or (2) invoked with "handoff" in args (`/wrapup handoff`). Either way, run the handoff mode: [phases/handoff.md](phases/handoff.md). Writes a continuity doc and outputs a boot prompt for the next agent.
-- On exit, emit the artifacts manifest for the paths this run wrote, per [the artifacts manifest](../../internals/engagement/manifest.md); a run that wrote nothing prints the empty manifest.
-- On exit, after the manifest, run the chain dispatcher for the next hop, per [the chain dispatcher](../../internals/chain/reference.md); a gate (or no clean edge) stops and hands back.
+Does NOT: ship, merge, review code (that is /review), or promote.
 
 ## Engagement
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-Emits: issues, resolution notes, consolidated audit results
-Writes: creates CONCERNS.md if absent (seeded with this run's resolved entries); handoff mode writes docs/_local/handoffs/ OR docs/implementation/handoffs/
-Override: Cascade step only fires for docs that exist - does not create docs to cascade into.
-## Tone
+See [the engagement protocol](../../internals/engagement/README.md).
+Emits: issues, resolution notes
+Writes: CONCERNS.md (creates if absent), docs/_local/handoffs/ (handoff mode)
+Override: cascade only fires for docs that exist
 
-Brief and mechanical. Resolve, cascade, report. This is bookkeeping that enables the next cycle, not a ceremony that slows it down.
+## Exit
+- /review for a critic pass before shipping.
+- /check-in for next session.
+
+## Tone
+Brief and mechanical. Resolve, cascade, report.

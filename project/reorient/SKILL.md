@@ -1,8 +1,10 @@
 ---
 name: reorient
 description: "Snapshot project state, surface deferred decisions, audit progress. Use when scattered or between milestones."
-status: stable
+status: deprecated
 ---
+
+> **Deprecated.** Absorbed into `/check-in --deep` mode.
 
 A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
 This is not a status report - it is a course correction.

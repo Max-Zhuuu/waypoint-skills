@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "check-in",
+  "status": "stable",
+  "description": "Session entry point. Loads context, reports state, detects enterprise artefacts. Use at every session start.",
+
+  "chain": {
+    "from": [],
+    "to": []
+  },
+
+  "steps": [
+    {
+      "id": "load-state",
+      "name": "Load workflow state",
+      "reads": ["CLAUDE.md", "SCOPE.md"],
+      "instruction": "Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.md frontmatter and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date.",
+      "checklist": [
+        "CLAUDE.md Active Workflow section read",
+        "Project type detected (if no workflow)",
+        "Recommendation ready (if no workflow)"
+      ]
+    },
+    {
+      "id": "read-concerns",
+      "name": "Read concerns and handoffs",
+      "reads": ["CONCERNS.md", "docs/_local/handoffs/"],
+      "instruction": "Read CONCERNS.md if it exists. Parse summary header for counts. Read Open, Investigating, and Blocked sections. Skip Resolved. Check docs/_local/handoffs/ for recent handoff docs (sorted by date prefix) - read the most recent for continuity context.",
+      "checklist": [
+        "CONCERNS.md parsed (or noted absent)",
+        "Open/Investigating/Blocked counts tallied",
+        "Handoff doc read (if exists)"
+      ]
+    },
+    {
+      "id": "enterprise-scan",
+      "name": "Detect enterprise artefacts",
+      "enterprise": true,
+      "reads": ["architecture-rule-catalogue.md", "contracts/*-endpoints.json", "docs/implementation/parity/"],
+      "instruction": "Scan for enterprise artefacts: architecture rule catalogue, endpoint registries, parity verification systems. If found, check scope and rule compliance for the current phase's work. Surface any violations in the report.",
+      "checklist": [
+        "Rule catalogue checked (if exists)",
+        "Endpoint registries checked (if exist)",
+        "Parity systems checked (if exist)",
+        "Scope compliance assessed",
+        "Violations noted for report"
+      ]
+    },
+    {
+      "id": "worktree-hygiene",
+      "name": "Worktree and downstream check",
+      "instruction": "Run git worktree list. Identify stale worktrees (branches already merged). Report if count exceeds expected active tasks. If DEPLOY.md exists, surface downstream view: staged-not-promoted PRs and blocked PRs (link, category, status only - never act on them).",
+      "checklist": [
+        "git worktree list checked",
+        "Stale worktrees identified",
+        "Downstream view surfaced (if DEPLOY.md exists)"
+      ]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": true,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["flags", "session plan"],
+    "writes": [".claude/.setup-prompted"],
+    "manifest": true,
+    "chain_dispatch": false
+  },
+
+  "tone": "Brief. Read state, report, move on."
+}

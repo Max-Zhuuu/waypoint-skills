@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "glossary-format.json",
+  "title": "Glossary Entry",
+  "description": "Format for a single GLOSSARY.md entry.",
+  "type": "object",
+  "required": ["term", "definition"],
+  "additionalProperties": false,
+  "properties": {
+    "term": { "type": "string", "minLength": 1 },
+    "definition": { "type": "string", "minLength": 1 },
+    "avoid": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Terms to avoid in favor of this canonical term."
+    },
+    "context": {
+      "type": "string",
+      "description": "When this term applies (e.g. 'in the UI only', 'engine API context')."
+    }
+  }
+}

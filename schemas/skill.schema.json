@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "skill.schema.json",
+  "title": "Waypoint Skill Definition",
+  "description": "Machine-readable skill metadata. Source of truth for structure, chain, capabilities, and engagement.",
+  "type": "object",
+  "required": ["name", "status", "description", "chain", "steps", "capabilities", "engagement"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to this schema file."
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Kebab-case skill name. Must match directory name."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["stable", "draft", "experimental", "deprecated"],
+      "description": "Skill maturity. Must match SKILL.md frontmatter status."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "One-line description. Must match SKILL.md frontmatter description."
+    },
+    "chain": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Skills that chain into this one."
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["target", "type"],
+            "additionalProperties": false,
+            "properties": {
+              "target": {
+                "type": "string",
+                "description": "Target skill name."
+              },
+              "type": {
+                "type": "string",
+                "enum": ["clean", "gate"],
+                "description": "Clean = auto-advance possible. Gate = always stops for confirmation."
+              },
+              "guard": {
+                "type": "string",
+                "description": "Boolean expression over guard vocabulary (SPEC, SLICED, REM, NEXT_HITL, TRIAGED, BUG, CONC, REVIEWED)."
+              }
+            }
+          },
+          "description": "Outbound chain edges."
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "instruction"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Unique step identifier within this skill."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable step name."
+          },
+          "enterprise": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, skip this step if no enterprise artefacts detected."
+          },
+          "reads": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Files or glob patterns this step reads. Paths relative to project root or skill directory."
+          },
+          "process": {
+            "type": "string",
+            "description": "Process doc reference (e.g. 'process/tdd.md#plan'). Relative to shared-infra root."
+          },
+          "references": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Reference docs loaded during this step. Paths relative to skill directory."
+          },
+          "instruction": {
+            "type": "string",
+            "description": "What the agent does in this step. Concise imperative."
+          },
+          "checklist": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Items to verify before advancing. Agent initializes and checks off."
+          },
+          "per_cycle_checklist": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Checklist applied on every iteration of a repeating step."
+          }
+        }
+      }
+    },
+    "safety_rails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "banned_ops": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Operations this skill must never execute directly."
+        },
+        "on_banned": {
+          "type": "string",
+          "enum": ["print_for_user"],
+          "description": "What to do when a banned operation is needed."
+        }
+      },
+      "description": "Overrides or extends schemas/safety-rails.json for this skill."
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["scope_protection", "safety_rails", "convention_enforcement", "enterprise_context", "catalogue_grill"],
+      "additionalProperties": false,
+      "properties": {
+        "scope_protection": { "type": "boolean" },
+        "safety_rails": { "type": "boolean" },
+        "convention_enforcement": { "type": "boolean" },
+        "enterprise_context": { "type": "boolean" },
+        "catalogue_grill": { "type": "boolean" }
+      },
+      "description": "Enterprise capabilities this skill implements. Tests verify SKILL.md references match."
+    },
+    "engagement": {
+      "type": "object",
+      "required": ["emits", "writes", "manifest", "chain_dispatch"],
+      "additionalProperties": false,
+      "properties": {
+        "emits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What this skill emits (e.g. 'concerns')."
+        },
+        "writes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Repo files this skill writes."
+        },
+        "override": {
+          "type": "string",
+          "description": "Engagement override declaration (e.g. 'commit-producing', 'workflow skill')."
+        },
+        "manifest": {
+          "type": "boolean",
+          "description": "Whether this skill emits an artifacts manifest at exit."
+        },
+        "chain_dispatch": {
+          "type": "boolean",
+          "description": "Whether this skill runs the chain dispatcher at exit."
+        }
+      }
+    },
+    "tone": {
+      "type": "string",
+      "description": "One-sentence tone directive."
+    }
+  }
+}

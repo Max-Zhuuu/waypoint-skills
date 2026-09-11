@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "safety-rails.json",
+  "title": "Safety Rails",
+  "description": "Hard constraints applying to all skills unconditionally.",
+
+  "banned_operations": {
+    "git": [
+      "git rebase",
+      "git push --force",
+      "git push --force-with-lease",
+      "git reset --hard"
+    ],
+    "cloud_cli": [
+      "az",
+      "aws",
+      "gcloud",
+      "terraform apply",
+      "terraform destroy",
+      "kubectl delete",
+      "kubectl apply"
+    ],
+    "production_db": [
+      "INSERT on non-local DB",
+      "UPDATE on non-local DB",
+      "DELETE on non-local DB",
+      "DROP on non-local DB",
+      "ALTER on non-local DB",
+      "TRUNCATE on non-local DB",
+      "alembic upgrade (production)",
+      "prisma migrate deploy (production)"
+    ],
+    "registry": [
+      "npm publish",
+      "cargo publish",
+      "pip upload",
+      "docker push (production)"
+    ]
+  },
+
+  "on_banned_template": "## Manual step required\n\nThe following command [{category}].\nReview and run it yourself:\n\n    {command}\n\n**What it does:** {explanation}\n**Why it's needed:** {context}\n**Rollback:** {rollback}",
+
+  "branch_rules": {
+    "merge_strategy": "merge commit (never rebase)",
+    "protected_branches": "no direct commits to protected branches",
+    "pre_push": "pull before work, push after stable commits",
+    "conflicts": "resolve locally, push merge commit - conflicts signal bad task decomposition",
+    "diverged_upstream": "merge, never rebase"
+  },
+
+  "worktree_rules": {
+    "check_at_session_start": true,
+    "clean_merged_branches": true,
+    "max_active": "match active task count",
+    "excess_threshold": 5,
+    "excess_action": "surface as concern"
+  }
+}
