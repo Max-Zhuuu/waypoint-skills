@@ -100,6 +100,17 @@ When the user picks a winner:
 3. **Update the store** - remove the decided dimension's type/field/setter.
 4. **If all dimensions are decided** - capture the archival content in a commit message or ADR on the canonical branch (the decision trail must not vanish with the panel). Then delete the panel component, remove it from the root layout, simplify the store back to production-only code.
 
+## Token isolation
+
+Prototype tokens must NEVER live in the project's production token file (`tokens.css`, `variables.css`, or equivalent).
+Experimental CSS custom properties go in a dedicated prototype token file (`prototype-tokens.css` or similar) that is imported only by prototype components.
+
+**Why:** Production token files are load-bearing infrastructure consumed by every component.
+Prototype tokens pollute the namespace, create selector precedence surprises, and become invisible tech debt when the experiment ends.
+
+When an experiment graduates to production, move its tokens into the production file and delete them from the prototype file.
+When an experiment is archived, delete its tokens entirely.
+
 ## Worktree lifecycle
 
 The design panel is exploration infrastructure - it lives on worktrees, never on the canonical branch. See the [engagement protocol's worktree section](../../internals/engagement/README.md) for the general convention. The prototype-specific rule:
@@ -114,3 +125,4 @@ The design panel is exploration infrastructure - it lives on worktrees, never on
 - **Forgetting to bake decisions.** A panel with 10 archived rows and no active ones should have been cleaned up 8 decisions ago.
 - **Using this for single-page layouts.** If the variants only affect one route, use [ui.md](ui.md) instead - it's faster to evaluate.
 - **Ignoring the project's design system.** Variants must use the project's existing tokens and spacing. A variant that invents its own visual language can't be evaluated in context.
+- **Putting prototype tokens in the production token file.** See "Token isolation" above. Dark themes, alternate palettes, experimental spacing - all go in a separate file.
