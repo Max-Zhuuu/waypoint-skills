@@ -48,20 +48,24 @@
     {
       "id": "prioritize",
       "name": "Prioritize",
-      "instruction": "Rank items by: blocking status (blockers first), dependency order (prerequisites before dependents), severity, age. For migration projects: route migration screens to /tdd with port-checklist as reference.",
+      "references": ["../../schemas/routing-policy.json"],
+      "instruction": "Rank items by: blocking status (blockers first), dependency order (prerequisites before dependents), severity, age. For migration projects: route migration screens to /tdd with port-checklist as reference. Apply priority routing discipline from routing-policy.json when ranking: evidenced incident > missed commitment risk > direct unblock > goal contribution > uncertainty reduction > context-switch cost. Preserve current work by default.",
       "checklist": [
         "Items ranked by blocking status, deps, severity, age",
-        "Migration screens routed with port-checklist reference (if migration project)"
+        "Migration screens routed with port-checklist reference (if migration project)",
+        "Candidates ranked per routing policy priority order",
+        "Current work preserved unless justified switch"
       ]
     },
     {
       "id": "route",
       "name": "Route to verb",
-      "instruction": "Present ranked list with recommended verb per item: feature without spec -> /spec, feature with spec -> /breakdown (or /tdd if already decomposed), bug -> /diagnose, tech debt -> /tdd direct, question or ambiguity -> /grill-with-docs. User picks one. Hand off to the chosen verb.",
+      "instruction": "Present ranked list with recommended verb per item: feature without spec -> /spec, feature with spec -> /breakdown (or /tdd if already decomposed), bug -> /diagnose, tech debt -> /tdd direct, question or ambiguity -> /grill-with-docs. User picks one. Hand off to the chosen verb. When routing to a build verb, note likely impact facets as advisory context (e.g. 'this touches auth boundaries - will need denial tests').",
       "checklist": [
         "Ranked list presented with verb per item",
         "User has picked an item",
-        "Handed off to chosen verb"
+        "Handed off to chosen verb",
+        "Likely impact facets noted for downstream skill"
       ]
     }
   ],

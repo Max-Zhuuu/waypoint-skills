@@ -39,10 +39,12 @@
       "id": "hypothesize",
       "name": "Form hypothesis",
       "process": "process/debugging.md#hypothesize",
-      "instruction": "Form a specific, falsifiable hypothesis about the root cause. Write it down. Do not start fixing until the hypothesis is tested.",
+      "references": ["../../schemas/routing-policy.json"],
+      "instruction": "Form a specific, falsifiable hypothesis about the root cause. Write it down. Do not start fixing until the hypothesis is tested. Apply loop budget from routing policy: two evidence-producing repair attempts per failure fingerprint, then one bounded diagnostic pass.",
       "checklist": [
         "Hypothesis written (specific and falsifiable)",
-        "Hypothesis distinguishes this bug from similar-looking bugs"
+        "Hypothesis distinguishes this bug from similar-looking bugs",
+        "Loop budget tracked per failure fingerprint"
       ]
     },
     {
@@ -53,7 +55,8 @@
       "checklist": [
         "Instrumentation added",
         "Hypothesis confirmed or rejected",
-        "Root cause identified"
+        "Root cause identified",
+        "Each attempt is evidence-producing (not speculative rewrite or blind retry)"
       ]
     },
     {

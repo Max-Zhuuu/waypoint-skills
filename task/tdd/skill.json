@@ -20,12 +20,16 @@
       "name": "Plan",
       "reads": ["TESTING.md", "CONVENTIONS.md", "GLOSSARY.md"],
       "process": "process/tdd.md#plan",
-      "instruction": "Read project context. Check ADRs in the area you are touching. Confirm the behavior list and interface design with the user before writing code.",
+      "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
+      "instruction": "Read project context. Check ADRs in the area you are touching. Confirm the behavior list and interface design with the user before writing code. Read facets, test layers, and permutations from slice annotations. If missing (spec/breakdown didn't enumerate), enumerate now as failsafe. Verify completeness against test-selection.json dimensions.",
       "checklist": [
         "Project context read (TESTING.md, CONVENTIONS.md, GLOSSARY.md)",
         "ADRs checked in touched area",
         "Behavior list confirmed with user",
-        "Interface design confirmed with user"
+        "Interface design confirmed with user",
+        "Slice test annotations read (facets, layers, permutations)",
+        "If annotations missing: failsafe enumeration performed",
+        "Test layers match cheapest-layer-that-falsifies principle"
       ]
     },
     {
@@ -61,7 +65,8 @@
         "Test uses public interface only",
         "Test would survive internal refactor",
         "Code is minimal for this test",
-        "No speculative features added"
+        "No speculative features added",
+        "If same failure persists without new evidence, leave patch loop for diagnosis per routing-policy rerouting rules"
       ]
     },
     {
@@ -72,7 +77,8 @@
         "reference/mocking.md",
         "reference/deep-modules.md",
         "reference/interface-design.md",
-        "reference/refactoring.md"
+        "reference/refactoring.md",
+        "../../schemas/test-selection.json"
       ],
       "process": "process/tdd.md#refactor",
       "instruction": "Clean up implementation and tests. Consult reference docs for patterns. Check slice-marker.md for done-marker semantics when the slice is complete.",
@@ -80,7 +86,8 @@
         "No new test smells introduced",
         "Interfaces are deep (few methods, rich behavior)",
         "Duplication eliminated",
-        "Slice done marker written if slice complete (reference/slice-marker.md)"
+        "Slice done marker written if slice complete (reference/slice-marker.md)",
+        "Tests use cheapest falsifying layer; no circular oracles"
       ]
     },
     {

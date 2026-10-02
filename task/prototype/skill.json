@@ -14,11 +14,12 @@
       "id": "detect-branch",
       "name": "Detect prototype branch",
       "reads": ["CONVENTIONS.md", "ARCHITECTURE.md"],
-      "instruction": "Determine which prototype branch to use. Logic: purely functional behavior to validate (build a TUI or CLI app). UI: visual/layout changes to compare (duplicate existing components, wire to variant switcher). Design: design token or theme exploration (toggle panel). Read the project's taste profile if available.",
+      "instruction": "Determine which prototype branch to use. Logic: purely functional behavior to validate (build a TUI or CLI app). UI: visual/layout changes to compare (duplicate existing components, wire to variant switcher). Design: design token or theme exploration (toggle panel). Read the project's taste profile if available. For Design branch: load design-sensibility.md for token constraints, density spectrum, and interaction model. Prototypes must evaluate real dense tables, forms, empty/error states, and narrow layouts.",
       "references": ["phases/logic.md", "phases/ui.md", "phases/design.md"],
       "checklist": [
         "Branch selected (logic/ui/design)",
-        "Existing components identified for duplication (if UI branch)"
+        "Existing components identified for duplication (if UI branch)",
+        "Design-sensibility loaded for Design branch prototypes"
       ]
     },
     {
@@ -39,7 +40,9 @@
       "checklist": [
         "Multiple meaningful variations built",
         "Variations compared in context",
-        "Decision captured (which variant, why)"
+        "Decision captured (which variant, why)",
+        "Each variation evaluated against interaction states (hover, focus-visible, active, selected, disabled, loading, error, success)",
+        "Dense/narrow/empty/error layouts tested, not just hero screens"
       ]
     },
     {

@@ -29,12 +29,17 @@
       "name": "Grill requirements",
       "process": "process/requirements.md",
       "reads": ["SCOPE.md"],
-      "instruction": "Follow process/requirements.md. Grill scope, acceptance criteria, and trade-offs. Check SCOPE.md for scope protection rules - never recommend cutting features or endpoints without explicit user approval. Every acceptance criterion must be testable.",
+      "references": ["../../schemas/test-selection.json", "../../schemas/constraint-sheet.json"],
+      "instruction": "Follow process/requirements.md. Grill scope, acceptance criteria, and trade-offs. Check SCOPE.md for scope protection rules - never recommend cutting features or endpoints without explicit user approval. Every acceptance criterion must be testable. Enumerate test dimensions from test-selection.json for each acceptance criterion. Mark relevant dimensions and classify each (boundary, equivalence, invariant, transition, environmental). Mark irrelevant dimensions with reasons. For architecture decisions, apply constraint-sheet dimensions.",
       "checklist": [
         "Scope grilled - what's in, out, uncertain",
         "Acceptance criteria defined - each is testable",
         "Trade-offs surfaced and decided",
-        "Scope protection checked - no features cut without user approval"
+        "Scope protection checked - no features cut without user approval",
+        "Test dimensions enumerated per acceptance criterion",
+        "Each dimension classified or marked irrelevant with reason",
+        "Key test permutations identified (risk-to-test mapping applied)",
+        "Architecture-relevant criteria grounded against constraint sheet"
       ]
     },
     {

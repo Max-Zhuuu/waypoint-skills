@@ -50,11 +50,14 @@
       "name": "Scope validation",
       "enterprise": true,
       "reads": ["contracts/*-endpoints.json", "SCOPE.md", "CLAUDE.md"],
-      "instruction": "If endpoint registries or scope docs exist, verify completed work covers all 'in' items it should. Missing coverage is a new concern (type: issue, severity: BLOCK). Check SCOPE.md scope protection rules. Check endpoint registries for 'in' endpoints that should be covered by this entity.",
+      "references": ["../../schemas/routing-policy.json"],
+      "instruction": "If endpoint registries or scope docs exist, verify completed work covers all 'in' items it should. Missing coverage is a new concern (type: issue, severity: BLOCK). Check SCOPE.md scope protection rules. Check endpoint registries for 'in' endpoints that should be covered by this entity. Beyond scope coverage, verify obligation completion per routing policy. Coverage gaps (mandatory obligations with no executable check) prevent verified status.",
       "checklist": [
         "Endpoint registry checked for 'in' coverage",
         "SCOPE.md protection rules verified",
-        "Missing coverage logged as BLOCK concern"
+        "Missing coverage logged as BLOCK concern",
+        "Obligation completion verified (not just scope coverage)",
+        "Coverage gaps explicitly listed"
       ]
     },
     {
@@ -71,12 +74,14 @@
     {
       "id": "evaluate-gate",
       "name": "Evaluate gate and report",
-      "instruction": "Check current phase's gate criteria: items remaining, gate conditions satisfied, blocking concerns. The Blocking: verdict is authoritative - /ship consumes it for the afk gate (key 1b) and never re-derives from raw CONCERNS.md. Archive resolved concerns if Resolved section exceeds threshold. Report: '{entity}: {N} concerns resolved, {M} escalated. Blocking: {none | C-041, C-047}. Gate: {X}/{Y} criteria met. Remaining: {list}.'",
+      "instruction": "Check current phase's gate criteria: items remaining, gate conditions satisfied, blocking concerns. The Blocking: verdict is authoritative - /ship consumes it for the afk gate (key 1b) and never re-derives from raw CONCERNS.md. Archive resolved concerns if Resolved section exceeds threshold. Report: '{entity}: {N} concerns resolved, {M} escalated. Blocking: {none | C-041, C-047}. Gate: {X}/{Y} criteria met. Remaining: {list}.' Produce compact handoff packet: (1) what changed and which requirements satisfied, (2) data flow with trust/persistence boundaries, (3) architecture decision with revisit trigger, (4) requirement-to-test evidence table including blocked and untested claims, (5) remaining decisions.",
       "checklist": [
         "Gate criteria evaluated",
         "Blocking verdict authored",
         "Resolved concerns archived (if threshold exceeded)",
-        "Report printed"
+        "Report printed",
+        "Handoff packet includes evidence table",
+        "Blocked and untested claims explicitly listed"
       ]
     }
   ],

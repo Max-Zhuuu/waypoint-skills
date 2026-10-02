@@ -14,11 +14,12 @@
       "id": "load-state",
       "name": "Load workflow state",
       "reads": ["CLAUDE.md", "SCOPE.md"],
-      "instruction": "Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.md frontmatter and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date.",
+      "instruction": "Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.md frontmatter and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date. If routing-policy obligation state exists from a previous tdd/review cycle, surface unsatisfied obligations as part of the state report.",
       "checklist": [
         "CLAUDE.md Active Workflow section read",
         "Project type detected (if no workflow)",
-        "Recommendation ready (if no workflow)"
+        "Recommendation ready (if no workflow)",
+        "Unsatisfied obligations surfaced if present"
       ]
     },
     {

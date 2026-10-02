@@ -1,0 +1,68 @@
+{
+  "$id": "trust-boundaries.json",
+  "description": "Trust boundary checklist, enforcement principles, LLM cost boundaries.",
+
+  "boundaries": [
+    { "from": "browser", "to": "api", "question": "Is the session/access token valid for this service and operation?", "evidence": ["Issuer/audience/expiry checks", "Rejected-invalid-token tests"] },
+    { "from": "api", "to": "business_operation", "question": "Can this principal perform this action on this resource in this tenant?", "evidence": ["Resource-level denial tests", "Function-level denial tests", "Server-side enforcement"] },
+    { "from": "api_worker", "to": "data_store", "question": "Which service identity can read/write which data?", "evidence": ["Least-privilege role policy", "Tenant constraints", "Real persistence checks"] },
+    { "from": "queue", "to": "worker", "question": "What trusted scope does the job carry, and what is revalidated at execution?", "evidence": ["Revocation policy", "Stale-job tests", "Duplicate delivery and retry behavior"] },
+    { "from": "service", "to": "external_provider", "question": "Where is its credential held and what scopes/quotas apply?", "evidence": ["Server-side secret handling", "Timeout", "Bounded retries", "Audit evidence"] },
+    { "from": "service", "to": "llm", "question": "Which content may leave the system, and which tools can resulting output invoke?", "evidence": ["Data policy", "Server-side tool authorization", "Usage accounting"] }
+  ],
+
+  "enforcement_principles": [
+    "Gateway auth does NOT prove object-level authorization",
+    "Browser-hidden controls do NOT enforce permissions",
+    "Caches and object identifiers must NOT bypass tenant scope",
+    "Logs carry safe correlation/decision metadata, not raw tokens or secrets"
+  ],
+
+  "llm_cost": {
+    "measure": ["input_tokens", "output_tokens", "cached_input", "retrieval_tool_payloads", "retries", "task_outcome"],
+    "rules": [
+      "Per-user token cap alone is not authorization",
+      "Budget, rate, and concurrency enforcement belong in trusted services",
+      "Model text cannot grant permission to itself"
+    ]
+  },
+
+  "principles": [
+    { "id": "owasp-bola-matrix", "source": "OWASP API1:2023 (BOLA)", "principle": "For every endpoint taking an object ID: call with own resource, other tenant's resource, nonexistent, sequential probe. Assert 403/404.", "maps_to": "boundaries[api->business_operation]" },
+    { "id": "google-concurrency", "source": "Google eng-practices", "principle": "For parallel programming: carefully analyze for deadlocks and race conditions.", "maps_to": "boundaries[queue->worker]" }
+  ],
+
+  "exemplars": [
+    {
+      "id": "dual-secret-tenant",
+      "file": "bv-glomaris-vms/tests/admin/test_admin_tenant_access.py",
+      "lines": "1-171",
+      "pattern": "Dual-secret pattern: even if the code bug BOLA exploits existed, the database grants prevent escalation. Runtime test (only low-privilege secret requested) + source scan (no line fetches high-privilege name) + status-gate test (all 5 non-active statuses refused).",
+      "boundary": "api_worker -> data_store",
+      "why": "Defense in depth tested at both layers. OWASP BOLA textbook."
+    },
+    {
+      "id": "handle-errors-boundary",
+      "file": "bv-glomaris-vms/src/app/http_error.py",
+      "lines": "132-213",
+      "pattern": "Single boundary decorator: auth before handler, typed errors render intended response, unhandled exceptions become generic 500 without leaking stack traces. public=False default means auth is opt-out, not opt-in.",
+      "boundary": "browser -> api",
+      "why": "One enforcement point, never duplicated. Fail-closed default."
+    },
+    {
+      "id": "framework-tables-boundary",
+      "file": "bv-glomaris-vms/tests/test_framework_tables.py",
+      "lines": "1-167",
+      "pattern": "Security boundary pinned from both sides: served tables have no credential columns AND unserved tables have no route. Specific column names checked, not pattern-matched.",
+      "boundary": "api -> business_operation",
+      "why": "Named-column pinning means the test documents exactly what it protects against."
+    },
+    {
+      "id": "identity-contextvar",
+      "file": "bv-glomaris-vms/src/app/identity.py",
+      "pattern": "Calling principal carried via ContextVar from auth boundary to repositories. Audit stamps set without threading user= through 393 routes.",
+      "boundary": "api -> business_operation",
+      "why": "Principal flows through a trusted channel, not through handler parameters that could be misrouted."
+    }
+  ]
+}

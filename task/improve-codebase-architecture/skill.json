@@ -42,22 +42,25 @@
       "id": "deepen",
       "name": "Deepen",
       "process": "process/architecture-review.md#deepen",
-      "references": ["reference/deepening.md", "reference/interface-design.md"],
-      "instruction": "For chosen candidate: spawn 3+ parallel agents with different constraints (minimize interface, maximize flexibility, optimize for common caller, ports & adapters). Side effects inline: new domain term -> update GLOSSARY.md, rejected candidate with reason -> offer ADR.",
+      "references": ["reference/deepening.md", "reference/interface-design.md", "../../schemas/constraint-sheet.json"],
+      "instruction": "For chosen candidate: spawn 3+ parallel agents with different constraints (minimize interface, maximize flexibility, optimize for common caller, ports & adapters). Side effects inline: new domain term -> update GLOSSARY.md, rejected candidate with reason -> offer ADR. When spawning parallel agents for different constraints, align constraint dimensions with the constraint sheet (workload, state, trust, operations) to ensure structured evaluation.",
       "checklist": [
         "Multiple interface alternatives explored",
         "GLOSSARY.md updated (if new terms)",
-        "ADR offered (if rejected candidate has load-bearing reason)"
+        "ADR offered (if rejected candidate has load-bearing reason)",
+        "Parallel constraints aligned with constraint sheet dimensions"
       ]
     },
     {
       "id": "record",
       "name": "Record decisions",
       "process": "process/architecture-review.md#record",
+      "references": ["../../schemas/constraint-sheet.json"],
       "instruction": "Write proposals with concrete file paths and interface changes. Record any ADRs decided during deepening.",
       "checklist": [
         "Proposals written with concrete paths",
-        "ADRs recorded"
+        "ADRs recorded",
+        "Decisions recorded with constraint sheet structure and revisit trigger"
       ]
     }
   ],

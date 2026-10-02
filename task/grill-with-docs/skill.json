@@ -64,7 +64,8 @@
         "Terms validated against glossary",
         "Vague terms sharpened to canonical names",
         "Edge cases stress-tested with scenarios",
-        "Code cross-referenced where possible"
+        "Code cross-referenced where possible",
+        "Architecture questions grilled against constraint sheet dimensions (workload, state, trust, operations)"
       ]
     },
     {
@@ -80,11 +81,13 @@
     {
       "id": "offer-adrs",
       "name": "Offer ADRs sparingly",
-      "instruction": "Only offer an ADR when all three hold: (1) hard to reverse - cost of changing later is meaningful, (2) surprising without context - future reader will wonder why, (3) result of a real trade-off - genuine alternatives existed. If any is missing, skip the ADR. Consolidate related decisions into a single ADR. Each answers a root question with branching sub-decisions.",
+      "references": ["../../schemas/constraint-sheet.json"],
+      "instruction": "Only offer an ADR when all three hold: (1) hard to reverse - cost of changing later is meaningful, (2) surprising without context - future reader will wonder why, (3) result of a real trade-off - genuine alternatives existed. If any is missing, skip the ADR. Consolidate related decisions into a single ADR. Each answers a root question with branching sub-decisions. When an ADR passes the three-gate test, structure it using the constraint sheet: record workload assumptions, state ownership, trust boundaries, operations plan, one rejected alternative with revisit trigger.",
       "checklist": [
         "Three-gate test applied to every ADR candidate",
         "Related decisions consolidated into single ADRs",
-        "ADR format from schemas/adr-format.json used"
+        "ADR format from schemas/adr-format.json used",
+        "ADRs include constraint sheet dimensions and revisit trigger"
       ]
     }
   ],

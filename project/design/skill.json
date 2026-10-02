@@ -39,13 +39,15 @@
       "id": "wave-2-tokens",
       "name": "Wave 2 - Tokens",
       "references": ["phases/wave-2-tokens.md"],
-      "instruction": "Distill soul into finite token system. Follow wave-2-tokens.md. Color roles, type scale, spacing, motion. Checkpoint before advancing.",
+      "instruction": "Distill soul into finite token system. Follow wave-2-tokens.md. Color roles, type scale, spacing, motion. Checkpoint before advancing. Token system must include semantic surface, text, border, focus, and elevation tokens. Define a small set of elevation levels (resting, floating, modal). Reserve gradients for deliberate focal treatments.",
       "checklist": [
         "Color roles defined",
         "Type scale defined",
         "Spacing system defined",
         "Motion tokens defined",
-        "Wave 2 checkpoint passed"
+        "Wave 2 checkpoint passed",
+        "Elevation levels defined (resting, floating, modal)",
+        "Interaction states defined separately from visual style"
       ]
     },
     {

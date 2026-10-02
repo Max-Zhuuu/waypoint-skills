@@ -35,13 +35,17 @@
       "id": "decide-scope",
       "name": "Decide scope",
       "references": [
-        "reference/what-it-checks.md"
+        "reference/what-it-checks.md",
+        "../../schemas/trust-boundaries.json",
+        "../../schemas/routing-policy.json"
       ],
-      "instruction": "Standards sweep always runs. Intent pass only when no downstream reviewer will check it. Check DEPLOY.md adapter to decide. Fixed category vocabulary in reference/what-it-checks.md.",
+      "instruction": "Standards sweep always runs. Intent pass only when no downstream reviewer will check it. Check DEPLOY.md adapter to decide. Fixed category vocabulary in reference/what-it-checks.md. When changes cross a trust boundary, add denial test obligations and enforcement verification to review scope. Security facet obligations apply even without a rule catalogue.",
       "checklist": [
         "Standards sweep included",
         "Intent pass decision made (downstream reviewer check)",
-        "Category vocabulary from what-it-checks.md used (not invented)"
+        "Category vocabulary from what-it-checks.md used (not invented)",
+        "Trust boundaries identified for changed paths",
+        "Denial test obligations noted for boundary crossings"
       ]
     },
     {
@@ -53,7 +57,8 @@
         "contracts/*-endpoints.json"
       ],
       "references": [
-        "reference/what-it-checks.md"
+        "reference/what-it-checks.md",
+        "../../schemas/routing-policy.json"
       ],
       "instruction": "If the project has an architecture rule catalogue, read it. Map each finding to a rule family. Scope reductions (removing coverage of an 'in' endpoint) are always BLOCK severity. Check endpoint registries: if the diff removes coverage of an 'in' endpoint, that is a BLOCK finding. If the diff adds a new endpoint not in the registry, flag for registry update.",
       "checklist": [
@@ -61,7 +66,8 @@
         "Findings mapped to rule families where applicable",
         "Scope reductions flagged as BLOCK",
         "Endpoint registry checked for coverage gaps",
-        "New endpoints flagged for registry update"
+        "New endpoints flagged for registry update",
+        "Security facet obligations checked even without rule catalogue"
       ]
     },
     {

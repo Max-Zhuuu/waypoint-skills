@@ -1,0 +1,193 @@
+{
+  "$id": "routing-policy.json",
+  "description": "Execution routing policy: facet classification, evidence discipline, obligations, rerouting.",
+
+  "facets": [
+    {
+      "id": "local_presentation",
+      "triggers": [
+        "Component-local styling changed",
+        "No shared contract or runtime semantics changed"
+      ],
+      "obligations": [
+        "Relevant style/token checks",
+        "Visual inspection or targeted comparison",
+        "Overflow and accessible-name checks if affected"
+      ]
+    },
+    {
+      "id": "interaction_state",
+      "triggers": [
+        "Selection, focus, validation, derived totals, URL state, form state",
+        "Local component state transitions"
+      ],
+      "obligations": [
+        "Pure-logic assertions for computed values and state transitions",
+        "Component transition tests",
+        "Relevant keyboard/assistive semantics",
+        "Affected workflow checks"
+      ],
+      "invariant": "For computed properties, record inputs and invariant, not merely the formula. Test with independently specified examples - never copy the production selector into the oracle."
+    },
+    {
+      "id": "integration",
+      "triggers": [
+        "Transport (HTTP, WebSocket, queue)",
+        "Cache invalidation",
+        "External API calls, retries, polling, real-time subscriptions"
+      ],
+      "obligations": [
+        "Consumer expectation verification",
+        "Backend/provider verification",
+        "Real boundary smoke (not just mocked)",
+        "Timeout and failure handling",
+        "Retry safety (idempotency for mutations)"
+      ]
+    },
+    {
+      "id": "shared_impact",
+      "triggers": [
+        "Global tokens, shared component, shared schema",
+        "Dependency lockfile, design system changes, shared utility"
+      ],
+      "obligations": [
+        "Consumer closure (all known consumers)",
+        "Declared dynamic consumers",
+        "Broad fallback when mapping is incomplete"
+      ],
+      "invariant": "Use union of base and head graphs so deleted/moved nodes stay visible in impact analysis."
+    },
+    {
+      "id": "security_data_infrastructure",
+      "triggers": [
+        "Tenant isolation, permissions/authorization, credentials",
+        "Database migrations, IAM/RBAC, network rules",
+        "Encryption, PII handling, audit logging"
+      ],
+      "obligations": [
+        "Denial cases (unauthorized access must be rejected)",
+        "Persistence invariants",
+        "Infrastructure validation",
+        "Recovery/rollback evidence",
+        "Review obligations (may require human reviewer)"
+      ],
+      "invariant": "Gateway auth does not prove object-level auth. Browser-hidden controls do not enforce permissions. Caches must not bypass tenant scope."
+    },
+    {
+      "id": "uncertain_impact",
+      "triggers": [
+        "Missing mapping (changed file has no known contract)",
+        "Stale graph, unresolved dynamic dispatch",
+        "Global CSS without component mapping"
+      ],
+      "obligations": [
+        "Bounded investigation (time-boxed)",
+        "Conservative subsystem fallback suite",
+        "Repository fallback suite if subsystem cannot be established"
+      ]
+    }
+  ],
+
+  "facet_rules": {
+    "accumulative": true,
+    "short_circuit": false,
+    "rationale": "An auth change that also changes an API shape needs both sets of checks."
+  },
+
+  "evidence_status": {
+    "values": ["verified", "hypothesis", "contradicted", "unknown", "not_applicable"],
+    "rule": "Agent statements without supporting evidence (test output, grep, git diff, traces) remain hypotheses. Boolean false, unknown, and not-applicable are different states."
+  },
+
+  "obligation_lifecycle": {
+    "states": ["created", "mapped", "executed", "satisfied", "invalidated", "blocked", "gap"],
+    "removal_rule": "Remove only with recorded evidence that the obligation's premise is false.",
+    "gap_rule": "Mandatory obligation with no executable check prevents verified status."
+  },
+
+  "rerouting": {
+    "outcomes": [
+      { "condition": "Implementation violates accepted behavior", "action": "Repair implementation; rerun failed + affected checks" },
+      { "condition": "Test harness/environment failed", "action": "Diagnose environment; preserve implementation; report blocked" },
+      { "condition": "Test contradicts accepted contract", "action": "Correct test with contract reference; rerun relevant checks" },
+      { "condition": "Requirement ambiguous or newly requested", "action": "Produce contract decision with options and consequences" },
+      { "condition": "New dependency or boundary discovered", "action": "Add facet/obligations; recompute impact; retain task goal" },
+      { "condition": "Same failure persists without new evidence", "action": "Leave patch loop for diagnosis; stop speculative edits" },
+      { "condition": "Unrelated defect found", "action": "Capture deduplicated issue candidate; continue unless blocked" }
+    ],
+    "loop_budget": {
+      "repair_attempts_per_fingerprint": 2,
+      "diagnostic_passes": 1,
+      "evidence_producing_rule": "A repair is evidence-producing only if it changes implementation in response to a specific hypothesis informed by failure output. A blind retry is not evidence-producing.",
+      "exhaustion_result": "Reproducible blocked handoff, not success or automatic abandonment.",
+      "flaky_rule": "A test becoming green only after retry remains instability to investigate, not clean verification."
+    }
+  },
+
+  "fast_path": {
+    "criteria": [
+      "All changes mapped to known contracts",
+      "Known ownership for all affected nodes",
+      "No touched trust, persistence, or shared boundary",
+      "Accepted behavior unchanged",
+      "Relevant verification exists and passes",
+      "No unmapped or unresolved dynamic edges"
+    ],
+    "rule": "All must be affirmatively true. A one-line patch can still be high risk."
+  },
+
+  "priority_routing": {
+    "ranking": [
+      "Evidenced incident or irreversible harm",
+      "Missed commitment risk",
+      "Direct unblock of active goal",
+      "Goal contribution",
+      "Uncertainty reduction",
+      "Effort/context-switch cost"
+    ],
+    "default": "Preserve current work. Switch only for incident, explicit reprioritization, or genuine blocker.",
+    "max_candidates": 3
+  },
+
+  "principles": [
+    { "id": "nasa-r2", "source": "NASA Power of Ten, Rule 2 (Holzmann 2006)", "principle": "All loops must have a fixed, provable upper bound.", "maps_to": "rerouting.loop_budget" },
+    { "id": "nasa-r7", "source": "NASA Power of Ten, Rule 7", "principle": "Check every return value. Unchecked returns are unchecked obligations.", "maps_to": "obligation_lifecycle.gap_rule" },
+    { "id": "aws-formal", "source": "AWS formal methods (Newcombe et al., CACM 2015)", "principle": "Specify invariants for high-risk components, not everything. The facet classification identifies what needs deeper analysis; the fast path lets simple changes through.", "maps_to": "fast_path" },
+    { "id": "google-hermetic", "source": "Google SWE Book, Ch14", "principle": "Hermetic = deterministic. Tests touching shared state are flaky candidates.", "maps_to": "rerouting.loop_budget.flaky_rule" }
+  ],
+
+  "exemplars": [
+    {
+      "id": "auth-coverage-convention",
+      "file": "bv-glomaris-vms/tests/test_route_auth_coverage.py",
+      "lines": "364-441",
+      "pattern": "Convention enforcement: every registered route introspected at test time to verify auth decorator present. 3 named exceptions, pinned in both directions.",
+      "facets": ["security_data_infrastructure"],
+      "why": "Auth coverage enforced by test, not discipline. Renamed routes fail. Stale exemptions fail."
+    },
+    {
+      "id": "fail-closed-config",
+      "file": "bv-glomaris-vms/src/shared/globals.py",
+      "lines": "1-150",
+      "pattern": "Boot-time guards refuse to start with unsafe configuration: disabled auth on hosted sites, weak JWT secrets, missing passwords.",
+      "facets": ["security_data_infrastructure"],
+      "why": "Security posture is fail-closed. Defaults are the safe answer."
+    },
+    {
+      "id": "affected-paths",
+      "file": "bv-glomaris-vms/src/app/affected.py",
+      "lines": "1-267",
+      "pattern": "Write response envelope declares which GET paths a write invalidated. Test asserts every template matches a live registered route.",
+      "facets": ["integration", "shared_impact"],
+      "why": "Cache invalidation contract is machine-readable and tested. Renamed routes are test failures, not stale 404s."
+    },
+    {
+      "id": "confirmation-protocol",
+      "file": "bv-glomaris-vms/src/app/confirmations.py",
+      "lines": "1-194",
+      "pattern": "Stateless HTTP replaces modal UI dialogs. 409 response includes retry payload. Unknown keys refused. bool('false') pitfall addressed.",
+      "facets": ["integration", "interaction_state"],
+      "why": "Dangerous-direction validation: the one boolean interpretation that silently does the wrong thing is explicitly tested."
+    }
+  ]
+}

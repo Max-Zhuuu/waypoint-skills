@@ -14,6 +14,21 @@
     "decision": { "type": "string", "minLength": 1 },
     "consequences": { "type": "string", "minLength": 1 },
     "date": { "type": "string" },
-    "superseded_by": { "type": "integer", "minimum": 1 }
+    "superseded_by": { "type": "integer", "minimum": 1 },
+    "workload_assumptions": { "type": "object", "description": "Constraint-sheet workload dimension from constraint-sheet.json" },
+    "revisit_trigger": { "type": "string", "description": "Observable condition that would invalidate this decision" },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string" },
+          "date": { "type": "string" },
+          "version": { "type": "string" },
+          "applicability": { "type": "string" }
+        }
+      },
+      "description": "Research evidence with provenance from constraint-sheet.json"
+    }
   }
 }

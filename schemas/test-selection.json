@@ -1,0 +1,139 @@
+{
+  "$id": "test-selection.json",
+  "description": "Test selection strategy: layers, risk mapping, dimensions, coverage strategies.",
+
+  "layers": [
+    { "name": "types", "proves": "Shape agreement", "cost": 1 },
+    { "name": "schema_validation", "proves": "Transport constraints", "cost": 2 },
+    { "name": "domain_unit", "proves": "Meaning, logic, invariants", "cost": 3 },
+    { "name": "integration", "proves": "Boundary behavior", "cost": 4 },
+    { "name": "e2e", "proves": "Deployed composition", "cost": 5 }
+  ],
+  "layer_rule": "Use the cheapest layer that can falsify the requirement. Mocked E2E alone cannot verify the actual backend.",
+
+  "risk_to_test": [
+    { "risk": "Incorrect nested computed values", "test": "Independent input/output examples, invariants, property tests" },
+    { "risk": "State-sequence bug", "test": "Model-based command sequences with saved seeds and shrunk failures" },
+    { "risk": "Stale query response wins", "test": "Controlled interleavings: request A, request B, resolve B, resolve A" },
+    { "risk": "Duplicate persisted mutation", "test": "Concurrent and retried calls against real transaction/uniqueness" },
+    { "risk": "Cross-tenant access", "test": "Same operation with unauthorized resource and tenant combinations" },
+    { "risk": "Schema drift", "test": "Backend validation plus consumer/provider expectations" },
+    { "risk": "Broken deployment wiring", "test": "Thin real-stack smoke: auth, API, database, queue/worker, UI refresh" },
+    { "risk": "Generic visual regression", "test": "Promoted visual baseline, fixed fonts/data/environment, meaningful viewports" }
+  ],
+
+  "dimensions": [
+    { "name": "principal_role", "examples": ["admin", "user", "anonymous", "service_account"] },
+    { "name": "tenant_ownership", "examples": ["own_tenant", "other_tenant", "no_tenant"] },
+    { "name": "data_validity", "examples": ["valid", "empty", "malformed", "boundary", "unicode", "injection"] },
+    { "name": "cardinality", "examples": ["zero", "one", "many", "maximum", "overflow"] },
+    { "name": "operation_state", "examples": ["create", "read", "update", "delete", "transition", "concurrent"] },
+    { "name": "failure_mode", "examples": ["timeout", "network_error", "partial_failure", "retry", "rollback"] },
+    { "name": "concurrency", "examples": ["parallel_requests", "race_condition", "optimistic_lock_conflict"] },
+    { "name": "locale_time", "examples": ["timezone_boundary", "date_boundary", "locale_format"] },
+    { "name": "viewport", "examples": ["mobile", "tablet", "desktop", "narrow", "ultra_wide"] },
+    { "name": "accessibility", "examples": ["keyboard_nav", "screen_reader", "reduced_motion", "high_contrast"] }
+  ],
+  "dimension_classification": ["boundary", "equivalence_partition", "invariant", "transition", "environmental"],
+  "dimension_rule": "Enumerate relevant dimensions. Classify each. Mark irrelevant dimensions with explicit reasons.",
+
+  "coverage_strategies": [
+    { "situation": "Small finite decision table", "strategy": "exhaustive" },
+    { "situation": "Presentation/UI variations", "strategy": "Constrained pairwise or higher-strength" },
+    { "situation": "Dangerous interactions (auth, money, data loss)", "strategy": "Targeted adversarial" },
+    { "situation": "State sequences", "strategy": "Property/model-based exploration" }
+  ],
+  "coverage_rule": "Pairwise is NOT sufficient for authorization or transactional correctness.",
+
+  "anti_patterns": [
+    "Copying production selector into test oracle (circular test)",
+    "Mocking everything in an integration test",
+    "Testing only happy path for security-relevant operations",
+    "Visual regression with non-deterministic fonts/data/dates",
+    "Treating test count as quality metric",
+    "Re-running flaky test until green and calling it verified"
+  ],
+
+  "principles": [
+    { "id": "nasa-r5", "source": "NASA Power of Ten, Rule 5", "principle": "Minimum two assertions per critical function. Each dimension should produce at least boundary + invariant assertions.", "maps_to": "dimensions, dual_assertion_rule" },
+    { "id": "google-sizes", "source": "Google SWE Book, Ch14", "principle": "Test size = resource constraint, not type. Small: 1 thread, no I/O, <1s. Medium: localhost, <5min. Large: multi-machine, <15min.", "maps_to": "layers" },
+    { "id": "google-pyramid", "source": "Google SWE Book", "principle": "80/15/5 pyramid. Push tests down unless the requirement genuinely needs a higher layer.", "maps_to": "layer_rule" },
+    { "id": "nvidia-tier1", "source": "NVIDIA SkillEvaluator Tier 1", "principle": "Deterministic quality gates run offline. Schema, security, structural checks that either pass or don't.", "maps_to": "coverage_strategies" },
+    { "id": "owasp-bola", "source": "OWASP API1:2023 (BOLA)", "principle": "Every endpoint receiving an object ID must validate ownership. Test matrix: own resource, other tenant, nonexistent, sequential probe.", "maps_to": "dimensions[tenant_ownership]" }
+  ],
+
+  "dual_assertion_rule": "Each critical invariant should have both a runtime assertion AND a static/structural assertion. One proves current behavior; the other proves the code cannot silently regress.",
+
+  "exemplars": [
+    {
+      "id": "iban-boundaries",
+      "file": "bv-glomaris-vms/tests/test_iban.py",
+      "lines": "1-167",
+      "pattern": "Systematic boundary/equivalence partitioning for IBAN validation. Each boundary value isolates exactly one dimension. Docstrings explain why the wrong check would pass.",
+      "demonstrates": ["dimensions", "boundary", "equivalence_partition"]
+    },
+    {
+      "id": "auth-independent-oracle",
+      "file": "bv-glomaris-vms/tests/test_auth.py",
+      "lines": "58-66",
+      "pattern": "Hash pinned against external C# expression line numbers, not against the Python implementation. Tests parity with the oracle, not self-consistency.",
+      "demonstrates": ["anti_patterns (circular oracle avoidance)"]
+    },
+    {
+      "id": "golden-parity",
+      "file": "bv-glomaris-vms/tests/test_golden_parity.py",
+      "lines": "1-151",
+      "pattern": "Replays Python engine against JSON snapshots from running C# server. External oracle. Excluded accounts documented with 5-point evidence trail and separately asserted still written.",
+      "demonstrates": ["layers (integration via golden files)", "anti_patterns (independent oracle)"]
+    },
+    {
+      "id": "claim-lifecycle-computed",
+      "file": "bv-glomaris-vms/tests/test_claim_lifecycle.py",
+      "lines": "228-250",
+      "pattern": "Pins unobservable phantom field through the one stored figure computed from it. Direct assertion on phantom proves nothing; indirect assertion through dependent value does.",
+      "demonstrates": ["risk_to_test (incorrect nested computed values)"]
+    },
+    {
+      "id": "dual-assertion-tenant",
+      "file": "bv-glomaris-vms/tests/admin/test_admin_tenant_access.py",
+      "lines": "45-70",
+      "pattern": "Two independent proofs: runtime (only low-privilege secret requested) AND static source scan (no line fetches high-privilege secret name). NASA Rule 5 in practice.",
+      "demonstrates": ["dual_assertion_rule", "dimensions[tenant_ownership]"]
+    },
+    {
+      "id": "fixture-status-orchestration",
+      "file": "bv-glomaris-vms/tests/test_fixture_status.py",
+      "lines": "1-322",
+      "pattern": "Orchestration tested separately from effects. Stub records (method_name, status_at_call_time) - the property no other test sees.",
+      "demonstrates": ["risk_to_test (state-sequence bug)"]
+    },
+    {
+      "id": "keyvault-concurrency",
+      "file": "bv-glomaris-vms/tests/admin/test_admin_keyvault.py",
+      "lines": "173-205",
+      "pattern": "Thread-safety of singleton via real threading.Barrier. 8 threads contend, assert exactly 1 construction.",
+      "demonstrates": ["risk_to_test (duplicate persisted mutation)", "dimensions[concurrency]"]
+    },
+    {
+      "id": "hook-coverage-convention",
+      "file": "bv-glomaris-vms/tests/test_hook_coverage.py",
+      "lines": "1-1580",
+      "pattern": "1580-line convention enforcement test. Sweeps every lifecycle hook, verifies every substantive hook ported. Positive controls (strip evidence, pairs come back). Discovered 4 real defects.",
+      "demonstrates": ["coverage_strategies (exhaustive for finite decision tables)"]
+    },
+    {
+      "id": "route-shadowing",
+      "file": "bv-glomaris-vms/tests/test_route_shadowing.py",
+      "lines": "1-323",
+      "pattern": "Structural test: no two routes match the same URL for the same method. Born from real incident. Latent overlap set pinned in both directions.",
+      "demonstrates": ["coverage_strategies (exhaustive)", "anti_patterns (prevent ambiguity, don't resolve it)"]
+    },
+    {
+      "id": "ddl-faithfulness",
+      "file": "bv-glomaris-vms/tests/test_ddl_faithfulness.py",
+      "lines": "1-251",
+      "pattern": "DDL tested from both directions: no phantom column created AND every non-phantom column still is. Nullability verified per column against generator rules.",
+      "demonstrates": ["risk_to_test (schema drift)"]
+    }
+  ]
+}

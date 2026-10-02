@@ -43,24 +43,29 @@
     {
       "id": "decompose",
       "name": "Decompose into slices",
-      "instruction": "Each slice must be implementable (built and tested in one session), testable (clear done condition), scoped (bounded file set, ~5 files max), and ordered (explicit dependencies). Granularity: one slice per screen, API endpoint, or behavioral unit. Tag every slice Autonomy: afk|hitl - afk only when Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface. Untagged is treated as hitl downstream.",
+      "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
+      "instruction": "Each slice must be implementable (built and tested in one session), testable (clear done condition), scoped (bounded file set, ~5 files max), and ordered (explicit dependencies). Granularity: one slice per screen, API endpoint, or behavioral unit. Tag every slice Autonomy: afk|hitl - afk only when Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface. Untagged is treated as hitl downstream. Annotate each slice with impact facets from routing-policy.json so downstream skills know what testing obligations the slice carries. Include required test layers and key permutations from the spec's dimension enumeration.",
       "checklist": [
         "Every slice is implementable in one session",
         "Every slice has a clear done condition",
         "Every slice touches a bounded set of files",
         "Dependencies between slices are explicit",
-        "Every slice tagged afk or hitl"
+        "Every slice tagged afk or hitl",
+        "Each slice annotated with impact facets",
+        "Required test layers specified per slice",
+        "Test permutations from spec carried through to slice annotations"
       ]
     },
     {
       "id": "validate",
       "name": "Validate against scope",
-      "instruction": "Check each slice against the spec's acceptance criteria. Every criterion must be covered by at least one slice. Every slice must trace back to at least one criterion. Flag uncovered criteria as gaps. Flag untraceable slices as scope creep.",
+      "instruction": "Check each slice against the spec's acceptance criteria. Every criterion must be covered by at least one slice. Every slice must trace back to at least one criterion. Flag uncovered criteria as gaps. Flag untraceable slices as scope creep. Verify every test permutation from the spec is covered by at least one slice. Flag uncovered permutations as test gaps, not just scope gaps.",
       "checklist": [
         "Every acceptance criterion covered by at least one slice",
         "Every slice traces to at least one acceptance criterion",
         "Gaps flagged to user",
-        "Scope creep flagged to user"
+        "Scope creep flagged to user",
+        "Test permutations from spec traced to slices"
       ]
     },
     {

@@ -1,0 +1,76 @@
+{
+  "$id": "constraint-sheet.json",
+  "description": "Architecture decision constraint sheet and decision record format.",
+
+  "default_posture": "Prefer modular application with clear internal boundaries and managed identity/data services. Independent services only when measured scaling, isolation, ownership, or release needs warrant them.",
+
+  "dimensions": [
+    {
+      "name": "workload",
+      "fields": ["request_volume_burst_estimate", "latency_target", "cpu_vs_io", "job_duration", "payload_size", "concurrency", "data_growth"],
+      "note": "Label all estimates."
+    },
+    {
+      "name": "state",
+      "fields": ["owner", "source_of_truth", "transaction_boundary", "consistency_requirement", "retry_semantics", "cache_invalidation", "retention"]
+    },
+    {
+      "name": "trust",
+      "fields": ["principal", "tenant_context", "credential_token_audience", "enforcement_point", "object_action_permission", "prohibited_data_flows"]
+    },
+    {
+      "name": "operations",
+      "fields": ["failure_detection", "timeout_policy", "bounded_retry", "recovery_approach", "cost_ceiling", "operator_ownership"]
+    },
+    {
+      "name": "alternatives",
+      "fields": ["current_approach", "alternative_1", "alternative_2"],
+      "rule": "At most two credible alternatives. Document why the default fails or remains adequate."
+    },
+    {
+      "name": "revisit_trigger",
+      "fields": ["observable_condition"],
+      "rule": "An observable condition that would invalidate the decision. Example: sustained queue latency exceeding agreed SLO."
+    }
+  ],
+
+  "decision_record_fields": {
+    "required": ["context", "workload_assumptions", "decision", "rationale", "revisit_trigger"],
+    "optional": ["alternatives", "evidence"]
+  },
+
+  "stopping_criteria": [
+    "Requirements satisfied",
+    "Material risks accounted for",
+    "Recommendation is reversible or has reviewed migration plan"
+  ],
+  "stopping_rule": "Research only concrete decisions whose answer could change the implementation.",
+
+  "principles": [
+    { "id": "google-review", "source": "Google eng-practices (looking-for.md)", "principle": "Design > Functionality > Complexity > Tests. Solve the problem you know needs solving now.", "maps_to": "stopping_criteria" },
+    { "id": "aws-lightweight", "source": "AWS ShardStore (CACM 2015)", "principle": "Lightweight embedded specification in the code rather than separate formal system.", "maps_to": "default_posture" }
+  ],
+
+  "exemplars": [
+    {
+      "id": "schema-driven-codegen",
+      "file": "bv-glomaris-vms/data/schema.json + tools/generate_dataclasses.py",
+      "pattern": "Single schema.json is source of truth for field names, types, max lengths, PK, defaults. Codegen produces dataclasses. No hand-written model can drift from the database.",
+      "demonstrates": ["dimensions.state (source_of_truth)"]
+    },
+    {
+      "id": "unit-of-work",
+      "file": "bv-glomaris-vms/src/app/db/unit_of_work.py",
+      "lines": "1-148",
+      "pattern": "UoW owns connection, cursor, commit/rollback boundary. Savepoints for partial-batch rollback. Teardown asymmetric: commit failures propagate, rollback/close failures swallowed.",
+      "demonstrates": ["dimensions.state (transaction_boundary)", "dimensions.operations (recovery_approach)"]
+    },
+    {
+      "id": "declarative-read-grids",
+      "file": "bv-glomaris-vms/src/app/read_grid.py",
+      "lines": "1-246",
+      "pattern": "100+ read routes declared as frozen dataclasses, validated at import time. Unknown tables, unknown columns, mismatched route params all fail before any request.",
+      "demonstrates": ["default_posture (modular app with clear internal boundaries)"]
+    }
+  ]
+}
