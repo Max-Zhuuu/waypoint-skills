@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "check-in",
   "status": "stable",
-  "description": "Session entry point. Loads context, reports state, detects enterprise artefacts. Use at every session start.",
+  "description": "Session entry point. Load context, report state, detect enterprise artefacts.",
 
   "chain": {
     "from": [],
@@ -13,49 +13,30 @@
     {
       "id": "load-state",
       "name": "Load workflow state",
-      "reads": ["CLAUDE.md", "SCOPE.md", "SCOPE.json", ".claude/project-state.json"],
-      "instruction": "Run ~/.claude/scripts/discover-project-state.sh to refresh .claude/project-state.json. Read it for current project state (framework, test runner, docs status, external connectors). Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.json or SCOPE.md and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date. If routing-policy obligation state exists from a previous tdd/review cycle, surface unsatisfied obligations as part of the state report.",
-      "checklist": [
-        "CLAUDE.md Active Workflow section read",
-        "Project type detected (if no workflow)",
-        "Recommendation ready (if no workflow)",
-        "Unsatisfied obligations surfaced if present"
-      ]
+      "reads": ["CLAUDE.md", "SCOPE.json", "SCOPE.md", ".claude/project-state.json"],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh to refresh project state. Read Active Workflow from CLAUDE.md. No workflow: detect project type, recommend /triage or /setup. Workflow exists: note active skill, phase, date. Surface unsatisfied obligations from prior cycles.",
+      "checklist": ["State loaded and mode detected", "Obligations surfaced if present"]
     },
     {
       "id": "read-concerns",
       "name": "Read concerns and handoffs",
       "reads": ["CONCERNS.md", "docs/_local/handoffs/"],
-      "instruction": "Read CONCERNS.md if it exists. Parse summary header for counts. Read Open, Investigating, and Blocked sections. Skip Resolved. Check docs/_local/handoffs/ for recent handoff docs (sorted by date prefix) - read the most recent for continuity context.",
-      "checklist": [
-        "CONCERNS.md parsed (or noted absent)",
-        "Open/Investigating/Blocked counts tallied",
-        "Handoff doc read (if exists)"
-      ]
+      "instruction": "Read CONCERNS.md if exists. Parse summary header. Read Open + Investigating + Blocked, skip Resolved. Check docs/_local/handoffs/ for most recent handoff doc.",
+      "checklist": ["Concerns parsed", "Handoff doc read (if exists)"]
     },
     {
       "id": "enterprise-scan",
       "name": "Detect enterprise artefacts",
       "enterprise": true,
-      "reads": ["architecture-rule-catalogue.md", "contracts/*-endpoints.json", "docs/implementation/parity/"],
-      "instruction": "Scan for enterprise artefacts: architecture rule catalogue, endpoint registries, parity verification systems. If found, check scope and rule compliance for the current phase's work. Surface any violations in the report.",
-      "checklist": [
-        "Rule catalogue checked (if exists)",
-        "Endpoint registries checked (if exist)",
-        "Parity systems checked (if exist)",
-        "Scope compliance assessed",
-        "Violations noted for report"
-      ]
+      "reads": ["architecture-rule-catalogue.md", "contracts/*-endpoints.json"],
+      "instruction": "Scan for rule catalogue, endpoint registries, parity systems. If found, check scope and rule compliance for current phase. Surface violations.",
+      "checklist": ["Enterprise artefacts checked", "Violations noted"]
     },
     {
       "id": "worktree-hygiene",
       "name": "Worktree and downstream check",
-      "instruction": "Run git worktree list. Identify stale worktrees (branches already merged). Report if count exceeds expected active tasks. If DEPLOY.md exists, surface downstream view: staged-not-promoted PRs and blocked PRs (link, category, status only - never act on them).",
-      "checklist": [
-        "git worktree list checked",
-        "Stale worktrees identified",
-        "Downstream view surfaced (if DEPLOY.md exists)"
-      ]
+      "instruction": "Run git worktree list. Identify stale worktrees (merged branches). If DEPLOY.md exists, surface staged-not-promoted and blocked PRs (link, category, status only).",
+      "checklist": ["Stale worktrees identified", "Downstream view surfaced"]
     }
   ],
 

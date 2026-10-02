@@ -1,78 +1,152 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "scope-format.json",
+  "title": "Project Scope",
   "description": "Project scope definition. Replaces SCOPE.md. Produced by /setup phase 0.",
-
-  "product": {
-    "problem": "What problem this solves, in one sentence.",
-    "audience": "Who it's for.",
-    "summary": "Done in two sentences."
-  },
-
-  "scope": {
-    "in": [
-      {
-        "feature": "Feature or capability name",
-        "owner": "Who owns this decision",
-        "priority": "critical | high | medium | low",
-        "source": "Where this requirement came from (user request, migration, compliance, etc.)"
+  "type": "object",
+  "required": ["product", "scope"],
+  "additionalProperties": true,
+  "properties": {
+    "product": {
+      "type": "object",
+      "description": "What this product is and who it's for.",
+      "required": ["problem", "audience", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "problem": { "type": "string", "description": "What problem this solves, in one sentence." },
+        "audience": { "type": "string", "description": "Who it's for." },
+        "summary": { "type": "string", "description": "Done in two sentences." }
       }
-    ],
-    "out": [
-      {
-        "feature": "Feature explicitly excluded",
-        "reason": "Why it's out",
-        "revisit": "Condition that would bring it back in, or 'never'"
-      }
-    ],
-    "uncertain": [
-      {
-        "feature": "Feature with unresolved scope",
-        "decision_owner": "Who decides",
-        "validate_by": "ISO date by which this must be resolved",
-        "default_if_unresolved": "in | out"
-      }
-    ]
-  },
-
-  "dependencies": {
-    "external": [
-      {
-        "name": "System or service name",
-        "status": "available | in_progress | blocked | unknown",
-        "owner": "Who to contact",
-        "blocker_for": ["Which in-scope features this blocks"]
-      }
-    ],
-    "internal": [
-      {
-        "name": "Internal prerequisite",
-        "status": "done | in_progress | not_started",
-        "blocks": ["What depends on this"]
-      }
-    ]
-  },
-
-  "constraints": {
-    "compliance": [],
-    "performance": {
-      "latency_target": null,
-      "throughput_target": null,
-      "availability_target": null
     },
-    "browser_support": [],
-    "timeline": {
-      "deadline": null,
-      "milestones": []
+    "scope": {
+      "type": "object",
+      "description": "What's in, out, and uncertain.",
+      "required": ["in", "out"],
+      "additionalProperties": false,
+      "properties": {
+        "in": {
+          "type": "array",
+          "description": "Features and capabilities in scope.",
+          "items": {
+            "type": "object",
+            "required": ["feature", "priority"],
+            "additionalProperties": false,
+            "properties": {
+              "feature": { "type": "string", "description": "Feature or capability name." },
+              "owner": { "type": "string", "description": "Who owns this decision." },
+              "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"], "description": "Priority level." },
+              "source": { "type": "string", "description": "Where this requirement came from (user request, migration, compliance, etc.)." }
+            }
+          }
+        },
+        "out": {
+          "type": "array",
+          "description": "Features explicitly excluded.",
+          "items": {
+            "type": "object",
+            "required": ["feature", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "feature": { "type": "string", "description": "Feature explicitly excluded." },
+              "reason": { "type": "string", "description": "Why it's out." },
+              "revisit": { "type": "string", "description": "Condition that would bring it back in, or 'never'." }
+            }
+          }
+        },
+        "uncertain": {
+          "type": "array",
+          "description": "Features with unresolved scope.",
+          "items": {
+            "type": "object",
+            "required": ["feature", "decision_owner", "validate_by"],
+            "additionalProperties": false,
+            "properties": {
+              "feature": { "type": "string", "description": "Feature with unresolved scope." },
+              "decision_owner": { "type": "string", "description": "Who decides." },
+              "validate_by": { "type": "string", "format": "date", "description": "ISO date by which this must be resolved." },
+              "default_if_unresolved": { "type": "string", "enum": ["in", "out"], "description": "What happens if not resolved by the date." }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "External and internal prerequisites.",
+      "additionalProperties": false,
+      "properties": {
+        "external": {
+          "type": "array",
+          "description": "External systems or services this depends on.",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "System or service name." },
+              "status": { "type": "string", "enum": ["available", "in_progress", "blocked", "unknown"], "description": "Current availability." },
+              "owner": { "type": "string", "description": "Who to contact." },
+              "blocker_for": { "type": "array", "items": { "type": "string" }, "description": "Which in-scope features this blocks." }
+            }
+          }
+        },
+        "internal": {
+          "type": "array",
+          "description": "Internal prerequisites.",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Internal prerequisite." },
+              "status": { "type": "string", "enum": ["done", "in_progress", "not_started"], "description": "Current state." },
+              "blocks": { "type": "array", "items": { "type": "string" }, "description": "What depends on this." }
+            }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Non-functional requirements and hard limits.",
+      "additionalProperties": true,
+      "properties": {
+        "compliance": { "type": "array", "items": { "type": "string" }, "description": "Regulatory or policy requirements." },
+        "performance": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "latency_target": { "type": ["string", "null"], "description": "Target response time." },
+            "throughput_target": { "type": ["string", "null"], "description": "Target throughput." },
+            "availability_target": { "type": ["string", "null"], "description": "Target uptime (e.g. 99.9%)." }
+          }
+        },
+        "browser_support": { "type": "array", "items": { "type": "string" }, "description": "Browsers that must be supported." },
+        "timeline": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "deadline": { "type": ["string", "null"], "format": "date", "description": "Hard deadline if any." },
+            "milestones": { "type": "array", "items": { "type": "string" }, "description": "Key milestone dates." }
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Known risks and mitigations.",
+      "items": {
+        "type": "object",
+        "required": ["description", "likelihood", "impact"],
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string", "description": "What could go wrong." },
+          "likelihood": { "type": "string", "enum": ["high", "medium", "low"], "description": "Probability." },
+          "impact": { "type": "string", "enum": ["high", "medium", "low"], "description": "Severity." },
+          "mitigation": { "type": "string", "description": "What we're doing about it." },
+          "owner": { "type": "string", "description": "Who watches this." }
+        }
+      }
     }
-  },
-
-  "risks": [
-    {
-      "description": "What could go wrong",
-      "likelihood": "high | medium | low",
-      "impact": "high | medium | low",
-      "mitigation": "What we're doing about it",
-      "owner": "Who watches this"
-    }
-  ]
+  }
 }

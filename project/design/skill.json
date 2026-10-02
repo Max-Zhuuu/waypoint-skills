@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "design",
   "status": "stable",
-  "description": "Create and evolve a design system through three waves: Soul, Tokens, Proof. Prototypes to validate each wave.",
+  "description": "Design system through three waves: Soul, Tokens, Proof.",
 
   "chain": {
     "from": [],
@@ -15,23 +15,20 @@
     {
       "id": "context-and-mode",
       "name": "Context gate and mode detection",
-      "references": ["reference/context-gate.md", "reference/mode-detection.md"],
-      "instruction": "Gate on understanding, not file existence. Detect mode: greenfield, resume, retrofit, or evolve. Read guardrails for prototyping philosophy and fixation detection.",
       "references": ["reference/context-gate.md", "reference/mode-detection.md", "reference/guardrails.md"],
+      "instruction": "Gate on understanding, not file existence. Detect mode: greenfield/resume/retrofit/evolve.",
       "checklist": [
         "Context gate passed",
-        "Mode detected (greenfield/resume/retrofit/evolve)"
+        "Mode detected"
       ]
     },
     {
       "id": "wave-1-soul",
       "name": "Wave 1 - Soul",
       "references": ["phases/wave-1-soul.md"],
-      "instruction": "Find the product's design identity. Follow wave-1-soul.md. Checkpoint before advancing: 'Wave 1 complete. {summary}. Ready for Wave 2?'",
+      "instruction": "Find product's design identity per wave-1-soul.md. Checkpoint before advancing.",
       "checklist": [
-        "Product verb identified",
-        "Emotional range defined",
-        "Competitive audit done",
+        "Product verb, emotional range, competitive audit done",
         "Wave 1 checkpoint passed"
       ]
     },
@@ -39,26 +36,21 @@
       "id": "wave-2-tokens",
       "name": "Wave 2 - Tokens",
       "references": ["phases/wave-2-tokens.md"],
-      "instruction": "Distill soul into finite token system. Follow wave-2-tokens.md. Color roles, type scale, spacing, motion. Checkpoint before advancing. Token system must include semantic surface, text, border, focus, and elevation tokens. Define a small set of elevation levels (resting, floating, modal). Reserve gradients for deliberate focal treatments.",
+      "instruction": "Distill soul into finite token system per wave-2-tokens.md. Color roles, type scale, spacing, motion. Semantic surface/text/border/focus/elevation tokens. Elevation levels: resting, floating, modal. Interaction states separate from visual style.",
       "checklist": [
-        "Color roles defined",
-        "Type scale defined",
-        "Spacing system defined",
-        "Motion tokens defined",
-        "Wave 2 checkpoint passed",
-        "Elevation levels defined (resting, floating, modal)",
-        "Interaction states defined separately from visual style"
+        "Color, type, spacing, motion tokens defined",
+        "Elevation levels and interaction states defined",
+        "Wave 2 checkpoint passed"
       ]
     },
     {
       "id": "wave-3-proof",
       "name": "Wave 3 - Proof",
       "references": ["phases/wave-3-proof.md", "reference/document-family.md"],
-      "instruction": "Stress-test tokens on real screens. Follow wave-3-proof.md. Write design system docs per document-family.md.",
+      "instruction": "Stress-test tokens on real screens per wave-3-proof.md. Write design system docs per document-family.md.",
       "checklist": [
         "Tokens stress-tested on real screens",
-        "Design system docs written",
-        "Wave 3 checkpoint passed"
+        "Design system docs written"
       ]
     }
   ],
@@ -74,7 +66,7 @@
   "engagement": {
     "emits": ["concerns"],
     "writes": ["docs/design/"],
-    "override": "requires SCOPE.md or equivalent context; at Tier 1, prompts inline",
+    "override": "requires SCOPE.md or equivalent; at Tier 1, prompts inline",
     "manifest": true,
     "chain_dispatch": false
   },

@@ -1,90 +1,177 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "deploy-format.json",
+  "title": "Deployment Configuration",
   "description": "Deployment configuration definition. Replaces DEPLOY.md. Produced by /setup.",
-
-  "environments": [
-    {
-      "name": "Environment name (dev, staging, beta, production)",
-      "url": "Base URL",
-      "branch": "Git branch that deploys here",
-      "auto_deploy": false,
-      "provider": "Azure SWA | Vercel | AWS | manual",
-      "infrastructure": {
-        "compute": "Azure Functions | Lambda | Container | VM",
-        "database": "Postgres | CosmosDB | none",
-        "storage": "Blob | S3 | none",
-        "cdn": "Azure CDN | CloudFront | none"
-      },
-      "access": {
-        "who": ["Roles or teams that can access this environment"],
-        "auth": "How access is controlled"
+  "type": "object",
+  "required": ["environments", "ci"],
+  "additionalProperties": true,
+  "properties": {
+    "environments": {
+      "type": "array",
+      "description": "Deployment environments.",
+      "items": {
+        "type": "object",
+        "required": ["name", "provider"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Environment name (dev, staging, beta, production)." },
+          "url": { "type": "string", "format": "uri", "description": "Base URL." },
+          "branch": { "type": "string", "description": "Git branch that deploys here." },
+          "auto_deploy": { "type": "boolean", "description": "Whether deploys happen automatically on push." },
+          "provider": { "type": "string", "description": "Hosting provider (Azure SWA, Vercel, AWS, manual)." },
+          "infrastructure": {
+            "type": "object",
+            "description": "Infrastructure backing this environment.",
+            "additionalProperties": true,
+            "properties": {
+              "compute": { "type": "string", "description": "Compute platform (Azure Functions, Lambda, Container, VM)." },
+              "database": { "type": "string", "description": "Database (Postgres, CosmosDB, none)." },
+              "storage": { "type": "string", "description": "Object storage (Blob, S3, none)." },
+              "cdn": { "type": "string", "description": "CDN (Azure CDN, CloudFront, none)." }
+            }
+          },
+          "access": {
+            "type": "object",
+            "description": "Who can access this environment.",
+            "additionalProperties": false,
+            "properties": {
+              "who": { "type": "array", "items": { "type": "string" }, "description": "Roles or teams with access." },
+              "auth": { "type": "string", "description": "How access is controlled." }
+            }
+          }
+        }
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "description": "How changes move between environments.",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered list of environments in the promotion path."
+        },
+        "gates": {
+          "type": "array",
+          "description": "Requirements for promoting between environments.",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "requires"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string", "description": "Source environment." },
+              "to": { "type": "string", "description": "Target environment." },
+              "requires": { "type": "array", "items": { "type": "string" }, "description": "What must pass before promotion." },
+              "approver": { "type": "string", "description": "Who approves (automated, role, or named person)." },
+              "automated": { "type": "boolean", "description": "Whether promotion is automatic." }
+            }
+          }
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "description": "Continuous integration configuration.",
+      "required": ["platform", "checks"],
+      "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "string", "description": "CI platform (GitHub Actions, Azure DevOps, GitLab CI)." },
+        "pipeline": { "type": "string", "description": "Path to CI config file." },
+        "checks": {
+          "type": "array",
+          "description": "CI checks that run on each push/PR.",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "blocking"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Check name." },
+              "type": { "type": "string", "enum": ["lint", "typecheck", "unit_test", "integration_test", "e2e", "security_scan", "build"], "description": "Check category." },
+              "blocking": { "type": "boolean", "description": "Whether this check must pass to merge." },
+              "timeout": { "type": "string", "description": "Maximum duration." }
+            }
+          }
+        }
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "description": "Secret management.",
+      "additionalProperties": false,
+      "properties": {
+        "management": { "type": "string", "description": "Secret management system (Azure KeyVault, AWS Secrets Manager, GitHub Secrets, .env)." },
+        "rotation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "policy": { "type": "string", "description": "How often secrets rotate." },
+            "automated": { "type": "boolean", "description": "Whether rotation is automated." }
+          }
+        },
+        "classification": {
+          "type": "array",
+          "description": "Secret categories and their access controls.",
+          "items": {
+            "type": "object",
+            "required": ["name", "location"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Secret category." },
+              "location": { "type": "string", "description": "Where it's stored." },
+              "access": { "type": "string", "description": "Who/what can read it." }
+            }
+          }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "description": "Rollback strategy.",
+      "additionalProperties": false,
+      "properties": {
+        "strategy": { "type": "string", "enum": ["revert_commit", "previous_deployment", "feature_flag", "blue_green"], "description": "Rollback approach." },
+        "automated": { "type": "boolean", "description": "Whether rollback is automated." },
+        "steps": { "type": "array", "items": { "type": "string" }, "description": "Manual rollback steps if not automated." },
+        "data_considerations": { "type": "string", "description": "What happens to data written between deploy and rollback." }
+      }
+    },
+    "monitoring": {
+      "type": "object",
+      "description": "Production monitoring.",
+      "additionalProperties": false,
+      "properties": {
+        "health_check": { "type": "string", "description": "Health check endpoint or mechanism." },
+        "alerts": {
+          "type": "array",
+          "description": "Alert configurations.",
+          "items": {
+            "type": "object",
+            "required": ["condition", "channel", "severity"],
+            "additionalProperties": false,
+            "properties": {
+              "condition": { "type": "string", "description": "What triggers the alert." },
+              "channel": { "type": "string", "description": "Where it's sent (PagerDuty, Slack, email)." },
+              "severity": { "type": "string", "enum": ["critical", "warning", "info"], "description": "Alert severity." }
+            }
+          }
+        },
+        "dashboards": {
+          "type": "array",
+          "description": "Monitoring dashboards.",
+          "items": {
+            "type": "object",
+            "required": ["name", "purpose"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Dashboard name." },
+              "url": { "type": "string", "format": "uri", "description": "Dashboard link." },
+              "purpose": { "type": "string", "description": "What this dashboard tells you." }
+            }
+          }
+        }
       }
     }
-  ],
-
-  "promotion": {
-    "path": ["dev", "staging", "beta", "production"],
-    "gates": [
-      {
-        "from": "Source environment",
-        "to": "Target environment",
-        "requires": ["What must pass before promotion"],
-        "approver": "Who approves (automated | role | named person)",
-        "automated": false
-      }
-    ]
-  },
-
-  "ci": {
-    "platform": "GitHub Actions | Azure DevOps | GitLab CI",
-    "pipeline": "Path to CI config",
-    "checks": [
-      {
-        "name": "Check name",
-        "type": "lint | typecheck | unit_test | integration_test | e2e | security_scan | build",
-        "blocking": true,
-        "timeout": "Duration"
-      }
-    ]
-  },
-
-  "secrets": {
-    "management": "Azure KeyVault | AWS Secrets Manager | GitHub Secrets | .env",
-    "rotation": {
-      "policy": "How often secrets rotate",
-      "automated": false
-    },
-    "classification": [
-      {
-        "name": "Secret category",
-        "location": "Where it's stored",
-        "access": "Who/what can read it"
-      }
-    ]
-  },
-
-  "rollback": {
-    "strategy": "revert_commit | previous_deployment | feature_flag | blue_green",
-    "automated": false,
-    "steps": [],
-    "data_considerations": "What happens to data written between deploy and rollback"
-  },
-
-  "monitoring": {
-    "health_check": "Endpoint or mechanism",
-    "alerts": [
-      {
-        "condition": "What triggers the alert",
-        "channel": "Where it's sent (PagerDuty, Slack, email)",
-        "severity": "critical | warning | info"
-      }
-    ],
-    "dashboards": [
-      {
-        "name": "Dashboard name",
-        "url": "Link",
-        "purpose": "What this dashboard tells you"
-      }
-    ]
   }
 }

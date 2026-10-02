@@ -6,87 +6,58 @@ status: deprecated
 
 > **Deprecated.** Absorbed into `/check-in --deep` mode.
 
-A periodic checkpoint that forces clarity on direction, surfaces what you have been avoiding, and produces a focused plan.
-This is not a status report - it is a course correction.
+Periodic checkpoint forcing clarity on direction. Surfaces what you've been avoiding, produces focused plan.
+Not a status report - a course correction. Surfaces and records; does not fix. Bugs found -> capture as findings, propose as next work. No mid-audit debugging.
 
-Throughout, reorient surfaces and records; it does not fix.
-When the snapshot turns up a bug, a failing test, or a broken build, capture it as a finding and propose it as next work - do not repair it mid-audit, which turns a compass check into an unplanned debugging session.
+## Phase 1 - Snapshot
 
-## Phase 1 - Snapshot the landscape
+Build honest picture from actual state, not memory or self-assessment.
+Read [reference/snapshot-checklist.md](reference/snapshot-checklist.md): CONCERNS.md, tracking docs, recent git, test health.
 
-Build an honest picture of where the project stands.
-Do not rely on memory, conversation history, or the user's self-assessment.
-Read actual state.
-
-Read [reference/snapshot-checklist.md](reference/snapshot-checklist.md) and work through it in order: CONCERNS.md, tracking docs, recent git history, test health.
-
-### Present the snapshot
-
-Compact dashboard:
+Present compact dashboard:
 
 ```
 Inventory: 45 ported / 12 remaining / 8 blocked
-Recent momentum: 18/30 commits on wiring, 0 on testing (drift)
+Momentum: 18/30 commits on wiring, 0 on testing (drift)
 Concerns: 14 open (6 questions, 5 flags, 3 assumptions), oldest: 3 weeks
 Tests: 142 pass, 2 skip, 0 fail
 ```
 
-Flag **drift indicators**: any axis with 0 commits in the last 30, any tracker category that has not advanced in 2+ weeks, any concern open > 1 week.
+Flag drift: any axis with 0 commits in 30 days, any category stalled 2+ weeks, any concern open > 1 week.
 
-## Phase 2 - State the goal
+## Phase 2 - State goal
 
-In 1-2 sentences, state what the current milestone goal appears to be, derived from recent work patterns and roadmap docs.
+1-2 sentences: what current milestone goal appears to be from work patterns and roadmap.
 
-Challenge it with `AskUserQuestion`:
+Challenge with AskUserQuestion:
+- **Stay the course** - goal correct, progress real
+- **Narrow** - scope crept, need cuts
+- **Pivot** - goal should change
+- **No clear goal** - that's the problem
 
-- **Stay the course** - the goal is correct and progress is real
-- **Narrow it** - goal is right but scope has crept; need to cut
-- **Pivot** - the goal itself should change based on what we have learned
-- **No clear goal** - that is the problem
+Narrow -> ask what to cut. Pivot -> ask new goal. No clear goal -> heavier goal-setting in Phase 3.
 
-If "Narrow": ask what to cut.
-If "Pivot": ask what the new goal is.
-If "No clear goal": make Phase 3 heavier on goal-setting.
+## Phase 3 - Hard questions
 
-## Phase 3 - Surface hard questions
-
-The point of this phase is to make the user decide things they have been deferring.
-Deferred decisions accumulate drag.
-
-Read [reference/hard-questions.md](reference/hard-questions.md) for where to look and how to frame each question via `AskUserQuestion`.
-Each decision becomes a concern resolution or a new concern.
+Force decisions on deferred items. Deferred decisions accumulate drag.
+Read [reference/hard-questions.md](reference/hard-questions.md). Each decision -> concern resolution or new concern.
 
 ## Phase 4 - Axis audit
 
-Read [reference/axis-audit.md](reference/axis-audit.md) for the axis table, adapt it to the project, and rate each axis.
+Read [reference/axis-audit.md](reference/axis-audit.md). Adapt to project, rate each axis.
 
-## Phase 5 - Reprioritize and record
+## Phase 5 - Reprioritize
 
-Based on Phases 2-4, produce a plan and emit findings.
+From Phases 2-4, produce plan and emit findings to CONCERNS.md:
+- Drift indicators -> issue concerns
+- Decisions -> resolved or new concerns
+- Behind/blocking axes -> issue concerns if not tracked
 
-### Emit findings to CONCERNS.md
+Read [reference/output-format.md](reference/output-format.md) for work-items format, deprioritized list, summary.
 
-- Each drift indicator from Phase 1 -> issue concern (source: /reorient)
-- Each decision from Phase 3 -> resolved concern (with decision:) or new question/assumption
-- Each "behind" or "blocking" axis rating -> issue concern if not already tracked
-
-Read [reference/output-format.md](reference/output-format.md) for the work-items format, the deprioritized list, the concurrent agent plan, and how to print the summary.
-
-## Engagement
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-Emits: flags, audit results, concern triage
-Writes: creates CONCERNS.md if absent (seeded with this run's findings)
-Override: Tier 1 behavior differs - creates CONCERNS.md rather than working without it.
 ## Exit
 
-When the audit is complete, suggest next steps:
-- If priorities shifted -> "/check-in reads your open concerns and proposes what to work on next."
-- If concerns need resolution -> "/wrapup updates GLOSSARY.md, conventions, and specs to match resolved decisions."
-- If scope needs revision -> "/grill-with-docs to stress-test and update SCOPE.md."
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
-
-## Tone
-
-Direct. This skill exists because the user asked to be challenged on their direction.
-Do not soften hard questions. If a feature should be cut, recommend cutting it.
-Keep the whole interaction under 15 minutes. This is a compass check, not a strategy offsite.
+- Priorities shifted -> /check-in
+- Concerns need resolution -> /wrapup
+- Scope needs revision -> /grill-with-docs
+- On exit, run the shared exit sequence: see [the exit sequence](../../internals/engagement/README.md#exit-sequence).

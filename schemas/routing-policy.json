@@ -163,7 +163,9 @@
       "lines": "364-441",
       "pattern": "Convention enforcement: every registered route introspected at test time to verify auth decorator present. 3 named exceptions, pinned in both directions.",
       "facets": ["security_data_infrastructure"],
-      "why": "Auth coverage enforced by test, not discipline. Renamed routes fail. Stale exemptions fail."
+      "why": "Auth coverage enforced by test, not discipline. Renamed routes fail. Stale exemptions fail.",
+      "snippet": "def test_every_route_authenticated():\n    unprotected = []\n    for route, handler in _http_routes():\n        marker = getattr(handler, '_auth_marker', None)\n        if marker == 'enforced': continue\n        if marker == 'public' and route in PUBLIC: continue\n        unprotected.append(route)\n    assert not unprotected",
+      "generalized_pattern": "Introspect every registered route at test time to verify auth decorator present; named exceptions pinned both directions so renamed routes fail."
     },
     {
       "id": "fail-closed-config",
@@ -171,7 +173,9 @@
       "lines": "1-150",
       "pattern": "Boot-time guards refuse to start with unsafe configuration: disabled auth on hosted sites, weak JWT secrets, missing passwords.",
       "facets": ["security_data_infrastructure"],
-      "why": "Security posture is fail-closed. Defaults are the safe answer."
+      "why": "Security posture is fail-closed. Defaults are the safe answer.",
+      "snippet": "if AUTH_ENABLED and not JWT_SECRET:\n    raise RuntimeError('JWT_SECRET required when auth enabled.')\nif IS_DEPLOYED and not AUTH_ENABLED:\n    raise RuntimeError('Auth disabled in deployed environment.')",
+      "generalized_pattern": "Refuse to start when security-critical config missing or weak; safe default is failure, not permissive fallback."
     },
     {
       "id": "affected-paths",
@@ -179,7 +183,9 @@
       "lines": "1-267",
       "pattern": "Write response envelope declares which GET paths a write invalidated. Test asserts every template matches a live registered route.",
       "facets": ["integration", "shared_impact"],
-      "why": "Cache invalidation contract is machine-readable and tested. Renamed routes are test failures, not stale 404s."
+      "why": "Cache invalidation contract is machine-readable and tested. Renamed routes are test failures, not stale 404s.",
+      "snippet": "RESOURCES = frozenset(v for n, v in globals().items()\n    if n.isupper() and isinstance(v, str))\ndef resource(template, *values):\n    if template not in RESOURCES:\n        raise ValueError(f'unknown resource: {template}')\n    return template.format(*values)",
+      "generalized_pattern": "Write responses declare invalidated read endpoints as machine-readable data; test verifies every target matches a live route."
     },
     {
       "id": "confirmation-protocol",
@@ -187,7 +193,9 @@
       "lines": "1-194",
       "pattern": "Stateless HTTP replaces modal UI dialogs. 409 response includes retry payload. Unknown keys refused. bool('false') pitfall addressed.",
       "facets": ["integration", "interaction_state"],
-      "why": "Dangerous-direction validation: the one boolean interpretation that silently does the wrong thing is explicitly tested."
+      "why": "Dangerous-direction validation: the one boolean interpretation that silently does the wrong thing is explicitly tested.",
+      "snippet": "# 409 with retry payload:\n{'status': 409, 'confirmations': [{'key': 'deleteCard'}],\n 'retry': {'confirm': {'deleteCard': true}}}\n# Unknown keys rejected, bool('false')==True tested",
+      "generalized_pattern": "Replace modal dialogs with stateless 409+retry; unknown keys rejected, dangerous boolean edge cases explicitly tested."
     }
   ]
 }

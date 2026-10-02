@@ -1,24 +1,16 @@
 ---
 name: wrapup
-description: "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb."
+description: "Resolve concerns, cascade to shared docs, evaluate gate. Run after implementation."
 status: stable
 ---
 
 Read [skill.json](./skill.json). Initialize checklists. Execute steps sequentially.
-Single reconciliation point for all doc updates after implementation.
-Ending the session? Say "I'm wrapping up" or invoke with `handoff` to write a continuity doc and boot prompt.
-
-Does NOT: ship, merge, review code (that is /review), or promote.
+Single reconciliation point for doc updates after implementation.
+Invoke with `handoff` to write continuity doc and boot prompt.
 
 ## Engagement
-See [the engagement protocol](../../internals/engagement/README.md).
-Emits: issues, resolution notes
-Writes: CONCERNS.md (creates if absent), docs/_local/handoffs/ (handoff mode)
-Override: cascade only fires for docs that exist
+See [engagement protocol](../../internals/engagement/README.md).
 
 ## Exit
-- /review for a critic pass before shipping.
+- /review for critic pass before shipping.
 - /check-in for next session.
-
-## Tone
-Brief and mechanical. Resolve, cascade, report.

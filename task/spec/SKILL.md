@@ -1,20 +1,17 @@
 ---
 name: spec
-description: "Grill scope and acceptance criteria, output a spec file. Use when starting a feature or requirements are vague."
+description: "Grill scope and acceptance criteria, output spec. Use when starting feature or requirements vague."
 status: stable
 ---
 
 Read [skill.json](./skill.json). Initialize checklists. Execute steps sequentially.
-Process methodology: [process/requirements.md](../../process/requirements.md).
-Detects recently-grilled docs and skips its own grill phase.
+Process: [process/requirements.md](../../process/requirements.md).
+Detects recently-grilled docs, skips own grill phase if current.
 
-## Engagement
-See [the engagement protocol](../../internals/engagement/README.md).
-Emits: concerns (type: question, assumption)
-Writes: none (spec output delegated to file or issue tracker per J1 rules)
+See [engagement protocol](../../internals/engagement/README.md).
 
 ## Exit
-- /breakdown to decompose into implementation slices.
+- /breakdown to decompose into slices.
 
-## Tone
-Thorough. Every acceptance criterion is testable. No vague requirements.
+## Engagement
+See engagement protocol.

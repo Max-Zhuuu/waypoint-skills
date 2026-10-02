@@ -1,61 +1,28 @@
 ---
 name: design
-description: "Create and evolve a design system through three waves: Soul, Tokens, Proof. Prototypes to validate each wave."
+description: "Create and evolve a design system through three waves: Soul, Tokens, Proof."
 status: stable
-metadata:
-  hermes:
-    tags: [design-system, tokens, visual-design, interaction-design]
-    category: project
-  status: stable
 ---
 
-Design system coordinator.
-Routes to the right wave based on project state, tracks cross-wave concerns, and manages the design document family.
+Design system coordinator. Routes to right wave based on project state.
 
-Each wave is a separate document with its own instructions:
-- [WAVE-1-SOUL.md](phases/wave-1-soul.md) - find the product's design identity
-- [WAVE-2-TOKENS.md](phases/wave-2-tokens.md) - distill the soul into a finite token system
-- [WAVE-3-PROOF.md](phases/wave-3-proof.md) - stress-test the tokens on real screens
-
-Other skills consume the outputs: /prototype for visual exploration, /spec for component specs, /tdd and /create for implementation.
-
-## Context gate
+Waves:
+- [WAVE-1-SOUL.md](phases/wave-1-soul.md) - product's design identity
+- [WAVE-2-TOKENS.md](phases/wave-2-tokens.md) - distill soul into token system
+- [WAVE-3-PROOF.md](phases/wave-3-proof.md) - stress-test tokens on real screens
 
 Read [reference/context-gate.md](reference/context-gate.md) before proceeding. Gate on understanding, not file existence.
+Read [reference/mode-detection.md](reference/mode-detection.md) for greenfield/resume/retrofit/evolve.
+Read [reference/guardrails.md](reference/guardrails.md) for prototyping philosophy and fixation detection.
 
-## Mode detection
-
-Read [reference/mode-detection.md](reference/mode-detection.md) to detect greenfield, resume, retrofit, or evolve mode.
-
-### Wave entry
-
-After detecting mode, read the appropriate wave document and follow its instructions.
-Each wave document is self-contained - it has its own steps, prototyping triggers, and output checklist.
-
-Between waves, checkpoint: "Wave {N} complete. {summary}. Ready for wave {N+1}, or revisit anything?"
-
-## Guardrails
-
-Read [reference/guardrails.md](reference/guardrails.md) for prototyping philosophy, fixation detection, skill handoffs, and rules.
-
-## Document family
-
-Read [reference/document-family.md](reference/document-family.md) for the full document ownership table.
-
-## Tone
-
-Principled. Every token choice traces to a product decision.
-
-## Exit
-
-- /prototype to validate decisions visually.
-- /create to implement tokens in code.
+Between waves, checkpoint: "Wave {N} complete. {summary}. Ready for wave {N+1}?"
 
 Does NOT write component code. Produces design tokens and system specs.
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
+
+## Exit
+- /prototype to validate decisions visually.
+- /create to implement tokens in code.
+- On exit, run the shared exit sequence: see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
 
 ## Engagement
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-Emits: design decisions, design brief, token rationale
-Writes: docs/design/ directory tree
-Override: requires SCOPE.md or equivalent project context. At Tier 1, prompts user for minimal context (product verb, density, primary task) inline rather than hard-gating. This is the only skill that gates on project context - see rationale in DESIGN-DECISIONS.md.
+See engagement protocol.

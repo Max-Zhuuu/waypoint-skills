@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "wrapup",
   "status": "stable",
-  "description": "Resolve concerns, cascade to shared docs, evaluate gate criteria. Run after /tdd or any implementation verb.",
+  "description": "Resolve concerns, cascade to shared docs, evaluate gate.",
 
   "chain": {
     "from": ["tdd"],
@@ -17,72 +17,42 @@
       "id": "gather-concerns",
       "name": "Gather concerns",
       "reads": ["CONCERNS.md"],
-      "instruction": "Read CONCERNS.md. Filter open concerns that reference the current entity (by refs: field or entity name in description). Also include any concerns emitted by the implementation verb this session.",
-      "checklist": [
-        "CONCERNS.md read",
-        "Entity-related concerns filtered",
-        "Session-emitted concerns included"
-      ]
+      "instruction": "Read CONCERNS.md. Filter open concerns referencing current entity (by refs or name). Include session-emitted concerns.",
+      "checklist": ["Entity-related concerns gathered"]
     },
     {
       "id": "spec-drift",
       "name": "Spec drift check",
-      "instruction": "Re-read the entity's documentation (feature spec, logic doc). Compare field-by-field against what was built. Check: field count matches, field types match, edge cases handled, error states covered, naming consistent with GLOSSARY.md. Any mismatch becomes a new concern (type: issue, source: /wrapup). If no spec/logic doc exists: report 'No {doc type} found. Drift check skipped.' and continue.",
-      "checklist": [
-        "Entity docs re-read",
-        "Field-by-field comparison done",
-        "Mismatches logged as concerns",
-        "Or: drift check skipped (no docs)"
-      ]
+      "instruction": "Re-read entity docs (spec, logic doc). Compare field-by-field against what was built: count, types, edge cases, errors, naming vs GLOSSARY.md. Mismatches become concerns (type: issue). No docs: report skipped, continue.",
+      "checklist": ["Drift check done or skipped"]
     },
     {
       "id": "resolve",
-      "name": "Resolve each concern",
-      "instruction": "For each concern, apply the resolution cascade: (1) read the authoritative source for ground truth, (2) write or run a test to prove which side is correct, (3) escalate to user with specifics only if source and tests are ambiguous. Never skip to step 3. Resolution: update spec, fix code, or both. Intentional differences go in spec Change Log with rationale. Mark resolved in CONCERNS.md: status [resolved], resolved: date, decision: line. Move to Resolved section. Recalculate summary header.",
-      "checklist": [
-        "Each concern resolved via cascade (source -> test -> escalate)",
-        "CONCERNS.md updated with resolutions",
-        "Summary header recalculated"
-      ]
+      "name": "Resolve concerns",
+      "instruction": "For each concern: (1) read authoritative source, (2) write/run test to prove which side correct, (3) escalate only if ambiguous. Never skip to 3. Update spec, fix code, or both. Mark resolved in CONCERNS.md with date and decision. Recalculate summary header.",
+      "checklist": ["Each concern resolved via cascade", "CONCERNS.md updated"]
     },
     {
       "id": "scope-validation",
       "name": "Scope validation",
       "enterprise": true,
-      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "CLAUDE.md"],
+      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "SCOPE.json"],
       "references": ["../../schemas/routing-policy.json"],
-      "instruction": "If endpoint registries or scope docs exist, verify completed work covers all 'in' items it should. Missing coverage is a new concern (type: issue, severity: BLOCK). Check SCOPE.md scope protection rules. Check endpoint registries for 'in' endpoints that should be covered by this entity. Beyond scope coverage, verify obligation completion per routing policy. Coverage gaps (mandatory obligations with no executable check) prevent verified status.",
-      "checklist": [
-        "Endpoint registry checked for 'in' coverage",
-        "SCOPE.md protection rules verified",
-        "Missing coverage logged as BLOCK concern",
-        "Obligation completion verified (not just scope coverage)",
-        "Coverage gaps explicitly listed"
-      ]
+      "instruction": "Verify completed work covers all 'in' items. Missing coverage = BLOCK concern. Verify obligation completion per routing policy. Coverage gaps prevent verified status.",
+      "checklist": ["Scope coverage verified", "Obligation completion checked"]
     },
     {
       "id": "cascade",
       "name": "Cascade to shared docs",
-      "reads": ["CONVENTIONS.md", "SCOPE.md", "ARCHITECTURE.md", "TESTING.md"],
-      "instruction": "Check whether any resolution affects shared docs. Cascade: naming changes -> CONVENTIONS.md, scope changes -> SCOPE.md, dependency changes -> ARCHITECTURE.md, test expectations -> TESTING.md. Only cascade to docs that exist - do not create docs just to cascade into them. For milestone-type concerns, offer spec archival.",
-      "checklist": [
-        "Cascade targets identified",
-        "Affected shared docs updated",
-        "Milestone concerns offered archival"
-      ]
+      "reads": ["CONVENTIONS.md", "SCOPE.md", "ARCHITECTURE.md"],
+      "instruction": "Cascade resolutions: naming -> CONVENTIONS, scope -> SCOPE, dependencies -> ARCHITECTURE. Only cascade to docs that exist. Milestone concerns: offer archival.",
+      "checklist": ["Affected docs updated"]
     },
     {
       "id": "evaluate-gate",
       "name": "Evaluate gate and report",
-      "instruction": "Check current phase's gate criteria: items remaining, gate conditions satisfied, blocking concerns. The Blocking: verdict is authoritative - /ship consumes it for the afk gate (key 1b) and never re-derives from raw CONCERNS.md. Archive resolved concerns if Resolved section exceeds threshold. Report: '{entity}: {N} concerns resolved, {M} escalated. Blocking: {none | C-041, C-047}. Gate: {X}/{Y} criteria met. Remaining: {list}.' Produce compact handoff packet: (1) what changed and which requirements satisfied, (2) data flow with trust/persistence boundaries, (3) architecture decision with revisit trigger, (4) requirement-to-test evidence table including blocked and untested claims, (5) remaining decisions.",
-      "checklist": [
-        "Gate criteria evaluated",
-        "Blocking verdict authored",
-        "Resolved concerns archived (if threshold exceeded)",
-        "Report printed",
-        "Handoff packet includes evidence table",
-        "Blocked and untested claims explicitly listed"
-      ]
+      "instruction": "Check gate: items remaining, conditions satisfied, blocking concerns. Blocking verdict is authoritative for /ship. Archive resolved if threshold exceeded. Report: '{entity}: {N} resolved, {M} escalated. Blocking: {list}. Gate: {X}/{Y} met.' Produce handoff packet: changes + requirements satisfied, data flow with boundaries, evidence table with blocked/untested claims.",
+      "checklist": ["Gate evaluated", "Blocking verdict authored", "Handoff packet produced"]
     }
   ],
 
@@ -96,7 +66,7 @@
 
   "engagement": {
     "emits": ["issues", "resolution notes"],
-    "writes": ["CONCERNS.md (creates if absent)", "docs/_local/handoffs/ (handoff mode)"],
+    "writes": ["CONCERNS.md", "docs/_local/handoffs/"],
     "override": "cascade only fires for docs that exist",
     "manifest": true,
     "chain_dispatch": true

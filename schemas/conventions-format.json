@@ -1,83 +1,164 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "conventions-format.json",
+  "title": "Project Conventions",
   "description": "Project conventions definition. Replaces CONVENTIONS.md. Produced by /setup phase 1.",
-
-  "naming": {
-    "files": {
-      "components": "PascalCase.vue | PascalCase.tsx",
-      "utilities": "camelCase.ts",
-      "tests": "*.test.ts | *.spec.ts",
-      "styles": "kebab-case.css | co-located",
-      "constants": "UPPER_SNAKE_CASE"
+  "type": "object",
+  "required": ["naming", "file_placement", "patterns"],
+  "additionalProperties": true,
+  "properties": {
+    "naming": {
+      "type": "object",
+      "description": "Naming conventions for files, code, and routes.",
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "type": "object",
+          "description": "File naming conventions by type.",
+          "additionalProperties": true,
+          "properties": {
+            "components": { "type": "string", "description": "Component file naming (e.g. PascalCase.vue)." },
+            "utilities": { "type": "string", "description": "Utility file naming (e.g. camelCase.ts)." },
+            "tests": { "type": "string", "description": "Test file naming (e.g. *.test.ts)." },
+            "styles": { "type": "string", "description": "Style file naming (e.g. kebab-case.css)." },
+            "constants": { "type": "string", "description": "Constants file naming (e.g. UPPER_SNAKE_CASE)." }
+          }
+        },
+        "code": {
+          "type": "object",
+          "description": "Code identifier naming conventions.",
+          "additionalProperties": true,
+          "properties": {
+            "functions": { "type": "string", "description": "Function naming convention." },
+            "classes": { "type": "string", "description": "Class naming convention." },
+            "constants": { "type": "string", "description": "Constant naming convention." },
+            "private": { "type": "string", "description": "Private member naming convention." },
+            "boolean": { "type": "string", "description": "Boolean variable naming convention (e.g. is/has/should prefix)." }
+          }
+        },
+        "routes": {
+          "type": "object",
+          "description": "URL/route naming conventions.",
+          "additionalProperties": true,
+          "properties": {
+            "api": { "type": "string", "description": "API route convention (e.g. /api/resource-name)." },
+            "pages": { "type": "string", "description": "Page route convention (e.g. /resource-name/:id)." }
+          }
+        }
+      }
     },
-    "code": {
-      "functions": "camelCase",
-      "classes": "PascalCase",
-      "constants": "UPPER_SNAKE_CASE",
-      "private": "_prefixed | #private",
-      "boolean": "is/has/should prefix"
+    "file_placement": {
+      "type": "object",
+      "description": "Where different types of files live.",
+      "required": ["structure", "rules"],
+      "additionalProperties": false,
+      "properties": {
+        "structure": { "type": "string", "enum": ["feature-sliced", "domain-driven", "layer-based"], "description": "Overall file organization strategy." },
+        "rules": {
+          "type": "array",
+          "description": "Specific placement rules.",
+          "items": {
+            "type": "object",
+            "required": ["pattern", "location"],
+            "additionalProperties": false,
+            "properties": {
+              "pattern": { "type": "string", "description": "What kind of file." },
+              "location": { "type": "string", "description": "Where it goes." },
+              "example": { "type": "string", "description": "Concrete path example." }
+            }
+          }
+        }
+      }
     },
-    "routes": {
-      "api": "/api/resource-name (kebab-case, plural nouns)",
-      "pages": "/resource-name/:id"
+    "patterns": {
+      "type": "object",
+      "description": "Required and prohibited code patterns.",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "array",
+          "description": "Patterns that must be followed.",
+          "items": {
+            "type": "object",
+            "required": ["pattern", "where", "why"],
+            "additionalProperties": false,
+            "properties": {
+              "pattern": { "type": "string", "description": "Pattern name." },
+              "where": { "type": "string", "description": "Where it must be used." },
+              "why": { "type": "string", "description": "Why this pattern is required." },
+              "example_file": { "type": "string", "description": "Path to an exemplar in the codebase." }
+            }
+          }
+        },
+        "prohibited": {
+          "type": "array",
+          "description": "Patterns that must not be used.",
+          "items": {
+            "type": "object",
+            "required": ["pattern", "instead", "why"],
+            "additionalProperties": false,
+            "properties": {
+              "pattern": { "type": "string", "description": "What not to do." },
+              "instead": { "type": "string", "description": "What to do instead." },
+              "why": { "type": "string", "description": "Why this is prohibited." }
+            }
+          }
+        }
+      }
+    },
+    "imports": {
+      "type": "object",
+      "description": "Import ordering and boundary rules.",
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Import group ordering (e.g. builtin, external, internal, relative)."
+        },
+        "aliases": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Path alias mappings (e.g. '@shared' -> 'src/shared')."
+        },
+        "rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Import boundary rules (e.g. no cross-domain imports)."
+        }
+      }
+    },
+    "formatting": {
+      "type": "object",
+      "description": "Code formatting configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "tool": { "type": "string", "description": "Formatting tool (prettier, biome, ruff, black)." },
+        "config": { "type": "string", "description": "Path to config file." },
+        "line_length": { "type": "integer", "description": "Max line length." },
+        "indent": { "type": "string", "description": "Indentation style (e.g. 2 spaces, tabs)." }
+      }
+    },
+    "error_handling": {
+      "type": "object",
+      "description": "Error handling conventions.",
+      "additionalProperties": false,
+      "properties": {
+        "strategy": { "type": "string", "enum": ["typed_errors", "error_codes", "exceptions"], "description": "Error handling approach." },
+        "boundary": { "type": "string", "description": "Where errors are caught and transformed." },
+        "user_facing": { "type": "string", "description": "How errors are presented to the user." }
+      }
+    },
+    "testing": {
+      "type": "object",
+      "description": "Testing conventions.",
+      "additionalProperties": false,
+      "properties": {
+        "framework": { "type": "string", "description": "Test framework (vitest, pytest, jest)." },
+        "location": { "type": "string", "enum": ["co-located", "separate", "top-level"], "description": "Where test files live relative to source." },
+        "naming": { "type": "string", "description": "Test naming convention (describe/it, test_ prefix)." },
+        "coverage_target": { "type": ["number", "null"], "description": "Coverage percentage target if any." }
+      }
     }
-  },
-
-  "file_placement": {
-    "structure": "feature-sliced | domain-driven | layer-based",
-    "rules": [
-      {
-        "pattern": "What kind of file",
-        "location": "Where it goes",
-        "example": "Concrete path example"
-      }
-    ]
-  },
-
-  "patterns": {
-    "required": [
-      {
-        "pattern": "Pattern name",
-        "where": "Where it must be used",
-        "why": "Why this pattern is required",
-        "example_file": "Path to an exemplar in the codebase"
-      }
-    ],
-    "prohibited": [
-      {
-        "pattern": "What not to do",
-        "instead": "What to do instead",
-        "why": "Why this is prohibited"
-      }
-    ]
-  },
-
-  "imports": {
-    "order": ["builtin", "external", "internal", "relative"],
-    "aliases": {},
-    "rules": [
-      "No cross-domain imports (feature A must not import from feature B internals)",
-      "Shared code lives in shared/"
-    ]
-  },
-
-  "formatting": {
-    "tool": "prettier | biome | ruff | black",
-    "config": "Path to config file",
-    "line_length": 100,
-    "indent": "2 spaces | 4 spaces | tabs"
-  },
-
-  "error_handling": {
-    "strategy": "typed_errors | error_codes | exceptions",
-    "boundary": "Where errors are caught and transformed",
-    "user_facing": "How errors are presented to the user"
-  },
-
-  "testing": {
-    "framework": "vitest | pytest | jest",
-    "location": "co-located | separate __tests__/ | top-level tests/",
-    "naming": "describe/it | test_ prefix",
-    "coverage_target": null
   }
 }

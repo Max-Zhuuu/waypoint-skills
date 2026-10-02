@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "ship",
   "status": "draft",
-  "description": "Assemble a spec-grounded PR and propose an afk/hitl routing. The outbound seam from local completion to a delivery pipeline. Run after /wrapup.",
+  "description": "Assemble spec-grounded PR, propose afk/hitl routing. Run after /wrapup.",
 
   "chain": {
     "from": ["review"],
@@ -15,22 +15,17 @@
       "name": "Compose Intent block",
       "reads": ["DEPLOY.md"],
       "references": ["reference/adapters.md", "reference/intent-template.md"],
-      "instruction": "Resolve DEPLOY.md adapter. Write ## Intent from spec, ADR delta, and resolved concern decision lines. Never read the diff to describe the change (diff-derived Intent grades itself). Mark block 'spec-derived'.",
+      "instruction": "Resolve DEPLOY.md adapter. Write ## Intent from spec + ADR delta + resolved concern decisions. Never derive from diff. Mark 'spec-derived'.",
       "checklist": [
-        "DEPLOY.md adapter resolved",
-        "Intent block written from spec (not diff)",
-        "Intent marked spec-derived"
+        "Adapter resolved, Intent written from spec (not diff)"
       ]
     },
     {
       "id": "assess-autonomy",
       "name": "Assess autonomy and preconditions",
-      "instruction": "Precondition check: Intent present, every slice traces to acceptance criterion, tests green, no open blocking concern. Compose afk gate from 3 keys: (1a) every slice tagged afk, (1b) wrapup blocking verdict is 'none', (2) no diff path matches load-bearing glob. Propose afk iff all three hold; any failure -> hitl.",
+      "instruction": "Preconditions: Intent present, slice-to-criterion tracing verified, tests green, no blocking concerns. Compose afk gate: (1a) all slices tagged afk, (1b) wrapup blocking = none, (2) no load-bearing glob hit. All hold = afk, any fail = hitl.",
       "checklist": [
-        "Intent present and non-empty",
-        "Slice-to-criterion tracing verified",
-        "Tests green (or reported unverified)",
-        "No open blocking concerns",
+        "Preconditions verified",
         "Autonomy gate composed (afk or hitl)"
       ]
     },
@@ -38,11 +33,9 @@
       "id": "route-and-open",
       "name": "Route and open PR",
       "references": ["reference/adapters.md"],
-      "instruction": "Route per 2x3 engagement table. Print compact session digest and clickable link. Open or hold based on engagement tier. Surface reviewed-state as non-blocking note. Ship proposes, the target disposes.",
+      "instruction": "Route per engagement table. Print session digest + link. Open or hold per engagement tier. Surface reviewed-state as non-blocking note.",
       "checklist": [
-        "Session digest printed",
-        "PR opened or held per engagement",
-        "Reviewed-state surfaced"
+        "PR opened or held, digest printed"
       ]
     }
   ],
@@ -63,5 +56,5 @@
     "chain_dispatch": true
   },
 
-  "tone": "Mechanical and honest. Ship proposes, the target disposes. Never imply afk means merged."
+  "tone": "Mechanical and honest. Ship proposes, target disposes."
 }

@@ -21,15 +21,11 @@
       "reads": ["TESTING.md", "CONVENTIONS.md", "GLOSSARY.md"],
       "process": "process/tdd.md#plan",
       "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
-      "instruction": "Read project context. Check ADRs in the area you are touching. Confirm the behavior list and interface design with the user before writing code. Read facets, test layers, and permutations from slice annotations. If missing (spec/breakdown didn't enumerate), enumerate now as failsafe. Verify completeness against test-selection.json dimensions.",
+      "instruction": "Read project context + ADRs in touched area. Confirm behavior list and interface design with user. Read slice test annotations (facets, layers, permutations). If missing, enumerate as failsafe per test-selection.json.",
       "checklist": [
-        "Project context read (TESTING.md, CONVENTIONS.md, GLOSSARY.md)",
-        "ADRs checked in touched area",
-        "Behavior list confirmed with user",
-        "Interface design confirmed with user",
-        "Slice test annotations read (facets, layers, permutations)",
-        "If annotations missing: failsafe enumeration performed",
-        "Test layers match cheapest-layer-that-falsifies principle"
+        "Behavior list and interface confirmed with user",
+        "Slice test annotations read or failsafe-enumerated",
+        "Test layers match cheapest-falsifying-layer principle"
       ]
     },
     {
@@ -37,36 +33,30 @@
       "name": "Endpoint scope check",
       "enterprise": true,
       "reads": ["contracts/*-endpoints.json"],
-      "instruction": "Verify the slice covers every endpoint it should per the registry. Read the issue tracker issue (Linear/GitHub) if one exists for this slice and check acceptance criteria.",
+      "instruction": "Verify slice covers every 'in' endpoint per registry. Read issue tracker if issue exists for this slice.",
       "checklist": [
-        "Endpoint registry checked - every 'in' endpoint for this slice is covered",
-        "Issue tracker issue read if it exists",
-        "Acceptance criteria noted"
+        "Every 'in' endpoint for this slice covered",
+        "Issue acceptance criteria noted"
       ]
     },
     {
       "id": "tracer",
       "name": "Tracer bullet",
       "process": "process/tdd.md#tracer",
-      "instruction": "Write one end-to-end test that exercises the happy path through the public interface. It must fail (red).",
+      "instruction": "Write one E2E test exercising happy path through public interface. Must fail (red).",
       "checklist": [
-        "One E2E test written",
-        "Test exercises happy path through public interface",
-        "Test fails (red)"
+        "E2E happy-path test written and failing"
       ]
     },
     {
       "id": "loop",
       "name": "Incremental loop",
       "process": "process/tdd.md#loop",
-      "instruction": "For each behavior: write a failing test (red), implement the minimum code to pass (green), then refactor. Show the user each test before writing implementation. Proceed with your ranking but give the opportunity to redirect.",
+      "instruction": "Per behavior: failing test (red), minimal implementation (green), refactor. Show user each test before implementing. Same failure without new evidence = leave patch loop per routing-policy rerouting.",
       "per_cycle_checklist": [
-        "Test describes behavior, not implementation",
-        "Test uses public interface only",
-        "Test would survive internal refactor",
-        "Code is minimal for this test",
-        "No speculative features added",
-        "If same failure persists without new evidence, leave patch loop for diagnosis per routing-policy rerouting rules"
+        "Test describes behavior via public interface, survives refactor",
+        "Code minimal for this test, no speculative features",
+        "Persistent failures escalated per loop budget"
       ]
     },
     {
@@ -81,13 +71,11 @@
         "../../schemas/test-selection.json"
       ],
       "process": "process/tdd.md#refactor",
-      "instruction": "Clean up implementation and tests. Consult reference docs for patterns. Check slice-marker.md for done-marker semantics when the slice is complete.",
+      "instruction": "Clean up implementation and tests per reference docs. Write slice done marker if complete (reference/slice-marker.md).",
       "checklist": [
-        "No new test smells introduced",
-        "Interfaces are deep (few methods, rich behavior)",
-        "Duplication eliminated",
-        "Slice done marker written if slice complete (reference/slice-marker.md)",
-        "Tests use cheapest falsifying layer; no circular oracles"
+        "Interfaces deep, duplication eliminated, no test smells",
+        "Tests use cheapest falsifying layer, no circular oracles",
+        "Slice done marker written if complete"
       ]
     },
     {
@@ -95,10 +83,10 @@
       "name": "Convention enforcement",
       "enterprise": true,
       "reads": ["process/convention-enforcement.md"],
-      "instruction": "Verify convention-enforcement tests pass if the project has them. If a new convention or repeating pattern emerged during refactor, offer to create a convention test for it.",
+      "instruction": "Verify convention-enforcement tests pass. Offer new convention test if repeating pattern emerged.",
       "checklist": [
-        "Convention-enforcement tests pass (if they exist)",
-        "New conventions offered as tests if detected during refactor"
+        "Convention tests pass (if they exist)",
+        "New convention test offered if pattern detected"
       ]
     }
   ],

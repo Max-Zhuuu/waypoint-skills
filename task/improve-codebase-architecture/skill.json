@@ -19,10 +19,9 @@
       "process": "process/architecture-review.md#explore",
       "reads": ["GLOSSARY.md", "docs/adr/", "docs/decisions/"],
       "references": ["reference/language.md"],
-      "instruction": "Use Agent tool with Explore to walk the codebase. Read domain glossary and ADRs first.",
+      "instruction": "Agent(Explore) to walk codebase. Read glossary + ADRs first.",
       "checklist": [
-        "Glossary and ADRs read",
-        "Codebase explored",
+        "Glossary + ADRs read, codebase explored",
         "Candidate opportunities identified"
       ]
     },
@@ -31,10 +30,9 @@
       "name": "Present candidates",
       "process": "process/architecture-review.md#present",
       "references": ["reference/html-report.md"],
-      "instruction": "Write a self-contained HTML report to OS temp directory (Tailwind + Mermaid CDN). Each candidate gets a before/after card. Open for user and ask which to explore.",
+      "instruction": "HTML report to OS temp dir (Tailwind + Mermaid CDN). Before/after card per candidate. Open for user, ask which to explore.",
       "checklist": [
-        "HTML report written to temp directory",
-        "Each candidate has before/after visualization",
+        "HTML report with before/after cards written to temp dir",
         "User asked which to explore"
       ]
     },
@@ -43,12 +41,10 @@
       "name": "Deepen",
       "process": "process/architecture-review.md#deepen",
       "references": ["reference/deepening.md", "reference/interface-design.md", "../../schemas/constraint-sheet.json"],
-      "instruction": "For chosen candidate: spawn 3+ parallel agents with different constraints (minimize interface, maximize flexibility, optimize for common caller, ports & adapters). Side effects inline: new domain term -> update GLOSSARY.md, rejected candidate with reason -> offer ADR. When spawning parallel agents for different constraints, align constraint dimensions with the constraint sheet (workload, state, trust, operations) to ensure structured evaluation.",
+      "instruction": "Spawn 3+ parallel agents with different constraints (minimize interface, maximize flexibility, common caller, ports & adapters). Align constraints with constraint-sheet dimensions. New term -> GLOSSARY.md. Rejected candidate with reason -> offer ADR.",
       "checklist": [
-        "Multiple interface alternatives explored",
-        "GLOSSARY.md updated (if new terms)",
-        "ADR offered (if rejected candidate has load-bearing reason)",
-        "Parallel constraints aligned with constraint sheet dimensions"
+        "Multiple alternatives explored, aligned with constraint sheet",
+        "GLOSSARY.md updated if new terms, ADR offered if rejected with reason"
       ]
     },
     {
@@ -56,11 +52,10 @@
       "name": "Record decisions",
       "process": "process/architecture-review.md#record",
       "references": ["../../schemas/constraint-sheet.json"],
-      "instruction": "Write proposals with concrete file paths and interface changes. Record any ADRs decided during deepening.",
+      "instruction": "Write proposals with concrete file paths and interface changes. Record ADRs with constraint-sheet structure and revisit trigger.",
       "checklist": [
         "Proposals written with concrete paths",
-        "ADRs recorded",
-        "Decisions recorded with constraint sheet structure and revisit trigger"
+        "ADRs recorded with constraint sheet structure + revisit trigger"
       ]
     }
   ],

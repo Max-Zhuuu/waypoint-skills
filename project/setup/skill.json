@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "setup",
   "status": "stable",
-  "description": "Kickoff a project with scoping grill, architecture decisions, and documentation structure. Handles fresh builds, migrations, and resumptions.",
+  "description": "Kickoff project with scoping grill, architecture decisions, doc structure.",
 
   "chain": {
     "from": [],
@@ -15,91 +15,55 @@
   "steps": [
     {
       "id": "detect-state",
-      "name": "Detect project state and mode",
-      "reads": [".claude/project-state.json", "SCOPE.json", "SCOPE.md", "CONTEXT.json", "GLOSSARY.md", "_GLOSSARY.md", "CLAUDE.md", "CONVENTIONS.json", "CONVENTIONS.md", "TESTING.md", "ARCHITECTURE.json", "ARCHITECTURE.md", "DEPLOY.json", "DEPLOY.md", "docs/adr/", "docs/decisions/"],
-      "instruction": "Run ~/.claude/scripts/discover-project-state.sh to generate .claude/project-state.json, then read it. Use the detected framework, package manager, test runner, linter, CI platform, deploy provider, and external connectors to inform setup decisions. Use project_docs to detect mode: Starting fresh (no docs or only CLAUDE.md) -> phase-0-grill. Resuming (some exist, some missing) -> list done/missing, pick up first incomplete. Restructuring (user asks or docs don't follow current format) -> reference/restructuring.md. Reviewing (all exist) -> reference/resume-path.md. Migrating (user states they're replacing an existing system, or SCOPE.json has parity fields, or a source system repo is referenced) -> phase-0-grill with migration-specific questions, then migration-init. If legacy .md versions exist, offer to convert to .json format.",
+      "name": "Detect project state",
+      "reads": [".claude/project-state.json", "SCOPE.json", "SCOPE.md", "CONTEXT.json", "CLAUDE.md", "CONVENTIONS.json", "ARCHITECTURE.json", "DEPLOY.json"],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh, read .claude/project-state.json. Detect mode: fresh (no docs) -> phase-0-grill. Resuming (partial docs) -> pick up first incomplete. Restructuring (user asks) -> reference/restructuring.md. Reviewing (all exist) -> reference/resume-path.md. Migrating (source system referenced) -> phase-0-grill with migration questions. Legacy .md versions exist -> offer .json conversion.",
       "references": ["reference/restructuring.md", "reference/resume-path.md"],
-      "checklist": [
-        "Project state detected (fresh/resuming/restructuring/reviewing/migrating)",
-        "Mode recorded",
-        "Routed to correct path"
-      ]
+      "checklist": ["Mode detected and routed"]
     },
     {
       "id": "phase-0-grill",
       "name": "Phase 0 - Discovery and scoping",
       "references": ["../../schemas/scope-format.json", "../../schemas/context-format.json"],
-      "instruction": "Print questions inline with recommended answers. Skip any already answered. Product: what problem, for whom, done in 2 sentences. Scope: IN/OUT/UNCERTAIN, decision owners and deadlines. Dependencies: backend API status, design assets, infrastructure, domain expertise. Constraints: compliance, performance, browser support, timeline. Risks: biggest worries, undocumented knowledge. Personas: who uses this, what do they need, how often. External connectors: what systems does this depend on, what data flows. If migrating: also ask source system questions - what legacy system, how many screens/features, where is the source code, what is the parity strategy (exact match vs improvement), what is the cutover approach. Write SCOPE.json (conforming to scope-format.json), CONTEXT.json (conforming to context-format.json), CONCERNS.md, GLOSSARY.md.",
-      "checklist": [
-        "SCOPE.json exists and conforms to scope-format.json",
-        "CONTEXT.json exists and conforms to context-format.json",
-        "External connectors inventoried in CONTEXT.json",
-        "Personas defined in CONTEXT.json",
-        "Uncertain items have decision owners and validate-by dates",
-        "GLOSSARY.md exists",
-        "CONCERNS.md seeded",
-        "Migration source system identified (if migrating)"
-      ]
+      "instruction": "Print questions with recommended answers. Skip answered. Product: problem, audience, done-in-2-sentences. Scope: IN/OUT/UNCERTAIN with owners and deadlines. Dependencies, constraints, risks. Personas: who, what, how often. External connectors: systems, data flows. Migrating: source system, parity strategy, cutover approach. Write SCOPE.json (scope-format.json), CONTEXT.json (context-format.json), CONCERNS.md, GLOSSARY.md.",
+      "checklist": ["SCOPE.json written", "CONTEXT.json written", "External connectors inventoried", "GLOSSARY.md seeded"]
     },
     {
       "id": "tier-select",
       "name": "Tier selection",
-      "instruction": "Determine tier conversationally. Small: solo dev, few features, low ceremony. Moderate: standard project, team, conventions needed. Large: complex domain, multiple teams. Migrations are always Moderate or Large. Record tier in CLAUDE.md. For transition procedures see the Tier transitions section in reference/scope-tiers.md.",
+      "instruction": "Determine tier conversationally. Small: solo, few features, low ceremony. Moderate: standard project, team. Large: complex domain, multiple teams. Migrations always Moderate+. Record in CLAUDE.md. Transitions: reference/scope-tiers.md.",
       "references": ["reference/scope-tiers.md"],
-      "checklist": [
-        "Tier selected (Small/Moderate/Large)",
-        "Recorded in CLAUDE.md"
-      ]
+      "checklist": ["Tier selected and recorded"]
     },
     {
       "id": "migration-init",
       "name": "Migration initialization",
-      "reads": ["contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
-      "references": ["../../project/migrate/reference/migration-structure.md", "reference/local-docs.md"],
-      "instruction": "Only runs in migration mode. Read scope docs and endpoint registries. Read parity verification system if it exists (entity registries, endpoint maps). All source features are IN unless explicitly cut with reason and owner. Write Active Workflow to CLAUDE.md with migration phases: (1) docs sprint, (2) vertical slice, (3) horizontal buildout, (4) integration, (5) functional validation, (6) design pass, (7) cutover. Phase files in phases/migrate/. Skip if not migrating.",
-      "checklist": [
-        "Scope protection: all source features IN unless explicitly cut",
-        "Parity system read (if exists)",
-        "Active Workflow written with 7 migration phases",
-        "Migration structure reference read"
-      ]
+      "reads": ["contracts/*-endpoints.json"],
+      "references": ["../../project/migrate/reference/migration-structure.md"],
+      "instruction": "Migration mode only. All source features IN unless explicitly cut with reason. Write Active Workflow with 7 phases: docs, vertical slice, horizontal buildout, integration, validation, design pass, cutover. Skip if not migrating.",
+      "checklist": ["Source features scope-protected", "Active Workflow written (if migrating)"]
     },
     {
       "id": "phase-1-architecture",
       "name": "Phase 1 - Architecture and standards",
       "reads": ["architecture-rule-catalogue.md"],
       "references": ["reference/references.md", "../../schemas/architecture-format.json", "../../schemas/conventions-format.json", "../../schemas/deploy-format.json"],
-      "instruction": "If rule catalogue exists: per-family checklist grill (catalogue-grill.md methodology). If no catalogue but moderate/large: offer to bootstrap. Else: fall back to references.md area catalog. Produce consolidated decision-tree ADRs. Write ARCHITECTURE.json (conforming to architecture-format.json), CONVENTIONS.json (conforming to conventions-format.json), DEPLOY.json (conforming to deploy-format.json). For API-consuming projects: offer endpoint registry scaffolding. For migrations: architecture decisions should address what changes vs what ports directly from the source system.",
-      "checklist": [
-        "Architecture decisions documented as ADRs",
-        "ARCHITECTURE.json exists and conforms to architecture-format.json",
-        "CONVENTIONS.json exists and conforms to conventions-format.json",
-        "DEPLOY.json exists and conforms to deploy-format.json",
-        "Project skeleton runs (dev server + tests)",
-        "CLAUDE.md has Project Scaffold + Documentation Map"
-      ]
+      "instruction": "Rule catalogue exists: per-family checklist grill. No catalogue but moderate+: offer bootstrap. Else: references.md area catalog. Write ARCHITECTURE.json, CONVENTIONS.json, DEPLOY.json conforming to format schemas. API projects: offer endpoint registry. Migrations: address what changes vs what ports.",
+      "checklist": ["ADRs documented", "ARCHITECTURE.json written", "CONVENTIONS.json written", "DEPLOY.json written", "Skeleton runs"]
     },
     {
       "id": "convention-scaffolding",
       "name": "Convention enforcement scaffolding",
       "enterprise": true,
       "reads": ["process/convention-enforcement.md"],
-      "instruction": "Offer convention-enforcement tests: structure (file placement), imports (no cross-domain), auth coverage (every route authenticated). Offer hook configuration: .claude/settings.json deny lists, doc-sync reminders. Offer endpoint registry for API-consuming projects. For migrations: offer parity verification scaffolding (entity registry CSV, endpoint map, named deviations register).",
-      "checklist": [
-        "Convention tests offered",
-        "Hook configuration offered",
-        "Endpoint registry offered (if API-consuming)",
-        "Parity scaffolding offered (if migrating)"
-      ]
+      "instruction": "Offer convention-enforcement tests (structure, imports, auth coverage). Offer hook config (.claude/settings.json deny lists). Offer endpoint registry for API projects. Migrating: offer parity verification scaffolding.",
+      "checklist": ["Convention tests offered", "Parity scaffolding offered (if migrating)"]
     },
     {
       "id": "gate-and-complete",
-      "name": "Gate check and completion",
-      "instruction": "Verify Phase 1 gate: architecture decisions documented, skeleton runs, docs created, CLAUDE.md complete. For migrations: also verify Active Workflow written, source system scope documented. Route: /check-in for first session, /breakdown to decompose, /triage to pick from backlog.",
-      "checklist": [
-        "All gate criteria met",
-        "Next step recommended"
-      ]
+      "name": "Gate check",
+      "instruction": "Verify: architecture documented, skeleton runs, docs created, CLAUDE.md complete. Migrating: Active Workflow written, source scope documented. Route: /check-in or /breakdown.",
+      "checklist": ["Gate criteria met", "Next step recommended"]
     }
   ],
 
@@ -113,11 +77,11 @@
 
   "engagement": {
     "emits": ["concerns"],
-    "writes": ["CLAUDE.md", "SCOPE.json", "CONTEXT.json", "CONVENTIONS.json", "TESTING.md", "ARCHITECTURE.json", "DEPLOY.json", ".claude/", "Active Workflow (migration mode)"],
+    "writes": ["CLAUDE.md", "SCOPE.json", "CONTEXT.json", "CONVENTIONS.json", "ARCHITECTURE.json", "DEPLOY.json", ".claude/"],
     "override": "scaffolding creator",
     "manifest": true,
     "chain_dispatch": false
   },
 
-  "tone": "Direct. Cut scope aggressively in Phase 0. Challenge vague answers. For migrations: every source feature is accounted for."
+  "tone": "Direct. Cut scope aggressively. Challenge vague answers."
 }

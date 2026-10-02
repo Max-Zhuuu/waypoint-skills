@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "breakdown",
   "status": "stable",
-  "description": "Decompose a spec into implementable slices with dependency ordering. Use when a spec needs a build plan.",
+  "description": "Decompose spec into implementable slices with dependency ordering.",
 
   "chain": {
     "from": ["spec"],
@@ -17,13 +17,10 @@
       "id": "read-spec",
       "name": "Read and understand",
       "reads": ["SCOPE.md", "CONVENTIONS.md"],
-      "instruction": "Read the spec file (resolve via Documentation Map or docs/specs/{feature}.md). Identify entities, behaviors, dependencies, and scope boundaries. If no spec exists, suggest /spec first. Do not add features the spec does not describe. Flag ambiguity as a concern, do not fill the gap.",
+      "instruction": "Read spec (Documentation Map or docs/specs/{feature}.md). Identify entities, behaviors, dependencies, scope boundaries. No spec? Suggest /spec. Never add features spec does not describe. Flag ambiguity as concern.",
       "checklist": [
-        "Spec file located and read",
-        "Entities identified",
-        "Behaviors identified",
-        "Dependencies mapped",
-        "Scope boundaries checked against SCOPE.md (if it exists)"
+        "Spec read, entities and behaviors identified",
+        "Dependencies mapped, scope boundaries checked"
       ]
     },
     {
@@ -31,52 +28,40 @@
       "name": "Scope guard",
       "enterprise": true,
       "reads": ["SCOPE.md", "CLAUDE.md", "contracts/*-endpoints.json"],
-      "instruction": "Check scope documents before decomposing. Every endpoint with status 'in' in the registry must trace to at least one slice. Never recommend cutting an endpoint or feature without explicit user approval. Complexity and development cost are not reasons to cut. Flag, don't decide.",
+      "instruction": "Every 'in' endpoint must trace to at least one slice. Never cut endpoint or feature without explicit user approval. Cost not reason to cut. Flag, don't decide.",
       "checklist": [
-        "SCOPE.md scope protection directives checked",
-        "CLAUDE.md project constraints checked",
-        "Endpoint registry read - all 'in' endpoints noted",
-        "Every 'in' endpoint traceable to at least one planned slice",
-        "No features cut without explicit user approval"
+        "Every 'in' endpoint traceable to planned slice",
+        "No features cut without user approval"
       ]
     },
     {
       "id": "decompose",
       "name": "Decompose into slices",
       "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
-      "instruction": "Each slice must be implementable (built and tested in one session), testable (clear done condition), scoped (bounded file set, ~5 files max), and ordered (explicit dependencies). Granularity: one slice per screen, API endpoint, or behavioral unit. Tag every slice Autonomy: afk|hitl - afk only when Done-when is machine-verifiable and it touches no DEPLOY.md load-bearing surface. Untagged is treated as hitl downstream. Annotate each slice with impact facets from routing-policy.json so downstream skills know what testing obligations the slice carries. Include required test layers and key permutations from the spec's dimension enumeration.",
+      "instruction": "Each slice: implementable in one session, testable (clear done condition), scoped (~5 files max), ordered (explicit deps). One slice per screen, endpoint, or behavioral unit. Tag Autonomy: afk|hitl. afk only when done-condition machine-verifiable and no DEPLOY.md load-bearing surface touched. Annotate each with impact facets from routing-policy.json. Include test layers and permutations from spec.",
       "checklist": [
-        "Every slice is implementable in one session",
-        "Every slice has a clear done condition",
-        "Every slice touches a bounded set of files",
-        "Dependencies between slices are explicit",
+        "Each slice: one session, clear done, bounded files, explicit deps",
         "Every slice tagged afk or hitl",
-        "Each slice annotated with impact facets",
-        "Required test layers specified per slice",
-        "Test permutations from spec carried through to slice annotations"
+        "Impact facets and test layers annotated per slice"
       ]
     },
     {
       "id": "validate",
       "name": "Validate against scope",
-      "instruction": "Check each slice against the spec's acceptance criteria. Every criterion must be covered by at least one slice. Every slice must trace back to at least one criterion. Flag uncovered criteria as gaps. Flag untraceable slices as scope creep. Verify every test permutation from the spec is covered by at least one slice. Flag uncovered permutations as test gaps, not just scope gaps.",
+      "instruction": "Every acceptance criterion covered by at least one slice. Every slice traces to at least one criterion. Flag uncovered criteria as gaps, untraceable slices as scope creep. Verify test permutations from spec covered.",
       "checklist": [
-        "Every acceptance criterion covered by at least one slice",
-        "Every slice traces to at least one acceptance criterion",
-        "Gaps flagged to user",
-        "Scope creep flagged to user",
-        "Test permutations from spec traced to slices"
+        "Bidirectional trace: criteria to slices, slices to criteria",
+        "Gaps and scope creep flagged",
+        "Test permutations traced to slices"
       ]
     },
     {
       "id": "write",
       "name": "Write slices",
-      "instruction": "Check the project's slice storage convention. If CLAUDE.md has J1-type rules (code-as-documentation, no spec files outside ADRs) or says slices live in the issue tracker: create Linear/GitHub issues with parent epic, acceptance criteria checkboxes, autonomy tags, dependency links, and ADR references. Otherwise: append ## Implementation Slices to the spec file. Do not modify existing spec content. If re-decomposing, replace the previous slices section entirely. Tier-adapted output: Tier 1/2 = spec file or issues, Tier 3 = GitHub sub-issues with project board.",
+      "instruction": "Check slice storage convention. J1 rules or issue tracker preference: create Linear/GitHub issues with acceptance checkboxes, autonomy tags, dep links. Otherwise: append ## Implementation Slices to spec file. Never modify existing spec content.",
       "checklist": [
-        "Slice storage convention checked (J1 rules, CLAUDE.md, issue tracker preference)",
-        "Slices written to correct destination",
-        "Existing spec content not modified",
-        "Output format matches project tier"
+        "Storage convention checked, slices written to correct destination",
+        "Existing spec content not modified"
       ]
     }
   ],

@@ -1,30 +1,54 @@
 #!/usr/bin/env bash
-# Verify every SKILL.md stays within line budget. Warn >80, fail >100.
+# Verify every skill stays within line and step budgets.
+# Combined SKILL.md + skill.json: fail >150. Max steps: 8.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+JQ="python $REPO_ROOT/tests/json_query.py"
 ERRORS=0
 WARNINGS=0
 
-while IFS= read -r skill_md; do
-  lines=$(wc -l < "$skill_md")
-  name="$(basename "$(dirname "$skill_md")")"
+while IFS= read -r skill_json; do
+  dir="$(dirname "$skill_json")"
+  name=$($JQ get "$skill_json" name)
+  skill_md="$dir/SKILL.md"
 
-  if [[ $lines -gt 100 ]]; then
-    echo "FAIL: $name ($lines lines, max 100)"
+  # Skip deprecated/experimental
+  json_status=$($JQ get "$skill_json" status 2>/dev/null || echo "unknown")
+  if [[ "$json_status" == "deprecated" || "$json_status" == "experimental" ]]; then
+    echo "SKIP: $name ($json_status)"
+    continue
+  fi
+
+  # Combined line count
+  json_lines=$(wc -l < "$skill_json")
+  md_lines=0
+  [[ -f "$skill_md" ]] && md_lines=$(wc -l < "$skill_md")
+  combined=$((json_lines + md_lines))
+
+  # Step count
+  steps=$($JQ count "$skill_json" steps 2>/dev/null || echo "0")
+
+  if [[ $combined -gt 150 ]]; then
+    echo "FAIL: $name ($combined combined lines, max 150)"
     ERRORS=$((ERRORS + 1))
-  elif [[ $lines -gt 80 ]]; then
-    echo "WARN: $name ($lines lines, target <80)"
+  elif [[ $combined -gt 120 ]]; then
+    echo "WARN: $name ($combined combined lines, target <120)"
     WARNINGS=$((WARNINGS + 1))
   else
-    echo "OK: $name ($lines lines)"
+    echo "OK: $name ($combined lines)"
   fi
-done < <(find "$REPO_ROOT/task" "$REPO_ROOT/project" "$REPO_ROOT/in-progress" -name "SKILL.md" 2>/dev/null)
+
+  if [[ $steps -gt 8 ]]; then
+    echo "FAIL: $name ($steps steps, max 8)"
+    ERRORS=$((ERRORS + 1))
+  fi
+done < <(find "$REPO_ROOT/task" "$REPO_ROOT/project" "$REPO_ROOT/in-progress" -name "skill.json" 2>/dev/null)
 
 echo ""
 if [[ $ERRORS -gt 0 ]]; then
-  echo "FAILED: $ERRORS file(s) over 100 lines"
+  echo "FAILED: $ERRORS budget violation(s)"
   exit 1
 else
-  echo "PASSED ($WARNINGS warning(s) over 80 lines)"
+  echo "PASSED ($WARNINGS warning(s) over 120 lines)"
 fi

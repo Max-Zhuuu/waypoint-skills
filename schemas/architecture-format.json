@@ -1,93 +1,169 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "architecture-format.json",
+  "title": "System Architecture",
   "description": "System architecture definition. Replaces ARCHITECTURE.md. Produced by /setup phase 1.",
-
-  "system": {
-    "name": "Project name",
-    "type": "monolith | modular_monolith | microservices | serverless | hybrid",
-    "description": "One-paragraph system description"
-  },
-
-  "components": [
-    {
-      "name": "Component name",
-      "responsibility": "What this component does (one sentence)",
-      "technology": "Framework, language, runtime",
-      "owns": ["What data or domain concepts this component owns"],
-      "depends_on": ["Other components this consumes"],
-      "boundary_type": "process | module | package | service"
-    }
-  ],
-
-  "data_flow": [
-    {
-      "from": "Source component",
-      "to": "Destination component",
-      "protocol": "HTTP | WebSocket | queue | direct_call | event",
-      "auth": "How this connection is authenticated",
-      "data": "What data flows through this path"
-    }
-  ],
-
-  "state": {
-    "stores": [
-      {
-        "name": "Store name",
-        "type": "relational | document | cache | blob | queue",
-        "technology": "Specific product (Postgres, Redis, etc.)",
-        "owner": "Which component owns writes",
-        "consistency": "strong | eventual | read_after_write",
-        "retention": "How long data is kept"
+  "type": "object",
+  "required": ["system", "components"],
+  "additionalProperties": true,
+  "properties": {
+    "system": {
+      "type": "object",
+      "description": "Top-level system identification.",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "description": "Project name." },
+        "type": { "type": "string", "enum": ["monolith", "modular_monolith", "microservices", "serverless", "hybrid"], "description": "System architecture style." },
+        "description": { "type": "string", "description": "One-paragraph system description." }
       }
-    ],
-    "source_of_truth": {
-      "description": "What is the authoritative data source and how are conflicts resolved"
-    }
-  },
-
-  "boundaries": {
-    "trust": [
-      {
-        "from": "Untrusted side",
-        "to": "Trusted side",
-        "enforcement": "How the boundary is enforced",
-        "reference": "trust-boundaries.json boundary id"
+    },
+    "components": {
+      "type": "array",
+      "description": "Architectural components.",
+      "items": {
+        "type": "object",
+        "required": ["name", "responsibility", "technology"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Component name." },
+          "responsibility": { "type": "string", "description": "What this component does (one sentence)." },
+          "technology": { "type": "string", "description": "Framework, language, runtime." },
+          "owns": { "type": "array", "items": { "type": "string" }, "description": "Data or domain concepts this component owns." },
+          "depends_on": { "type": "array", "items": { "type": "string" }, "description": "Other components this consumes." },
+          "boundary_type": { "type": "string", "enum": ["process", "module", "package", "service"], "description": "Isolation boundary type." }
+        }
       }
-    ],
-    "deployment": [
-      {
-        "name": "Deployment unit name",
-        "contains": ["Components in this unit"],
-        "scales_independently": true
+    },
+    "data_flow": {
+      "type": "array",
+      "description": "Data flow paths between components.",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "protocol"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string", "description": "Source component." },
+          "to": { "type": "string", "description": "Destination component." },
+          "protocol": { "type": "string", "enum": ["HTTP", "WebSocket", "queue", "direct_call", "event"], "description": "Communication protocol." },
+          "auth": { "type": "string", "description": "How this connection is authenticated." },
+          "data": { "type": "string", "description": "What data flows through this path." }
+        }
       }
-    ],
-    "team": [
-      {
-        "team": "Team name",
-        "owns": ["Components this team owns"],
-        "api_contract": "How other teams interact with this team's components"
+    },
+    "state": {
+      "type": "object",
+      "description": "State management and data stores.",
+      "additionalProperties": false,
+      "properties": {
+        "stores": {
+          "type": "array",
+          "description": "Data stores.",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "technology"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Store name." },
+              "type": { "type": "string", "enum": ["relational", "document", "cache", "blob", "queue"], "description": "Store type." },
+              "technology": { "type": "string", "description": "Specific product (Postgres, Redis, etc.)." },
+              "owner": { "type": "string", "description": "Which component owns writes." },
+              "consistency": { "type": "string", "enum": ["strong", "eventual", "read_after_write"], "description": "Consistency model." },
+              "retention": { "type": "string", "description": "How long data is kept." }
+            }
+          }
+        },
+        "source_of_truth": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "description": { "type": "string", "description": "What is the authoritative data source and how conflicts are resolved." }
+          }
+        }
       }
-    ]
-  },
-
-  "decisions": [
-    {
-      "id": "ADR number or slug",
-      "decision": "What was decided",
-      "rationale": "Why",
-      "revisit_trigger": "Observable condition that would reopen this",
-      "reference": "Path to full ADR if exists"
+    },
+    "boundaries": {
+      "type": "object",
+      "description": "Trust, deployment, and team boundaries.",
+      "additionalProperties": false,
+      "properties": {
+        "trust": {
+          "type": "array",
+          "description": "Trust boundaries.",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "enforcement"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string", "description": "Untrusted side." },
+              "to": { "type": "string", "description": "Trusted side." },
+              "enforcement": { "type": "string", "description": "How the boundary is enforced." },
+              "reference": { "type": "string", "description": "trust-boundaries.json boundary id." }
+            }
+          }
+        },
+        "deployment": {
+          "type": "array",
+          "description": "Deployment units.",
+          "items": {
+            "type": "object",
+            "required": ["name", "contains"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Deployment unit name." },
+              "contains": { "type": "array", "items": { "type": "string" }, "description": "Components in this unit." },
+              "scales_independently": { "type": "boolean", "description": "Whether this unit scales on its own." }
+            }
+          }
+        },
+        "team": {
+          "type": "array",
+          "description": "Team ownership boundaries.",
+          "items": {
+            "type": "object",
+            "required": ["team", "owns"],
+            "additionalProperties": false,
+            "properties": {
+              "team": { "type": "string", "description": "Team name." },
+              "owns": { "type": "array", "items": { "type": "string" }, "description": "Components this team owns." },
+              "api_contract": { "type": "string", "description": "How other teams interact with this team's components." }
+            }
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "description": "Architecture Decision Records (summaries).",
+      "items": {
+        "type": "object",
+        "required": ["id", "decision"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "description": "ADR number or slug." },
+          "decision": { "type": "string", "description": "What was decided." },
+          "rationale": { "type": "string", "description": "Why." },
+          "revisit_trigger": { "type": "string", "description": "Observable condition that would reopen this." },
+          "reference": { "type": "string", "description": "Path to full ADR if exists." }
+        }
+      }
+    },
+    "external_connectors": {
+      "type": "array",
+      "description": "External systems this architecture integrates with.",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "integration_point"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "External system name." },
+          "type": { "type": "string", "enum": ["infrastructure", "analytics", "auth_provider", "payment", "storage", "messaging"], "description": "Connector category." },
+          "integration_point": { "type": "string", "description": "Which component connects to this." },
+          "credential_location": { "type": "string", "description": "Where the credential is stored." },
+          "failure_mode": { "type": "string", "description": "What happens when this fails." },
+          "fallback": { "type": "string", "description": "How the system degrades." }
+        }
+      }
     }
-  ],
-
-  "external_connectors": [
-    {
-      "name": "External system name",
-      "type": "infrastructure | analytics | auth_provider | payment | storage | messaging",
-      "integration_point": "Which component connects to this",
-      "credential_location": "Where the credential is stored",
-      "failure_mode": "What happens when this fails",
-      "fallback": "How the system degrades"
-    }
-  ]
+  }
 }

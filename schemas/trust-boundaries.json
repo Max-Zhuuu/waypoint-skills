@@ -52,7 +52,9 @@
       "lines": "1-171",
       "pattern": "Dual-secret pattern: even if the code bug BOLA exploits existed, the database grants prevent escalation. Runtime test (only low-privilege secret requested) + source scan (no line fetches high-privilege name) + status-gate test (all 5 non-active statuses refused).",
       "boundary": "api_worker -> data_store",
-      "why": "Defense in depth tested at both layers. OWASP BOLA textbook."
+      "why": "Defense in depth tested at both layers. OWASP BOLA textbook.",
+      "snippet": "assert vault_requests == ['tenant-acme-readonly']\nassert 'tenant-acme-admin' not in vault_requests\n# Static: no source line fetches high-privilege secret\n# Status-gate: all 5 non-active statuses refused\nfor status in NON_ACTIVE:\n    with pytest.raises(ForbiddenError):\n        tenant_connection(uow, 'acme', status=status)",
+      "generalized_pattern": "Test defense in depth independently: runtime assertion, static source scan, status-gate - one layer failing silently doesn't defeat others."
     },
     {
       "id": "handle-errors-boundary",
@@ -60,7 +62,9 @@
       "lines": "132-213",
       "pattern": "Single boundary decorator: auth before handler, typed errors render intended response, unhandled exceptions become generic 500 without leaking stack traces. public=False default means auth is opt-out, not opt-in.",
       "boundary": "browser -> api",
-      "why": "One enforcement point, never duplicated. Fail-closed default."
+      "why": "One enforcement point, never duplicated. Fail-closed default.",
+      "snippet": "def handle_errors(fn=None, *, public=False):\n    def wrapper(req):\n        if not public:\n            claims = verify_request(req)  # auth BEFORE handler\n        return handler(req)\n    except HttpError as e:\n        return e.as_response()\n    except Exception:\n        return generic_500()  # never leak internals",
+      "generalized_pattern": "Single boundary decorator with fail-closed default (public=False); auth before handler, typed errors intended status, unhandled -> generic 500."
     },
     {
       "id": "framework-tables-boundary",
@@ -68,14 +72,18 @@
       "lines": "1-167",
       "pattern": "Security boundary pinned from both sides: served tables have no credential columns AND unserved tables have no route. Specific column names checked, not pattern-matched.",
       "boundary": "api -> business_operation",
-      "why": "Named-column pinning means the test documents exactly what it protects against."
+      "why": "Named-column pinning means the test documents exactly what it protects against.",
+      "snippet": "def test_served_tables_no_credentials():\n    for table in SERVED_TABLES:\n        cols = column_names(table)\n        assert not [c for c in cols if 'assword' in c]\n# Opposite: tables WITH credentials have no route\nassert 'Users' not in SERVED_TABLES",
+      "generalized_pattern": "Pin security boundary both sides: exposed entities have no sensitive columns, entities with sensitive columns not exposed."
     },
     {
       "id": "identity-contextvar",
       "file": "bv-glomaris-vms/src/app/identity.py",
       "pattern": "Calling principal carried via ContextVar from auth boundary to repositories. Audit stamps set without threading user= through 393 routes.",
       "boundary": "api -> business_operation",
-      "why": "Principal flows through a trusted channel, not through handler parameters that could be misrouted."
+      "why": "Principal flows through a trusted channel, not through handler parameters that could be misrouted.",
+      "snippet": "_current_user: ContextVar[str|None] = ContextVar('current_user', default=None)\ndef current_user() -> str:\n    return _current_user.get() or SYSTEM_USER\ndef set_current_user(name) -> Token:\n    return _current_user.set(name.strip().lower() or None)",
+      "generalized_pattern": "Carry authenticated principal via request-scoped context variable set at auth boundary; eliminates threading user parameter through every handler."
     }
   ]
 }

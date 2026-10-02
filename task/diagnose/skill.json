@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "diagnose",
   "status": "stable",
-  "description": "Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.",
+  "description": "Disciplined diagnosis loop: reproduce, hypothesize, instrument, fix, regression-test.",
 
   "chain": {
     "from": ["triage"],
@@ -17,80 +17,59 @@
       "id": "feedback-loop",
       "name": "Establish feedback loop",
       "process": "process/debugging.md#feedback-loop",
-      "instruction": "Set up the fastest possible feedback loop. Find or create the minimal reproduction path. Target: under 30 seconds from change to observed result.",
+      "instruction": "Set up fastest feedback loop. Find or create minimal reproduction path. Target: under 30s from change to observed result.",
       "checklist": [
-        "Feedback loop established",
-        "Reproduction path identified",
-        "Cycle time under 30 seconds"
+        "Reproduction path identified, cycle time under 30s"
       ]
     },
     {
       "id": "reproduce",
-      "name": "Reproduce the bug",
+      "name": "Reproduce",
       "process": "process/debugging.md#reproduce",
-      "instruction": "Reproduce the bug in an E2E setting as closely aligned with how an end user would encounter it. Write a failing test that captures the bug. If the bug can't be reproduced, document what was tried and escalate.",
+      "instruction": "Reproduce bug in E2E setting aligned with end-user encounter. Write failing test capturing bug. If not reproducible, document attempts and escalate.",
       "checklist": [
-        "Bug reproduced in E2E setting",
-        "Failing test written",
-        "Reproduction is deterministic"
+        "Bug reproduced in E2E setting with deterministic failing test"
       ]
     },
     {
       "id": "hypothesize",
-      "name": "Form hypothesis",
+      "name": "Hypothesize",
       "process": "process/debugging.md#hypothesize",
       "references": ["../../schemas/routing-policy.json"],
-      "instruction": "Form a specific, falsifiable hypothesis about the root cause. Write it down. Do not start fixing until the hypothesis is tested. Apply loop budget from routing policy: two evidence-producing repair attempts per failure fingerprint, then one bounded diagnostic pass.",
+      "instruction": "Form specific, falsifiable hypothesis. Write it down. Do not fix until tested. Loop budget: 2 evidence-producing attempts per failure fingerprint, then 1 diagnostic pass.",
       "checklist": [
-        "Hypothesis written (specific and falsifiable)",
-        "Hypothesis distinguishes this bug from similar-looking bugs",
-        "Loop budget tracked per failure fingerprint"
+        "Hypothesis written (specific, falsifiable, distinguishes from similar bugs)",
+        "Loop budget tracked per fingerprint"
       ]
     },
     {
       "id": "instrument",
       "name": "Instrument and verify",
       "process": "process/debugging.md#instrument",
-      "instruction": "Add instrumentation to test the hypothesis. Logging, breakpoints, assertions. Observe the actual behavior. Confirm or reject the hypothesis. If rejected, form a new one.",
+      "instruction": "Add instrumentation to test hypothesis. Observe actual behavior. Confirm or reject. If rejected, form new hypothesis. Every attempt must be evidence-producing, not speculative rewrite.",
       "checklist": [
-        "Instrumentation added",
-        "Hypothesis confirmed or rejected",
-        "Root cause identified",
-        "Each attempt is evidence-producing (not speculative rewrite or blind retry)"
+        "Hypothesis confirmed or rejected with evidence",
+        "Root cause identified"
       ]
     },
     {
       "id": "fix",
       "name": "Fix",
       "process": "process/debugging.md#fix",
-      "instruction": "Fix the root cause. The previously-failing test must now pass. Run the full test suite to check for regressions. Remove instrumentation.",
+      "instruction": "Fix root cause. Previously-failing test must pass. Run full suite for regressions. Remove instrumentation.",
       "checklist": [
-        "Fix applied to root cause (not symptoms)",
-        "Failing test now passes",
-        "No regressions in test suite",
-        "Instrumentation removed"
+        "Root cause fixed (not symptoms), failing test passes",
+        "No regressions, instrumentation removed"
       ]
     },
     {
-      "id": "cleanup",
-      "name": "Cleanup",
+      "id": "cleanup-and-learn",
+      "name": "Cleanup and learn",
       "process": "process/debugging.md#cleanup",
-      "instruction": "Clean up the fix. Ensure the test is well-named and documents the bug scenario. Remove any temporary code.",
+      "instruction": "Clean up fix. Ensure test well-named, documents bug scenario. Remove temporary code. Identify root cause class. Offer convention test if pattern could prevent recurrence.",
       "checklist": [
-        "Test is well-named and documents the scenario",
-        "No temporary code remains",
-        "Fix is minimal and focused"
-      ]
-    },
-    {
-      "id": "learn",
-      "name": "Learn",
-      "process": "process/debugging.md#learn",
-      "instruction": "What caused this bug to be possible? Is there a class of similar bugs? Could a convention test or structural check prevent recurrence? If so, offer to create one.",
-      "checklist": [
-        "Root cause class identified",
-        "Prevention strategy considered",
-        "Convention test offered (if applicable)"
+        "Test documents scenario, no temporary code remains",
+        "Prevention strategy considered, convention test offered if applicable"
       ]
     }
   ],

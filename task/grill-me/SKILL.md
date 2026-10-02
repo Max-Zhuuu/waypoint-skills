@@ -4,24 +4,15 @@ description: "Interview relentlessly about a plan or design until reaching share
 status: stable
 ---
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
-
-Ask the questions one at a time.
-
-If a question can be answered by exploring the codebase, explore the codebase instead.
-
-## Tone
+Interview relentlessly about every aspect of the plan. Walk each design branch depth-first, resolving dependencies one-by-one. Provide recommended answer per question. One question at a time. Explore codebase instead of asking when possible.
 
 Adversarial but constructive - stress the plan, not the person.
 
-## Engagement
-See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
-Emits: concerns (type: question, assumption)
-Writes: none
 ## Exit
+- Clear design -> "/spec for acceptance criteria."
+- Scope resolved -> "Ready to build or park."
+- Decisions logged -> "/wrapup to update glossary + conventions."
+- Run shared exit sequence: see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
 
-When the grill is complete, suggest next steps based on what was decided:
-- If the grill produced a clear design -> "/spec to write acceptance criteria, or /tdd to build?"
-- If the grill resolved scope questions -> "Scope updated. Ready to build, or park for later?"
-- If decisions were logged as concerns -> "Decisions logged. /wrapup updates GLOSSARY.md, conventions, and specs to match."
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
+## Engagement
+See engagement protocol.

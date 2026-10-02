@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "prototype",
   "status": "stable",
-  "description": "Build throwaway prototypes to flesh out a design. Duplicate existing components, wire to variant switcher.",
+  "description": "Build throwaway prototypes. Duplicate existing components, wire to variant switcher.",
 
   "chain": {
     "from": [],
@@ -14,44 +14,38 @@
       "id": "detect-branch",
       "name": "Detect prototype branch",
       "reads": ["CONVENTIONS.md", "ARCHITECTURE.md"],
-      "instruction": "Determine which prototype branch to use. Logic: purely functional behavior to validate (build a TUI or CLI app). UI: visual/layout changes to compare (duplicate existing components, wire to variant switcher). Design: design token or theme exploration (toggle panel). Read the project's taste profile if available. For Design branch: load design-sensibility.md for token constraints, density spectrum, and interaction model. Prototypes must evaluate real dense tables, forms, empty/error states, and narrow layouts.",
       "references": ["phases/logic.md", "phases/ui.md", "phases/design.md"],
+      "instruction": "Select branch: Logic (TUI/CLI for functional validation), UI (duplicate components + variant switcher), Design (token toggle panel). For Design: load design-sensibility.md.",
       "checklist": [
         "Branch selected (logic/ui/design)",
-        "Existing components identified for duplication (if UI branch)",
-        "Design-sensibility loaded for Design branch prototypes"
+        "Design-sensibility loaded if Design branch"
       ]
     },
     {
       "id": "scaffold",
       "name": "Scaffold prototype",
-      "instruction": "Never create standalone artifacts or isolated files when existing components can be duplicated. For UI prototypes: find the existing component(s) being redesigned, duplicate them in-place (or in a prototype directory alongside the originals), and wire to a variant switcher so all design variations can be toggled and compared in context. The variant switcher pattern: a single control that swaps between original and N prototype variants, rendered in the actual app layout. For logic prototypes: throwaway script or TUI. For design: toggle panel with token overrides.",
+      "instruction": "Never create standalone artifacts. UI: duplicate existing component(s), wire variant switcher for toggling original vs N variants in actual app layout. Logic: throwaway script/TUI. Design: toggle panel with token overrides.",
       "checklist": [
-        "Existing components duplicated (not standalone artifacts)",
-        "Variant switcher wired (UI branch)",
-        "Prototype runs in actual app context",
-        "All variations toggleable for comparison"
+        "Components duplicated in context (not isolated)",
+        "Variant switcher wired (UI branch)"
       ]
     },
     {
       "id": "iterate",
       "name": "Iterate and compare",
-      "instruction": "Build out the prototype variations. Each variation should be meaningfully different - not just color tweaks but structural alternatives. Present side-by-side via the variant switcher. Capture what was learned. The prototype is throwaway - don't polish, don't test, don't document.",
+      "instruction": "Build meaningfully different variations (structural, not just color). Compare via variant switcher. Evaluate each against all 9 interaction states. Test dense/narrow/empty/error layouts.",
       "checklist": [
-        "Multiple meaningful variations built",
-        "Variations compared in context",
-        "Decision captured (which variant, why)",
-        "Each variation evaluated against interaction states (hover, focus-visible, active, selected, disabled, loading, error, success)",
-        "Dense/narrow/empty/error layouts tested, not just hero screens"
+        "Multiple variations built and compared",
+        "Interaction states and edge layouts tested",
+        "Decision captured (which variant, why)"
       ]
     },
     {
       "id": "extract-or-discard",
       "name": "Extract or discard",
-      "instruction": "If a variant is chosen: extract it as the new implementation, remove the variant switcher and other variants. If learning was the goal: discard all variants, document what was learned. Clean up prototype artifacts.",
+      "instruction": "Chosen variant: extract as new implementation, remove switcher and other variants. Learning goal: discard all, document findings. Clean up.",
       "checklist": [
-        "Chosen variant extracted (or all discarded)",
-        "Variant switcher removed",
+        "Chosen variant extracted or all discarded",
         "Prototype artifacts cleaned up"
       ]
     }

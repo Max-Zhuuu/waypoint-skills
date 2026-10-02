@@ -1,23 +1,16 @@
 ---
 name: check-in
-description: "Session entry point. Loads context, reports state, detects enterprise artefacts. Use at every session start."
+description: "Session entry point. Load context, report state, detect enterprise artefacts."
 status: stable
 ---
 
 Read [skill.json](./skill.json). Initialize checklists. Execute steps sequentially.
-Context loader, not a project manager. Reports state without prescribing work.
-Invoke with `--deep` (or "I'm stuck") for the full reorient sequence: snapshot, hard questions, axis audit.
-
-Does NOT: implement, update docs, or prescribe next task. /triage handles prioritization.
+Context loader, not project manager. Reports state without prescribing work.
+Invoke with `--deep` for full reorient sequence.
 
 ## Engagement
-See [the engagement protocol](../../internals/engagement/README.md).
-Emits: flags, session plan
-Writes: .claude/.setup-prompted (first Tier 1 invocation)
+See [engagement protocol](../../internals/engagement/README.md).
 
 ## Exit
-- /triage to pick next task from backlog.
-- Invokes the user's chosen implementation verb directly.
-
-## Tone
-Brief. Read state, report, move on.
+- /triage to pick next task.
+- User's chosen implementation verb directly.

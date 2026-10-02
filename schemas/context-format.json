@@ -1,85 +1,156 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "context-format.json",
+  "title": "Product Context",
   "description": "Product context definition. Why we're building this, for whom, what success looks like. Maintained by humans, consumed by agents as authority. Produced by /setup phase 0.",
-
-  "vision": {
-    "problem": "What problem this product solves",
-    "audience": "Who it's for (be specific - role, org size, workflow)",
-    "why_now": "Why this needs to exist now, not later",
-    "differentiator": "What makes this different from alternatives"
-  },
-
-  "success_metrics": [
-    {
-      "metric": "What to measure",
-      "target": "Quantified goal",
-      "measurement": "How and where this is measured (PostHog event, database query, manual count)",
-      "timeframe": "When to evaluate"
-    }
-  ],
-
-  "personas": [
-    {
-      "name": "Persona label (e.g. 'Portfolio Analyst')",
-      "role": "Job title or function",
-      "goals": ["What they're trying to accomplish"],
-      "pain_points": ["What's hard or broken in their current workflow"],
-      "frequency": "daily | weekly | monthly | occasional"
-    }
-  ],
-
-  "priorities": {
-    "current": [
-      {
-        "initiative": "What we're focused on now",
-        "why": "Why this is the priority",
-        "success_criteria": "How we know this is done",
-        "deadline": null
+  "type": "object",
+  "required": ["vision", "personas", "priorities"],
+  "additionalProperties": true,
+  "properties": {
+    "vision": {
+      "type": "object",
+      "description": "Product vision and positioning.",
+      "required": ["problem", "audience"],
+      "additionalProperties": false,
+      "properties": {
+        "problem": { "type": "string", "description": "What problem this product solves." },
+        "audience": { "type": "string", "description": "Who it's for (be specific - role, org size, workflow)." },
+        "why_now": { "type": "string", "description": "Why this needs to exist now, not later." },
+        "differentiator": { "type": "string", "description": "What makes this different from alternatives." }
       }
-    ],
-    "next": [
-      {
-        "initiative": "What comes after current priorities",
-        "depends_on": "What must be true before starting this"
+    },
+    "success_metrics": {
+      "type": "array",
+      "description": "Measurable success criteria.",
+      "items": {
+        "type": "object",
+        "required": ["metric", "target", "measurement"],
+        "additionalProperties": false,
+        "properties": {
+          "metric": { "type": "string", "description": "What to measure." },
+          "target": { "type": "string", "description": "Quantified goal." },
+          "measurement": { "type": "string", "description": "How and where this is measured (PostHog event, database query, manual count)." },
+          "timeframe": { "type": "string", "description": "When to evaluate." }
+        }
       }
-    ],
-    "not_now": [
-      {
-        "initiative": "Explicitly deprioritized",
-        "reason": "Why it's not now",
-        "revisit_trigger": "What would change this"
+    },
+    "personas": {
+      "type": "array",
+      "description": "User personas.",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "goals", "frequency"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Persona label (e.g. 'Portfolio Analyst')." },
+          "role": { "type": "string", "description": "Job title or function." },
+          "goals": { "type": "array", "items": { "type": "string" }, "description": "What they're trying to accomplish." },
+          "pain_points": { "type": "array", "items": { "type": "string" }, "description": "What's hard or broken in their current workflow." },
+          "frequency": { "type": "string", "enum": ["daily", "weekly", "monthly", "occasional"], "description": "How often they use the product." }
+        }
       }
-    ]
-  },
-
-  "external_connectors": [
-    {
-      "name": "System name (Azure, PostHog, Linear, Marsoft Engine, etc.)",
-      "purpose": "What this connector does for the product",
-      "data_flow": "What data goes in/out",
-      "cost_model": "How this costs money (per-request, per-seat, flat)",
-      "owner": "Who manages this integration",
-      "status": "active | planned | evaluating | deprecated"
+    },
+    "priorities": {
+      "type": "object",
+      "description": "Current, next, and explicitly deprioritized work.",
+      "required": ["current"],
+      "additionalProperties": false,
+      "properties": {
+        "current": {
+          "type": "array",
+          "description": "What we're focused on now.",
+          "items": {
+            "type": "object",
+            "required": ["initiative", "why"],
+            "additionalProperties": false,
+            "properties": {
+              "initiative": { "type": "string", "description": "What we're focused on now." },
+              "why": { "type": "string", "description": "Why this is the priority." },
+              "success_criteria": { "type": "string", "description": "How we know this is done." },
+              "deadline": { "type": ["string", "null"], "format": "date", "description": "Hard deadline if any." }
+            }
+          }
+        },
+        "next": {
+          "type": "array",
+          "description": "What comes after current priorities.",
+          "items": {
+            "type": "object",
+            "required": ["initiative"],
+            "additionalProperties": false,
+            "properties": {
+              "initiative": { "type": "string", "description": "What comes after current priorities." },
+              "depends_on": { "type": "string", "description": "What must be true before starting this." }
+            }
+          }
+        },
+        "not_now": {
+          "type": "array",
+          "description": "Explicitly deprioritized work.",
+          "items": {
+            "type": "object",
+            "required": ["initiative", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "initiative": { "type": "string", "description": "Explicitly deprioritized." },
+              "reason": { "type": "string", "description": "Why it's not now." },
+              "revisit_trigger": { "type": "string", "description": "What would change this." }
+            }
+          }
+        }
+      }
+    },
+    "external_connectors": {
+      "type": "array",
+      "description": "External systems this product depends on.",
+      "items": {
+        "type": "object",
+        "required": ["name", "purpose", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "System name (Azure, PostHog, Linear, Marsoft Engine, etc.)." },
+          "purpose": { "type": "string", "description": "What this connector does for the product." },
+          "data_flow": { "type": "string", "description": "What data goes in/out." },
+          "cost_model": { "type": "string", "description": "How this costs money (per-request, per-seat, flat)." },
+          "owner": { "type": "string", "description": "Who manages this integration." },
+          "status": { "type": "string", "enum": ["active", "planned", "evaluating", "deprecated"], "description": "Current status." }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Hard constraints on the product.",
+      "additionalProperties": true,
+      "properties": {
+        "timeline": { "type": "string", "description": "Hard deadlines and why." },
+        "budget": { "type": "string", "description": "Cost ceilings and what they bound." },
+        "compliance": { "type": "array", "items": { "type": "string" }, "description": "Regulatory or policy requirements." },
+        "team": {
+          "type": "object",
+          "description": "Team constraints.",
+          "additionalProperties": false,
+          "properties": {
+            "size": { "type": "string", "description": "How many people." },
+            "expertise": { "type": "string", "description": "What the team knows well vs. is learning." },
+            "availability": { "type": "string", "description": "Full-time, part-time, shared with other projects." }
+          }
+        }
+      }
+    },
+    "decisions_log": {
+      "type": "array",
+      "description": "Product direction decisions.",
+      "items": {
+        "type": "object",
+        "required": ["date", "decision"],
+        "additionalProperties": false,
+        "properties": {
+          "date": { "type": "string", "format": "date", "description": "ISO date." },
+          "decision": { "type": "string", "description": "What was decided about product direction." },
+          "rationale": { "type": "string", "description": "Why." },
+          "decided_by": { "type": "string", "description": "Who made this call." }
+        }
+      }
     }
-  ],
-
-  "constraints": {
-    "timeline": "Hard deadlines and why",
-    "budget": "Cost ceilings and what they bound",
-    "compliance": ["Regulatory or policy requirements"],
-    "team": {
-      "size": "How many people",
-      "expertise": "What the team knows well vs. is learning",
-      "availability": "Full-time, part-time, shared with other projects"
-    }
-  },
-
-  "decisions_log": [
-    {
-      "date": "ISO date",
-      "decision": "What was decided about product direction",
-      "rationale": "Why",
-      "decided_by": "Who made this call"
-    }
-  ]
+  }
 }

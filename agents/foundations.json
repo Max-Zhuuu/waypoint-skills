@@ -62,5 +62,46 @@
     "constraint_sheet": "~/.claude/schemas/constraint-sheet.json",
     "trust_boundaries": "~/.claude/schemas/trust-boundaries.json",
     "design_sensibility": "~/.claude/design-sensibility.md"
+  },
+
+  "task_type_personas": {
+    "description": "Task classification determines reasoning mode and schema loading. Classify at step 0 before any reads.",
+    "types": {
+      "build": {
+        "mode": "constructive",
+        "question": "What should this do?",
+        "schema_loading": ["foundations.json", "constraint-sheet.json(primary dims)", "test-selection.json", "trust-boundaries.json(if boundary crossed)"],
+        "primary_dimensions": ["workload", "state", "trust", "observability"],
+        "reasoning": "Define boundaries, then fill inward. Start with what's NOT in scope."
+      },
+      "refactor": {
+        "mode": "structural",
+        "question": "What couples, what breaks?",
+        "schema_loading": ["foundations.json", "constraint-sheet.json(coupling, reversibility, ownership)"],
+        "primary_dimensions": ["coupling", "migration", "reversibility", "ownership"],
+        "reasoning": "Map dependency graph first. Every change must leave system working."
+      },
+      "migrate": {
+        "mode": "forensic",
+        "question": "What exists, what's the parity contract?",
+        "schema_loading": ["foundations.json", "constraint-sheet.json(all)", "trust-boundaries.json", "test-selection.json"],
+        "primary_dimensions": ["migration", "state", "observability", "ownership", "reversibility"],
+        "reasoning": "Inventory before planning. Every source feature accounted for."
+      },
+      "performance": {
+        "mode": "quantitative",
+        "question": "Where's the bottleneck?",
+        "schema_loading": ["foundations.json", "constraint-sheet.json(workload, observability, coupling)"],
+        "primary_dimensions": ["workload", "observability", "coupling"],
+        "reasoning": "Measure before hypothesizing. No guesses at bottlenecks."
+      },
+      "integrate": {
+        "mode": "contractual",
+        "question": "What's the SLA, what fails, what's the fallback?",
+        "schema_loading": ["foundations.json", "constraint-sheet.json(operations, trust)", "trust-boundaries.json(external connectors)"],
+        "primary_dimensions": ["operations", "trust", "observability", "coupling"],
+        "reasoning": "Connector's failure mode IS the design constraint. Start with what breaks."
+      }
+    }
   }
 }

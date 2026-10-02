@@ -15,32 +15,28 @@
       "name": "Prerequisites and scope protection",
       "reads": ["SCOPE.md", "CLAUDE.md", "ARCHITECTURE.md", "contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
       "references": ["reference/migration-structure.md", "reference/references.md"],
-      "instruction": "Verify /setup has been run (SCOPE.md, ARCHITECTURE.md, CLAUDE.md exist). Read scope docs and endpoint registries. Migration is not an excuse to cut source system features. All source features are IN unless explicitly cut with reason and owner recorded. If parity verification system exists (entity registries, endpoint maps), read it as authoritative scope.",
+      "instruction": "Verify /setup ran (SCOPE.md, ARCHITECTURE.md, CLAUDE.md exist). Read scope docs and endpoint registries. All source features IN unless explicitly cut with reason and owner. Parity system (entity registries, endpoint maps) is authoritative scope if exists.",
       "checklist": [
-        "/setup has been run (SCOPE.md, ARCHITECTURE.md, CLAUDE.md exist)",
-        "Scope docs read",
-        "Scope protection acknowledged: all source features IN unless explicitly cut",
-        "Parity system read (if exists)"
+        "/setup ran, scope docs read",
+        "All source features IN unless explicitly cut",
+        "Parity system read if exists"
       ]
     },
     {
       "id": "phase-dispatch",
       "name": "Phase dispatch",
       "reads": ["CLAUDE.md"],
-      "instruction": "Read Active Workflow from CLAUDE.md to determine current phase. Route to the appropriate phase file. 7 phases: (1) docs sprint, (2) vertical slice, (3) horizontal buildout, (4) integration, (5) functional validation, (6) design pass, (7) cutover. Each phase file lives at phases/{NN}-{name}.md. If no workflow record: start at phase 1 and write the workflow record.",
+      "instruction": "Read Active Workflow from CLAUDE.md for current phase. Route to phases/{NN}-{name}.md. 7 phases: docs sprint, vertical slice, horizontal buildout, integration, functional validation, design pass, cutover. No workflow record -> start phase 1, write record.",
       "checklist": [
-        "Current phase identified from Active Workflow",
-        "Routed to correct phase file"
+        "Phase identified and routed"
       ]
     },
     {
       "id": "wrapup-and-advance",
       "name": "Wrapup and phase advance",
-      "instruction": "At phase boundaries: suggest /wrapup to resolve concerns and cascade docs. Evaluate gate criteria from the current phase file. If gate passes: advance phase in CLAUDE.md Active Workflow record, announce next phase. If gate fails: list unmet criteria, propose work to close gaps. At final phase (cutover): mark workflow as completed with date.",
+      "instruction": "At phase boundaries: suggest /wrapup. Evaluate gate criteria from phase file. Pass -> advance phase in CLAUDE.md, announce next. Fail -> list unmet, propose work. Final phase (cutover) -> mark completed with date.",
       "checklist": [
-        "/wrapup suggested at phase boundary",
-        "Gate criteria evaluated",
-        "Phase advanced (or gaps identified)"
+        "Gate evaluated, phase advanced or gaps listed"
       ]
     }
   ],

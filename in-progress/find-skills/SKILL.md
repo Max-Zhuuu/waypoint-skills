@@ -4,58 +4,13 @@ description: "Discover and recommend installable skills from the ecosystem. Use 
 status: experimental
 ---
 
-Help users discover and install skills from the open agent skills ecosystem via the Skills CLI (`npx skills`).
-
-## Triggers
-
-Use when the user asks how to do X (where a skill likely exists), asks to find/search for skills, wants to extend capabilities, or mentions needing help with a specific domain.
+Discover and install skills from the open agent skills ecosystem via Skills CLI (`npx skills`).
 
 ## Process
 
-### 1. Understand the need
-
-Identify the domain (e.g., React, testing, deployment), the specific task, and whether it's common enough that a skill likely exists.
-
-### 2. Search
-
-Check the [skills.sh leaderboard](https://skills.sh/) first for well-known skills. If not covered, run:
-
-```bash
-npx skills find [query]
-```
-
-Use specific keywords: "react testing" over just "testing". Try alternative terms if the first query misses.
-
-### 3. Verify quality
-
-Do not recommend based solely on search results. Check:
-- **Install count** - prefer 1K+, cautious under 100
-- **Source reputation** - official sources (`vercel-labs`, `anthropics`, `microsoft`) over unknown authors
-- **GitHub stars** - repos with <100 stars deserve skepticism
-
-### 4. Present and install
-
-Present: skill name, what it does, install count, source, install command.
-See [reference/examples.md](reference/examples.md) for response format.
-
-To install for the user:
-
-```bash
-npx skills add <owner/repo@skill> -g -y
-```
-
-### When no skills found
-
-Acknowledge the gap, offer to help directly with general capabilities, mention `npx skills init` for creating custom skills.
-
-## Categories
-
-See [reference/categories.md](reference/categories.md) for common search categories and keyword suggestions.
+1. **Search** - Identify domain + task. Check [skills.sh](https://skills.sh/) first. Then `npx skills find [query]` with specific keywords. Try alternative terms if first query misses. Categories: [reference/categories.md](reference/categories.md).
+2. **Verify + recommend** - Check: install count (prefer 1K+, cautious <100), source reputation (official > unknown), stars (<100 = skepticism). Present: name, purpose, count, source, install command. Format: [reference/examples.md](reference/examples.md). Install: `npx skills add <owner/repo@skill> -g -y`. Nothing found: acknowledge gap, offer direct help, mention `npx skills init`.
 
 ## Tone
 
-Concise. Skill name, one-line reason, install command.
-
-## Exit
-
-Discovery complete. User installs selected skills or moves on.
+Skill name, one-line reason, install command.

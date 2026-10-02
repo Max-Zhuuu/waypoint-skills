@@ -22,7 +22,19 @@
     { "risk": "Generic visual regression", "test": "Promoted visual baseline, fixed fonts/data/environment, meaningful viewports" },
     { "risk": "Behavioral regression from refactoring", "test": "Characterization tests (capture current behavior before change), then equivalence assertions (new path produces same output as old)" },
     { "risk": "Data migration corruption", "test": "Round-trip proof: migrate forward, verify, migrate back, verify unchanged. Null/edge rows in fixture." },
-    { "risk": "External connector failure", "test": "Timeout, auth expiry, rate limit, partial response, DNS failure. Each connector tested independently." }
+    { "risk": "External connector failure", "test": "Timeout, auth expiry, rate limit, partial response, DNS failure. Each connector tested independently." },
+    { "risk": "Dependency upgrade regression", "test": "Pin baseline behavior before upgrade. Full suite both versions. Diff transitive lockfile. Smoke-test integration points whose SDK changed." },
+    { "risk": "Configuration drift between environments", "test": "Boot-time guards refuse unsafe/incomplete config. Schema-validate all env configs against canonical shape. Diff staging vs production config keys (not values)." },
+    { "risk": "API backward compatibility breakage", "test": "Record response shapes as contract snapshots. Assert new version produces superset-compatible responses (no removed fields, no narrowed types). Breaking changes require version bump + migration path." },
+    { "risk": "Performance regression", "test": "Benchmark critical paths with representative data. Baseline with statistical significance (min 5 runs, report p95). Fail on >10% latency regression. N+1 query detection via query count assertion." },
+    { "risk": "Cache coherence failure", "test": "Write-then-read through cache verifies freshness. Tenant-scoped cache keys (no cross-tenant bleed). TTL expiry with clock control. Invalidation triggered by every declared write-path." },
+    { "risk": "Timezone, locale, or encoding mismatch", "test": "Date arithmetic across DST transitions. Storage round-trip UTC vs local. Locale-dependent sorting with non-ASCII. Unicode normalization for search. Midnight boundary for date-only fields." },
+    { "risk": "Event ordering or delivery failure", "test": "Out-of-order: send B then A, verify correct state. Duplicate: send same twice, verify idempotent. Dropped: verify gap detection or alert. Webhook signature validation with tampered payloads." },
+    { "risk": "Feature flag interaction", "test": "Critical paths each flag on and off. Pairwise for N interacting flags. Assert no combination disables auth or transaction safety. Sweep flags on >30 days for cleanup." },
+    { "risk": "Shared component breaking unknown consumers", "test": "Enumerate consumers via import graph. Run consumer suites against changed component. Contract test for dynamic consumers (plugins, extensions)." },
+    { "risk": "Persistence invariant violation", "test": "FK/referential integrity at database level. Cascade delete/update with realistic chains. Unique constraints tested with concurrent inserts." },
+    { "risk": "LLM boundary violation", "test": "Tool auth: output cannot invoke tools beyond declared scope. Data classification: no PII/secrets in outbound prompts. Prompt injection: adversarial inputs cannot override system instructions. Cost caps enforced server-side." },
+    { "risk": "Concurrent session interference", "test": "Two sessions different users: no data leakage in responses or subscriptions. Multi-tab same user: optimistic lock conflict surfaces. Session fixation/rotation tested after auth events." }
   ],
 
   "dimensions": [
@@ -38,6 +50,13 @@
     { "name": "accessibility", "examples": ["keyboard_nav", "screen_reader", "reduced_motion", "high_contrast"] }
   ],
   "dimension_classification": ["boundary", "equivalence_partition", "invariant", "transition", "environmental"],
+  "dimension_classification_definitions": {
+    "boundary": "Values at edge of validity where behavior changes. Off-by-one, min/max, empty/full, just-over/just-under a limit.",
+    "equivalence_partition": "Groups of values producing same behavior. One representative per group sufficient.",
+    "invariant": "Property that must hold regardless of input or state. Tested by asserting across diverse inputs.",
+    "transition": "State change sequences where order matters. Test valid transitions AND assert invalid transitions rejected.",
+    "environmental": "Conditions external to application logic: timezone, locale, viewport, OS, network speed."
+  },
   "dimension_rule": "Enumerate relevant dimensions. Classify each. Mark irrelevant dimensions with explicit reasons.",
 
   "coverage_strategies": [
@@ -46,7 +65,11 @@
     { "situation": "Dangerous interactions (auth, money, data loss)", "strategy": "Targeted adversarial" },
     { "situation": "State sequences", "strategy": "Property/model-based exploration" },
     { "situation": "Refactoring (behavior must not change)", "strategy": "Characterization tests before change, equivalence proof after. Golden file or parallel-run comparison." },
-    { "situation": "External connector integration", "strategy": "Contract test against recorded responses. Separate live smoke from unit. Never mock the failure modes." }
+    { "situation": "External connector integration", "strategy": "Contract test against recorded responses. Separate live smoke from unit. Never mock the failure modes." },
+    { "situation": "Consumer-provider boundary (API, event, schema)", "strategy": "Consumer-driven contract tests. Consumer declares expected shape. Provider verifies it produces that shape. Neither mocks the contract." },
+    { "situation": "Output matching known-good reference (reports, rendered HTML, computed values)", "strategy": "Golden file comparison with external oracle. Snapshot auto-update requires human review. Diffs inline, not just pass/fail." },
+    { "situation": "Repeating structural invariant across codebase (naming, auth, imports, route registration)", "strategy": "Convention enforcement test: parse codebase structurally, assert invariant for all instances. Ratchet pattern for gradual adoption." },
+    { "situation": "System resilience under partial failure (multi-dependency, cascading)", "strategy": "Fault injection at specific boundaries. Verify graceful degradation, not just error handling. Test recovery after fault clears." }
   ],
   "coverage_rule": "Pairwise is NOT sufficient for authorization or transactional correctness.",
 
@@ -56,7 +79,13 @@
     "Testing only happy path for security-relevant operations",
     "Visual regression with non-deterministic fonts/data/dates",
     "Treating test count as quality metric",
-    "Re-running flaky test until green and calling it verified"
+    "Re-running flaky test until green and calling it verified",
+    "Testing test infrastructure instead of production behavior (asserting mock was called, verifying test helper shape)",
+    "Tautological assertions that can never fail (asserting defined when function always returns, asserting type the compiler proves)",
+    "Re-implementing production algorithm in test to compute expected values (test and production share same bug)",
+    "Mocking the boundary under test (claiming integration coverage while protocol, serialization, error handling all mocked)",
+    "Excessive test scaffolding obscuring the assertion (200-line setup for 10-line test = wrong layer or too-broad interface)",
+    "Same-session production+test as self-verification (agent writes code and tests verifying own interpretation - if wrong, both wrong same direction)"
   ],
 
   "principles": [
@@ -75,70 +104,90 @@
       "file": "bv-glomaris-vms/tests/test_iban.py",
       "lines": "1-167",
       "pattern": "Systematic boundary/equivalence partitioning for IBAN validation. Each boundary value isolates exactly one dimension. Docstrings explain why the wrong check would pass.",
-      "demonstrates": ["dimensions", "boundary", "equivalence_partition"]
+      "demonstrates": ["dimensions", "boundary", "equivalence_partition"],
+      "snippet": "VALID = ['GB33BUKB20201555555555', 'DE89370400440532013000']\ndef _csharp_walk(digits):\n    '''Independent oracle transcribed from reference.'''\n    while len(buf) > 6:\n        prefix, buf = buf[:6], buf[6:]\n        buf = str(int(prefix) % 97) + buf\n    return int(buf) % 97",
+      "generalized_pattern": "Each test value isolates one validation dimension; independent oracle verifies production code."
     },
     {
       "id": "auth-independent-oracle",
       "file": "bv-glomaris-vms/tests/test_auth.py",
       "lines": "58-66",
       "pattern": "Hash pinned against external C# expression line numbers, not against the Python implementation. Tests parity with the oracle, not self-consistency.",
-      "demonstrates": ["anti_patterns (circular oracle avoidance)"]
+      "demonstrates": ["anti_patterns (circular oracle avoidance)"],
+      "snippet": "def test_password_hash_matches_reference():\n    expected = hashlib.sha256(b'Test1234SHA256Managed').hexdigest()\n    assert my_hash('Test1234') == expected",
+      "generalized_pattern": "Pin computed value against independently specified expected result, not production code's own formula."
     },
     {
       "id": "golden-parity",
       "file": "bv-glomaris-vms/tests/test_golden_parity.py",
       "lines": "1-151",
       "pattern": "Replays Python engine against JSON snapshots from running C# server. External oracle. Excluded accounts documented with 5-point evidence trail and separately asserted still written.",
-      "demonstrates": ["layers (integration via golden files)", "anti_patterns (independent oracle)"]
+      "demonstrates": ["layers (integration via golden files)", "anti_patterns (independent oracle)"],
+      "snippet": "for fixture in FIXTURES:\n    snapshot = load_snapshot(fixture)\n    result = recalculate(snapshot.inputs)\n    for entry in snapshot.expected_outputs:\n        assert result.get(entry.key).amount == entry.amount",
+      "generalized_pattern": "Replay new implementation against JSON snapshots from reference system; exclusions documented with evidence trail."
     },
     {
       "id": "claim-lifecycle-computed",
       "file": "bv-glomaris-vms/tests/test_claim_lifecycle.py",
       "lines": "228-250",
       "pattern": "Pins unobservable phantom field through the one stored figure computed from it. Direct assertion on phantom proves nothing; indirect assertion through dependent value does.",
-      "demonstrates": ["risk_to_test (incorrect nested computed values)"]
+      "demonstrates": ["risk_to_test (incorrect nested computed values)"],
+      "snippet": "# Phantom field unobservable directly, pin through dependent:\nclaim_lifecycle.update_net_outlay(claim, uow, previous=previous)\nsummary = SummaryRepository(uow).get(ref, fix)\n# Wrong phantom (500) -> 50. Correct (900) -> 90.\nassert summary.DeductiblesAmount == Decimal('90')",
+      "generalized_pattern": "Pin unobservable intermediates through downstream stored values; wrong intermediate produces wrong dependent."
     },
     {
       "id": "dual-assertion-tenant",
       "file": "bv-glomaris-vms/tests/admin/test_admin_tenant_access.py",
       "lines": "45-70",
       "pattern": "Two independent proofs: runtime (only low-privilege secret requested) AND static source scan (no line fetches high-privilege secret name). NASA Rule 5 in practice.",
-      "demonstrates": ["dual_assertion_rule", "dimensions[tenant_ownership]"]
+      "demonstrates": ["dual_assertion_rule", "dimensions[tenant_ownership]"],
+      "snippet": "def test_only_low_privilege_secret(vault):\n    with tenant_connection(uow, 'acme'):\n        pass\n    assert vault == ['tenant-acme-readonly']\n\ndef test_no_source_fetches_admin_secret():\n    for path in root.rglob('*.py'):\n        for line in path.read_text().splitlines():\n            if 'full_privilege_name' in line and 'secret(' in line:\n                raise AssertionError(f'{path.name} fetches admin secret')",
+      "generalized_pattern": "Prove security from two directions: runtime (what was requested) AND static source scan (what code could request)."
     },
     {
       "id": "fixture-status-orchestration",
       "file": "bv-glomaris-vms/tests/test_fixture_status.py",
       "lines": "1-322",
       "pattern": "Orchestration tested separately from effects. Stub records (method_name, status_at_call_time) - the property no other test sees.",
-      "demonstrates": ["risk_to_test (state-sequence bug)"]
+      "demonstrates": ["risk_to_test (state-sequence bug)"],
+      "snippet": "calls = []\ndef stub_method(name, record):\n    calls.append((name, record.Status))\n# Orchestration posts at status 3, then sets 4.\n# Wrong order: methods see 4, skip with early return.\nassert calls == [('InsertFreight', '3'), ('InsertCommission', '3')]",
+      "generalized_pattern": "Test orchestration separately from effects: stub records what was called and at what state."
     },
     {
       "id": "keyvault-concurrency",
       "file": "bv-glomaris-vms/tests/admin/test_admin_keyvault.py",
       "lines": "173-205",
       "pattern": "Thread-safety of singleton via real threading.Barrier. 8 threads contend, assert exactly 1 construction.",
-      "demonstrates": ["risk_to_test (duplicate persisted mutation)", "dimensions[concurrency]"]
+      "demonstrates": ["risk_to_test (duplicate persisted mutation)", "dimensions[concurrency]"],
+      "snippet": "built = []\nbarrier = threading.Barrier(8)\ndef race():\n    barrier.wait()\n    get_client()\nthreads = [Thread(target=race) for _ in range(8)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nassert len(built) == 1",
+      "generalized_pattern": "Test singleton thread-safety with real barrier: N threads contend, assert exactly 1 construction."
     },
     {
       "id": "hook-coverage-convention",
       "file": "bv-glomaris-vms/tests/test_hook_coverage.py",
       "lines": "1-1580",
       "pattern": "1580-line convention enforcement test. Sweeps every lifecycle hook, verifies every substantive hook ported. Positive controls (strip evidence, pairs come back). Discovered 4 real defects.",
-      "demonstrates": ["coverage_strategies (exhaustive for finite decision tables)"]
+      "demonstrates": ["coverage_strategies (exhaustive for finite decision tables)"],
+      "snippet": "# Exhaustive sweep: every hook across every writable table\ndef test_positive_control():\n    result = run_without_evidence(table, hook)\n    assert result.status == 'gap'  # proves gate measures",
+      "generalized_pattern": "For finite decision tables, sweep exhaustively with positive controls: remove evidence, assert gap reappears."
     },
     {
       "id": "route-shadowing",
       "file": "bv-glomaris-vms/tests/test_route_shadowing.py",
       "lines": "1-323",
       "pattern": "Structural test: no two routes match the same URL for the same method. Born from real incident. Latent overlap set pinned in both directions.",
-      "demonstrates": ["coverage_strategies (exhaustive)", "anti_patterns (prevent ambiguity, don't resolve it)"]
+      "demonstrates": ["coverage_strategies (exhaustive)", "anti_patterns (prevent ambiguity, don't resolve it)"],
+      "snippet": "for (r1, m1), (r2, m2) in combinations(routes, 2):\n    if m1 != m2: continue\n    if could_match_same_url(r1, r2):\n        conflicts.append((r1, r2, m1))\nassert not conflicts",
+      "generalized_pattern": "Structurally test no two routes match same URL for same method; prevent ambiguity at registration, not resolution."
     },
     {
       "id": "ddl-faithfulness",
       "file": "bv-glomaris-vms/tests/test_ddl_faithfulness.py",
       "lines": "1-251",
       "pattern": "DDL tested from both directions: no phantom column created AND every non-phantom column still is. Nullability verified per column against generator rules.",
-      "demonstrates": ["risk_to_test (schema drift)"]
+      "demonstrates": ["risk_to_test (schema drift)"],
+      "snippet": "for table in generated_tables:\n    ddl_cols = columns_in_ddl(table)\n    schema_cols = columns_in_schema(table)\n    assert not (ddl_cols - schema_cols), f'phantom: {ddl_cols - schema_cols}'\n    assert not (schema_cols - ddl_cols), f'missing: {schema_cols - ddl_cols}'",
+      "generalized_pattern": "Test schema faithfulness both directions: no phantom artifacts AND no missing artifacts."
     }
   ]
 }

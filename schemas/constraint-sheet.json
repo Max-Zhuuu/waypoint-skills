@@ -77,6 +77,16 @@
   ],
   "stopping_rule": "Research only concrete decisions whose answer could change the implementation.",
 
+  "defer": {
+    "description": "Not every decision needs to be made now. Deferral is a valid outcome when cost of deciding wrong exceeds cost of delay.",
+    "required_fields": {
+      "observable_trigger_to_force_decision": "Concrete condition that will force this decision (e.g., 'when daily active users exceed 10k' or 'when the second tenant onboards').",
+      "cost_of_delay": "What gets worse while this decision remains open.",
+      "what_stays_open": "Which downstream decisions are blocked and which can proceed independently."
+    },
+    "guidance": "Defer when: reversibility unclear and more information coming, decision value depends on future event, or premature commitment constrains options disproportionately. Do not defer when: downstream work blocked or cost of delay compounds."
+  },
+
   "principles": [
     { "id": "google-review", "source": "Google eng-practices (looking-for.md)", "principle": "Design > Functionality > Complexity > Tests. Solve the problem you know needs solving now.", "maps_to": "stopping_criteria" },
     { "id": "aws-lightweight", "source": "AWS ShardStore (CACM 2015)", "principle": "Lightweight embedded specification in the code rather than separate formal system.", "maps_to": "default_posture" }
@@ -87,21 +97,27 @@
       "id": "schema-driven-codegen",
       "file": "bv-glomaris-vms/data/schema.json + tools/generate_dataclasses.py",
       "pattern": "Single schema.json is source of truth for field names, types, max lengths, PK, defaults. Codegen produces dataclasses. No hand-written model can drift from the database.",
-      "demonstrates": ["dimensions.state (source_of_truth)"]
+      "demonstrates": ["dimensions.state (source_of_truth)"],
+      "snippet": "# AUTO-GENERATED from data/schema.json - do not edit by hand.\n# Source table: {table}\n# Regenerate: python tools/generate_dataclasses.py\nPRIMARY_KEY = {pk!r}\n@dataclass\nclass {classname}:",
+      "generalized_pattern": "Single machine-readable schema is source of truth; code generators produce runtime types, models cannot drift from storage layer."
     },
     {
       "id": "unit-of-work",
       "file": "bv-glomaris-vms/src/app/db/unit_of_work.py",
       "lines": "1-148",
       "pattern": "UoW owns connection, cursor, commit/rollback boundary. Savepoints for partial-batch rollback. Teardown asymmetric: commit failures propagate, rollback/close failures swallowed.",
-      "demonstrates": ["dimensions.state (transaction_boundary)", "dimensions.operations (recovery_approach)"]
+      "demonstrates": ["dimensions.state (transaction_boundary)", "dimensions.operations (recovery_approach)"],
+      "snippet": "class UnitOfWork:\n    def __enter__(self):\n        self._conn = connect()\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is None:\n            self._conn.commit()   # propagate commit failures\n        else:\n            self._conn.rollback() # swallow rollback failures",
+      "generalized_pattern": "Unit of Work owns transaction boundary; commit failures propagate, rollback/close failures swallowed - second exception masks the real one."
     },
     {
       "id": "declarative-read-grids",
       "file": "bv-glomaris-vms/src/app/read_grid.py",
       "lines": "1-246",
       "pattern": "100+ read routes declared as frozen dataclasses, validated at import time. Unknown tables, unknown columns, mismatched route params all fail before any request.",
-      "demonstrates": ["default_posture (modular app with clear internal boundaries)"]
+      "demonstrates": ["default_posture (modular app with clear internal boundaries)"],
+      "snippet": "@dataclass(frozen=True)\nclass ReadGrid:\n    table: str\n    def __post_init__(self):\n        if self.table not in schema.tables():\n            raise ValueError(f'unknown table: {self.table}')",
+      "generalized_pattern": "Declare routes as immutable data validated at startup; misconfigured route fails at boot, not first user request."
     }
   ]
 }

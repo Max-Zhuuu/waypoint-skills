@@ -2,7 +2,7 @@
   "$schema": "../../schemas/skill.schema.json",
   "name": "triage",
   "status": "stable",
-  "description": "Read a backlog (Linear, GitHub, PRs, or a list), categorize, prioritize, and route each item to the right verb.",
+  "description": "Read backlog, categorize, prioritize, route to right verb.",
 
   "chain": {
     "from": [],
@@ -17,20 +17,17 @@
       "id": "read-backlog",
       "name": "Read backlog",
       "reads": ["CLAUDE.md"],
-      "instruction": "Auto-detect backlog source from CLAUDE.md (Linear workflow section, GitHub issues config) or accept a user-provided list. Parse issues, PRs, or items. For each: extract title, description, labels, status, assignee.",
+      "instruction": "Auto-detect source from CLAUDE.md (Linear, GitHub) or accept user list. Parse items: title, description, labels, status, assignee.",
       "checklist": [
-        "Backlog source identified",
-        "Items parsed with title, description, labels"
+        "Backlog source identified, items parsed"
       ]
     },
     {
       "id": "categorize",
       "name": "Categorize",
-      "instruction": "For each item: categorize as feature, bug, tech debt, or question. Extract acceptance criteria if present. Note dependency links between items.",
+      "instruction": "Each item: feature, bug, tech debt, or question. Extract acceptance criteria if present. Note dependency links.",
       "checklist": [
-        "Every item has a category (feature/bug/tech-debt/question)",
-        "Acceptance criteria extracted where present",
-        "Dependencies between items noted"
+        "Every item categorized with deps noted"
       ]
     },
     {
@@ -38,34 +35,27 @@
       "name": "Enterprise cross-reference",
       "enterprise": true,
       "reads": ["contracts/*-endpoints.json", "SCOPE.md", "docs/implementation/parity/*.csv"],
-      "instruction": "Cross-reference backlog against endpoint registry: uncovered 'in' endpoints are implicit high-priority items. Check scope docs for items that may conflict with scope protection. Check parity systems (entity registries, endpoint maps) for uncovered entities.",
+      "instruction": "Cross-reference against endpoint registry: uncovered 'in' endpoints are implicit high-priority items. Check scope for conflicts. Check parity systems for uncovered entities.",
       "checklist": [
-        "Endpoint registry cross-referenced (uncovered 'in' endpoints surfaced)",
-        "Scope conflicts flagged",
-        "Parity gaps surfaced (if parity system exists)"
+        "Uncovered endpoints surfaced, scope conflicts flagged"
       ]
     },
     {
       "id": "prioritize",
       "name": "Prioritize",
       "references": ["../../schemas/routing-policy.json"],
-      "instruction": "Rank items by: blocking status (blockers first), dependency order (prerequisites before dependents), severity, age. For migration projects: route migration screens to /tdd with port-checklist as reference. Apply priority routing discipline from routing-policy.json when ranking: evidenced incident > missed commitment risk > direct unblock > goal contribution > uncertainty reduction > context-switch cost. Preserve current work by default.",
+      "instruction": "Rank: blockers first, then dep order, severity, age. Apply routing-policy priority: incident > missed commitment > unblock > contribution > uncertainty reduction > switch cost. Preserve current work by default.",
       "checklist": [
-        "Items ranked by blocking status, deps, severity, age",
-        "Migration screens routed with port-checklist reference (if migration project)",
-        "Candidates ranked per routing policy priority order",
+        "Items ranked per routing policy priority",
         "Current work preserved unless justified switch"
       ]
     },
     {
       "id": "route",
       "name": "Route to verb",
-      "instruction": "Present ranked list with recommended verb per item: feature without spec -> /spec, feature with spec -> /breakdown (or /tdd if already decomposed), bug -> /diagnose, tech debt -> /tdd direct, question or ambiguity -> /grill-with-docs. User picks one. Hand off to the chosen verb. When routing to a build verb, note likely impact facets as advisory context (e.g. 'this touches auth boundaries - will need denial tests').",
+      "instruction": "Present ranked list with verb: feature without spec -> /spec, with spec -> /breakdown, bug -> /diagnose, tech debt -> /tdd, question -> /grill-with-docs. Note likely impact facets for downstream. User picks, hand off.",
       "checklist": [
-        "Ranked list presented with verb per item",
-        "User has picked an item",
-        "Handed off to chosen verb",
-        "Likely impact facets noted for downstream skill"
+        "Ranked list with verbs presented, user picked, handed off"
       ]
     }
   ],
@@ -85,5 +75,5 @@
     "chain_dispatch": false
   },
 
-  "tone": "Brief. You are a dispatch desk, not a project manager. Present facts, route fast."
+  "tone": "Brief. Dispatch desk, not project manager. Facts, route fast."
 }

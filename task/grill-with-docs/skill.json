@@ -27,12 +27,9 @@
         "ARCHITECTURE.md",
         "TESTING.md"
       ],
-      "instruction": "Check what documentation structure exists. Read the project's CLAUDE.md for the full layout. Scan for: GLOSSARY.md (or GLOSSARY-MAP.md), docs/adr/ or docs/decisions/, SCOPE.md, CONVENTIONS.md, ARCHITECTURE.md, TESTING.md, architecture rule catalogue (architecture-rule-catalogue.md or similar), endpoint registries (contracts/*-endpoints.json). Create files lazily - only when you have something to write.",
+      "instruction": "Read CLAUDE.md for doc layout. Scan for glossary, ADRs, scope, conventions, architecture, testing, rule catalogue, endpoint registries. Create files lazily.",
       "checklist": [
-        "CLAUDE.md read for documentation layout",
-        "Existing docs identified",
-        "Architecture rule catalogue presence noted",
-        "Endpoint registries presence noted"
+        "CLAUDE.md read, existing docs + catalogue + registries identified"
       ]
     },
     {
@@ -46,48 +43,37 @@
       "references": [
         "reference/catalogue-grill.md"
       ],
-      "instruction": "If an architecture rule catalogue exists, follow reference/catalogue-grill.md: initialize a per-family checklist, grill each family systematically (one at a time, depth-first). Produce consolidated decision-tree ADRs (one per root question with branching sub-decisions), not granular per-decision docs. Target 6-8 ADRs for complex projects. Cross-reference against the catalogue's open items. Check SCOPE.md and endpoint registries before recommending any changes - never cut features or endpoints without explicit user approval.",
+      "instruction": "If rule catalogue exists: follow reference/catalogue-grill.md. Per-family checklist, grill depth-first. Consolidated decision-tree ADRs (target 6-8). Cross-reference catalogue open items. Never cut features/endpoints without user approval.",
       "checklist": [
-        "Rule families enumerated as checklist",
-        "Each family grilled systematically",
-        "Open items from catalogue addressed",
-        "Scope protection checked before recommendations",
-        "ADRs consolidated (decision-tree style)"
+        "Each family grilled, open items addressed",
+        "Scope protection checked, ADRs consolidated"
       ]
     },
     {
       "id": "interview",
       "name": "Interview",
-      "instruction": "Interview relentlessly about every aspect of the plan. One question at a time, waiting for feedback before continuing. For each question, provide a recommended answer. If a question can be answered by exploring the codebase, explore instead of asking. Challenge against the glossary: when a term conflicts with GLOSSARY.md, call it out immediately. Sharpen fuzzy language: propose precise canonical terms for vague or overloaded words. Discuss concrete scenarios that probe edge cases. Cross-reference with code: if the user states how something works, check whether the code agrees.",
+      "instruction": "One question at a time, with recommended answer. Explore codebase instead of asking when possible. Challenge terms against glossary. Sharpen vague language to canonical terms. Probe edge cases with scenarios. Cross-reference claims with code.",
       "checklist": [
-        "Every design branch walked depth-first",
-        "Terms validated against glossary",
-        "Vague terms sharpened to canonical names",
-        "Edge cases stress-tested with scenarios",
-        "Code cross-referenced where possible",
-        "Architecture questions grilled against constraint sheet dimensions (workload, state, trust, operations)"
+        "Every design branch walked, terms validated against glossary",
+        "Edge cases stress-tested, code cross-referenced",
+        "Architecture questions grilled against constraint sheet"
       ]
     },
     {
       "id": "update-docs",
       "name": "Update docs inline",
-      "instruction": "Update GLOSSARY.md inline when a term is resolved - don't batch. GLOSSARY.md must be devoid of implementation details; it is a glossary and nothing else. Cascade to other project docs when decisions affect them: naming pattern -> conventions/NAMING.md, scope change -> SCOPE.md, dependency change -> ARCHITECTURE.md, test expectations -> TESTING.md. Only cascade when the doc exists and the change is genuine.",
+      "instruction": "Update GLOSSARY.md inline when term resolved, not batched. No implementation details in glossary. Cascade to existing docs when genuine: naming -> NAMING.md, scope -> SCOPE.md, deps -> ARCHITECTURE.md, tests -> TESTING.md. Never create docs just to cascade.",
       "checklist": [
-        "Resolved terms written to GLOSSARY.md immediately",
-        "Cascades applied to affected existing docs",
-        "No docs created just to cascade into"
+        "Terms written to GLOSSARY.md immediately, cascades applied to existing docs"
       ]
     },
     {
       "id": "offer-adrs",
       "name": "Offer ADRs sparingly",
       "references": ["../../schemas/constraint-sheet.json"],
-      "instruction": "Only offer an ADR when all three hold: (1) hard to reverse - cost of changing later is meaningful, (2) surprising without context - future reader will wonder why, (3) result of a real trade-off - genuine alternatives existed. If any is missing, skip the ADR. Consolidate related decisions into a single ADR. Each answers a root question with branching sub-decisions. When an ADR passes the three-gate test, structure it using the constraint sheet: record workload assumptions, state ownership, trust boundaries, operations plan, one rejected alternative with revisit trigger.",
+      "instruction": "ADR only when all three hold: (1) hard to reverse, (2) surprising without context, (3) real trade-off. Consolidate related decisions into single ADR. Structure with constraint sheet: workload, state, trust, operations, rejected alternative, revisit trigger.",
       "checklist": [
-        "Three-gate test applied to every ADR candidate",
-        "Related decisions consolidated into single ADRs",
-        "ADR format from schemas/adr-format.json used",
-        "ADRs include constraint sheet dimensions and revisit trigger"
+        "Three-gate test applied, ADRs consolidated with constraint sheet structure"
       ]
     }
   ],

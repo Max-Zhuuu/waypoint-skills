@@ -307,6 +307,47 @@
     ]
   },
 
+  "adversarial_review": {
+    "description": "Independent adversarial review of architecture decisions during planning.",
+    "trigger": "Reversibility assessed as expensive or irreversible.",
+    "per_tier": {
+      "tier_1": "Protocol suggests adversarial review. User invokes.",
+      "tier_2": "Protocol suggests adversarial review. User invokes.",
+      "tier_3": "Protocol suggests automatic dispatch. User can skip."
+    },
+    "rules": [
+      "Adversarial agent receives the DECISION, not the reasoning.",
+      "Adversarial agent reads schemas independently - same schemas, fresh context.",
+      "Adversarial agent must NOT see the planning agent's constraint sheet fill or rationale.",
+      "Convergent findings are high-confidence. Divergent findings are the valuable ones."
+    ],
+    "agent": "adversarial-reviewer"
+  },
+
+  "loading_profiles": {
+    "description": "Two modes. Auto-detected from project state. Convention mode for existing projects, establishment mode for 0-to-1.",
+    "detection": {
+      "rule": "If CONVENTIONS.json AND ARCHITECTURE.json exist in project root -> convention_mode. Otherwise -> establishment_mode.",
+      "override": "User can force establishment_mode by invoking /setup."
+    },
+    "convention_mode": {
+      "description": "Project has conventions. Agent writes code that fits. Methodology overhead minimal.",
+      "always_load": ["foundations.json (evidence_discipline, obligation_tracking only)", "CONVENTIONS.json", "ARCHITECTURE.json"],
+      "load_on_boundary_cross": ["trust-boundaries.json (crossed boundary only)"],
+      "load_on_irreversible": ["constraint-sheet.json"],
+      "never_load": ["routing-policy.json (full)", "engagement-protocol.json (full)"],
+      "engagement": "step_tracking + exit_sequence only. No concern emission, no tier detection, no nudge protocol.",
+      "target": "< 500 lines total framework context"
+    },
+    "establishment_mode": {
+      "description": "No conventions yet. Agent establishes them. Full methodology.",
+      "always_load": ["foundations.json", "constraint-sheet.json", "engagement-protocol.json"],
+      "load_on_need": ["test-selection.json", "trust-boundaries.json", "routing-policy.json"],
+      "engagement": "Full protocol (tier detection, concern emission, nudge, exit).",
+      "target": "Full framework as needed"
+    }
+  },
+
   "exit_sequence": {
     "description": "Every skill ends with this two-step sequence after its own gated writes.",
     "steps": [
