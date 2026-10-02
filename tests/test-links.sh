@@ -7,10 +7,12 @@ ERRORS=0
 WARNINGS=0
 
 while IFS= read -r json; do
+  json="${json%$'\r'}"
   dir="$(dirname "$json")"
 
   # Check step-level reads (project-root-relative paths and globs)
   while IFS= read -r path; do
+    path="${path%$'\r'}"
     [[ -z "$path" ]] && continue
     # Skip glob patterns (contain *)
     if [[ "$path" == *"*"* ]]; then
@@ -24,6 +26,7 @@ while IFS= read -r json; do
 
   # Check step-level references (skill-directory-relative paths)
   while IFS= read -r path; do
+    path="${path%$'\r'}"
     [[ -z "$path" ]] && continue
     if [[ ! -f "$dir/$path" ]]; then
       echo "FAIL: $json references '$path' (not found at $dir/$path)"
@@ -33,6 +36,7 @@ while IFS= read -r json; do
 
   # Check step-level process refs (shared-infra-relative, resolve via ../../)
   while IFS= read -r path; do
+    path="${path%$'\r'}"
     [[ -z "$path" ]] && continue
     # Strip #anchor
     file_path="${path%%#*}"

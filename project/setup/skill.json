@@ -41,8 +41,8 @@
     {
       "id": "tier-select",
       "name": "Tier selection",
-      "instruction": "Determine tier conversationally. Small: solo dev, few features, low ceremony. Moderate: standard project, team, conventions needed. Large: complex domain, multiple teams. Migrations are always Moderate or Large. Record tier in CLAUDE.md. For transition procedures see reference/tier-transitions.md.",
-      "references": ["reference/tier-transitions.md"],
+      "instruction": "Determine tier conversationally. Small: solo dev, few features, low ceremony. Moderate: standard project, team, conventions needed. Large: complex domain, multiple teams. Migrations are always Moderate or Large. Record tier in CLAUDE.md. For transition procedures see the Tier transitions section in reference/scope-tiers.md.",
+      "references": ["reference/scope-tiers.md"],
       "checklist": [
         "Tier selected (Small/Moderate/Large)",
         "Recorded in CLAUDE.md"
@@ -52,7 +52,7 @@
       "id": "migration-init",
       "name": "Migration initialization",
       "reads": ["contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
-      "references": ["reference/migration-structure.md", "reference/local-docs.md"],
+      "references": ["../../project/migrate/reference/migration-structure.md", "reference/local-docs.md"],
       "instruction": "Only runs in migration mode. Read scope docs and endpoint registries. Read parity verification system if it exists (entity registries, endpoint maps). All source features are IN unless explicitly cut with reason and owner. Write Active Workflow to CLAUDE.md with migration phases: (1) docs sprint, (2) vertical slice, (3) horizontal buildout, (4) integration, (5) functional validation, (6) design pass, (7) cutover. Phase files in phases/migrate/. Skip if not migrating.",
       "checklist": [
         "Scope protection: all source features IN unless explicitly cut",
@@ -66,7 +66,6 @@
       "name": "Phase 1 - Architecture and standards",
       "reads": ["architecture-rule-catalogue.md"],
       "references": ["reference/references.md"],
-      "process": "phases/phase-1.md",
       "instruction": "If rule catalogue exists: per-family checklist grill (catalogue-grill.md methodology). If no catalogue but moderate/large: offer to bootstrap. Else: fall back to references.md area catalog. Produce consolidated decision-tree ADRs. For API-consuming projects: offer endpoint registry scaffolding. For migrations: architecture decisions should address what changes vs what ports directly from the source system.",
       "checklist": [
         "Architecture decisions documented as ADRs",
