@@ -8,6 +8,8 @@
 #
 # v3: Added schemas/ (JSON schemas for skill validation and output formats)
 #     and tests/ (structural test suite) to the sync.
+# v4: Added agents/ (agent definitions that reference waypoint schemas).
+#     Agents sync file-by-file (not directory replace) to preserve non-waypoint agents.
 #
 # Usage: .\sync-skills.ps1 [-RepoPath <path>] [-DryRun]
 
@@ -86,6 +88,31 @@ foreach ($dir in $sharedDirs) {
     $sharedCount++
 }
 
+# --- Agents (file-by-file, preserves non-waypoint agents) ---
+
+$agentSrc = Join-Path $RepoPath "agents"
+$agentDest = Join-Path $claudeRoot "agents"
+$agentCount = 0
+
+if (Test-Path $agentSrc) {
+    if (-not (Test-Path $agentDest)) {
+        if ($DryRun) { Write-Host "  Would create: agents/" }
+        else { New-Item -ItemType Directory -Path $agentDest -Force | Out-Null }
+    }
+
+    Get-ChildItem $agentSrc -File | ForEach-Object {
+        $dest = Join-Path $agentDest $_.Name
+
+        if ($DryRun) {
+            Write-Host "  Would sync agent: $($_.Name)"
+        } else {
+            Copy-Item $_.FullName $dest -Force
+            Write-Host "  Synced agent: $($_.Name)" -ForegroundColor Yellow
+        }
+        $agentCount++
+    }
+}
+
 # --- Root files ---
 
 $rootFiles = @("CONCERNS-FORMAT.md", "README.md")
@@ -131,6 +158,16 @@ foreach ($root in $syncRoots) {
             if (-not $DryRun) { Copy-Item $src (Join-Path $sessionSkills $file) -Force }
         }
     }
+    # Agents
+    if (Test-Path $agentDest) {
+        $sessionAgents = Join-Path $root "agents"
+        if (-not (Test-Path $sessionAgents)) {
+            if (-not $DryRun) { New-Item -ItemType Directory -Path $sessionAgents -Force | Out-Null }
+        }
+        Get-ChildItem $agentDest -File | ForEach-Object {
+            if (-not $DryRun) { Copy-Item $_.FullName (Join-Path $sessionAgents $_.Name) -Force }
+        }
+    }
     # Shared dirs
     foreach ($dir in $sharedDirs) {
         $src = Join-Path $claudeRoot $dir
@@ -148,4 +185,4 @@ foreach ($root in $syncRoots) {
     $cswapCount++
 }
 
-Write-Host "`n$copied skills, $sharedCount shared dirs, $rootCount root files $(if ($DryRun) {'would be '})synced. $skipped skipped. $cswapCount cswap session(s) replicated."
+Write-Host "`n$copied skills, $agentCount agents, $sharedCount shared dirs, $rootCount root files $(if ($DryRun) {'would be '})synced. $skipped skipped. $cswapCount cswap session(s) replicated."

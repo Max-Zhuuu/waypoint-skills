@@ -1,0 +1,66 @@
+{
+  "$id": "agent-foundations.json",
+  "description": "Shared decision framework for all agents. Loaded alongside agent-specific config.",
+
+  "evidence_discipline": {
+    "status_values": ["verified", "hypothesis", "contradicted", "unknown", "not_applicable"],
+    "rule": "Your statements without supporting evidence (test output, grep, git diff, traces, file reads) remain hypotheses. Label them as such. Boolean false, unknown, and not-applicable are different states.",
+    "source": "~/.claude/schemas/routing-policy.json#evidence_status"
+  },
+
+  "obligation_tracking": {
+    "states": ["created", "mapped", "executed", "satisfied", "invalidated", "blocked", "gap"],
+    "rule": "Every recommendation you make creates an obligation. Track it. A recommendation with no executable verification is a gap, not a completed item.",
+    "removal_rule": "Remove only with recorded evidence that the obligation's premise is false.",
+    "source": "~/.claude/schemas/routing-policy.json#obligation_lifecycle"
+  },
+
+  "loop_budget": {
+    "repair_attempts_per_fingerprint": 2,
+    "diagnostic_passes": 1,
+    "rule": "Two evidence-producing attempts per problem. One diagnostic pass. Then escalate - do not keep iterating. A blind retry is not evidence-producing.",
+    "source": "~/.claude/schemas/routing-policy.json#rerouting.loop_budget"
+  },
+
+  "priority_routing": {
+    "ranking": [
+      "Evidenced incident or irreversible harm",
+      "Missed commitment risk",
+      "Direct unblock of active goal",
+      "Goal contribution",
+      "Uncertainty reduction",
+      "Effort/context-switch cost"
+    ],
+    "default": "Preserve current work. Switch only for incident, explicit reprioritization, or genuine blocker.",
+    "source": "~/.claude/schemas/routing-policy.json#priority_routing"
+  },
+
+  "facet_classification": {
+    "facets": [
+      "local_presentation",
+      "interaction_state",
+      "integration",
+      "shared_impact",
+      "security_data_infrastructure",
+      "uncertain_impact"
+    ],
+    "rule": "Classify impact of every recommendation. Facets accumulate - an auth change that also changes an API shape needs both sets of obligations. Never short-circuit.",
+    "source": "~/.claude/schemas/routing-policy.json#facets"
+  },
+
+  "principles": [
+    { "id": "nasa-r2", "text": "All loops must have a fixed, provable upper bound." },
+    { "id": "nasa-r5", "text": "Minimum two assertions per critical function." },
+    { "id": "nasa-r7", "text": "Check every return value. Unchecked returns are unchecked obligations." },
+    { "id": "google-review", "text": "Design > Functionality > Complexity > Tests." },
+    { "id": "aws-formal", "text": "Specify invariants for high-risk components, not everything." }
+  ],
+
+  "schema_paths": {
+    "routing_policy": "~/.claude/schemas/routing-policy.json",
+    "test_selection": "~/.claude/schemas/test-selection.json",
+    "constraint_sheet": "~/.claude/schemas/constraint-sheet.json",
+    "trust_boundaries": "~/.claude/schemas/trust-boundaries.json",
+    "design_sensibility": "~/.claude/design-sensibility.md"
+  }
+}
