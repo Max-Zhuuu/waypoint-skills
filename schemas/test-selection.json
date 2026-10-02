@@ -19,7 +19,10 @@
     { "risk": "Cross-tenant access", "test": "Same operation with unauthorized resource and tenant combinations" },
     { "risk": "Schema drift", "test": "Backend validation plus consumer/provider expectations" },
     { "risk": "Broken deployment wiring", "test": "Thin real-stack smoke: auth, API, database, queue/worker, UI refresh" },
-    { "risk": "Generic visual regression", "test": "Promoted visual baseline, fixed fonts/data/environment, meaningful viewports" }
+    { "risk": "Generic visual regression", "test": "Promoted visual baseline, fixed fonts/data/environment, meaningful viewports" },
+    { "risk": "Behavioral regression from refactoring", "test": "Characterization tests (capture current behavior before change), then equivalence assertions (new path produces same output as old)" },
+    { "risk": "Data migration corruption", "test": "Round-trip proof: migrate forward, verify, migrate back, verify unchanged. Null/edge rows in fixture." },
+    { "risk": "External connector failure", "test": "Timeout, auth expiry, rate limit, partial response, DNS failure. Each connector tested independently." }
   ],
 
   "dimensions": [
@@ -41,7 +44,9 @@
     { "situation": "Small finite decision table", "strategy": "exhaustive" },
     { "situation": "Presentation/UI variations", "strategy": "Constrained pairwise or higher-strength" },
     { "situation": "Dangerous interactions (auth, money, data loss)", "strategy": "Targeted adversarial" },
-    { "situation": "State sequences", "strategy": "Property/model-based exploration" }
+    { "situation": "State sequences", "strategy": "Property/model-based exploration" },
+    { "situation": "Refactoring (behavior must not change)", "strategy": "Characterization tests before change, equivalence proof after. Golden file or parallel-run comparison." },
+    { "situation": "External connector integration", "strategy": "Contract test against recorded responses. Separate live smoke from unit. Never mock the failure modes." }
   ],
   "coverage_rule": "Pairwise is NOT sufficient for authorization or transactional correctness.",
 

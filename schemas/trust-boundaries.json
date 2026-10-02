@@ -11,6 +11,19 @@
     { "from": "service", "to": "llm", "question": "Which content may leave the system, and which tools can resulting output invoke?", "evidence": ["Data policy", "Server-side tool authorization", "Usage accounting"] }
   ],
 
+  "external_connector_inventory": {
+    "description": "For each external system the product depends on, record these fields. Agents read this to understand failure modes and observability requirements.",
+    "per_connector_fields": ["name", "type", "credential_location", "sla", "cost_model", "failure_mode", "monitoring_endpoint", "data_classification", "fallback_behavior"],
+    "types": ["infrastructure", "analytics", "project_management", "auth_provider", "payment", "storage", "messaging", "search"],
+    "examples": [
+      { "name": "Azure Functions", "type": "infrastructure", "failure_mode": "cold_start_latency, region_outage", "fallback_behavior": "queue_and_retry" },
+      { "name": "PostHog", "type": "analytics", "failure_mode": "ingestion_delay, sdk_load_failure", "fallback_behavior": "silent_drop, no_user_impact" },
+      { "name": "Linear", "type": "project_management", "failure_mode": "api_rate_limit, webhook_delay", "fallback_behavior": "cache_last_known, retry_with_backoff" },
+      { "name": "Marsoft Engine", "type": "infrastructure", "failure_mode": "timeout, stale_data, partial_response", "fallback_behavior": "display_staleness_signal, bounded_retry" }
+    ],
+    "rule": "Every external dependency is a trust boundary. If it can fail, document how. If it handles user data, classify it. If it costs money, cap it."
+  },
+
   "enforcement_principles": [
     "Gateway auth does NOT prove object-level authorization",
     "Browser-hidden controls do NOT enforce permissions",

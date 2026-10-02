@@ -23,6 +23,37 @@
       "fields": ["failure_detection", "timeout_policy", "bounded_retry", "recovery_approach", "cost_ceiling", "operator_ownership"]
     },
     {
+      "name": "coupling",
+      "fields": ["fan_in", "fan_out", "blast_radius", "stability", "module_depth"],
+      "note": "fan_in = who depends on this. fan_out = what this depends on. blast_radius = if this breaks, what else breaks. stability = settled vs actively changing. module_depth = Ousterhout's deep-module ratio (interface width vs implementation depth)."
+    },
+    {
+      "name": "migration",
+      "fields": ["transition_pattern", "rollback_plan", "data_migration", "incremental_verification"],
+      "patterns": ["strangler_fig", "parallel_run", "expand_contract", "feature_flag", "big_bang"],
+      "rule": "Every non-trivial change to existing code requires a transition strategy. 'Deploy and hope' is not a plan."
+    },
+    {
+      "name": "observability",
+      "fields": ["metrics", "logging", "tracing", "alerting", "external_connectors"],
+      "rule": "Specify how you will KNOW this works in production, not just that it works in dev. For each external connector (Azure, AWS, Linear, PostHog, etc.): credential location, SLA, cost model, failure mode, monitoring endpoint."
+    },
+    {
+      "name": "reversibility",
+      "levels": ["trivial", "expensive", "irreversible"],
+      "examples": {
+        "trivial": "Config change, feature flag toggle, UI copy",
+        "expensive": "Schema migration, API version, dependency upgrade",
+        "irreversible": "Data deletion, public API contract, external integration go-live"
+      },
+      "rule": "Analysis depth scales with irreversibility. A trivial change does not need a full constraint sheet. An irreversible change needs every dimension filled."
+    },
+    {
+      "name": "ownership",
+      "fields": ["owning_team", "affected_teams", "coordination_overhead", "communication_pattern"],
+      "rule": "Conway's Law is real. A decision requiring daily cross-team coordination has different cost than one that doesn't. Name the teams, not just the code."
+    },
+    {
       "name": "alternatives",
       "fields": ["current_approach", "alternative_1", "alternative_2"],
       "rule": "At most two credible alternatives. Document why the default fails or remains adequate."
