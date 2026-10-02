@@ -13,8 +13,8 @@
     {
       "id": "load-state",
       "name": "Load workflow state",
-      "reads": ["CLAUDE.md", "SCOPE.md"],
-      "instruction": "Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.md frontmatter and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date. If routing-policy obligation state exists from a previous tdd/review cycle, surface unsatisfied obligations as part of the state report.",
+      "reads": ["CLAUDE.md", "SCOPE.md", "SCOPE.json", ".claude/project-state.json"],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh to refresh .claude/project-state.json. Read it for current project state (framework, test runner, docs status, external connectors). Read Active Workflow from CLAUDE.md. If no workflow record: detect project type from SCOPE.json or SCOPE.md and recommend /triage or /setup. If workflow exists: note active skill, current phase, activation date. If routing-policy obligation state exists from a previous tdd/review cycle, surface unsatisfied obligations as part of the state report.",
       "checklist": [
         "CLAUDE.md Active Workflow section read",
         "Project type detected (if no workflow)",

@@ -69,7 +69,7 @@ foreach ($dir in $skillDirs) {
 
 # --- Shared infrastructure (peer directories) ---
 
-$sharedDirs = @("internals", "templates", "process", "schemas", "tests")
+$sharedDirs = @("internals", "templates", "process", "schemas", "tests", "scripts")
 $sharedCount = 0
 
 foreach ($dir in $sharedDirs) {
