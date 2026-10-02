@@ -71,7 +71,7 @@ Clear the Active Workflow section from CLAUDE.md (or mark as completed with date
 - /wrapup to resolve concerns and cascade docs.
 
 Does NOT scaffold project infrastructure (use /setup) or decompose (use /breakdown first).
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#14-exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.

@@ -15,7 +15,7 @@ Three concerns that once lived here as sections now sit beside this file, each c
 
 - [autonomy.md](autonomy.md) - the `autonomy` axis (`afk`/`hitl`): "could this change ship unattended at all" (a capability), and the table that composes it with engagement.
 - [review-safety.md](review-safety.md) - the review safety invariant: the five points where untrusted text could reach a position that steers a later turn, and the gate at each.
-- [manifest.md](manifest.md) - the artifacts manifest emission: the run-time receipt of what a skill wrote, the sibling of concern emission (section 4).
+- [manifest.md](manifest.md) - the artifacts manifest emission: the run-time receipt of what a skill wrote, the sibling of concern emission (section 5).
 - [../chain/reference.md](../chain/reference.md) - the chain dispatcher and the graph it walks, run at each skill's Exit after the manifest.
 
 ## Multiple skills invoked at once
@@ -43,7 +43,25 @@ Check in order - first match wins:
 
 Tier 3 requires explicit opt-in. Without the marker, always ask before emitting concerns.
 
-## 2. Per-Tier Behavioral Defaults
+## 2. Step Tracking via Tasks
+
+Every skill with steps in its skill.json must initialize those steps as tasks before executing any of them.
+This is not optional - the user monitors parallel agent sessions via the task list.
+
+**On invocation, immediately after tier detection:**
+
+1. Read the skill's `steps` array from skill.json.
+2. Create one task per step using TaskCreate. Use the step's `name` as the task title and the step's `id` as a prefix (e.g., "detect-state: Detect project state and mode").
+3. Begin executing steps in order. As each step completes, mark its task done with a one-line summary of the outcome.
+4. If a step is skipped (conditional, not applicable), mark its task done with "Skipped: {reason}".
+
+**Rules:**
+
+- All tasks must be created at the start, not lazily as steps are reached.
+- A skill that runs without initializing tasks is a protocol violation.
+- Task summaries should be terse - one sentence stating what was decided or produced, not a recap of the step's instructions.
+
+## 3. Per-Tier Behavioral Defaults
 
 These defaults apply to every skill unless overridden in the skill's tier declaration.
 
@@ -74,7 +92,7 @@ CONCERNS.md exists. Skills read from it and write to it (with permission).
 - Task-layer skills: read only the Open section to check for relevant concerns.
 - /check-in, /reorient: read Open + Investigating + Blocked for the full picture. Skip Resolved.
 - /wrapup: read Open (to resolve), then Resolved (to check archival threshold).
-- After work, follow the nudge protocol (section 3) for discoveries.
+- After work, follow the nudge protocol (section 4) for discoveries.
 - Emit concerns as `[open]` with type, raised date, and refs.
 - Resolve concerns addressed by the current work (move to Resolved, add resolution note).
 - After any write to CONCERNS.md, recalculate the summary header (counts + line offsets).
@@ -102,7 +120,7 @@ The nudge protocol's "ask" step is skipped.
 - A concrete automation proposal (hook, script, check), not vague advice
 - User confirmation before implementing
 
-## 3. Nudge Protocol
+## 4. Nudge Protocol
 
 Every nudge, at every tier, follows three steps:
 
@@ -122,7 +140,7 @@ Every nudge, at every tier, follows three steps:
 Never nag. If the user declines a nudge, do not re-offer the same concern.
 If the user says "stop suggesting concerns," respect it for the rest of the session.
 
-## 4. Concern Emission
+## 5. Concern Emission
 
 ### Format
 
@@ -167,7 +185,7 @@ Commits: abc1234, def5678
 
 Concern emission is one of two run emissions a skill can make; the other is the artifacts manifest ([manifest.md](manifest.md)), the receipt of what the run actually wrote.
 
-## 5. First-Invocation Notice
+## 6. First-Invocation Notice
 
 On first-ever invocation in a project without scaffolding (Tier 1), if `.claude/.setup-prompted` does not exist:
 
@@ -182,7 +200,7 @@ Write `.claude/.setup-prompted` after showing. If `.claude/` doesn't exist, the 
 This is handled by the engagement protocol, not by individual skills.
 The tier declaration inherits this behavior automatically.
 
-## 6. Exit Protocol (Commit-Producing Skills)
+## 7. Exit Protocol (Commit-Producing Skills)
 
 Skills that produce commits (/tdd, /create, /diagnose) run this before committing:
 
@@ -237,7 +255,7 @@ Mini-wrapup cannot:
 - Modify owned files (spec drift fixes remain /wrapup's responsibility)
 - Delete or rewrite existing entries in shared-append files
 
-## 7. Write Discipline
+## 8. Write Discipline
 
 ### File classification
 
@@ -272,7 +290,7 @@ If they append conflicting definitions, that's a merge conflict - which surfaces
 
 Check the Claims section of CONCERNS.md. If another session claims the same file area, warn and ask before proceeding. This check is encoded in every skill's tier declaration.
 
-## 8. Multi-Agent Enforcement
+## 9. Multi-Agent Enforcement
 
 Three levels, each compensating for failures in the level above:
 
@@ -292,10 +310,10 @@ The hook checks for file-area conflicts and surfaces them before the agent acts.
 
 Skills must not depend on the hook existing - they must also do their own checks (Level 2).
 
-## 9. Scaffolding File Table
+## 10. Scaffolding File Table
 
 When scaffolding files exist, skills gain capabilities.
-When they don't, skills substitute (see Tier 1 adaptations in section 2).
+When they don't, skills substitute (see Tier 1 adaptations in section 3).
 
 | File | What it gives skills | Created by |
 |------|---------------------|------------|
@@ -313,22 +331,22 @@ When they don't, skills substitute (see Tier 1 adaptations in section 2).
 Skills create only their own output artifacts.
 Exception: /grill-with-docs creates GLOSSARY.md and docs/adr/ because those ARE its outputs.
 
-## 10. Prohibitions
+## 11. Prohibitions
 
 These apply to every skill regardless of tier:
 
 1. **Don't block on missing scaffolding.** Every skill works at Tier 1.
 2. **Don't repeatedly mention what's missing.** Adapt once, move on.
-3. **Don't prompt for /setup more than once.** The first-invocation notice (section 5) handles this.
+3. **Don't prompt for /setup more than once.** The first-invocation notice (section 6) handles this.
 4. **Don't create scaffolding that belongs to another skill.** /spec creates specs, not SCOPE.md.
 5. **Don't degrade silently.** When you skip a check, say what you skipped and what you did instead, in one sentence.
 6. **Don't nudge more than once per discovery.** Ask, respect the answer.
 7. **Don't emit concerns at Tier 2 without the nudge protocol.** The user chose to track - that doesn't mean they want every observation recorded.
 8. **Don't offer automation suggestions below Tier 3.** Premature automation is worse than manual work.
-9. **Don't write to shared files without checking Claims.** See section 7.
-10. **Don't skip the exit protocol on commit-producing skills.** See section 6.
+9. **Don't write to shared files without checking Claims.** See section 8.
+10. **Don't skip the exit protocol on commit-producing skills.** See section 7.
 
-## 11. Canonical Branch Convention
+## 12. Canonical Branch Convention
 
 One designated branch holds the canonical CONCERNS.md.
 The canonical branch is implicitly designated by where `## Active Workflow` lives in CLAUDE.md.
@@ -349,7 +367,7 @@ Claims (volatile, session-scoped) are worktree-local by nature.
 /check-in warns when a worktree is behind the canonical branch's CONCERNS.md.
 /reorient flags stale canonical branch designations.
 
-## 12. Skill Tier Declaration Template
+## 13. Skill Tier Declaration Template
 
 Every skill's `## Engagement` section uses this format:
 
@@ -364,7 +382,7 @@ Override: {behavioral deviation from defaults - or omit line}
 Skills with overrides expand the Override field to explain the deviation.
 Skills that opt out entirely (e.g., /how-to-start) state the opt-out and reason.
 
-## 13. Exit Sequence
+## 14. Exit Sequence
 
 Every skill ends with the same two-step sequence, after it has applied its own gated writes.
 This sequence is shared protocol: a skill's `## Exit` cites it in one line and lists only its own unique handoffs, never restating the two steps.
@@ -375,7 +393,7 @@ This sequence is shared protocol: a skill's `## Exit` cites it in one line and l
 The one-line citation each skill's `## Exit` carries:
 
 ```markdown
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#13-exit-sequence).
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#14-exit-sequence).
 ```
 
 ### Conditional handoffs
