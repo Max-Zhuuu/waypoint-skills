@@ -17,6 +17,16 @@ param(
 )
 
 $claudeRoot = Join-Path $env:USERPROFILE ".claude"
+
+# Collect all sync targets: active session + any cswap inactive sessions
+$syncRoots = @($claudeRoot)
+$cswapSessions = Join-Path (Join-Path $env:USERPROFILE ".claude-swap-backup") "sessions"
+if (Test-Path $cswapSessions) {
+    Get-ChildItem $cswapSessions -Directory | ForEach-Object {
+        $syncRoots += $_.FullName
+    }
+}
+
 $target = Join-Path $claudeRoot "skills"
 
 if (-not (Test-Path $target)) {
@@ -96,4 +106,46 @@ foreach ($file in $rootFiles) {
     $rootCount++
 }
 
-Write-Host "`n$copied skills, $sharedCount shared dirs, $rootCount root files $(if ($DryRun) {'would be '})synced. $skipped skipped."
+# --- Replicate to cswap inactive sessions ---
+
+$cswapCount = 0
+foreach ($root in $syncRoots) {
+    if ($root -eq $claudeRoot) { continue }
+    $sessionSkills = Join-Path $root "skills"
+    if (-not (Test-Path $sessionSkills)) {
+        if (-not $DryRun) { New-Item -ItemType Directory -Path $sessionSkills -Force | Out-Null }
+    }
+
+    # Skills
+    Get-ChildItem (Join-Path $claudeRoot "skills") -Directory | ForEach-Object {
+        $dest = Join-Path $sessionSkills $_.Name
+        if (-not $DryRun) {
+            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
+            Copy-Item $_.FullName $dest -Recurse -Force
+        }
+    }
+    # Root files in skills/
+    foreach ($file in $rootFiles) {
+        $src = Join-Path (Join-Path $claudeRoot "skills") $file
+        if (Test-Path $src) {
+            if (-not $DryRun) { Copy-Item $src (Join-Path $sessionSkills $file) -Force }
+        }
+    }
+    # Shared dirs
+    foreach ($dir in $sharedDirs) {
+        $src = Join-Path $claudeRoot $dir
+        if (-not (Test-Path $src)) { continue }
+        $dest = Join-Path $root $dir
+        if (-not $DryRun) {
+            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
+            Copy-Item $src $dest -Recurse -Force
+        }
+    }
+
+    $sessionName = Split-Path $root -Leaf
+    if ($DryRun) { Write-Host "  Would replicate to cswap session: $sessionName" }
+    else { Write-Host "  Replicated to cswap session: $sessionName" -ForegroundColor Magenta }
+    $cswapCount++
+}
+
+Write-Host "`n$copied skills, $sharedCount shared dirs, $rootCount root files $(if ($DryRun) {'would be '})synced. $skipped skipped. $cswapCount cswap session(s) replicated."
