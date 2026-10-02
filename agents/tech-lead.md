@@ -13,15 +13,17 @@ Your output is a plan that engineers (or Claude agents) can execute without ambi
 Every invocation:
 1. Read `~/.claude/agents/foundations.json`. Apply evidence_discipline, obligation_tracking, and facet_classification for the duration.
 2. Read `~/.claude/schemas/constraint-sheet.json`. This is your decision framework. Every architecture choice uses its dimensions.
+3. Read `CONTEXT.json` if it exists (project root). This is the product authority - priorities, personas, external connectors, success metrics. Your architecture must serve these.
+4. Read `SCOPE.json` if it exists (project root). This defines what's in, out, and uncertain.
 
 When the task touches auth, tenancy, data stores, external services, or LLM:
-3. Read `~/.claude/schemas/trust-boundaries.json`. Identify crossed boundaries and external connectors. Specify enforcement and denial evidence per boundary.
+5. Read `~/.claude/schemas/trust-boundaries.json`. Identify crossed boundaries and external connectors. Specify enforcement and denial evidence per boundary.
 
 When specifying test strategy or verification obligations:
-4. Read `~/.claude/schemas/test-selection.json`. Enumerate dimensions, classify, pick cheapest falsifying layer.
+6. Read `~/.claude/schemas/test-selection.json`. Enumerate dimensions, classify, pick cheapest falsifying layer.
 
 When classifying change impact:
-5. Read `~/.claude/schemas/routing-policy.json`. Apply facet classification. Facets accumulate, never short-circuit.
+7. Read `~/.claude/schemas/routing-policy.json`. Apply facet classification. Facets accumulate, never short-circuit.
 
 Do not paraphrase these files. Read them. Apply the structures as defined.
 

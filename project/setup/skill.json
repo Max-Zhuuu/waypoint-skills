@@ -16,8 +16,8 @@
     {
       "id": "detect-state",
       "name": "Detect project state and mode",
-      "reads": ["SCOPE.md", "GLOSSARY.md", "_GLOSSARY.md", "CLAUDE.md", "CONVENTIONS.md", "TESTING.md", "ARCHITECTURE.md", "docs/adr/", "docs/decisions/"],
-      "instruction": "Check which project docs exist. Detect mode: Starting fresh (none or only CLAUDE.md) -> phase-0-grill. Resuming (some exist, some missing) -> list done/missing, pick up first incomplete. Restructuring (user asks or docs don't follow three-tier layout) -> reference/restructuring.md. Reviewing (all exist) -> reference/resume-path.md. Migrating (user states they're replacing an existing system, or SCOPE.md frontmatter has parity-strategy/cutover-approach, or a source system repo is referenced) -> phase-0-grill with migration-specific questions, then migration-init.",
+      "reads": ["SCOPE.json", "SCOPE.md", "CONTEXT.json", "GLOSSARY.md", "_GLOSSARY.md", "CLAUDE.md", "CONVENTIONS.json", "CONVENTIONS.md", "TESTING.md", "ARCHITECTURE.json", "ARCHITECTURE.md", "DEPLOY.json", "DEPLOY.md", "docs/adr/", "docs/decisions/"],
+      "instruction": "Check which project docs exist. Accept both .json and .md variants (prefer .json if both exist). Detect mode: Starting fresh (none or only CLAUDE.md) -> phase-0-grill. Resuming (some exist, some missing) -> list done/missing, pick up first incomplete. Restructuring (user asks or docs don't follow current format) -> reference/restructuring.md. Reviewing (all exist) -> reference/resume-path.md. Migrating (user states they're replacing an existing system, or SCOPE.json has parity fields, or a source system repo is referenced) -> phase-0-grill with migration-specific questions, then migration-init. If legacy .md versions exist, offer to convert to .json format.",
       "references": ["reference/restructuring.md", "reference/resume-path.md"],
       "checklist": [
         "Project state detected (fresh/resuming/restructuring/reviewing/migrating)",
@@ -28,10 +28,13 @@
     {
       "id": "phase-0-grill",
       "name": "Phase 0 - Discovery and scoping",
-      "instruction": "Print questions inline with recommended answers. Skip any already answered. Product: what problem, for whom, done in 2 sentences. Scope: IN/OUT/UNCERTAIN, decision owners and deadlines. Dependencies: backend API status, design assets, infrastructure, domain expertise. Constraints: compliance, performance, browser support, timeline. Risks: biggest worries, undocumented knowledge. If migrating: also ask source system questions - what legacy system, how many screens/features, where is the source code, what is the parity strategy (exact match vs improvement), what is the cutover approach. Write SCOPE.md, CONCERNS.md, GLOSSARY.md.",
+      "references": ["../../schemas/scope-format.json", "../../schemas/context-format.json"],
+      "instruction": "Print questions inline with recommended answers. Skip any already answered. Product: what problem, for whom, done in 2 sentences. Scope: IN/OUT/UNCERTAIN, decision owners and deadlines. Dependencies: backend API status, design assets, infrastructure, domain expertise. Constraints: compliance, performance, browser support, timeline. Risks: biggest worries, undocumented knowledge. Personas: who uses this, what do they need, how often. External connectors: what systems does this depend on, what data flows. If migrating: also ask source system questions - what legacy system, how many screens/features, where is the source code, what is the parity strategy (exact match vs improvement), what is the cutover approach. Write SCOPE.json (conforming to scope-format.json), CONTEXT.json (conforming to context-format.json), CONCERNS.md, GLOSSARY.md.",
       "checklist": [
-        "SCOPE.md exists and reviewed",
-        "External dependencies identified",
+        "SCOPE.json exists and conforms to scope-format.json",
+        "CONTEXT.json exists and conforms to context-format.json",
+        "External connectors inventoried in CONTEXT.json",
+        "Personas defined in CONTEXT.json",
         "Uncertain items have decision owners and validate-by dates",
         "GLOSSARY.md exists",
         "CONCERNS.md seeded",
@@ -65,14 +68,15 @@
       "id": "phase-1-architecture",
       "name": "Phase 1 - Architecture and standards",
       "reads": ["architecture-rule-catalogue.md"],
-      "references": ["reference/references.md"],
-      "instruction": "If rule catalogue exists: per-family checklist grill (catalogue-grill.md methodology). If no catalogue but moderate/large: offer to bootstrap. Else: fall back to references.md area catalog. Produce consolidated decision-tree ADRs. For API-consuming projects: offer endpoint registry scaffolding. For migrations: architecture decisions should address what changes vs what ports directly from the source system.",
+      "references": ["reference/references.md", "../../schemas/architecture-format.json", "../../schemas/conventions-format.json", "../../schemas/deploy-format.json"],
+      "instruction": "If rule catalogue exists: per-family checklist grill (catalogue-grill.md methodology). If no catalogue but moderate/large: offer to bootstrap. Else: fall back to references.md area catalog. Produce consolidated decision-tree ADRs. Write ARCHITECTURE.json (conforming to architecture-format.json), CONVENTIONS.json (conforming to conventions-format.json), DEPLOY.json (conforming to deploy-format.json). For API-consuming projects: offer endpoint registry scaffolding. For migrations: architecture decisions should address what changes vs what ports directly from the source system.",
       "checklist": [
         "Architecture decisions documented as ADRs",
+        "ARCHITECTURE.json exists and conforms to architecture-format.json",
+        "CONVENTIONS.json exists and conforms to conventions-format.json",
+        "DEPLOY.json exists and conforms to deploy-format.json",
         "Project skeleton runs (dev server + tests)",
-        "Documentation structure created",
-        "CLAUDE.md has Project Scaffold + Documentation Map",
-        "ARCHITECTURE.md exists"
+        "CLAUDE.md has Project Scaffold + Documentation Map"
       ]
     },
     {
@@ -109,7 +113,7 @@
 
   "engagement": {
     "emits": ["concerns"],
-    "writes": ["CLAUDE.md", "SCOPE.md", "CONVENTIONS.md", "TESTING.md", "ARCHITECTURE.md", "DEPLOY.md", ".claude/", "Active Workflow (migration mode)"],
+    "writes": ["CLAUDE.md", "SCOPE.json", "CONTEXT.json", "CONVENTIONS.json", "TESTING.md", "ARCHITECTURE.json", "DEPLOY.json", ".claude/", "Active Workflow (migration mode)"],
     "override": "scaffolding creator",
     "manifest": true,
     "chain_dispatch": false

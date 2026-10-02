@@ -1,0 +1,85 @@
+{
+  "$id": "context-format.json",
+  "description": "Product context definition. Why we're building this, for whom, what success looks like. Maintained by humans, consumed by agents as authority. Produced by /setup phase 0.",
+
+  "vision": {
+    "problem": "What problem this product solves",
+    "audience": "Who it's for (be specific - role, org size, workflow)",
+    "why_now": "Why this needs to exist now, not later",
+    "differentiator": "What makes this different from alternatives"
+  },
+
+  "success_metrics": [
+    {
+      "metric": "What to measure",
+      "target": "Quantified goal",
+      "measurement": "How and where this is measured (PostHog event, database query, manual count)",
+      "timeframe": "When to evaluate"
+    }
+  ],
+
+  "personas": [
+    {
+      "name": "Persona label (e.g. 'Portfolio Analyst')",
+      "role": "Job title or function",
+      "goals": ["What they're trying to accomplish"],
+      "pain_points": ["What's hard or broken in their current workflow"],
+      "frequency": "daily | weekly | monthly | occasional"
+    }
+  ],
+
+  "priorities": {
+    "current": [
+      {
+        "initiative": "What we're focused on now",
+        "why": "Why this is the priority",
+        "success_criteria": "How we know this is done",
+        "deadline": null
+      }
+    ],
+    "next": [
+      {
+        "initiative": "What comes after current priorities",
+        "depends_on": "What must be true before starting this"
+      }
+    ],
+    "not_now": [
+      {
+        "initiative": "Explicitly deprioritized",
+        "reason": "Why it's not now",
+        "revisit_trigger": "What would change this"
+      }
+    ]
+  },
+
+  "external_connectors": [
+    {
+      "name": "System name (Azure, PostHog, Linear, Marsoft Engine, etc.)",
+      "purpose": "What this connector does for the product",
+      "data_flow": "What data goes in/out",
+      "cost_model": "How this costs money (per-request, per-seat, flat)",
+      "owner": "Who manages this integration",
+      "status": "active | planned | evaluating | deprecated"
+    }
+  ],
+
+  "constraints": {
+    "timeline": "Hard deadlines and why",
+    "budget": "Cost ceilings and what they bound",
+    "compliance": ["Regulatory or policy requirements"],
+    "team": {
+      "size": "How many people",
+      "expertise": "What the team knows well vs. is learning",
+      "availability": "Full-time, part-time, shared with other projects"
+    }
+  },
+
+  "decisions_log": [
+    {
+      "date": "ISO date",
+      "decision": "What was decided about product direction",
+      "rationale": "Why",
+      "decided_by": "Who made this call"
+    }
+  ]
+}

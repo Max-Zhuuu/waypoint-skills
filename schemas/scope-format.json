@@ -1,0 +1,78 @@
+{
+  "$id": "scope-format.json",
+  "description": "Project scope definition. Replaces SCOPE.md. Produced by /setup phase 0.",
+
+  "product": {
+    "problem": "What problem this solves, in one sentence.",
+    "audience": "Who it's for.",
+    "summary": "Done in two sentences."
+  },
+
+  "scope": {
+    "in": [
+      {
+        "feature": "Feature or capability name",
+        "owner": "Who owns this decision",
+        "priority": "critical | high | medium | low",
+        "source": "Where this requirement came from (user request, migration, compliance, etc.)"
+      }
+    ],
+    "out": [
+      {
+        "feature": "Feature explicitly excluded",
+        "reason": "Why it's out",
+        "revisit": "Condition that would bring it back in, or 'never'"
+      }
+    ],
+    "uncertain": [
+      {
+        "feature": "Feature with unresolved scope",
+        "decision_owner": "Who decides",
+        "validate_by": "ISO date by which this must be resolved",
+        "default_if_unresolved": "in | out"
+      }
+    ]
+  },
+
+  "dependencies": {
+    "external": [
+      {
+        "name": "System or service name",
+        "status": "available | in_progress | blocked | unknown",
+        "owner": "Who to contact",
+        "blocker_for": ["Which in-scope features this blocks"]
+      }
+    ],
+    "internal": [
+      {
+        "name": "Internal prerequisite",
+        "status": "done | in_progress | not_started",
+        "blocks": ["What depends on this"]
+      }
+    ]
+  },
+
+  "constraints": {
+    "compliance": [],
+    "performance": {
+      "latency_target": null,
+      "throughput_target": null,
+      "availability_target": null
+    },
+    "browser_support": [],
+    "timeline": {
+      "deadline": null,
+      "milestones": []
+    }
+  },
+
+  "risks": [
+    {
+      "description": "What could go wrong",
+      "likelihood": "high | medium | low",
+      "impact": "high | medium | low",
+      "mitigation": "What we're doing about it",
+      "owner": "Who watches this"
+    }
+  ]
+}

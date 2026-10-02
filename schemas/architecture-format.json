@@ -1,0 +1,93 @@
+{
+  "$id": "architecture-format.json",
+  "description": "System architecture definition. Replaces ARCHITECTURE.md. Produced by /setup phase 1.",
+
+  "system": {
+    "name": "Project name",
+    "type": "monolith | modular_monolith | microservices | serverless | hybrid",
+    "description": "One-paragraph system description"
+  },
+
+  "components": [
+    {
+      "name": "Component name",
+      "responsibility": "What this component does (one sentence)",
+      "technology": "Framework, language, runtime",
+      "owns": ["What data or domain concepts this component owns"],
+      "depends_on": ["Other components this consumes"],
+      "boundary_type": "process | module | package | service"
+    }
+  ],
+
+  "data_flow": [
+    {
+      "from": "Source component",
+      "to": "Destination component",
+      "protocol": "HTTP | WebSocket | queue | direct_call | event",
+      "auth": "How this connection is authenticated",
+      "data": "What data flows through this path"
+    }
+  ],
+
+  "state": {
+    "stores": [
+      {
+        "name": "Store name",
+        "type": "relational | document | cache | blob | queue",
+        "technology": "Specific product (Postgres, Redis, etc.)",
+        "owner": "Which component owns writes",
+        "consistency": "strong | eventual | read_after_write",
+        "retention": "How long data is kept"
+      }
+    ],
+    "source_of_truth": {
+      "description": "What is the authoritative data source and how are conflicts resolved"
+    }
+  },
+
+  "boundaries": {
+    "trust": [
+      {
+        "from": "Untrusted side",
+        "to": "Trusted side",
+        "enforcement": "How the boundary is enforced",
+        "reference": "trust-boundaries.json boundary id"
+      }
+    ],
+    "deployment": [
+      {
+        "name": "Deployment unit name",
+        "contains": ["Components in this unit"],
+        "scales_independently": true
+      }
+    ],
+    "team": [
+      {
+        "team": "Team name",
+        "owns": ["Components this team owns"],
+        "api_contract": "How other teams interact with this team's components"
+      }
+    ]
+  },
+
+  "decisions": [
+    {
+      "id": "ADR number or slug",
+      "decision": "What was decided",
+      "rationale": "Why",
+      "revisit_trigger": "Observable condition that would reopen this",
+      "reference": "Path to full ADR if exists"
+    }
+  ],
+
+  "external_connectors": [
+    {
+      "name": "External system name",
+      "type": "infrastructure | analytics | auth_provider | payment | storage | messaging",
+      "integration_point": "Which component connects to this",
+      "credential_location": "Where the credential is stored",
+      "failure_mode": "What happens when this fails",
+      "fallback": "How the system degrades"
+    }
+  ]
+}

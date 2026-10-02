@@ -1,0 +1,83 @@
+{
+  "$id": "conventions-format.json",
+  "description": "Project conventions definition. Replaces CONVENTIONS.md. Produced by /setup phase 1.",
+
+  "naming": {
+    "files": {
+      "components": "PascalCase.vue | PascalCase.tsx",
+      "utilities": "camelCase.ts",
+      "tests": "*.test.ts | *.spec.ts",
+      "styles": "kebab-case.css | co-located",
+      "constants": "UPPER_SNAKE_CASE"
+    },
+    "code": {
+      "functions": "camelCase",
+      "classes": "PascalCase",
+      "constants": "UPPER_SNAKE_CASE",
+      "private": "_prefixed | #private",
+      "boolean": "is/has/should prefix"
+    },
+    "routes": {
+      "api": "/api/resource-name (kebab-case, plural nouns)",
+      "pages": "/resource-name/:id"
+    }
+  },
+
+  "file_placement": {
+    "structure": "feature-sliced | domain-driven | layer-based",
+    "rules": [
+      {
+        "pattern": "What kind of file",
+        "location": "Where it goes",
+        "example": "Concrete path example"
+      }
+    ]
+  },
+
+  "patterns": {
+    "required": [
+      {
+        "pattern": "Pattern name",
+        "where": "Where it must be used",
+        "why": "Why this pattern is required",
+        "example_file": "Path to an exemplar in the codebase"
+      }
+    ],
+    "prohibited": [
+      {
+        "pattern": "What not to do",
+        "instead": "What to do instead",
+        "why": "Why this is prohibited"
+      }
+    ]
+  },
+
+  "imports": {
+    "order": ["builtin", "external", "internal", "relative"],
+    "aliases": {},
+    "rules": [
+      "No cross-domain imports (feature A must not import from feature B internals)",
+      "Shared code lives in shared/"
+    ]
+  },
+
+  "formatting": {
+    "tool": "prettier | biome | ruff | black",
+    "config": "Path to config file",
+    "line_length": 100,
+    "indent": "2 spaces | 4 spaces | tabs"
+  },
+
+  "error_handling": {
+    "strategy": "typed_errors | error_codes | exceptions",
+    "boundary": "Where errors are caught and transformed",
+    "user_facing": "How errors are presented to the user"
+  },
+
+  "testing": {
+    "framework": "vitest | pytest | jest",
+    "location": "co-located | separate __tests__/ | top-level tests/",
+    "naming": "describe/it | test_ prefix",
+    "coverage_target": null
+  }
+}

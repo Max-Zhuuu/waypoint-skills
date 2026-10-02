@@ -1,0 +1,90 @@
+{
+  "$id": "deploy-format.json",
+  "description": "Deployment configuration definition. Replaces DEPLOY.md. Produced by /setup.",
+
+  "environments": [
+    {
+      "name": "Environment name (dev, staging, beta, production)",
+      "url": "Base URL",
+      "branch": "Git branch that deploys here",
+      "auto_deploy": false,
+      "provider": "Azure SWA | Vercel | AWS | manual",
+      "infrastructure": {
+        "compute": "Azure Functions | Lambda | Container | VM",
+        "database": "Postgres | CosmosDB | none",
+        "storage": "Blob | S3 | none",
+        "cdn": "Azure CDN | CloudFront | none"
+      },
+      "access": {
+        "who": ["Roles or teams that can access this environment"],
+        "auth": "How access is controlled"
+      }
+    }
+  ],
+
+  "promotion": {
+    "path": ["dev", "staging", "beta", "production"],
+    "gates": [
+      {
+        "from": "Source environment",
+        "to": "Target environment",
+        "requires": ["What must pass before promotion"],
+        "approver": "Who approves (automated | role | named person)",
+        "automated": false
+      }
+    ]
+  },
+
+  "ci": {
+    "platform": "GitHub Actions | Azure DevOps | GitLab CI",
+    "pipeline": "Path to CI config",
+    "checks": [
+      {
+        "name": "Check name",
+        "type": "lint | typecheck | unit_test | integration_test | e2e | security_scan | build",
+        "blocking": true,
+        "timeout": "Duration"
+      }
+    ]
+  },
+
+  "secrets": {
+    "management": "Azure KeyVault | AWS Secrets Manager | GitHub Secrets | .env",
+    "rotation": {
+      "policy": "How often secrets rotate",
+      "automated": false
+    },
+    "classification": [
+      {
+        "name": "Secret category",
+        "location": "Where it's stored",
+        "access": "Who/what can read it"
+      }
+    ]
+  },
+
+  "rollback": {
+    "strategy": "revert_commit | previous_deployment | feature_flag | blue_green",
+    "automated": false,
+    "steps": [],
+    "data_considerations": "What happens to data written between deploy and rollback"
+  },
+
+  "monitoring": {
+    "health_check": "Endpoint or mechanism",
+    "alerts": [
+      {
+        "condition": "What triggers the alert",
+        "channel": "Where it's sent (PagerDuty, Slack, email)",
+        "severity": "critical | warning | info"
+      }
+    ],
+    "dashboards": [
+      {
+        "name": "Dashboard name",
+        "url": "Link",
+        "purpose": "What this dashboard tells you"
+      }
+    ]
+  }
+}
