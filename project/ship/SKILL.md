@@ -64,7 +64,7 @@ Override: needs network and an adapter; not Tier-1-offline like wrapup.
 ## Exit
 - The target holds the merge decision; /check-in surfaces staged-but-unpromoted work next session.
 - /review first if the change wants a critic pass (sibling skill).
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#14-exit-sequence).
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
 
 ## Tone
 Mechanical and honest. Ship proposes, the target disposes. Never imply `afk` means merged.

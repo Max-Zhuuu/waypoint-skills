@@ -1,0 +1,319 @@
+{
+  "$id": "engagement-protocol.json",
+  "description": "Engagement protocol for the waypoint skill family. Machine-readable contract for tier detection, step tracking, concern emission, write discipline, and enforcement.",
+
+  "related_references": [
+    { "file": "autonomy.md", "topic": "autonomy axis (afk/hitl)" },
+    { "file": "review-safety.md", "topic": "review safety invariant - 5 untrusted-text crossings" },
+    { "file": "manifest.md", "topic": "artifacts manifest emission" },
+    { "file": "../chain/reference.md", "topic": "chain dispatcher" }
+  ],
+
+  "multi_skill_invocation": {
+    "rule": "Stop and confirm order before executing. Restate detected skills, propose sequence with reason, ask user to confirm.",
+    "execution": "One at a time, carrying output into next. Never interleave phases."
+  },
+
+  "tier_detection": {
+    "description": "Determines engagement tier on invocation. First match wins.",
+    "ladder": [
+      {
+        "check": "CLAUDE.md contains 'concerns: auto-emit' under '## Waypoint'",
+        "result": "tier_3",
+        "label": "Automated"
+      },
+      {
+        "check": "CONCERNS.md exists with content",
+        "sub_check": "CLAUDE.md has Documentation Map section",
+        "result_if_sub_true": "tier_2_plus",
+        "result_if_sub_false": "tier_2",
+        "label": "Tracking / Full cross-referencing"
+      },
+      {
+        "check": "Neither exists",
+        "result": "tier_1",
+        "label": "Just working"
+      }
+    ],
+    "rule": "Tier 3 requires explicit opt-in. Without the marker, always ask before emitting concerns."
+  },
+
+  "step_tracking": {
+    "description": "Every skill with steps in skill.json must initialize those steps as tasks before executing any of them.",
+    "rationale": "User monitors parallel agent sessions via the task list.",
+    "procedure": [
+      "Read the skill's steps array from skill.json.",
+      "Create one task per step using TaskCreate. Title format: '{step_id}: {step_name}'.",
+      "Execute steps in order. Mark each task done with a one-line outcome summary.",
+      "If a step is skipped, mark its task done with 'Skipped: {reason}'."
+    ],
+    "rules": [
+      "All tasks created at the start, not lazily.",
+      "A skill that runs without initializing tasks is a protocol violation.",
+      "Task summaries: one sentence stating what was decided or produced."
+    ]
+  },
+
+  "tier_defaults": {
+    "tier_1": {
+      "label": "Just working",
+      "description": "Full methodology, no scaffolding expected, no concern tracking.",
+      "path_resolution": "Resolve doc paths through Documentation Map in CLAUDE.md. Fall back to well-known root paths when no map exists.",
+      "glossary_fallback": ["_GLOSSARY.md", "GLOSSARY.md", "CONTEXT.md"],
+      "cross_reference_substitutions": [
+        { "missing": "_GLOSSARY.md/GLOSSARY.md/CONTEXT.md", "action": "Define terms inline" },
+        { "missing": "CONVENTIONS.md or conventions/", "action": "Infer conventions from existing code, state what was inferred" },
+        { "missing": "SCOPE.md", "action": "Ask scope questions inline" },
+        { "missing": "TESTING.md", "action": "State default test philosophy, offer to adjust" },
+        { "missing": "docs/adr/", "action": "Flag decisions that might reverse past choices, note no ADRs exist" }
+      ],
+      "adaptation_rule": "State each adaptation once, in one sentence, then move on."
+    },
+    "tier_2": {
+      "label": "Tracking",
+      "description": "CONCERNS.md exists. Skills read from it and write to it with permission.",
+      "concern_reads": {
+        "task_layer_skills": "Open section only",
+        "check_in_reorient": "Open + Investigating + Blocked",
+        "wrapup": "Open (to resolve), then Resolved (archival threshold)"
+      },
+      "behaviors": [
+        "Read summary header (line 2) first. Use @L offsets for targeted reads.",
+        "After work, follow nudge protocol for discoveries.",
+        "Emit concerns as [open] with type, raised date, and refs.",
+        "Resolve concerns addressed by current work (move to Resolved, add note).",
+        "After any write, recalculate summary header.",
+        "Use cross-referencing files when they exist, Tier 1 substitutions otherwise."
+      ],
+      "deepening_suggestions": {
+        "frequency": "At most once per session",
+        "trigger": "Concern history shows a pattern"
+      }
+    },
+    "tier_3": {
+      "label": "Automated",
+      "description": "User opted in to automatic concern emission. Nudge 'ask' step skipped.",
+      "behaviors": [
+        "Emit concerns silently during work. Log at session end.",
+        "Exception: /review findings never auto-emit at any tier.",
+        "Resolve concerns automatically when skill's work addresses them.",
+        "Surface only concerns needing human judgment (blocked, ambiguous, high-risk)."
+      ],
+      "automation_suggestions": {
+        "requires_all": [
+          "Pattern of repeated manual work (3+ instances same concern type)",
+          "Concrete automation proposal (hook, script, check)",
+          "User confirmation before implementing"
+        ]
+      }
+    }
+  },
+
+  "nudge_protocol": {
+    "steps": [
+      {
+        "name": "what",
+        "instruction": "The specific discovery. Use concrete names, not abstractions.",
+        "good": "Undocumented rule: vessel status requires confirmation before transition.",
+        "bad": "Found an undocumented business rule."
+      },
+      {
+        "name": "why",
+        "instruction": "Why it matters beyond this session. Reference scope, not theory.",
+        "good": "This affects VesselCard, VesselList, and FixtureCard - all have status transitions.",
+        "bad": "Undocumented rules can cause inconsistencies."
+      },
+      {
+        "name": "ask",
+        "instruction": "One question, one time.",
+        "per_tier": {
+          "tier_1": "Want me to start CONCERNS.md to track this?",
+          "tier_2": "Added as C-039 [open]. (or: Want me to add this as a concern?)",
+          "tier_3": "Silent emission, logged at session end."
+        }
+      }
+    ],
+    "rules": [
+      "Never nag. If the user declines, do not re-offer the same concern.",
+      "If the user says 'stop suggesting concerns', respect it for the rest of the session."
+    ]
+  },
+
+  "concern_emission": {
+    "format": {
+      "template": "### C-{next_id} [open] {one-line description}\ntype: {question|assumption|issue} | raised: {date} | source: /{skill-name}\n{1-3 lines of context}\nrefs: {paths to relevant files or other concern IDs}",
+      "id_rule": "Read current max ID from CONCERNS.md, increment.",
+      "placement": "Open section.",
+      "after_write": "Recalculate summary header (counts + line offsets)."
+    },
+    "review_exception": "A concern sourced from /review is never auto-emitted at any tier. Recording one is always a human pick.",
+    "emit_when": [
+      "Affects code or decisions beyond current task (cross-cutting)",
+      "Contradicts existing assumption or spec (discrepancy)",
+      "Cannot be fully resolved within current skill invocation (deferred)",
+      "Represents a risk that should be revisited later (time-bound)"
+    ],
+    "do_not_emit": [
+      "Things the skill just fixed",
+      "Generic best practices",
+      "Things already tracked (check for duplicates first)",
+      "Observations that only matter in current context"
+    ],
+    "resolved_format": "### C-NNN [resolved] {description}\ntype: {type} | raised: {date} | resolved: {date}\nResolution: {what was done}\nCommits: {short SHAs}"
+  },
+
+  "first_invocation": {
+    "trigger": "First-ever invocation in a project without scaffolding (Tier 1), .claude/.setup-prompted does not exist.",
+    "notice": "This project has no waypoint scaffolding.\nRun /how-to-start to get oriented, or /setup to scaffold.\nThis notice won't repeat.",
+    "after": "Write .claude/.setup-prompted.",
+    "rule": "Handled by engagement protocol, not individual skills. Tier declaration inherits automatically."
+  },
+
+  "exit_protocol": {
+    "applies_to": "Commit-producing skills (/tdd, /create, /diagnose)",
+    "procedure": [
+      {
+        "step": 1,
+        "question": "Mid-cycle commit or natural boundary?",
+        "mid_cycle": "Auto-provisional. Emit issue concern silently. Commit with [provisional] marker.",
+        "natural_boundary": "Ask: Stable enough to document, or provisional?"
+      },
+      {
+        "step": 2,
+        "condition": "stable",
+        "actions": [
+          "Spec sync: does the spec still match what was built?",
+          "Term/pattern capture: new domain term or convention?",
+          "Concern resolution: did this work resolve open concerns?",
+          "Commit code + doc updates together."
+        ]
+      },
+      {
+        "step": 3,
+        "condition": "provisional",
+        "actions": [
+          "Emit issue concern with what needs documenting.",
+          "Commit with [provisional] or [doc-deferred: <reason>] marker."
+        ]
+      },
+      {
+        "step": 4,
+        "action": "State next step: another cycle, /wrapup, or hand off."
+      }
+    ],
+    "deferred_doc_pressure": [
+      { "age": "< 3 days", "behavior": "Mention in summary, no special treatment" },
+      { "age": "3-7 days", "behavior": "Note as aging" },
+      { "age": "> 7 days", "behavior": "Promote to issue priority" },
+      { "age": "> 14 days", "behavior": "Top of priority stack, above feature work" }
+    ],
+    "deferred_doc_rule": "Never blocking. User can say 'not now'. Debt is visible and escalates.",
+    "mini_wrapup_can": [
+      "Append to shared-append files (GLOSSARY.md, conventions/NAMING.md, conventions/UX.md)",
+      "Emit issue concerns for deferred documentation"
+    ],
+    "mini_wrapup_cannot": [
+      "Modify owned files (spec drift fixes remain /wrapup's responsibility)",
+      "Delete or rewrite existing entries in shared-append files"
+    ]
+  },
+
+  "write_discipline": {
+    "file_categories": [
+      { "category": "shared_append", "semantics": "Any skill adds entries; never modifies existing", "conflict_resolution": "Merge by appending" },
+      { "category": "owned", "semantics": "One designated writer per section", "conflict_resolution": "Owner resolves" },
+      { "category": "volatile", "semantics": "Session-scoped, auto-expires", "conflict_resolution": "Last writer wins" }
+    ],
+    "file_registry": [
+      { "file": "GLOSSARY.md", "category": "shared_append", "writers": ["any skill resolving a term"], "constraint": "Add new terms only" },
+      { "file": "conventions/NAMING.md", "category": "shared_append", "writers": ["/grill-with-docs", "/wrapup", "/setup"], "constraint": "Add new patterns only" },
+      { "file": "conventions/UX.md", "category": "shared_append", "writers": ["/grill-with-docs", "/wrapup", "/setup"], "constraint": "Add new patterns only" },
+      { "file": "SCOPE.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Only during explicit scope discussions" },
+      { "file": "TESTING.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Only during explicit testing strategy discussions" },
+      { "file": "ARCHITECTURE.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Includes external dependencies section" },
+      { "file": "CONCERNS.md (persistent)", "category": "shared_structured", "writers": ["any skill (emit)", "/wrapup (resolve)"], "constraint": "Typed entries with lifecycle, ID-based" },
+      { "file": "CONCERNS.md (Claims)", "category": "volatile", "writers": ["any skill in session"], "constraint": "Session-scoped, stale after 4 hours" },
+      { "file": "Active Workflow", "category": "owned", "writers": ["workflow skill", "/check-in (phase only)"], "constraint": "Per-section owners" },
+      { "file": "Feature specs", "category": "owned", "writers": ["/spec (create)", "/wrapup (drift-fix)"], "constraint": "Creator owns until /wrapup reviews" },
+      { "file": "docs/patterns/*.md", "category": "shared_append", "writers": ["any skill discovering a cross-cutting pattern"], "constraint": "Add new patterns only" },
+      { "file": "CLAUDE.md", "category": "owned", "writers": ["/setup (scaffold)", "human (prose)"], "constraint": "Per-section owners documented" }
+    ],
+    "append_only_contract": "Append-only during work, modifications through /wrapup. Two agents can both append to GLOSSARY.md without conflict.",
+    "before_writing": "Check Claims section of CONCERNS.md. If another session claims same file area, warn and ask."
+  },
+
+  "multi_agent_enforcement": {
+    "levels": [
+      { "level": 1, "mechanism": "Hook", "detail": "UserPromptSubmit hook injects Claims", "prevents": "File-area conflicts between concurrent agents" },
+      { "level": 2, "mechanism": "Skill", "detail": "Skills read Claims/Concerns before writing", "prevents": "Working on area with unresolved blockers" },
+      { "level": 3, "mechanism": "Boundary", "detail": "/wrapup and /check-in verify consistency", "prevents": "Drift accumulated during session" }
+    ],
+    "hook_contract": {
+      "rule": "Projects with concurrent agents SHOULD install UserPromptSubmit hook injecting CONCERNS.md.",
+      "scaling": {
+        "under_30_concerns": "Inject Claims + full Open section",
+        "over_30_concerns": "Inject Claims + summary header only. Skills read from disk via @L offsets."
+      },
+      "independence": "Skills must not depend on hook existing - do own checks (Level 2)."
+    }
+  },
+
+  "scaffolding_table": [
+    { "file": "CONCERNS.md", "capability": "Concern tracking, cross-session continuity", "created_by": "Any skill (Tier 1 nudge), /reorient, /wrapup, /setup" },
+    { "file": "GLOSSARY.md", "capability": "Term validation, glossary challenges", "created_by": "/grill-with-docs" },
+    { "file": "conventions/NAMING.md", "capability": "Naming enforcement", "created_by": "/setup" },
+    { "file": "conventions/UX.md", "capability": "Interaction pattern consistency", "created_by": "/setup" },
+    { "file": "SCOPE.md", "capability": "Scope boundary checks", "created_by": "/setup" },
+    { "file": "TESTING.md", "capability": "Project-specific test philosophy", "created_by": "/setup" },
+    { "file": "ARCHITECTURE.md", "capability": "Architecture cross-referencing, external dependencies", "created_by": "/setup" },
+    { "file": "DESIGN.md", "capability": "Visual convention enforcement (optional)", "created_by": "/design" },
+    { "file": "docs/adr/", "capability": "Decision history", "created_by": "/grill-with-docs" },
+    { "file": "Documentation Map (in CLAUDE.md)", "capability": "Indirection layer for all of the above", "created_by": "/setup" }
+  ],
+  "scaffolding_rule": "Skills create only their own output artifacts. Exception: /grill-with-docs creates GLOSSARY.md and docs/adr/ because those are its outputs.",
+
+  "prohibitions": [
+    { "id": 1, "rule": "Don't block on missing scaffolding. Every skill works at Tier 1." },
+    { "id": 2, "rule": "Don't repeatedly mention what's missing. Adapt once, move on." },
+    { "id": 3, "rule": "Don't prompt for /setup more than once. First-invocation notice handles this." },
+    { "id": 4, "rule": "Don't create scaffolding that belongs to another skill." },
+    { "id": 5, "rule": "Don't degrade silently. State what you skipped and did instead, one sentence." },
+    { "id": 6, "rule": "Don't nudge more than once per discovery. Ask, respect the answer." },
+    { "id": 7, "rule": "Don't emit concerns at Tier 2 without the nudge protocol." },
+    { "id": 8, "rule": "Don't offer automation suggestions below Tier 3." },
+    { "id": 9, "rule": "Don't write to shared files without checking Claims." },
+    { "id": 10, "rule": "Don't skip the exit protocol on commit-producing skills." }
+  ],
+
+  "canonical_branch": {
+    "rule": "One designated branch holds canonical CONCERNS.md. Designated by where '## Active Workflow' lives in CLAUDE.md.",
+    "worktree_behavior": [
+      "Every worktree inherits CONCERNS.md from source branch at creation.",
+      "Changes merge back when worktree merges.",
+      "No cross-branch reads needed."
+    ],
+    "claims": "Volatile, session-scoped, worktree-local by nature.",
+    "warnings": [
+      "/check-in warns when worktree is behind canonical branch's CONCERNS.md.",
+      "/reorient flags stale canonical branch designations."
+    ]
+  },
+
+  "tier_declaration_template": {
+    "format": "## Engagement\nSee [the engagement protocol](../../internals/engagement/README.md).\nEmits: {concerns (type: ...), flags, audit results, nothing}\nWrites: {files this skill creates or appends to - or 'none'}\nOverride: {behavioral deviation from defaults - or omit line}",
+    "rules": [
+      "Skills with overrides expand the Override field.",
+      "Skills that opt out entirely state the opt-out and reason."
+    ]
+  },
+
+  "exit_sequence": {
+    "description": "Every skill ends with this two-step sequence after its own gated writes.",
+    "steps": [
+      { "step": 1, "action": "Emit the artifacts manifest (manifest.md). A run that wrote nothing prints the empty manifest." },
+      { "step": 2, "action": "Run the chain dispatcher (../chain/reference.md) for the next hop. On a gate or no clean outgoing edge, stop and hand back." }
+    ],
+    "citation": "- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md).",
+    "conditional_handoffs": "When a condition plainly does not hold, skip its handoff silently. Do not narrate the skip."
+  }
+}

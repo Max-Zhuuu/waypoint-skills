@@ -76,7 +76,7 @@ Brief. Recommend one skill with one reason, then stop.
 ## Exit
 
 - Routes to the recommended skill. The routing is the exit.
-- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#14-exit-sequence).
+- On exit, run the shared exit sequence (manifest, then the chain dispatcher): see [the exit sequence](../../internals/engagement/README.md#exit-sequence).
 
 ## Engagement
 See [the engagement protocol](../../internals/engagement/README.md) for the full protocol.
