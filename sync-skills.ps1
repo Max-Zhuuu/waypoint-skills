@@ -1,15 +1,17 @@
-# Sync waypoint skills to ~/.claude/skills/ (flattened)
-# Also syncs shared infrastructure: internals/, templates/, process/, schemas/, tests/, and root files.
+# Sync waypoint skills to ~/.claude/skills/ via directory junctions (zero-copy).
+# Also syncs shared infrastructure: internals/, templates/, process/, schemas/, tests/.
 #
 # The repo organizes skills under task/ and project/ for readability.
 # Claude Code discovers skills one level deep in ~/.claude/skills/.
-# This script bridges the gap: find every SKILL.md, copy its directory
-# to ~/.claude/skills/{name}/, then sync shared directories.
+# This script bridges the gap: create a junction from ~/.claude/skills/{name}/
+# pointing to repo/{category}/{name}/. Edits in either location hit the same files.
+# git status in the repo reflects changes immediately - no reverse sync needed.
 #
-# v3: Added schemas/ (JSON schemas for skill validation and output formats)
-#     and tests/ (structural test suite) to the sync.
-# v4: Added agents/ (agent definitions that reference waypoint schemas).
-#     Agents sync file-by-file (not directory replace) to preserve non-waypoint agents.
+# Non-waypoint skills (directories without a matching repo source) are left untouched.
+#
+# v5: Junctions replace copies. Single source of truth.
+#     Agents still sync file-by-file (junctions are directory-only on Windows).
+#     Root files still copy (junction is directory-only).
 #
 # Usage: .\sync-skills.ps1 [-RepoPath <path>] [-DryRun]
 
@@ -29,160 +31,141 @@ if (Test-Path $cswapSessions) {
     }
 }
 
-$target = Join-Path $claudeRoot "skills"
-
-if (-not (Test-Path $target)) {
-    if ($DryRun) { Write-Host "Would create: $target" }
-    else { New-Item -ItemType Directory -Path $target -Force | Out-Null }
-}
-
-# --- Skills (flattened from category dirs) ---
-
-$skillDirs = @("task", "project", "in-progress", "third-party")
-$copied = 0
-$skipped = 0
-
-foreach ($dir in $skillDirs) {
-    $parent = Join-Path $RepoPath $dir
-    if (-not (Test-Path $parent)) { continue }
-
-    Get-ChildItem $parent -Directory | ForEach-Object {
-        $skillFile = Join-Path $_.FullName "SKILL.md"
-        if (-not (Test-Path $skillFile)) {
-            Write-Host "  Skip: $dir/$($_.Name) (no SKILL.md)" -ForegroundColor DarkGray
-            $skipped++
-            return
-        }
-
-        $dest = Join-Path $target $_.Name
-
-        if ($DryRun) {
-            Write-Host "  Would copy: $dir/$($_.Name) -> $($_.Name)"
-        } else {
-            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
-            Copy-Item $_.FullName $dest -Recurse -Force
-            Write-Host "  Synced: $dir/$($_.Name)" -ForegroundColor Green
-        }
-        $copied++
+function Ensure-Dir($path) {
+    if (-not (Test-Path $path)) {
+        if ($DryRun) { Write-Host "  Would create: $path" }
+        else { New-Item -ItemType Directory -Path $path -Force | Out-Null }
     }
 }
 
-# --- Shared infrastructure (peer directories) ---
+function Make-Junction($link, $target) {
+    # If link exists: check if it's already the right junction
+    if (Test-Path $link) {
+        $item = Get-Item $link -Force
+        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            $existing = $item.Target
+            if ($existing -eq $target -or $existing -eq (Resolve-Path $target).Path) {
+                return "unchanged"
+            }
+        }
+        # Wrong target or not a junction - remove
+        if ($DryRun) { Write-Host "  Would remove: $link" }
+        else { Remove-Item $link -Recurse -Force -Confirm:$false }
+    }
+
+    if ($DryRun) {
+        Write-Host "  Would junction: $link -> $target"
+        return "created"
+    }
+
+    New-Item -ItemType Junction -Path $link -Target $target | Out-Null
+    return "created"
+}
+
+# --- Skills (junctioned from category dirs) ---
+
+$skillDirs = @("task", "project", "in-progress", "third-party")
+$linked = 0
+$unchanged = 0
+$skipped = 0
+
+foreach ($root in $syncRoots) {
+    $skillsDir = Join-Path $root "skills"
+    Ensure-Dir $skillsDir
+
+    foreach ($dir in $skillDirs) {
+        $parent = Join-Path $RepoPath $dir
+        if (-not (Test-Path $parent)) { continue }
+
+        Get-ChildItem $parent -Directory | ForEach-Object {
+            $skillFile = Join-Path $_.FullName "SKILL.md"
+            if (-not (Test-Path $skillFile)) {
+                $skipped++
+                return
+            }
+
+            $dest = Join-Path $skillsDir $_.Name
+            $result = Make-Junction $dest $_.FullName
+
+            if ($result -eq "created") {
+                Write-Host "  Linked: $dir/$($_.Name)" -ForegroundColor Green
+                $linked++
+            } else {
+                $unchanged++
+            }
+        }
+    }
+}
+
+# --- Shared infrastructure (junctioned peer directories) ---
 
 $sharedDirs = @("internals", "templates", "process", "schemas", "tests", "scripts")
 $sharedCount = 0
 
-foreach ($dir in $sharedDirs) {
-    $src = Join-Path $RepoPath $dir
-    if (-not (Test-Path $src)) { continue }
+foreach ($root in $syncRoots) {
+    foreach ($dir in $sharedDirs) {
+        $src = Join-Path $RepoPath $dir
+        if (-not (Test-Path $src)) { continue }
 
-    $dest = Join-Path $claudeRoot $dir
+        $dest = Join-Path $root $dir
+        $result = Make-Junction $dest $src
 
-    if ($DryRun) {
-        Write-Host "  Would sync shared: $dir/"
-    } else {
-        if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
-        Copy-Item $src $dest -Recurse -Force
-        Write-Host "  Synced shared: $dir/" -ForegroundColor Cyan
+        if ($result -eq "created") {
+            Write-Host "  Linked shared: $dir/ -> $root" -ForegroundColor Cyan
+            $sharedCount++
+        }
     }
-    $sharedCount++
 }
 
-# --- Agents (file-by-file, preserves non-waypoint agents) ---
+# --- Agents (file-by-file copy, preserves non-waypoint agents) ---
 
 $agentSrc = Join-Path $RepoPath "agents"
-$agentDest = Join-Path $claudeRoot "agents"
 $agentCount = 0
 
 if (Test-Path $agentSrc) {
-    if (-not (Test-Path $agentDest)) {
-        if ($DryRun) { Write-Host "  Would create: agents/" }
-        else { New-Item -ItemType Directory -Path $agentDest -Force | Out-Null }
-    }
+    foreach ($root in $syncRoots) {
+        $agentDest = Join-Path $root "agents"
+        Ensure-Dir $agentDest
 
-    Get-ChildItem $agentSrc -File | ForEach-Object {
-        $dest = Join-Path $agentDest $_.Name
+        Get-ChildItem $agentSrc -File | ForEach-Object {
+            $dest = Join-Path $agentDest $_.Name
 
-        if ($DryRun) {
-            Write-Host "  Would sync agent: $($_.Name)"
-        } else {
-            Copy-Item $_.FullName $dest -Force
-            Write-Host "  Synced agent: $($_.Name)" -ForegroundColor Yellow
+            if ($DryRun) {
+                Write-Host "  Would sync agent: $($_.Name)"
+            } else {
+                Copy-Item $_.FullName $dest -Force
+            }
+            $agentCount++
         }
-        $agentCount++
     }
 }
 
-# --- Root files ---
+# --- Root files (file copy, junction is directory-only) ---
 
 $rootFiles = @("CONCERNS-FORMAT.md", "README.md")
 $rootCount = 0
 
-foreach ($file in $rootFiles) {
-    $src = Join-Path $RepoPath $file
-    if (-not (Test-Path $src)) { continue }
-
-    $dest = Join-Path (Join-Path $claudeRoot "skills") $file
-
-    if ($DryRun) {
-        Write-Host "  Would sync root: $file"
-    } else {
-        Copy-Item $src $dest -Force
-        Write-Host "  Synced root: $file" -ForegroundColor Cyan
-    }
-    $rootCount++
-}
-
-# --- Replicate to cswap inactive sessions ---
-
-$cswapCount = 0
 foreach ($root in $syncRoots) {
-    if ($root -eq $claudeRoot) { continue }
-    $sessionSkills = Join-Path $root "skills"
-    if (-not (Test-Path $sessionSkills)) {
-        if (-not $DryRun) { New-Item -ItemType Directory -Path $sessionSkills -Force | Out-Null }
-    }
-
-    # Skills
-    Get-ChildItem (Join-Path $claudeRoot "skills") -Directory | ForEach-Object {
-        $dest = Join-Path $sessionSkills $_.Name
-        if (-not $DryRun) {
-            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
-            Copy-Item $_.FullName $dest -Recurse -Force
-        }
-    }
-    # Root files in skills/
+    $skillsDir = Join-Path $root "skills"
     foreach ($file in $rootFiles) {
-        $src = Join-Path (Join-Path $claudeRoot "skills") $file
-        if (Test-Path $src) {
-            if (-not $DryRun) { Copy-Item $src (Join-Path $sessionSkills $file) -Force }
-        }
-    }
-    # Agents
-    if (Test-Path $agentDest) {
-        $sessionAgents = Join-Path $root "agents"
-        if (-not (Test-Path $sessionAgents)) {
-            if (-not $DryRun) { New-Item -ItemType Directory -Path $sessionAgents -Force | Out-Null }
-        }
-        Get-ChildItem $agentDest -File | ForEach-Object {
-            if (-not $DryRun) { Copy-Item $_.FullName (Join-Path $sessionAgents $_.Name) -Force }
-        }
-    }
-    # Shared dirs
-    foreach ($dir in $sharedDirs) {
-        $src = Join-Path $claudeRoot $dir
+        $src = Join-Path $RepoPath $file
         if (-not (Test-Path $src)) { continue }
-        $dest = Join-Path $root $dir
-        if (-not $DryRun) {
-            if (Test-Path $dest) { Remove-Item $dest -Recurse -Force -Confirm:$false }
-            Copy-Item $src $dest -Recurse -Force
-        }
-    }
 
-    $sessionName = Split-Path $root -Leaf
-    if ($DryRun) { Write-Host "  Would replicate to cswap session: $sessionName" }
-    else { Write-Host "  Replicated to cswap session: $sessionName" -ForegroundColor Magenta }
-    $cswapCount++
+        $dest = Join-Path $skillsDir $file
+
+        if ($DryRun) {
+            Write-Host "  Would sync root: $file"
+        } else {
+            Copy-Item $src $dest -Force
+        }
+        $rootCount++
+    }
 }
 
-Write-Host "`n$copied skills, $agentCount agents, $sharedCount shared dirs, $rootCount root files $(if ($DryRun) {'would be '})synced. $skipped skipped. $cswapCount cswap session(s) replicated."
+# --- Summary ---
+
+$sessionCount = $syncRoots.Count
+Write-Host "`n$linked junctions created, $unchanged unchanged, $sharedCount shared dirs linked, $agentCount agents synced, $rootCount root files copied across $sessionCount target(s). $skipped skills skipped (no SKILL.md)."
+if ($unchanged -gt 0) {
+    Write-Host "($unchanged junctions already pointed to the correct target)" -ForegroundColor DarkGray
+}
