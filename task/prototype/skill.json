@@ -13,7 +13,7 @@
     {
       "id": "detect-branch",
       "name": "Detect prototype branch",
-      "reads": ["CONVENTIONS.md", "ARCHITECTURE.md"],
+      "reads": [],
       "references": ["phases/logic.md", "phases/ui.md", "phases/design.md"],
       "instruction": "Select branch: Logic (TUI/CLI for functional validation), UI (duplicate components + variant switcher), Design (token toggle panel). For Design: load design-sensibility.md.",
       "checklist": [
@@ -33,7 +33,7 @@
     {
       "id": "iterate",
       "name": "Iterate and compare",
-      "instruction": "Build meaningfully different variations (structural, not just color). Compare via variant switcher. Evaluate each against all 9 interaction states. Test dense/narrow/empty/error layouts.",
+      "instruction": "Build meaningfully different variations (structural, not just color). Compare via variant switcher. Evaluate each against all 9 interaction states. Test dense/narrow/empty/error layouts. When writing code that enforces an invariant, constraint, or business rule, add a single-line comment at the relevant code line. Format: # Invariant: <desc> | # Constraint: <desc> | # Rule: <desc> | # Correction: <desc>.",
       "checklist": [
         "Multiple variations built and compared",
         "Interaction states and edge layouts tested",

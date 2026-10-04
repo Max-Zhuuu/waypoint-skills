@@ -6,8 +6,8 @@ Check for these files. Presence/absence only - don't read contents beyond frontm
 | CONCERNS.md | Tracking is active. Grep for items matching the user's topic. |
 | SCOPE.md frontmatter | Project exists with defined boundaries. |
 | GLOSSARY.md first heading | Domain glossary exists. |
-| CONVENTIONS.md | Coding standards exist. |
-| TESTING.md | Test strategy exists. |
+| CLAUDE.md ## Conventions | Coding standards exist. |
+| CLAUDE.md ## Testing | Test strategy exists. |
 | docs/specs/ | Feature specs exist. Check if one matches the user's topic. |
 | docs/adr/ | Architecture decisions on record. |
 

@@ -13,7 +13,7 @@
     {
       "id": "load-state",
       "name": "Load workflow state",
-      "reads": ["CLAUDE.md", "SCOPE.json", "SCOPE.md", ".claude/project-state.json"],
+      "reads": [".claude/project-state.json"],
       "instruction": "Run ~/.claude/scripts/discover-project-state.sh to refresh project state. Read Active Workflow from CLAUDE.md. No workflow: detect project type, recommend /triage or /setup. Workflow exists: note active skill, phase, date. Surface unsatisfied obligations from prior cycles.",
       "checklist": ["State loaded and mode detected", "Obligations surfaced if present"]
     },
@@ -35,7 +35,7 @@
     {
       "id": "worktree-hygiene",
       "name": "Worktree and downstream check",
-      "instruction": "Run git worktree list. Identify stale worktrees (merged branches). If DEPLOY.md exists, surface staged-not-promoted and blocked PRs (link, category, status only).",
+      "instruction": "Run git worktree list. Identify stale worktrees (merged branches). If ## Deployment exists in CLAUDE.md, surface staged-not-promoted and blocked PRs (link, category, status only).",
       "checklist": ["Stale worktrees identified", "Downstream view surfaced"]
     }
   ],

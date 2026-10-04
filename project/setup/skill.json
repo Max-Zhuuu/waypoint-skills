@@ -16,8 +16,8 @@
     {
       "id": "detect-state",
       "name": "Detect project state",
-      "reads": [".claude/project-state.json", "SCOPE.json", "SCOPE.md", "CONTEXT.json", "CLAUDE.md", "CONVENTIONS.json", "ARCHITECTURE.json", "DEPLOY.json"],
-      "instruction": "Run ~/.claude/scripts/discover-project-state.sh, read .claude/project-state.json. Detect mode: fresh (no docs) -> phase-0-grill. Resuming (partial docs) -> pick up first incomplete. Restructuring (user asks) -> reference/restructuring.md. Reviewing (all exist) -> reference/resume-path.md. Migrating (source system referenced) -> phase-0-grill with migration questions. Legacy .md versions exist -> offer .json conversion.",
+      "reads": [".claude/project-state.json", "CLAUDE.md"],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh, read .claude/project-state.json. Detect mode: fresh (no CLAUDE.md) -> phase-0-grill. Resuming (CLAUDE.md exists but missing sections) -> pick up first incomplete. Restructuring (user asks) -> reference/restructuring.md. Reviewing (CLAUDE.md has all sections) -> reference/resume-path.md. Migrating (source system referenced) -> phase-0-grill with migration questions. Legacy separate files (SCOPE.md, CONVENTIONS.json, etc.) exist -> offer consolidation into CLAUDE.md.",
       "references": ["reference/restructuring.md", "reference/resume-path.md"],
       "checklist": ["Mode detected and routed"]
     },
@@ -25,8 +25,8 @@
       "id": "phase-0-grill",
       "name": "Phase 0 - Discovery and scoping",
       "references": ["../../schemas/scope-format.json", "../../schemas/context-format.json"],
-      "instruction": "Print questions with recommended answers. Skip answered. Product: problem, audience, done-in-2-sentences. Scope: IN/OUT/UNCERTAIN with owners and deadlines. Dependencies, constraints, risks. Personas: who, what, how often. External connectors: systems, data flows. Migrating: source system, parity strategy, cutover approach. Write SCOPE.json (scope-format.json), CONTEXT.json (context-format.json), CONCERNS.md, GLOSSARY.md.",
-      "checklist": ["SCOPE.json written", "CONTEXT.json written", "External connectors inventoried", "GLOSSARY.md seeded"]
+      "instruction": "Print questions with recommended answers. Skip answered. Product: problem, audience, done-in-2-sentences. Scope: IN/OUT/UNCERTAIN with owners and deadlines. Dependencies, constraints, risks. Personas: who, what, how often. External connectors: systems, data flows. Migrating: source system, parity strategy, cutover approach. Write ## Scope and ## Product context sections in CLAUDE.md. Write CONCERNS.md, GLOSSARY.md.",
+      "checklist": ["## Scope written in CLAUDE.md", "## Product context written in CLAUDE.md", "External connectors inventoried", "GLOSSARY.md seeded"]
     },
     {
       "id": "tier-select",
@@ -48,8 +48,8 @@
       "name": "Phase 1 - Architecture and standards",
       "reads": ["architecture-rule-catalogue.md"],
       "references": ["reference/references.md", "../../schemas/architecture-format.json", "../../schemas/conventions-format.json", "../../schemas/deploy-format.json"],
-      "instruction": "Rule catalogue exists: per-family checklist grill. No catalogue but moderate+: offer bootstrap. Else: references.md area catalog. Write ARCHITECTURE.json, CONVENTIONS.json, DEPLOY.json conforming to format schemas. API projects: offer endpoint registry. Migrations: address what changes vs what ports.",
-      "checklist": ["ADRs documented", "ARCHITECTURE.json written", "CONVENTIONS.json written", "DEPLOY.json written", "Skeleton runs"]
+      "instruction": "Rule catalogue exists: per-family checklist grill. No catalogue but moderate+: offer bootstrap. Else: references.md area catalog. Write ## Architecture, ## Conventions, and ## Deployment sections in CLAUDE.md. API projects: offer endpoint registry. Migrations: address what changes vs what ports.",
+      "checklist": ["ADRs documented", "## Architecture written in CLAUDE.md", "## Conventions written in CLAUDE.md", "## Deployment written in CLAUDE.md", "Skeleton runs"]
     },
     {
       "id": "convention-scaffolding",
@@ -77,7 +77,7 @@
 
   "engagement": {
     "emits": ["concerns"],
-    "writes": ["CLAUDE.md", "SCOPE.json", "CONTEXT.json", "CONVENTIONS.json", "ARCHITECTURE.json", "DEPLOY.json", ".claude/"],
+    "writes": ["CLAUDE.md", ".claude/"],
     "override": "scaffolding creator",
     "manifest": true,
     "chain_dispatch": false

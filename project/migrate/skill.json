@@ -13,9 +13,9 @@
     {
       "id": "prerequisites",
       "name": "Prerequisites and scope protection",
-      "reads": ["SCOPE.md", "CLAUDE.md", "ARCHITECTURE.md", "contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
+      "reads": ["contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
       "references": ["reference/migration-structure.md", "reference/references.md"],
-      "instruction": "Verify /setup ran (SCOPE.md, ARCHITECTURE.md, CLAUDE.md exist). Read scope docs and endpoint registries. All source features IN unless explicitly cut with reason and owner. Parity system (entity registries, endpoint maps) is authoritative scope if exists.",
+      "instruction": "Verify /setup ran (CLAUDE.md exists with ## Scope and ## Architecture sections). Read endpoint registries. All source features IN unless explicitly cut with reason and owner. Parity system (entity registries, endpoint maps) is authoritative scope if exists.",
       "checklist": [
         "/setup ran, scope docs read",
         "All source features IN unless explicitly cut",

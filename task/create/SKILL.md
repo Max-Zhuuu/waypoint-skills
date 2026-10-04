@@ -21,7 +21,7 @@ Structured enough to ensure specs exist before building and docs get updated aft
 
 If this request doesn't fit /create, see [reference/when-not-to-use.md](reference/when-not-to-use.md) and recommend the matching alternative instead of proceeding.
 
-1. Read existing project docs: SCOPE.md, CONVENTIONS.md, GLOSSARY.md, TESTING.md, CLAUDE.md.
+1. Read CLAUDE.md (covers scope, conventions, architecture, testing) and GLOSSARY.md.
 2. Check for `## Active Workflow` in CLAUDE.md:
    - **Same skill already active** (/create in progress): don't restart. Ask what feature to add next, or suggest `/check-in` to orient.
    - **Different skill active** (/migrate or /buildout in progress): warn that starting /create runs alongside that workflow, not inside it. Ask whether to proceed or fold this feature into the active workflow.

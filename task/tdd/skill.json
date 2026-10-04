@@ -18,7 +18,7 @@
     {
       "id": "plan",
       "name": "Plan",
-      "reads": ["TESTING.md", "CONVENTIONS.md", "GLOSSARY.md"],
+      "reads": ["GLOSSARY.md"],
       "process": "process/tdd.md#plan",
       "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
       "instruction": "Read project context + ADRs in touched area. Confirm behavior list and interface design with user. Read slice test annotations (facets, layers, permutations). If missing, enumerate as failsafe per test-selection.json.",
@@ -52,7 +52,7 @@
       "id": "loop",
       "name": "Incremental loop",
       "process": "process/tdd.md#loop",
-      "instruction": "Per behavior: failing test (red), minimal implementation (green), refactor. Show user each test before implementing. Same failure without new evidence = leave patch loop per routing-policy rerouting.",
+      "instruction": "Per behavior: failing test (red), minimal implementation (green), refactor. Show user each test before implementing. Same failure without new evidence = leave patch loop per routing-policy rerouting. When writing code that enforces an invariant, constraint, or business rule, add a single-line comment at the relevant code line. Format: # Invariant: <desc> | # Constraint: <desc> | # Rule: <desc> | # Correction: <desc>. These comments replace external documentation - they are the source of truth.",
       "per_cycle_checklist": [
         "Test describes behavior via public interface, survives refactor",
         "Code minimal for this test, no speculative features",

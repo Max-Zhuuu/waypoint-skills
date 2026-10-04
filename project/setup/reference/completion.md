@@ -1,11 +1,11 @@
 # Completion Templates
 
 Read by /setup after Phase 1 gate passes.
-Read SCOPE.md and the Phase 0 conversation to determine which template to use.
+Read CLAUDE.md to determine which template to use.
 
 ## If a source system was identified
 
-SCOPE.md repositories section mentions an existing system, or scope describes replacing/migrating from something.
+CLAUDE.md ## Scope or ## References mentions an existing system, or scope describes replacing/migrating from something.
 
 ```
 Setup complete. You described migrating from {system name}.

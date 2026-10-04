@@ -34,7 +34,7 @@
       "id": "enterprise-crossref",
       "name": "Enterprise cross-reference",
       "enterprise": true,
-      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "docs/implementation/parity/*.csv"],
+      "reads": ["contracts/*-endpoints.json", "docs/implementation/parity/*.csv"],
       "instruction": "Cross-reference against endpoint registry: uncovered 'in' endpoints are implicit high-priority items. Check scope for conflicts. Check parity systems for uncovered entities.",
       "checklist": [
         "Uncovered endpoints surfaced, scope conflicts flagged"

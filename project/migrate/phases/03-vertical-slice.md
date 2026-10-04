@@ -14,7 +14,7 @@ This is the most important gate. Skipping it means discovering broken patterns a
 
 ### CP2: Post-slice architecture review
 - **Trigger:** after all 3 screens are built and passing tests
-- **References:** all 3 feature specs, CONVENTIONS.md, ADR folder, source system files, TESTING.md
+- **References:** all 3 feature specs, CLAUDE.md (## Conventions, ## Testing), ADR folder, source system files
 - **Action:** invoke `/grill-with-docs` for any decision that meets the ADR threshold (hard to reverse, surprising, real trade-off). Run /wrapup on all 3 screens to resolve flags and cascade to shared docs.
 - **Pass:** architecture grill complete (no unresolved ADR-worthy decisions), /wrapup passed on all 3 screens, no unresolved flags.
 
@@ -53,5 +53,5 @@ If an earlier-phase decision is invalidated: this is a regression (see /check-in
 - [ ] All 3 cross-referenced against source system
 - [ ] CP2 passed (architecture grill complete, /wrapup resolved all flags)
 - [ ] Required changes applied and validated
-- [ ] CONVENTIONS.md and TESTING.md refined from real patterns
+- [ ] ## Conventions and ## Testing in CLAUDE.md refined from real patterns
 - [ ] Inventory shows 3 screens at `[P]`

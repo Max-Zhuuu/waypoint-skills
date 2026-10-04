@@ -13,9 +13,9 @@
     {
       "id": "compose-intent",
       "name": "Compose Intent block",
-      "reads": ["DEPLOY.md"],
+      "reads": [],
       "references": ["reference/adapters.md", "reference/intent-template.md"],
-      "instruction": "Resolve DEPLOY.md adapter. Write ## Intent from spec + ADR delta + resolved concern decisions. Never derive from diff. Mark 'spec-derived'.",
+      "instruction": "Resolve adapter from ## Deployment in CLAUDE.md. Write ## Intent from spec + ADR delta + resolved concern decisions. Never derive from diff. Mark 'spec-derived'.",
       "checklist": [
         "Adapter resolved, Intent written from spec (not diff)"
       ]

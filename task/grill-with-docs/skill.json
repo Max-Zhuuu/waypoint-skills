@@ -17,15 +17,10 @@
       "id": "scan-docs",
       "name": "Scan documentation",
       "reads": [
-        "CLAUDE.md",
         "GLOSSARY.md",
         "_GLOSSARY.md",
         "docs/adr/",
         "docs/decisions/",
-        "SCOPE.md",
-        "CONVENTIONS.md",
-        "ARCHITECTURE.md",
-        "TESTING.md"
       ],
       "instruction": "Read CLAUDE.md for doc layout. Scan for glossary, ADRs, scope, conventions, architecture, testing, rule catalogue, endpoint registries. Create files lazily.",
       "checklist": [
@@ -62,7 +57,7 @@
     {
       "id": "update-docs",
       "name": "Update docs inline",
-      "instruction": "Update GLOSSARY.md inline when term resolved, not batched. No implementation details in glossary. Cascade to existing docs when genuine: naming -> NAMING.md, scope -> SCOPE.md, deps -> ARCHITECTURE.md, tests -> TESTING.md. Never create docs just to cascade.",
+      "instruction": "Update GLOSSARY.md inline when term resolved, not batched. No implementation details in glossary. Cascade to CLAUDE.md sections when genuine: naming -> ## Conventions, scope -> ## Scope, deps -> ## Architecture, tests -> ## Testing in CLAUDE.md. Never create docs just to cascade.",
       "checklist": [
         "Terms written to GLOSSARY.md immediately, cascades applied to existing docs"
       ]

@@ -36,7 +36,7 @@
       "id": "scope-validation",
       "name": "Scope validation",
       "enterprise": true,
-      "reads": ["contracts/*-endpoints.json", "SCOPE.md", "SCOPE.json"],
+      "reads": ["contracts/*-endpoints.json"],
       "references": ["../../schemas/routing-policy.json"],
       "instruction": "Verify completed work covers all 'in' items. Missing coverage = BLOCK concern. Verify obligation completion per routing policy. Coverage gaps prevent verified status.",
       "checklist": ["Scope coverage verified", "Obligation completion checked"]
@@ -44,8 +44,8 @@
     {
       "id": "cascade",
       "name": "Cascade to shared docs",
-      "reads": ["CONVENTIONS.md", "SCOPE.md", "ARCHITECTURE.md"],
-      "instruction": "Cascade resolutions: naming -> CONVENTIONS, scope -> SCOPE, dependencies -> ARCHITECTURE. Only cascade to docs that exist. Milestone concerns: offer archival.",
+      "reads": [],
+      "instruction": "Cascade resolutions: naming -> ## Conventions in CLAUDE.md, scope -> ## Scope in CLAUDE.md, dependencies -> ## Architecture in CLAUDE.md. Milestone concerns: offer archival.",
       "checklist": ["Affected docs updated"]
     },
     {

@@ -15,7 +15,7 @@
     {
       "id": "context",
       "name": "Read project context",
-      "reads": ["SCOPE.md", "CONVENTIONS.md", "GLOSSARY.md", "CLAUDE.md"],
+      "reads": ["GLOSSARY.md"],
       "instruction": "Read project context. Check for recently grilled doc on this topic (from /grill-with-docs). If found and current, skip grill step, reuse as input.",
       "checklist": [
         "Project context read (SCOPE, CONVENTIONS, GLOSSARY)",
@@ -26,7 +26,7 @@
       "id": "grill",
       "name": "Grill requirements",
       "process": "process/requirements.md",
-      "reads": ["SCOPE.md"],
+      "reads": [],
       "references": ["../../schemas/test-selection.json", "../../schemas/constraint-sheet.json"],
       "instruction": "Follow process/requirements.md. Grill scope, acceptance criteria, trade-offs. Never cut features without user approval. Every criterion must be testable. Enumerate test dimensions per criterion, classify each (boundary/equivalence/invariant/transition/environmental). Mark irrelevant with reason. Apply constraint-sheet for architecture decisions.",
       "checklist": [
@@ -49,7 +49,7 @@
     {
       "id": "write",
       "name": "Write spec",
-      "instruction": "Write spec to decided location. Update GLOSSARY.md if new terms, SCOPE.md if scope changed, CONVENTIONS.md if new patterns. Never create docs just to cascade into them.",
+      "instruction": "Write spec to decided location. Update GLOSSARY.md if new terms, ## Scope in CLAUDE.md if scope changed, ## Conventions in CLAUDE.md if new patterns. Never create docs just to cascade into them.",
       "checklist": [
         "Spec written, shared artifacts updated if warranted",
         "All criteria traceable"

@@ -59,11 +59,11 @@
       "label": "Just working",
       "description": "Full methodology, no scaffolding expected, no concern tracking.",
       "path_resolution": "Resolve doc paths through Documentation Map in CLAUDE.md. Fall back to well-known root paths when no map exists.",
-      "glossary_fallback": ["_GLOSSARY.md", "GLOSSARY.md", "CONTEXT.md"],
+      "glossary_fallback": ["_GLOSSARY.md", "GLOSSARY.md"],
       "cross_reference_substitutions": [
-        { "missing": "_GLOSSARY.md/GLOSSARY.md/CONTEXT.md", "action": "Define terms inline" },
-        { "missing": "CONVENTIONS.md or conventions/", "action": "Infer conventions from existing code, state what was inferred" },
-        { "missing": "SCOPE.md", "action": "Ask scope questions inline" },
+        { "missing": "_GLOSSARY.md/GLOSSARY.md", "action": "Define terms inline" },
+        { "missing": "## Conventions in CLAUDE.md", "action": "Infer conventions from existing code, state what was inferred" },
+        { "missing": "## Scope in CLAUDE.md", "action": "Ask scope questions inline" },
         { "missing": "TESTING.md", "action": "State default test philosophy, offer to adjust" },
         { "missing": "docs/adr/", "action": "Flag decisions that might reverse past choices, note no ADRs exist" }
       ],
@@ -228,9 +228,9 @@
       { "file": "GLOSSARY.md", "category": "shared_append", "writers": ["any skill resolving a term"], "constraint": "Add new terms only" },
       { "file": "conventions/NAMING.md", "category": "shared_append", "writers": ["/grill-with-docs", "/wrapup", "/setup"], "constraint": "Add new patterns only" },
       { "file": "conventions/UX.md", "category": "shared_append", "writers": ["/grill-with-docs", "/wrapup", "/setup"], "constraint": "Add new patterns only" },
-      { "file": "SCOPE.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Only during explicit scope discussions" },
+      { "file": "CLAUDE.md ## Scope", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Only during explicit scope discussions" },
       { "file": "TESTING.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Only during explicit testing strategy discussions" },
-      { "file": "ARCHITECTURE.md", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Includes external dependencies section" },
+      { "file": "CLAUDE.md ## Architecture", "category": "owned", "writers": ["/setup", "/grill-with-docs"], "constraint": "Includes external dependencies section" },
       { "file": "CONCERNS.md (persistent)", "category": "shared_structured", "writers": ["any skill (emit)", "/wrapup (resolve)"], "constraint": "Typed entries with lifecycle, ID-based" },
       { "file": "CONCERNS.md (Claims)", "category": "volatile", "writers": ["any skill in session"], "constraint": "Session-scoped, stale after 4 hours" },
       { "file": "Active Workflow", "category": "owned", "writers": ["workflow skill", "/check-in (phase only)"], "constraint": "Per-section owners" },
@@ -263,9 +263,9 @@
     { "file": "GLOSSARY.md", "capability": "Term validation, glossary challenges", "created_by": "/grill-with-docs" },
     { "file": "conventions/NAMING.md", "capability": "Naming enforcement", "created_by": "/setup" },
     { "file": "conventions/UX.md", "capability": "Interaction pattern consistency", "created_by": "/setup" },
-    { "file": "SCOPE.md", "capability": "Scope boundary checks", "created_by": "/setup" },
+    { "file": "CLAUDE.md ## Scope", "capability": "Scope boundary checks", "created_by": "/setup" },
     { "file": "TESTING.md", "capability": "Project-specific test philosophy", "created_by": "/setup" },
-    { "file": "ARCHITECTURE.md", "capability": "Architecture cross-referencing, external dependencies", "created_by": "/setup" },
+    { "file": "CLAUDE.md ## Architecture", "capability": "Architecture cross-referencing, external dependencies", "created_by": "/setup" },
     { "file": "DESIGN.md", "capability": "Visual convention enforcement (optional)", "created_by": "/design" },
     { "file": "docs/adr/", "capability": "Decision history", "created_by": "/grill-with-docs" },
     { "file": "Documentation Map (in CLAUDE.md)", "capability": "Indirection layer for all of the above", "created_by": "/setup" }
@@ -327,12 +327,12 @@
   "loading_profiles": {
     "description": "Two modes. Auto-detected from project state. Convention mode for existing projects, establishment mode for 0-to-1.",
     "detection": {
-      "rule": "If CONVENTIONS.json AND ARCHITECTURE.json exist in project root -> convention_mode. Otherwise -> establishment_mode.",
+      "rule": "If CLAUDE.md contains ## Architecture section -> convention_mode. ## Conventions is optional (architecture-only projects like stateless APIs may omit it). Otherwise -> establishment_mode.",
       "override": "User can force establishment_mode by invoking /setup."
     },
     "convention_mode": {
       "description": "Project has conventions. Agent writes code that fits. Methodology overhead minimal.",
-      "always_load": ["foundations.json (evidence_discipline, obligation_tracking only)", "CONVENTIONS.json", "ARCHITECTURE.json"],
+      "always_load": ["foundations.json (evidence_discipline, obligation_tracking only)"],
       "load_on_boundary_cross": ["trust-boundaries.json (crossed boundary only)"],
       "load_on_irreversible": ["constraint-sheet.json"],
       "never_load": ["routing-policy.json (full)", "engagement-protocol.json (full)"],

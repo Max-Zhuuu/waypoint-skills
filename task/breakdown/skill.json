@@ -16,7 +16,7 @@
     {
       "id": "read-spec",
       "name": "Read and understand",
-      "reads": ["SCOPE.md", "CONVENTIONS.md"],
+      "reads": [],
       "instruction": "Read spec (Documentation Map or docs/specs/{feature}.md). Identify entities, behaviors, dependencies, scope boundaries. No spec? Suggest /spec. Never add features spec does not describe. Flag ambiguity as concern.",
       "checklist": [
         "Spec read, entities and behaviors identified",
@@ -27,7 +27,7 @@
       "id": "scope-guard",
       "name": "Scope guard",
       "enterprise": true,
-      "reads": ["SCOPE.md", "CLAUDE.md", "contracts/*-endpoints.json"],
+      "reads": ["contracts/*-endpoints.json"],
       "instruction": "Every 'in' endpoint must trace to at least one slice. Never cut endpoint or feature without explicit user approval. Cost not reason to cut. Flag, don't decide.",
       "checklist": [
         "Every 'in' endpoint traceable to planned slice",
@@ -38,7 +38,7 @@
       "id": "decompose",
       "name": "Decompose into slices",
       "references": ["../../schemas/routing-policy.json", "../../schemas/test-selection.json"],
-      "instruction": "Each slice: implementable in one session, testable (clear done condition), scoped (~5 files max), ordered (explicit deps). One slice per screen, endpoint, or behavioral unit. Tag Autonomy: afk|hitl. afk only when done-condition machine-verifiable and no DEPLOY.md load-bearing surface touched. Annotate each with impact facets from routing-policy.json. Include test layers and permutations from spec.",
+      "instruction": "Each slice: implementable in one session, testable (clear done condition), scoped (~5 files max), ordered (explicit deps). One slice per screen, endpoint, or behavioral unit. Tag Autonomy: afk|hitl. afk only when done-condition machine-verifiable and no load-bearing surface (## Deployment in CLAUDE.md) touched. Annotate each with impact facets from routing-policy.json. Include test layers and permutations from spec.",
       "checklist": [
         "Each slice: one session, clear done, bounded files, explicit deps",
         "Every slice tagged afk or hitl",

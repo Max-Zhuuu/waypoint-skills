@@ -11,17 +11,19 @@ Read by /setup when explaining tier options to the user during setup.
 Example: a CLI tool, a small API, a single-purpose library.
 
 **What you get:**
-- CLAUDE.md with Project Scaffold and Documentation Map
-- Basic SCOPE.md (summary, in/out/uncertain)
+- CLAUDE.md with one-liner, ## Commands, ## Agent constraints, ## Architecture (with ### Key design decisions and ### Source layout)
 - .claude/ directory for skill state
 
 **What you skip:**
-- No CONVENTIONS.md (project is too small for naming drift to matter)
-- No TESTING.md (test expectations are self-evident)
-- No GLOSSARY.md (domain is simple enough to hold in your head)
-- No docs/adr/ (decisions are few and obvious)
+- No ## Conventions section (project too small for naming drift)
+- No ## Scope section (scope is self-evident)
+- No ## Product context section (domain is simple)
+- No docs/_GLOSSARY.md (domain terms fit in the head)
+- No docs/decisions/ (decisions are few and obvious)
 
-**Skills available:** all verb skills in degraded mode (no convention enforcement, no domain term cross-referencing). /create works as the workflow. /check-in works with the Active Workflow record.
+Small tier projects typically get the **lean template** (see phase-1.md).
+
+**Skills available:** all verb skills in degraded mode (no convention enforcement, no domain term cross-referencing).
 
 ### Moderate
 
@@ -29,29 +31,32 @@ Example: a CLI tool, a small API, a single-purpose library.
 Example: a web app, a service with an API, a migration project.
 
 **What you get:**
-- Everything from Small, plus:
-- CONVENTIONS.md (flat file, naming patterns)
-- TESTING.md (test expectations by tier)
-- GLOSSARY.md (domain glossary)
-- ARCHITECTURE.md (architecture overview)
-- docs/adr/ (architecture decision records)
-- docs/implementation/ structure (specs, improvements, handoffs)
-- docs/_local/ structure (questions, assumptions, active work)
-- Full Documentation Map
+- Everything from Small, plus CLAUDE.md sections:
+  - ## Scope (In/Out/Uncertain, Constraints, Resources)
+  - ## Conventions (naming, file placement, required/prohibited patterns)
+  - ## Deployment (environments, promotion gates)
+  - ## Product context (personas, external connectors)
+  - ## Testing (philosophy, layers, framework)
+  - ## References (pointers to ADRs, glossary, catalogue, contracts)
+- docs/_GLOSSARY.md (domain glossary)
+- docs/decisions/ (architecture decision records)
+- docs/_local/ (gitignored working state)
+
+Moderate tier projects typically get the **full template** (see phase-1.md).
 
 **Skills available:** everything, including /check-in with full enforcement.
 
 ### Large
 
 **When:** complex domain, multiple teams, extensive conventions.
-Example: an enterprise platform, a multi-service system, a domain with deep business rules.
+Example: an enterprise platform, a multi-service system.
 
 **What you get:**
-- Everything from Moderate, restructured:
-- conventions/ folder replaces flat CONVENTIONS.md
+- Everything from Moderate, with expanded conventions:
+  - ## Conventions section in CLAUDE.md references a conventions/ folder for detailed rules
   - conventions/naming.md
   - conventions/decomposition.md
-  - conventions/testing.md (moved from TESTING.md)
+  - conventions/testing.md
   - conventions/review.md
 - Full docs tree with all subdirectories
 
@@ -63,8 +68,6 @@ Example: an enterprise platform, a multi-service system, a domain with deep busi
 Instead, open conversationally - ask what the user is building, how many people are involved, how complex the domain is.
 Then recommend a tier based on the answers.
 
-Signals for each tier:
-
 | Signal | Small | Moderate | Large |
 |--------|-------|----------|-------|
 | Team size | 1 | 2-5 | 5+ |
@@ -73,32 +76,25 @@ Signals for each tier:
 | Expected lifespan | Weeks-months | Months-years | Years |
 | Convention drift risk | Low | Medium | High |
 
-These are heuristics, not rules. A solo dev building a complex domain system might choose Large.
-A team of 10 building a straightforward CRUD app might choose Moderate.
+These are heuristics, not rules.
 
 ## Tier transitions
 
-Tiers are not permanent. Re-run /setup to upgrade or downgrade.
+Tiers are not permanent.
+Re-run /setup to upgrade or downgrade.
 
 **Upgrade (Small -> Moderate):**
-- /setup detects the existing Small scaffold
-- Asks about the new files (CONVENTIONS.md, TESTING.md, etc.)
-- Generates them and updates the Documentation Map
-- Existing decisions in CLAUDE.md are preserved (memoized)
+- /setup detects the existing CLAUDE.md with minimal sections
+- Asks about new sections (## Scope, ## Conventions, ## Deployment, etc.)
+- Adds sections to CLAUDE.md and generates docs/_GLOSSARY.md, docs/decisions/
+- Existing content in CLAUDE.md is preserved
 
 **Upgrade (Moderate -> Large):**
-- /setup reads existing flat files
-- Proposes the conventions/ folder structure
-- Extracts sections from CONVENTIONS.md into separate files
-- Moves TESTING.md to conventions/testing.md
-- Updates the Documentation Map (skills follow automatically)
+- /setup reads existing CLAUDE.md ## Conventions section
+- Proposes extracting detailed conventions into a conventions/ folder
+- CLAUDE.md ## Conventions references the folder
+- Updates ## References section
 
 **Downgrade (Large -> Moderate):**
-- /setup consolidates conventions/ back into flat files
-- Updates the Documentation Map
+- /setup consolidates conventions/ folder back into CLAUDE.md ## Conventions section
 - No data loss - content is merged, not deleted
-
-## Documentation Map generation
-
-After tier selection, /setup generates the Documentation Map in CLAUDE.md.
-See [CONCEPTS-REFERENCE.md](../../../internals/CONCEPTS-REFERENCE.md#documentation-map) for the tier-dependent table and format.
