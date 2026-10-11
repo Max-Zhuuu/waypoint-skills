@@ -20,7 +20,7 @@
         "GLOSSARY.md",
         "_GLOSSARY.md",
         "docs/adr/",
-        "docs/decisions/",
+        "docs/decisions/"
       ],
       "instruction": "Read CLAUDE.md for doc layout. Scan for glossary, ADRs, scope, conventions, architecture, testing, rule catalogue, endpoint registries. Create files lazily.",
       "checklist": [
