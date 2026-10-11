@@ -2,7 +2,7 @@
 
 Distill the soul into a finite set of design decisions. This wave is systematic - precision over breadth.
 
-Read `docs/design/DESIGN-BRIEF.md` and `docs/design/DESIGN-DECISIONS.md` before starting.
+Read `{DOCS}/design/DESIGN-BRIEF.md` and `{DOCS}/design/DESIGN-DECISIONS.md` before starting.
 Every token decision must trace back to the brief.
 
 ## Token architecture
@@ -60,7 +60,7 @@ Every token gets a semantic name. The Design Language section in DESIGN-DECISION
 
 When the user uses a vague term, probe for specificity. See [REFERENCES.md](../reference/references.md) for the vague-term resolution table.
 Pin every resolved term to a specific, reusable name in the Design Language section.
-New resolutions discovered during the project get logged in `docs/design/TERM-LOG.md` to expand the skill's reference over time.
+New resolutions discovered during the project get logged in `{DOCS}/design/TERM-LOG.md` to expand the skill's reference over time.
 
 ## Interaction states
 
@@ -68,7 +68,7 @@ Read business logic docs. Map compound states:
 
 "What happens when a vessel row is selected, an off-hire period is active, and a bunker report is overdue - simultaneously?"
 
-Build a state matrix in `docs/design/system/INTERACTION-STATES.md`:
+Build a state matrix in `{DOCS}/design/system/INTERACTION-STATES.md`:
 - Entity states from business logic (active, pending, closed, overdue)
 - UI states (selected, hovered, focused, disabled, loading, error, empty)
 - Compound states (which combinations are possible, how they stack visually)
@@ -97,8 +97,8 @@ Prototypes should be isolated HTML with mocked data - real components placed on 
 ## Output
 
 Update `styles/tokens.css` (or create it).
-Write `docs/design/system/TOKEN-RATIONALE.md` - why each token value, not just what it is.
-Write `docs/design/system/INTERACTION-STATES.md` - state matrix.
+Write `{DOCS}/design/system/TOKEN-RATIONALE.md` - why each token value, not just what it is.
+Write `{DOCS}/design/system/INTERACTION-STATES.md` - state matrix.
 Update DESIGN-DECISIONS.md with token-level decisions and design language terms.
 
 **Exit checkpoint:** "Wave 2 complete. Token system defined, {N} token decisions logged, interaction states mapped. Prototype confirms tokens work on real screens. Ready for wave 3 (Proof), or revisit any tokens?"

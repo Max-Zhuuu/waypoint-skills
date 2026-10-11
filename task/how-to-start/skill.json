@@ -13,8 +13,8 @@
     {
       "id": "quick-scan",
       "name": "Quick scan",
-      "references": ["reference/quick-scan.md"],
-      "instruction": "Check for project files: presence/absence only, don't read contents beyond frontmatter. Speed constraint: under 10 seconds total.",
+      "references": ["../../internals/engagement/doc-root.md", "reference/quick-scan.md"],
+      "instruction": "Resolve {DOCS} first: run ~/.claude/scripts/resolve-doc-root.sh (rule: internals/engagement/doc-root.md). Check for project files: presence/absence only, don't read contents beyond frontmatter. Speed constraint: under 10 seconds total.",
       "checklist": [
         "Project files scanned (presence only)",
         "Under 10 seconds"

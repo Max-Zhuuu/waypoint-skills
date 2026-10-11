@@ -204,6 +204,7 @@ All scripts live in `tests/` and use `json_query.py` (Python stdlib, no external
 | `test-engagement.sh` | SKILL.md engagement block present, manifest/chain citations when declared |
 | `test-enterprise.sh` | Capability=true implies enterprise steps exist with reads |
 | `test-process-docs.sh` | All process doc refs in skill.json resolve on disk |
+| `test-doc-root.sh` | No hard-coded `docs/specs` or `docs/design`; `resolve-doc-root.sh` picks the right branch in fixture trees |
 
 Run locally: `for t in tests/test-*.sh; do bash "$t"; done`
 CI: `.github/workflows/test-skills.yml` triggers on PRs touching skill/schema/test/process files.
@@ -281,6 +282,7 @@ No skill may nest deeper than `{group}/{name}/SKILL.md`.
 - [internals/CONCEPTS-REFERENCE.md](internals/CONCEPTS-REFERENCE.md) - Documentation Map, Resolution Cascade, naming classes
 - [internals/engagement/README.md](internals/engagement/README.md) - Tier detection, concern emission, shared spine
 - [internals/engagement/manifest.md](internals/engagement/manifest.md) - Artifacts manifest
+- [internals/engagement/doc-root.md](internals/engagement/doc-root.md) - Doc root `{DOCS}` resolution
 - [internals/engagement/autonomy.md](internals/engagement/autonomy.md) - Autonomy axis (afk/hitl)
 - [internals/engagement/review-safety.md](internals/engagement/review-safety.md) - Review safety (five crossings)
 - [internals/chain/reference.md](internals/chain/reference.md) - Chain dispatcher (guard vocabulary, hardening rules)

@@ -4,11 +4,11 @@ Check for existing design artifacts:
 
 | File exists | Mode | Action |
 |------------|------|--------|
-| Nothing in `docs/design/` | **Greenfield** | Enter wave 1 |
-| `docs/design/DESIGN-BRIEF.md` only | **Resume mid-soul** | Report state, offer wave 1 continue or wave 2 entry |
-| `docs/design/DESIGN-BRIEF.md` + `docs/design/system/TOKEN-RATIONALE.md` | **Resume mid-tokens** | Report state, offer wave 2 continue or wave 3 entry |
-| `docs/design/system/COMPONENT-SPECS.md` exists | **Resume mid-proof** | Report state, offer wave 3 continue or evolve |
-| `styles/tokens.css` exists but no `docs/design/` | **Retrofit** | Extract implicit decisions, then enter wave 1 or 2 |
+| Nothing in `{DOCS}/design/` | **Greenfield** | Enter wave 1 |
+| `{DOCS}/design/DESIGN-BRIEF.md` only | **Resume mid-soul** | Report state, offer wave 1 continue or wave 2 entry |
+| `{DOCS}/design/DESIGN-BRIEF.md` + `{DOCS}/design/system/TOKEN-RATIONALE.md` | **Resume mid-tokens** | Report state, offer wave 2 continue or wave 3 entry |
+| `{DOCS}/design/system/COMPONENT-SPECS.md` exists | **Resume mid-proof** | Report state, offer wave 3 continue or evolve |
+| `styles/tokens.css` exists but no `{DOCS}/design/` | **Retrofit** | Extract implicit decisions, then enter wave 1 or 2 |
 | Design system complete, user describes new surface | **Evolve** | Ask: "Extend existing brief or revisit foundations?" |
 
 ## Resume detection

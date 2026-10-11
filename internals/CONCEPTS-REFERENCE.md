@@ -238,6 +238,7 @@ The Documentation Map grows with the project tier:
 ### Fallback
 
 When no Documentation Map exists (pre-/setup), skills fall back to well-known root paths.
+Map paths sit under the doc root `{DOCS}`, which skills resolve by [engagement/doc-root.md](engagement/doc-root.md): declared in `## Docs`, else `_docs/`, else `docs/`.
 See engagement/README.md for tier detection and fallback behavior.
 
 ## Naming Classes

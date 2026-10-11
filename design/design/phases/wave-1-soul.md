@@ -32,7 +32,7 @@ For each reference:
 - What's their emotional range?
 - What's distinctive vs. generic about their visual language?
 
-Document findings in `docs/design/RESEARCH.md`. Include screenshots or URLs where possible.
+Document findings in `{DOCS}/design/RESEARCH.md`. Include screenshots or URLs where possible.
 When something "doesn't feel right" later in the process, return here and investigate.
 Flag findings explicitly: "Bloomberg uses monospace for all numerical data - this prevents column misalignment when values change. Worth adopting? Reference: Bloomberg Terminal position blotter."
 
@@ -97,7 +97,7 @@ But they must be named as such, not disguised as UX improvements.
 
 ## Output
 
-Write `docs/design/DESIGN-BRIEF.md`:
+Write `{DOCS}/design/DESIGN-BRIEF.md`:
 - Product verb
 - Emotional range
 - Density model
@@ -105,8 +105,8 @@ Write `docs/design/DESIGN-BRIEF.md`:
 - Reference touchstones
 - What was explicitly rejected and why
 
-Start `docs/design/DESIGN-DECISIONS.md` with wave 1 direction decisions and the Design Language section.
-Start `docs/design/RESEARCH.md` with competitive audit findings.
+Start `{DOCS}/design/DESIGN-DECISIONS.md` with wave 1 direction decisions and the Design Language section.
+Start `{DOCS}/design/RESEARCH.md` with competitive audit findings.
 
 **Exit prototype:** invoke `/prototype` to visualize the finalized direction.
 The brief needs visual proof before wave 2 can begin with confidence.

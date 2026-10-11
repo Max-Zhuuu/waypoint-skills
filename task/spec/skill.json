@@ -41,7 +41,8 @@
       "name": "Check output location",
       "enterprise": true,
       "reads": ["CLAUDE.md", "architecture-rule-catalogue.md"],
-      "instruction": "Check for J1 rules. If active: output to issue tracker, not docs/specs/. If no J1: write to docs/specs/.",
+      "references": ["../../internals/engagement/doc-root.md"],
+      "instruction": "Resolve {DOCS} first: run ~/.claude/scripts/resolve-doc-root.sh (rule: internals/engagement/doc-root.md). Check for J1 rules. If active: output to issue tracker, not {DOCS}/specs/. If no J1: write to {DOCS}/specs/.",
       "checklist": [
         "Output location decided"
       ]
@@ -67,7 +68,7 @@
 
   "engagement": {
     "emits": ["concerns"],
-    "writes": [],
+    "writes": ["{DOCS}/specs/"],
     "manifest": true,
     "chain_dispatch": true
   },

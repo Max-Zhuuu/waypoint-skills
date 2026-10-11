@@ -2,7 +2,7 @@
 
 Prove the token system works on real screens. This wave is explosive again - provocations welcome where data says the conservative choice isn't working.
 
-Read `docs/design/DESIGN-BRIEF.md`, `docs/design/DESIGN-DECISIONS.md`, and `docs/design/system/TOKEN-RATIONALE.md` before starting.
+Read `{DOCS}/design/DESIGN-BRIEF.md`, `{DOCS}/design/DESIGN-DECISIONS.md`, and `{DOCS}/design/system/TOKEN-RATIONALE.md` before starting.
 Every proof screen must use only defined tokens. No one-off values.
 
 ## Representative screens
@@ -48,7 +48,7 @@ Patterns that appear across 3+ proof screens become component specs:
 - Navigation pattern (breadcrumb, tab, drill-down)
 - Action group (primary, secondary, destructive, disabled)
 
-Document in `docs/design/system/COMPONENT-SPECS.md` with:
+Document in `{DOCS}/design/system/COMPONENT-SPECS.md` with:
 - Token usage (which tokens, how composed)
 - States (all interaction states from the matrix)
 - Variants (if any, with rationale for each)
@@ -64,8 +64,8 @@ When a provocation is accepted, invoke `/prototype` immediately to validate the 
 
 ## Output
 
-Write `docs/design/system/COMPONENT-SPECS.md`.
-Write `docs/design/system/DESIGN-SYSTEM.md` - the unified shareholder-readable document:
+Write `{DOCS}/design/system/COMPONENT-SPECS.md`.
+Write `{DOCS}/design/system/DESIGN-SYSTEM.md` - the unified shareholder-readable document:
 - Design philosophy (verb, emotional range, density rationale)
 - Color system with swatches
 - Typography with examples

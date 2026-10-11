@@ -8,7 +8,7 @@ Check for these files. Presence/absence only - don't read contents beyond frontm
 | GLOSSARY.md first heading | Domain glossary exists. |
 | CLAUDE.md ## Conventions | Coding standards exist. |
 | CLAUDE.md ## Testing | Test strategy exists. |
-| docs/specs/ | Feature specs exist. Check if one matches the user's topic. |
+| {DOCS}/specs/ | Feature specs exist. Check if one matches the user's topic. |
 | docs/adr/ | Architecture decisions on record. |
 
 Summarize as a one-line project read:

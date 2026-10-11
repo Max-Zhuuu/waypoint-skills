@@ -15,8 +15,8 @@
     {
       "id": "context-and-mode",
       "name": "Context gate and mode detection",
-      "references": ["reference/context-gate.md", "reference/mode-detection.md", "reference/guardrails.md"],
-      "instruction": "Gate on understanding, not file existence. Detect mode: greenfield/resume/retrofit/evolve.",
+      "references": ["../../internals/engagement/doc-root.md", "reference/context-gate.md", "reference/mode-detection.md", "reference/guardrails.md"],
+      "instruction": "Resolve {DOCS} first: run ~/.claude/scripts/resolve-doc-root.sh (rule: internals/engagement/doc-root.md). Gate on understanding, not file existence. Detect mode: greenfield/resume/retrofit/evolve.",
       "checklist": [
         "Context gate passed",
         "Mode detected"
@@ -65,7 +65,7 @@
 
   "engagement": {
     "emits": ["concerns"],
-    "writes": ["docs/design/"],
+    "writes": ["{DOCS}/design/"],
     "override": "requires ## Scope in CLAUDE.md or equivalent; at Tier 1, prompts inline",
     "manifest": true,
     "chain_dispatch": false

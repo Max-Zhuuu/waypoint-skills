@@ -35,5 +35,5 @@ Pass the relevant design docs as context to the invoked skill.
 - Both themes (light and dark) get equal care. Never invert naively.
 - Density is a first-class decision made early, not a mode toggle added later.
 - When something doesn't feel right, investigate with competitive research. Flag explicitly with a reference the implementer can go look at.
-- Archive discarded directions in `docs/design/archive/`. Never delete - the "can we bring back X" question is always valid.
-- Log new vague-term resolutions to `docs/design/TERM-LOG.md` for skill evolution.
+- Archive discarded directions in `{DOCS}/design/archive/`. Never delete - the "can we bring back X" question is always valid.
+- Log new vague-term resolutions to `{DOCS}/design/TERM-LOG.md` for skill evolution.

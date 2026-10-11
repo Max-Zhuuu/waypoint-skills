@@ -17,7 +17,8 @@
       "id": "read-spec",
       "name": "Read and understand",
       "reads": [],
-      "instruction": "Read spec (Documentation Map or docs/specs/{feature}.md). Identify entities, behaviors, dependencies, scope boundaries. No spec? Suggest /spec. Never add features spec does not describe. Flag ambiguity as concern.",
+      "references": ["../../internals/engagement/doc-root.md"],
+      "instruction": "Resolve {DOCS} first: run ~/.claude/scripts/resolve-doc-root.sh (rule: internals/engagement/doc-root.md). Read spec (Documentation Map or {DOCS}/specs/{feature}.md). Identify entities, behaviors, dependencies, scope boundaries. No spec? Suggest /spec. Never add features spec does not describe. Flag ambiguity as concern.",
       "checklist": [
         "Spec read, entities and behaviors identified",
         "Dependencies mapped, scope boundaries checked"

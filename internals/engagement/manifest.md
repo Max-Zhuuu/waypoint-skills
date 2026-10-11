@@ -12,7 +12,7 @@ A trailing block, one line per path, grouped by verb, and nothing else:
 
 ```
 Waypoint · /spec
-  created   docs/specs/auth.md
+  created   _docs/specs/auth.md
   modified  GLOSSARY.md          (+2 terms)
   concern   1 question open
 ```

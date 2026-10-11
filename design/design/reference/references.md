@@ -24,7 +24,7 @@ Pin the resolved meaning to a named term in DESIGN-DECISIONS.md's Design Languag
 | "soft" | "Soft as in rounded corners and gentle curves, or soft as in muted colors and low contrast?" | `rounded` (geometric softness) vs. `muted` (tonal softness) |
 | "natural" | "Natural as in organic shapes and earthy palette, or natural as in intuitive/feels obvious to use?" | `organic` (visual direction) vs. `intuitive` (interaction quality) |
 
-This table is a starter set. New resolutions discovered during projects should be logged in the project's `docs/design/TERM-LOG.md` and periodically folded back into this reference.
+This table is a starter set. New resolutions discovered during projects should be logged in the project's `{DOCS}/design/TERM-LOG.md` and periodically folded back into this reference.
 
 ## Competitive audit structure
 
