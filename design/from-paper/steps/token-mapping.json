@@ -1,0 +1,59 @@
+{
+  "id": "token-mapping",
+  "name": "Token Mapping",
+  "gate": "after deep extraction, before build",
+  "frequency": "once per section",
+  "instruction": "Map every extracted value to the project's token system. This step transforms Paper's CSS into project-compatible CSS. No raw values in the final output.",
+  "mapping_rules": [
+    {
+      "category": "Paper var() references",
+      "instruction": "Paper styles often contain var(--token-name). Map these to the project's equivalent. Paper and project may share token names (both use {prefix}*) or differ.",
+      "examples": [
+        { "paper": "var({prefix}dark)", "project": "var({prefix}dark)", "action": "direct" },
+        { "paper": "var({prefix}shadow-card)", "project": "var({prefix}shadow-card)", "action": "direct" },
+        { "paper": "var(--color-navy-400)", "project": "var({prefix}navy-400)", "action": "rename" },
+        { "paper": "var({prefix}radius-card)", "project": "var({prefix}radius-card)", "action": "direct" }
+      ]
+    },
+    {
+      "category": "Raw hex/rgba values from Paper",
+      "instruction": "Some Paper styles have literal color values instead of tokens. Check if the value matches an existing project token. If yes, use the token. If no, add a new token to the project's token file.",
+      "process": [
+        "1. Look up the raw value in the project's token file. Is there a token with this value?",
+        "2. If yes, use that token reference.",
+        "3. If no, look up the raw value in Paper's token set (from session-init). Is it a Paper token?",
+        "4. If it's a Paper token, add the equivalent to the project token file with the project's naming convention.",
+        "5. If it's not a Paper token either (truly raw), add it to the project token file with a descriptive name.",
+        "6. Never leave a raw hex value in the final CSS. Every value gets a var() reference."
+      ],
+      "exception": "rgba() values used for glass effects (backdrop-filter compositions, box-shadow alpha channels) may remain as-is if they are structural effects, not brand colors. Document each exception."
+    },
+    {
+      "category": "Spacing values",
+      "instruction": "Map px spacing to project spacing tokens where an exact match exists. If no exact match, add a token. Do not round to the nearest token - exact values matter.",
+      "examples": [
+        { "paper": "80px", "project": "var({prefix}pad-section)", "match": "exact" },
+        { "paper": "64px", "project": "var({prefix}pad-block)", "match": "exact" },
+        { "paper": "24px", "project": "24px (literal or add token)", "match": "no token, use literal in css" }
+      ]
+    },
+    {
+      "category": "Font values",
+      "instruction": "Map Paper font families to project font stack. Map font sizes to project text tokens if they match. Font weights map to project weight tokens.",
+      "critical": "Paper designs name a font family directly, while the project may load {font} through a font loader or a font token. The font-family value in CSS must match what the project's font setup produces (usually a {prefix}font-* token), not Paper's exact string."
+    },
+    {
+      "category": "Box shadows",
+      "instruction": "Paper box-shadow values often combine multiple shadows. Map the token portion (e.g., var({prefix}shadow-card)) and keep the offset/blur/spread values exactly as extracted. Multi-shadow values must be preserved as a single declaration.",
+      "example": {
+        "paper": "var({prefix}shadow-card) 0px 2px 3px",
+        "project": "var({prefix}shadow-card) 0px 2px 3px"
+      }
+    }
+  ],
+  "output": {
+    "token_map": "Complete mapping from Paper values to project var() references",
+    "new_tokens": "List of tokens added to the project's token file",
+    "exceptions": "List of raw values left as-is with justification"
+  }
+}

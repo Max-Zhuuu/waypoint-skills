@@ -1,0 +1,48 @@
+{
+  "id": "build-component",
+  "name": "Build Component",
+  "gate": "after token mapping",
+  "frequency": "once per section",
+  "instruction": "Write the {framework} component using the extracted structure as the skeleton and extracted text as content. The component's markup mirrors the Paper node tree. Every element in Paper becomes an element in the component.",
+  "process": [
+    {
+      "step": "B1 - Map Paper tree to elements",
+      "instruction": "Walk the extracted node tree. Each Paper Frame becomes a div (or a semantic HTML element if appropriate). Each Paper Text becomes a span, p, h2, etc. based on role. SVGs transfer as-is, or as icon-library imports if matched and the project uses that library.",
+      "rules": [
+        "Preserve the exact nesting depth. Do not flatten nested frames.",
+        "Every Paper node with visual properties gets its own element with a CSS class.",
+        "Class names use the resolved {class_prefix}.",
+        "Text content comes from the extraction, not the spec prose (they may differ).",
+        "If the project forbids bare HTML elements for a role (for example buttons or inputs must come from its component library or {component_dir}), use the project's component and style it through its props and tokens."
+      ]
+    },
+    {
+      "step": "B2 - Component file structure",
+      "instruction": "Write the component in the project's idiom for {framework}, following the Framework branches table in ../reference/project-conventions.md. Match the file location, naming and import style of neighbouring components in {component_dir}. Use semantic HTML where the project allows it (section, h2, p, button).",
+      "pattern": {
+        "header": "imports, in the project's order",
+        "data": "Constants, derived state, type definitions",
+        "sub_components": "Sub-components for repeated structures (cards, rows), inline or as sibling files per the project's convention",
+        "default_export": "The section component"
+      }
+    },
+    {
+      "step": "B3 - Static-first, interactions later",
+      "instruction": "Build the component with zero interactivity first. Every element visible in the Paper screenshot must render. State, event handlers and motion come in the add-interactions step. Get the static render pixel-perfect before adding behavior."
+    }
+  ],
+  "class_naming": {
+    "convention": "{class_prefix}{section}-{element}",
+    "examples": [
+      "{class_prefix}context-section",
+      "{class_prefix}context-heading",
+      "{class_prefix}context-body",
+      "{class_prefix}context-card",
+      "{class_prefix}context-card-header",
+      "{class_prefix}context-card-icon",
+      "{class_prefix}context-card-label",
+      "{class_prefix}context-card-body"
+    ],
+    "rule": "One class per visual element. No utility classes. No inline styles (except dynamic values like accent colors set by state). If the project already names classes another way (BEM, CSS modules), follow the project."
+  }
+}

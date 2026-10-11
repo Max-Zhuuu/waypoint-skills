@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "prot-paper",
+  "status": "draft",
+  "description": "Prototype in Paper: build two or more structurally different design directions on the canvas from real source data and existing tokens.",
+
+  "chain": {
+    "from": ["to-paper", "prototype", "design"],
+    "to": [
+      { "target": "from-paper", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "setup",
+      "name": "Setup",
+      "references": ["../from-paper/reference/project-conventions.md"],
+      "instruction": "get_guide (paper-mcp-instructions), get_basic_info, get_tokens. Resolve {prefix}, {token_files}, {framework} and {font} per project-conventions.md, then get_font_family_info on {font}. get_tree_summary on artboards that may hold components to clone. Paper disconnected: stop with setup steps, no fallback canvas.",
+      "checklist": ["Paper connected, tokens cached", "Project conventions and font resolved", "Cloneable components listed"]
+    },
+    {
+      "id": "source-extraction",
+      "name": "Source extraction",
+      "instruction": "Read the codebase before designing: component names with props and state, data models (types, enums, constants), real content, interaction patterns, and image assets on disk for paper-asset:// insertion. Build an inventory; no lorem ipsum.",
+      "checklist": ["Inventory of real components, data and content", "Interaction patterns and assets listed"]
+    },
+    {
+      "id": "design",
+      "name": "Design variant A",
+      "instruction": "Per section: lead with the interaction concept, show real data in context, one write_html per visual group, get_screenshot every 2-3 sections. Name frames {Section}: {Role}. Each section answers a question the previous one raised; hierarchy comes from interaction density, not eyebrow labels. Clone existing components with duplicate_nodes. Motion only as frame strips.",
+      "checklist": ["Every section shows a working interactive concept", "Existing components cloned, not rebuilt", "Only var({prefix}*) values and the project font"]
+    },
+    {
+      "id": "variants",
+      "name": "Variants",
+      "instruction": "Build at least one more artboard with a different interaction model (scroll, tabs, cards), narrative (chronological, thematic) or density (progressive, all visible). Name them {Page} - Variant A: {Concept}, {Page} - Variant B: {Concept}.",
+      "checklist": ["Two or more structurally different directions"]
+    },
+    {
+      "id": "review",
+      "name": "Review",
+      "instruction": "Screenshot each variant, compare how well each serves the page's purpose, call finish_working_on_nodes on every touched artboard, and recommend one with a reason.",
+      "checklist": ["Variants compared against the page's purpose", "finish_working_on_nodes called", "Recommendation given"]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Bold and opinionated. Creative direction, not mechanical extraction. Every choice is grounded in the user's journey."
+}

@@ -1,0 +1,108 @@
+{
+  "id": "build",
+  "name": "Build",
+  "instruction": "Outside-in construction. One visual group per write_html call.",
+  "sequence": [
+    "create_artboard (correct width, source font on root)",
+    "Build or clone NavBar/shell",
+    "Create content area container",
+    "Build component shells (chrome only)",
+    "Fill content (top to bottom)",
+    "Build footer if present"
+  ],
+  "image_carryover": {
+    "mandatory": true,
+    "rule": "NEVER replace a source image with a gradient placeholder, colored rectangle, or empty box. Every image in the source must appear in Paper.",
+    "methods": [
+      {
+        "method": "paper-asset:// local path",
+        "when": "Image file exists on disk (static asset directory, screenshots)",
+        "syntax": "<img src=\"paper-asset:///absolute/path/to/image.webp\" style=\"width: 100%; height: auto;\" />",
+        "note": "Path must be absolute. Forward slashes. Three slashes after paper-asset:."
+      },
+      {
+        "method": "DOM extraction",
+        "when": "Interactive component with a running dev server",
+        "how": "Extract the rendered HTML with inlined computed styles using the dom_extraction method. This is the preferred approach for all interactive components, whatever the framework."
+      },
+      {
+        "method": "Screenshot insertion (last resort)",
+        "when": "Interactive component where DOM extraction failed or dev server is unavailable",
+        "how": "Screenshot the running component in the browser, save to a temp path, then use paper-asset:// to insert it"
+      },
+      {
+        "method": "x-paper-clone",
+        "when": "Image already exists elsewhere in the Paper file",
+        "syntax": "<x-paper-clone node-id=\"existing-image-node-id\" />"
+      }
+    ],
+    "prohibited": [
+      "Gradient rectangles as image stand-ins",
+      "Empty boxes with placeholder text like 'Image here'",
+      "Screenshots of components when the HTML can be extracted directly",
+      "Hand-traced approximations that skip or simplify elements from the source DOM"
+    ]
+  },
+  "content_area_patterns": {
+    "dashboard-grid": "flex-wrap: wrap; gap. Card width = (container - (cols-1)*gap) / cols",
+    "full-width-list": "Vertical flex column",
+    "centered-form": "Wrapper with align-items: center",
+    "split-pane": "Horizontal flex. Sidebar width + flex-shrink: 0. Main flex: 1; min-width: 0",
+    "css-grid-source": "flex-wrap: wrap with computed child widths. Paper has no display: grid"
+  },
+  "interactive_components": {
+    "instruction": "For interactive components (tabs, carousels, state machines, data grids, component-library widgets), extract the actual rendered HTML from the running page and insert it into Paper. Do NOT screenshot components. Do NOT hand-trace from source code. Use the dom_extraction method below.",
+    "exception": "Fall back to screenshots ONLY if the page cannot run (see source-audit running_page)."
+  },
+  "dom_extraction": {
+    "instruction": "Extract the real rendered DOM with computed styles inlined, from the browser. This produces pixel-accurate Paper HTML without manual tracing and works the same for React, Vue and server-rendered pages, because it reads what the browser applied: scoped styles, CSS modules, utility classes and runtime-injected component-library themes included.",
+    "method": [
+      "1. Open the running page in Playwright (see source-audit running_page) at the artboard width, and wait until data has loaded.",
+      "2. Identify the target component by its wrapper class, data attribute or role.",
+      "3. browser_evaluate a walker that, for EVERY element under the target: (a) reads window.getComputedStyle and keeps the visually meaningful properties listed in recursive_copy_rules, dropping values equal to the parent's inherited value or the property default; (b) converts display: grid to nested flex (see css_grid_conversion); (c) emits div/span for every tag except svg; (d) keeps svg elements as outerHTML; (e) materializes ::before/::after with non-empty content as absolutely positioned children; (f) sets layer-name from the element's most meaningful class or component name; (g) never emits transition, animation or @keyframes.",
+      "4. Map literal values back to tokens with the token-map step (computed styles return resolved values such as rgb() and px, not var()).",
+      "5. Insert the output via write_html, one visual group per call.",
+      "6. Verify with get_screenshot against the reference screenshot."
+    ],
+    "recursive_copy_rules": [
+      "Copy EVERY element, not just the structural containers. Every text node, every icon, every divider, every badge.",
+      "For each element, inline ALL visually meaningful CSS properties: display, flex-direction, gap, padding, width, height, background, border, border-radius, color, font-size, font-weight, font-family, letter-spacing, text-transform, line-height, position, top/left/right/bottom, z-index, overflow, opacity, box-shadow, align-items, justify-content.",
+      "Do not skip 'small' elements like dots, dividers, or decorative shapes. These define the visual quality.",
+      "Preserve the exact nesting structure. Do not flatten or simplify the DOM tree.",
+      "For elements with pseudo-elements (::before, ::after), create actual child elements with position: absolute."
+    ],
+    "css_grid_conversion": {
+      "instruction": "Paper does not support display: grid. Convert to nested flex containers.",
+      "method": [
+        "Read grid-template-columns, grid-template-rows, grid-template-areas from the source CSS.",
+        "Calculate column widths from fr units: col_width = (container_width - (cols-1)*gap) * fr_value / total_fr.",
+        "Create a vertical flex container (gap matches grid gap).",
+        "For each row of grid areas, create a horizontal flex container with children sized to their column widths.",
+        "For elements that span multiple rows, nest them in a vertical flex container spanning the appropriate height."
+      ]
+    },
+    "fallback": "If no browser tool is available, inline styles from the project's CSS files with a Node script (class-to-rules map applied to the rendered HTML). This only works for plain global CSS; it misses scoped styles, CSS modules with hashed classes and runtime-injected themes, so flag every component it could not resolve."
+  },
+  "layer_naming": "Every frame: {Component}: {Role} or {Component}. Never leave 'Frame'.",
+  "typography": {
+    "font_sizes": "always px",
+    "letter_spacing": "em preferred",
+    "line_height": "px preferred",
+    "tabular_nums": "font-variant-numeric: tabular-nums on numbers/dates/currency"
+  },
+  "container_rules": {
+    "overflow_hidden": "fixed-height container",
+    "position_relative": "container with absolute children",
+    "height_fit_content": "final artboard height",
+    "flex_1_or_space_between": "replace margin-left: auto"
+  },
+  "css_translation": {
+    "::after/::before": "actual child with position: absolute",
+    ":hover": "default state only",
+    "transition/animation": "never write them; Paper drops them. If the motion matters, draw a frame strip next to the component (Start/Mid/End frames captioned with duration, curve and token names), per ../../from-paper/reference/project-conventions.md Paper limits",
+    "display: grid": "flex-wrap: wrap + computed widths",
+    "margin": "padding + gap",
+    "overflow-y: auto": "overflow: hidden",
+    "backdrop-filter": "supported - use as-is"
+  }
+}

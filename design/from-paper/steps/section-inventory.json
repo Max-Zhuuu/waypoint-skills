@@ -1,0 +1,62 @@
+{
+  "id": "section-inventory",
+  "name": "Section Inventory",
+  "gate": "before deep extraction",
+  "frequency": "once per section",
+  "instruction": "Build a complete catalog of every node in the section before extracting any styles. This catalog drives the extraction - if a node is not in the catalog, it will not be extracted, and the output will be wrong.",
+  "actions": [
+    {
+      "step": "S1 - Screenshot",
+      "call": "get_screenshot",
+      "args": { "nodeId": "section_node_id", "scale": 2 },
+      "note": "Scale 2 for text readability. This is the ground truth image. Save it mentally - every built component gets compared against it."
+    },
+    {
+      "step": "S2 - Tree summary (max depth)",
+      "call": "get_tree_summary",
+      "args": { "nodeId": "section_node_id", "depth": 10 },
+      "note": "Depth 10 to reach every leaf. If '... N children' appears, that subtree was truncated - call get_tree_summary on that node specifically to expand it."
+    },
+    {
+      "step": "S3 - Expand truncated subtrees",
+      "instruction": "For every node in the tree summary that shows '... N children' (truncated), call get_tree_summary on that node with depth 10. Repeat until every leaf node is visible. Do not proceed to extraction until the full tree is known.",
+      "call": "get_tree_summary",
+      "args": { "nodeId": "truncated_node_id", "depth": 10 }
+    },
+    {
+      "step": "S4 - Build node catalog",
+      "instruction": "Produce a flat list of every node ID in the section, grouped by depth level. This is the extraction manifest.",
+      "format": {
+        "level_0": ["section_frame_id"],
+        "level_1": ["child_1_id", "child_2_id"],
+        "level_2": ["grandchild_1_id", "grandchild_2_id", "grandchild_3_id"],
+        "level_N": ["... every leaf node"]
+      },
+      "rule": "If a node appears in the tree summary, it appears in the catalog. No exceptions. Text nodes, SVG elements, dividers, dots, icons - everything."
+    },
+    {
+      "step": "S5 - Screenshot subsections",
+      "instruction": "For complex sections with multiple visual groups, screenshot each top-level child frame separately at scale 2. This gives higher-resolution reference images for detailed areas like cards, lists, or panels.",
+      "call": "get_screenshot",
+      "when": "section has more than 3 top-level children or is taller than 800px"
+    },
+    {
+      "step": "S6 - Detect overflow regions",
+      "instruction": "Compare each child's x position and width against the section frame's content box (width minus paddingInline). A child is an overflow region when x + width > section content box width, or when the child's x offset puts its right edge past the section's right boundary. Record these as 'bleed nodes' in the catalog - they require margin offset + overflow: clip on the wrapping container. Common pattern: a dashboard or card strip offset rightward to create a 'bleeds off the edge' effect where the right side is cropped.",
+      "method": "For each direct child from get_children, compare child.x + child.width against section.width. If it exceeds by more than 2px, flag it as a bleed node. Also check if a child's x offset is significantly larger than the section's paddingInline - this means it is pushed rightward relative to siblings.",
+      "output_fields": {
+        "bleed_nodes": "list of node IDs that overflow the section boundary horizontally",
+        "offset_nodes": "list of node IDs with x offset > section paddingInline (shifted right or left of the normal content flow)",
+        "abs_overflow_nodes": "list of absolutely positioned nodes whose top + height exceeds their parent container's height. These require extra padding-bottom on the section to prevent clipping."
+      }
+    }
+  ],
+  "output": {
+    "screenshot": "Reference image of the full section",
+    "subsection_screenshots": "Higher-res screenshots of complex children",
+    "node_catalog": "Flat list of every node ID grouped by depth",
+    "total_node_count": "Number for the exit report",
+    "bleed_nodes": "Node IDs that extend past the section boundary (require overflow: clip)",
+    "offset_nodes": "Node IDs with non-standard x offset (require margin-left adjustment)"
+  }
+}

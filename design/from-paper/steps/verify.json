@@ -1,0 +1,92 @@
+{
+  "id": "verify",
+  "name": "Verify",
+  "gate": "after all build steps complete",
+  "frequency": "once per section",
+  "instruction": "Verify the built component matches the Paper design. This is not optional. A component that 'looks close' is a failed extraction. The verification must be systematic, not impressionistic.",
+  "process": [
+    {
+      "step": "V1 - Load in browser",
+      "instruction": "Use a dev server that is already running. If none is, start one only inside a git worktree or after the user says so. Load the page in a real browser (Playwright or the user's browser), screenshot the section at the Paper artboard's width, and verify it renders without errors (HTTP 200, no console errors)."
+    },
+    {
+      "step": "V2 - Type check and project guards",
+      "instruction": "Run {typecheck}, plus the project's lint and design-guard tests if it has them. Zero errors. Fix them before visual comparison. Skip the type-check when {framework} is html.",
+      "call": "Bash: {typecheck}"
+    },
+    {
+      "step": "V3 - Visual comparison",
+      "instruction": "Compare the rendered section against the Paper screenshot from step S1. This comparison must be specific, not 'looks good'.",
+      "checks": [
+        {
+          "id": "V3.1",
+          "name": "Layout structure",
+          "question": "Does the element arrangement match? Same columns, same stacking order, same element count?"
+        },
+        {
+          "id": "V3.2",
+          "name": "Spacing",
+          "question": "Are gaps between elements visually identical? Is padding around containers the same? Does the section have the same amount of whitespace?"
+        },
+        {
+          "id": "V3.3",
+          "name": "Typography",
+          "question": "Are heading sizes, body text sizes, and label sizes correct? Is the font weight right (light headings vs semibold labels)? Is letter-spacing present on headings?"
+        },
+        {
+          "id": "V3.4",
+          "name": "Colors and surfaces",
+          "question": "Are card backgrounds the right tint? Is the section background correct? Are icon backgrounds the right color? Are text colors the right opacity?"
+        },
+        {
+          "id": "V3.5",
+          "name": "Card/panel styling",
+          "question": "Do cards have the right border-radius, shadow, border color? Are glass effects (blur, transparency) present where the design uses them?"
+        },
+        {
+          "id": "V3.6",
+          "name": "Absolute positioning",
+          "question": "Are elements that should overlap or float positioned correctly? Do they sit at the right coordinates?"
+        },
+        {
+          "id": "V3.7",
+          "name": "Overflow and bleed",
+          "question": "For elements flagged as bleed_nodes in the inventory: are they offset to the right? Is their right edge cropped by the container? Is there no horizontal scrollbar? Does the wrapping container have overflow: hidden and the section have overflow: clip?"
+        }
+      ],
+      "verdict": "For each check, write PASS or FAIL with specific deviation. If any check fails, fix it before proceeding."
+    },
+    {
+      "step": "V4 - Property spot-checks",
+      "instruction": "Pick 5 critical CSS classes. For each, compare the CSS values in your file against the extracted values from deep-extraction. Are they identical?",
+      "method": "Read the CSS class from the file. Compare each property against the extracted_data_format from step E1. Flag any mismatches.",
+      "critical_classes": [
+        "Section container (padding, gap, background)",
+        "Main heading (font-size, line-height, letter-spacing, font-weight, color)",
+        "Primary card (padding, border-radius, shadow, background, border, position)",
+        "Card icon container (width, height, border-radius, background, color)",
+        "Body text (font-size, line-height, color)"
+      ]
+    },
+    {
+      "step": "V5 - Token enforcement",
+      "instruction": "Grep the CSS file for raw hex values. Every hex value must be in {token_files}, not in the section CSS. rgba() values for glass effects are the only exception.",
+      "call": "Grep: pattern '#[0-9a-fA-F]{3,8}' in the CSS file",
+      "on_results": "For each match, verify it's either in {token_files} or is an explicitly documented exception."
+    },
+    {
+      "step": "V6 - Interaction smoke test",
+      "instruction": "For each interaction in the spec table, describe how you would test it. If the dev server is running and you can curl the page, verify the interactive elements render (buttons have type='button', aria-expanded is present, etc.)."
+    }
+  ],
+  "failure_protocol": {
+    "instruction": "If any verification check fails:",
+    "steps": [
+      "1. Identify the specific deviation (e.g., 'heading is 28px, should be 42px')",
+      "2. Trace the deviation to its source (missed extraction, wrong token mapping, typo)",
+      "3. Fix the specific CSS property or component element",
+      "4. Re-run the failed verification check",
+      "5. Do NOT re-extract or rebuild the entire section for a single property fix"
+    ]
+  }
+}

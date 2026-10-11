@@ -189,6 +189,9 @@ They are the complete methodology without any tool-specific instructions.
 
 - **[design](design/design/SKILL.md)** - Create and evolve a design system through three waves: Soul, Tokens, Proof.
 - **[prototype](design/prototype/SKILL.md)** - Build throwaway prototypes. Duplicates existing components and wires to a variant switcher for side-by-side comparison.
+- **[to-paper](design/to-paper/SKILL.md)** - Replicate a running page as a pixel-accurate, editable static layout in Paper.
+- **[prot-paper](design/prot-paper/SKILL.md)** - Prototype two or more structurally different design directions in Paper from real source data.
+- **[from-paper](design/from-paper/SKILL.md)** - Extract a Paper artboard into components with exact CSS, mapped to the project's tokens.
 
 ### Sustain
 

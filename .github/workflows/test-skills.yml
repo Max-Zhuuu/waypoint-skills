@@ -54,3 +54,6 @@ jobs:
 
       - name: Check project state discovery
         run: bash tests/test-project-state.sh
+
+      - name: Check Paper skills
+        run: bash tests/test-paper-literals.sh

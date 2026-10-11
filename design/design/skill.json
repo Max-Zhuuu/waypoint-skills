@@ -7,7 +7,9 @@
   "chain": {
     "from": [],
     "to": [
-      { "target": "prototype", "type": "gate" }
+      { "target": "prototype", "type": "gate" },
+      { "target": "to-paper", "type": "gate" },
+      { "target": "prot-paper", "type": "gate" }
     ]
   },
 

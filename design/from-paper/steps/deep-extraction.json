@@ -1,0 +1,90 @@
+{
+  "id": "deep-extraction",
+  "name": "Deep Extraction",
+  "gate": "after section inventory, before token mapping",
+  "frequency": "once per section",
+  "instruction": "Extract computed styles from every node in the catalog. This is the core of the skill. Incomplete extraction is the primary failure mode - if you skip a node, the output will have wrong spacing, wrong colors, or missing elements.",
+  "actions": [
+    {
+      "step": "E1 - Batch style extraction",
+      "instruction": "Call get_computed_styles with batches of node IDs from the catalog. Paper supports batching - pass arrays of 8-12 node IDs per call to minimize round trips. Start from the section root and work down level by level.",
+      "call": "get_computed_styles",
+      "args": { "nodeIds": ["batch_of_ids_from_catalog"] },
+      "batch_size": "8-12 nodes per call. More is fine if they're simple nodes.",
+      "coverage_rule": "Every node in the catalog MUST have its styles extracted. After all batches complete, cross-check: is every catalog ID present in the extracted styles? If not, extract the missing ones."
+    },
+    {
+      "step": "E2 - JSX extraction for structure",
+      "instruction": "Call get_jsx on each top-level child of the section to get the HTML structure. Use format 'inline-styles' for exact values. This gives you the nesting structure and text content that get_computed_styles alone does not convey.",
+      "call": "get_jsx",
+      "args": { "nodeId": "top_level_child_id", "format": "inline-styles" },
+      "note": "get_jsx returns the rendered HTML structure. Use this as the skeleton for your {framework} component. The inline styles in JSX may differ from get_computed_styles - prefer get_computed_styles values; use JSX for structure and text content only."
+    },
+    {
+      "step": "E3 - Text content extraction",
+      "instruction": "Record the exact text content of every Text node. get_tree_summary truncates text - use get_jsx or get_children to get full strings. Spec prose is NOT the source of truth for text content in the design. The Paper node's text IS.",
+      "verify": "Compare every text string against the spec. If they differ, use the Paper value (the spec was written from Paper, but may have been paraphrased or truncated)."
+    },
+    {
+      "step": "E4 - SVG extraction",
+      "instruction": "For every SVG node in the catalog, call get_jsx to get the full SVG markup. SVGs cannot be reconstructed from screenshots or descriptions. The exact path data, viewBox, stroke-width, stroke-linecap, and stroke-linejoin must come from get_jsx.",
+      "call": "get_jsx",
+      "args": { "nodeId": "svg_node_id", "format": "inline-styles" },
+      "alternative": "If the SVG matches a known icon library (Lucide, Feather, Heroicons), record the icon name instead of raw SVG. But verify the match - do not assume."
+    },
+    {
+      "step": "E5 - Image fill extraction",
+      "instruction": "For every Rectangle or Frame node whose computed styles include backgroundImage: url(...), call get_fill_image to extract the image. Download the image to the project's static asset directory and reference it as an <img> or CSS background-image with a local path. Common cases: logos, avatars, photos, icons with raster fills. An empty placeholder div where Paper has an image fill is a defect.",
+      "call": "get_fill_image",
+      "args": { "nodeId": "image_node_id" },
+      "when": "Any node whose get_computed_styles returns a backgroundImage containing 'url('"
+    }
+  ],
+  "extracted_data_format": {
+    "instruction": "Organize extracted data as a flat lookup keyed by node ID. Every entry has: computed styles (from E1), HTML structure (from E2), text content (from E3), SVG markup if applicable (from E4).",
+    "example": {
+      "KNI-0": {
+        "role": "section frame",
+        "styles": {
+          "display": "flex",
+          "flexDirection": "column",
+          "paddingTop": "80px",
+          "paddingBottom": "64px",
+          "paddingInline": "120px",
+          "gap": "16px",
+          "position": "relative"
+        },
+        "children": ["KO0-0", "KNZ-0", "KNR-0", "KNJ-0"]
+      },
+      "KO0-0": {
+        "role": "heading",
+        "styles": {
+          "fontSize": "42px",
+          "lineHeight": "50px",
+          "letterSpacing": "-0.02em",
+          "fontFamily": "{font}",
+          "fontWeight": 300,
+          "color": "var({prefix}dark)",
+          "maxWidth": "720px"
+        },
+        "text": "Two roles. Different access. Same student."
+      }
+    }
+  },
+  "properties_to_always_extract": [
+    "display", "flexDirection", "flexWrap", "alignItems", "justifyContent", "flexGrow", "flexShrink", "flexBasis",
+    "gap", "padding", "paddingTop", "paddingBottom", "paddingInline", "paddingBlock",
+    "margin", "marginTop", "marginBottom", "marginLeft", "marginRight",
+    "width", "height", "maxWidth", "maxHeight", "minWidth", "minHeight",
+    "position", "top", "left", "right", "bottom", "zIndex",
+    "backgroundColor", "backgroundImage", "backgroundOrigin",
+    "color", "fontSize", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform", "whiteSpace", "textDecoration",
+    "borderWidth", "borderStyle", "borderColor", "borderRadius",
+    "boxShadow", "backdropFilter",
+    "overflow", "opacity"
+  ],
+  "properties_to_ignore": [
+    "transition", "animation", "cursor", "pointerEvents",
+    "any property not in the always_extract list that has its default value"
+  ]
+}

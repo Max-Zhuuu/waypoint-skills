@@ -1,0 +1,39 @@
+{
+  "id": "token-map",
+  "name": "Token Mapping",
+  "gate": "after source audit, before build",
+  "frequency": "once per page",
+  "instruction": "Map every source value to a Paper design token before building. Prefer Paper tokens that use the project's {prefix}; computed styles arrive as resolved values (rgb(), px), so match them by value against both Paper's token set and {token_files}.",
+  "mapping_order": [
+    {
+      "category": "colors",
+      "from": "hex/rgb/hsl",
+      "to": "var(--token)",
+      "exception": "opacity-modified colors with no token may use literals"
+    },
+    {
+      "category": "spacing",
+      "from": "padding/gap/margin",
+      "to": "spacing tokens"
+    },
+    {
+      "category": "border-radius",
+      "to": "radius tokens"
+    },
+    {
+      "category": "shadows",
+      "to": "shadow tokens if they exist"
+    },
+    {
+      "category": "font-sizes-weights",
+      "to": "text/weight tokens"
+    }
+  ],
+  "tailwind_resolution": {
+    "when": "source uses utility classes (text-navy-700, bg-slate-50, rounded-2xl)",
+    "steps": [
+      "Resolve each class to its computed CSS value",
+      "Map to the closest Paper token"
+    ]
+  }
+}

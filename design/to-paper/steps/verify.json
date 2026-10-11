@@ -1,0 +1,116 @@
+{
+  "id": "verify",
+  "name": "Verify",
+  "visual_fidelity_check": {
+    "mandatory": true,
+    "priority": "HIGHEST - do this BEFORE font sweep",
+    "instruction": "Compare the Paper artboard against the reference screenshot captured during source-audit. This is the single most important verification step. If something looks different, fix it.",
+    "method": [
+      "1. Take a get_screenshot of the full Paper artboard",
+      "2. Compare it visually against the reference screenshot of the running page",
+      "3. For each section, ask: does this LOOK like the real page? Not 'did I use the right tokens' - does it visually match?",
+      "4. Flag every section where the Paper version diverges from the real page",
+      "5. Fix divergences before proceeding to font sweep"
+    ],
+    "common_failures": [
+      "Images replaced with gradient boxes - the real page has photos/screenshots, Paper has colored rectangles",
+      "Interactive components look nothing like source - hand-drawn HTML approximation vs real rendered component",
+      "Proportions wrong - cards too tall/short, gaps too wide/narrow vs actual rendered page",
+      "Missing content - elements visible in the real page that were omitted or simplified"
+    ]
+  },
+  "image_audit": {
+    "mandatory": true,
+    "instruction": "Verify every image from the source-audit image_inventory appears in the Paper artboard. Missing images = failed extraction.",
+    "check": "For each image in the inventory: is it present in Paper as a paper-asset:// image? If not, insert it now."
+  },
+  "screenshot_checkpoints": {
+    "when": "after each major section",
+    "call": "get_screenshot",
+    "checks": [
+      {
+        "id": 1,
+        "name": "Font",
+        "question": "Does the typeface match the source?",
+        "priority": "check first"
+      },
+      {
+        "id": 2,
+        "name": "Spacing",
+        "question": "Even gaps, clear rhythm?"
+      },
+      {
+        "id": 3,
+        "name": "Typography",
+        "question": "Readable, proper hierarchy, correct weights?"
+      },
+      {
+        "id": 4,
+        "name": "Contrast",
+        "question": "All text legible?"
+      },
+      {
+        "id": 5,
+        "name": "Alignment",
+        "question": "Vertical lanes aligned across rows?"
+      },
+      {
+        "id": 6,
+        "name": "Fit",
+        "question": "No content clipped?"
+      },
+      {
+        "id": 7,
+        "name": "Images",
+        "question": "Are all source images present? No gradient placeholders?"
+      },
+      {
+        "id": 8,
+        "name": "Fidelity",
+        "question": "Would someone familiar with the real page recognize this as the same page?"
+      }
+    ]
+  },
+  "font_sweep": {
+    "mandatory": true,
+    "call": "find_nodes",
+    "args": {
+      "filters": [
+        {
+          "styleName": "fontFamily",
+          "styleValue": "system-ui*"
+        }
+      ],
+      "nodeId": "artboardId"
+    },
+    "on_results": "batch update_styles all to source font",
+    "why": "Paper defaults every Text node to system-ui, sans-serif. This is the only reliable catch."
+  },
+  "computed_style_spotchecks": {
+    "call": "get_computed_styles",
+    "count": "3-5 critical text nodes",
+    "verify": [
+      "Font family is source font, NOT system-ui",
+      "Font weights match source",
+      "Padding/gap exact",
+      "Border radius correct",
+      "Colors use tokens where available",
+      "No node carries transition or animation (Paper drops them; motion lives in frame strips)"
+    ],
+    "fix_with": "update_styles. Never delete and rebuild."
+  },
+  "finish": [
+    {
+      "call": "update_styles",
+      "action": "artboard height to fit-content"
+    },
+    {
+      "call": "get_screenshot",
+      "action": "final full-artboard screenshot"
+    },
+    {
+      "call": "finish_working_on_nodes",
+      "action": "artboard ID"
+    }
+  ]
+}

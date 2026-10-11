@@ -1,0 +1,42 @@
+{
+  "id": "session-init",
+  "name": "Session Init",
+  "gate": "before any mutation",
+  "frequency": "once per session",
+  "actions": [
+    { "call": "get_guide", "args": { "topic": "paper-mcp-instructions" } },
+    { "call": "get_basic_info", "note": "file, pages, artboard positions, token hash" },
+    { "call": "get_tokens", "note": "cache full set; use var(--token-name) for every matched value" },
+    { "resolve": "../../from-paper/reference/project-conventions.md", "note": "resolve {prefix}, {token_files}, {framework}, {font}, {component_dir} for the source project: CLAUDE.md ## Conventions, else detect, else ask once and record. Report each value with its source." },
+    { "read": "{DOCS}/design/paper-companion.md", "note": "optional companion ref with node IDs, domain columns and pattern CSS for this project; skip if absent" }
+  ],
+  "paper_gate": {
+    "instruction": "If the Paper MCP tools are missing or get_basic_info fails, stop and tell the user to open Paper desktop with the target file and reconnect the paper MCP server (/mcp). Do not fall back to another canvas."
+  },
+  "font_matching": {
+    "why": "Most visible error. Complete before writing any HTML.",
+    "steps": {
+      "F1_identify": {
+        "instruction": "Start from the resolved {font}, then confirm it in the source app's font setup. Do not guess. Do not assume it matches Paper tokens.",
+        "lookup_by_framework": {
+          "react": ["root layout or index.html", "font loader config", "global CSS", "tailwind config (fontFamily)"],
+          "vue": ["index.html", "main.ts style imports", "{token_files} (font tokens)", "nuxt.config.ts if Nuxt", "tailwind config (fontFamily)"],
+          "blazor": ["wwwroot/css/*.css", "_Host.cshtml or App.razor"],
+          "any": ["package.json (@fontsource/* and other font packages)"]
+        }
+      },
+      "F2_confirm": {
+        "call": "get_font_family_info",
+        "instruction": "Exact family name from F1. Verify weight coverage."
+      },
+      "F3_crosscheck": {
+        "instruction": "Compare the source font against Paper's font tokens (--font-body, {prefix}font*). Source wins if they differ. Note the discrepancy in the exit report."
+      },
+      "F4_apply": {
+        "warning": "Paper does NOT inherit fontFamily to child Text nodes. Every Text node defaults to system-ui, sans-serif.",
+        "preferred": "post-build sweep (see verify step)",
+        "alternative": "set font-family inline on every text-containing element in write_html"
+      }
+    }
+  }
+}

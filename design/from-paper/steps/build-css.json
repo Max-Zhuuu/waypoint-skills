@@ -1,0 +1,77 @@
+{
+  "id": "build-css",
+  "name": "Build CSS",
+  "gate": "after build component",
+  "frequency": "once per section",
+  "instruction": "Write CSS classes for every element in the component. Every property value comes from the deep extraction + token mapping. No values from memory. No 'looks about right.' If a value was not extracted, go back and extract it.",
+  "process": [
+    {
+      "step": "C1 - Section container",
+      "instruction": "Write the section's root class with exact extracted values: display, flex-direction, padding (all four sides individually if they differ), gap, background, position, width constraints.",
+      "verify": "Does this class contain every non-default property from the section frame's extracted styles?"
+    },
+    {
+      "step": "C2 - Direct children",
+      "instruction": "Write classes for each direct child of the section. Include layout properties (flex, grid, gap, alignment), sizing (width, height, flex-grow, flex-shrink), and visual properties (background, border, shadow, radius).",
+      "verify": "For each child class, compare its properties against the extracted styles for that node. Are any missing?"
+    },
+    {
+      "step": "C3 - Recursive descent",
+      "instruction": "Continue writing classes for every level of the tree. Do not stop at 'the card component' - write classes for the card header, the icon container inside the header, the label text, and the body text. Every node in the catalog that has non-default styles gets a class.",
+      "critical_properties_often_missed": [
+        "gap - the space between sibling elements. This is THE most missed property and causes the biggest visual deviations.",
+        "padding vs margin - Paper uses padding. Record whether spacing is on the container (padding) or the child (margin).",
+        "flex-shrink: 0 - on elements with fixed width inside flex containers. Missing this causes unexpected compression.",
+        "line-height - Paper specifies exact px line-height. Using unitless or em line-height produces different spacing.",
+        "letter-spacing - especially on headings. -0.02em vs 0 is visible.",
+        "maxWidth - on text blocks. Missing this lets text span the full container width.",
+        "position: absolute + top/left - for overlapping or offset elements. Missing this collapses them into flow.",
+        "overflow: clip on sections with absolute children - if a section has overflow: clip and absolute-positioned children that extend past the section's in-flow height, they get clipped. Either remove overflow: clip or increase padding-bottom to accommodate the absolute overflow. Calculate: abs_child.top + abs_child.height - container.height = overflow amount. Add that to padding-bottom.",
+        "fill images (logos, avatars, photos) - Paper nodes with backgroundImage: url(...) are actual images. Extract them with get_fill_image, download to the project's static asset directory, and render as <img> tags. Empty placeholder divs are a defect.",
+        "font-family mismatch between contexts - a Paper file may use one family for page chrome and another for product UI (popovers, cards, labels). Check which context each element belongs to and use the matching {font} token, not the first family you saw.",
+        "floating callout badges - glass-effect badges that annotate a dashboard. These are ALWAYS position: absolute with specific coordinates from Paper. Rendering them in flow breaks the layout. Extract their exact top/left/bottom/right from get_computed_styles."
+      ]
+    },
+    {
+      "step": "C4 - Overflow and bleed regions",
+      "instruction": "For every bleed_node and offset_node flagged in the inventory, implement the offset + clip pattern. This is the most commonly missed layout behavior because it is invisible in flat style extraction - it only shows up when comparing child positions against parent boundaries.",
+      "pattern": {
+        "offset_child": "margin-left: var({prefix}pad-section) shifts the element rightward from the normal content flow. Use width: 100% so the element's right edge extends past the container.",
+        "container_clip": "The nearest wrapping container (inner wrapper, not the section itself) needs overflow: hidden to crop the overflow. If the section itself clips, the background or padding area may be affected.",
+        "section_clip": "The section frame also needs overflow: clip as a safety net."
+      },
+      "common_mistake": "Setting overflow: clip only on the outermost section but not on the intermediate wrapper that actually constrains width. The overflow escapes through the wrapper and produces a horizontal scrollbar or content spilling past the viewport edge."
+    },
+    {
+      "step": "C5 - Cross-check coverage",
+      "instruction": "After writing all CSS, walk the node catalog one final time. For each node, verify: does it have a CSS class? Does that class contain every extracted property? Log any gaps and fix them.",
+      "method": "Create a mental checklist: catalog node ID -> class name -> property count from extraction vs property count in CSS. If CSS has fewer properties, something was dropped."
+    }
+  ],
+  "responsive_handling": {
+    "instruction": "Paper designs are fixed-width. Add responsive breakpoints at 1100px and 767px that gracefully degrade the layout. Key adjustments:",
+    "breakpoints": [
+      {
+        "max_width": "1100px",
+        "changes": [
+          "Section inline padding reduces to var({prefix}pad-section)",
+          "Multi-column layouts collapse to single column",
+          "Absolute positioned elements become static",
+          "Large headings reduce by ~25%"
+        ]
+      },
+      {
+        "max_width": "767px",
+        "changes": [
+          "Section inline padding reduces to 24px",
+          "All multi-column grids become single column",
+          "Heading font sizes reduce further",
+          "Complex dashboards stack vertically"
+        ]
+      }
+    ]
+  },
+  "reduced_motion": {
+    "instruction": "Add @media (prefers-reduced-motion: reduce) that disables transforms on hover, makes transitions instant, and stops any animations. This is an AC requirement, not optional."
+  }
+}

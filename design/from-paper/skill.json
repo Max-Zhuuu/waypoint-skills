@@ -1,0 +1,87 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "from-paper",
+  "status": "draft",
+  "description": "Paper to code: extract an artboard or section into components with exact CSS from get_computed_styles, mapped to project tokens.",
+
+  "chain": {
+    "from": ["to-paper", "prot-paper"],
+    "to": [{ "target": "review", "type": "gate" }]
+  },
+
+  "steps": [
+    {
+      "id": "session-init",
+      "name": "Session init (once per session)",
+      "references": ["steps/session-init.json", "reference/project-conventions.md"],
+      "instruction": "Load the Paper guide, file info and tokens. Resolve {prefix}, {token_files}, {framework}, {font} and {class_prefix} per project-conventions.md and report each with its source. Paper disconnected: stop with setup steps.",
+      "checklist": ["Paper connected, tokens cached", "Project conventions resolved"]
+    },
+    {
+      "id": "section-inventory",
+      "name": "Section inventory",
+      "references": ["steps/section-inventory.json"],
+      "instruction": "Screenshot the section, get the full tree summary, catalog every node.",
+      "checklist": ["Section screenshot taken", "Every node catalogued"]
+    },
+    {
+      "id": "deep-extraction",
+      "name": "Deep extraction",
+      "references": ["steps/deep-extraction.json"],
+      "instruction": "Batch get_computed_styles on every node, get_jsx for structure, record text. Finish before writing code.",
+      "checklist": ["Computed styles for every node, leaves included", "Structure and text recorded"]
+    },
+    {
+      "id": "token-mapping",
+      "name": "Token mapping",
+      "references": ["steps/token-mapping.json"],
+      "instruction": "Map every Paper var(--token) to a {prefix}* token; add missing tokens to {token_files}.",
+      "checklist": ["Every value mapped or added as a token"]
+    },
+    {
+      "id": "build-component",
+      "name": "Build component",
+      "references": ["steps/build-component.json"],
+      "instruction": "Write the {framework} component from the extracted structure and mapped tokens.",
+      "checklist": ["Component mirrors the extracted tree"]
+    },
+    {
+      "id": "build-css",
+      "name": "Build CSS",
+      "references": ["steps/build-css.json"],
+      "instruction": "Write classes from extracted values, token references only.",
+      "checklist": ["No value written from memory"]
+    },
+    {
+      "id": "add-interactions",
+      "name": "Add interactions",
+      "references": ["steps/add-interactions.json"],
+      "instruction": "Wire hover, click and keyboard behavior from {spec}; motion from the Paper frame strip, else {spec}.",
+      "checklist": ["Behaviors from the spec", "Motion from frame strips"]
+    },
+    {
+      "id": "verify",
+      "name": "Verify",
+      "references": ["steps/verify.json"],
+      "instruction": "Load in the browser and compare with the Paper screenshot; spot-check properties. Start dev servers only in a worktree.",
+      "checklist": ["Visual match verdict per section", "Properties spot-checked"]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": ["{framework} component files", "{token_files}"],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Surgical. A transfer, not a design operation. The artboard is the spec; nothing is invented."
+}

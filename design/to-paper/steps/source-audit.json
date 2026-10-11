@@ -1,0 +1,57 @@
+{
+  "id": "source-audit",
+  "name": "Source Audit",
+  "gate": "before writing HTML",
+  "frequency": "once per page",
+  "archetypes": {
+    "full-width-list": "NavBar + FilterBar + DataGrid + Footer",
+    "dashboard-grid": "NavBar + multi-col widget/card grid + Footer",
+    "centered-form": "NavBar + centered container + Footer",
+    "split-pane-detail": "NavBar + sidebar + main + Footer",
+    "app-shell": "Shell (nav/sidebar) + routed content area"
+  },
+  "read_order": [
+    { "what": "Page component", "extract": "tree, layout, conditional rendering" },
+    { "what": "Page styles", "extract": "scoped styles (Vue <style scoped>), CSS modules, Tailwind classes, plain CSS" },
+    { "what": "Layout wrapper", "extract": "shell/layout wrapping the page" },
+    { "what": "Child components", "extract": "every component in the page tree, including component-library ones and their theme" },
+    { "what": "Global styles", "extract": "{token_files}, base theme, custom properties" },
+    { "what": "Tailwind config", "extract": "custom theme (colors, spacing, fonts, shadows, radius), if the project uses Tailwind" }
+  ],
+  "image_inventory": {
+    "mandatory": true,
+    "instruction": "List every image, screenshot, or visual asset referenced by the page. Include src paths, alt text, and dimensions. These MUST be carried into Paper - never approximate an image with a gradient placeholder.",
+    "sources": [
+      "<img> src attributes and framework image components",
+      "CSS background-image URLs",
+      "SVG illustrations (inline or imported)",
+      "Static asset directory files referenced by the page"
+    ],
+    "output": "Produce a table: path | alt | width x height | usage context"
+  },
+  "running_page": {
+    "mandatory": true,
+    "instruction": "The build reads the page as the browser renders it, so it needs the page running. Use a dev server that is already running. If none is, start one only inside a git worktree or after the user says so. If the page needs sign-in, use the project's local auth bypass or ask the user to sign in in the browser.",
+    "blocker": "If the page cannot run, say so and stop. Do not reconstruct from source code alone."
+  },
+  "reference_screenshot": {
+    "mandatory": true,
+    "instruction": "Before building anything in Paper, capture a full-page screenshot of the running page at the artboard width. This is the GROUND TRUTH. Every Paper write_html call must be validated against this screenshot, not against your mental model of the code.",
+    "method": "Playwright MCP: browser_resize to the artboard width, browser_navigate, wait for data to load, browser_take_screenshot with fullPage. Save the path for the verify step.",
+    "fallback": "If no browser tool is available, ask the user to screenshot the page and provide the path."
+  },
+  "rendered_dom": {
+    "mandatory": true,
+    "instruction": "Read the DOM from the browser after the app has rendered and its data has loaded. Plain HTTP fetches return an empty shell for client-rendered apps (Vite, Vue and React SPAs) and miss runtime-injected component-library styles, so they are not a valid source.",
+    "method": "With the page open in Playwright, use browser_evaluate to read document.querySelector(target).outerHTML and to run the computed-style walk described in build.json dom_extraction. Save the output to a temp file and record the path for the build step."
+  },
+  "svg_extraction": {
+    "instruction": "Trace every icon to its actual SVG source. Never approximate.",
+    "sources": {
+      "icon_libraries": "canonical SVG path from the icon name (Lucide, Feather, PrimeIcons, Bootstrap Icons and the like)",
+      "icon_components": "read the component, or take the rendered <svg> from the browser",
+      "icon_fonts": "map the glyph to the library's SVG; an icon font glyph is not editable in Paper"
+    },
+    "preserve": ["viewBox", "stroke-width", "stroke-linecap", "stroke-linejoin"]
+  }
+}

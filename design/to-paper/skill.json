@@ -1,0 +1,76 @@
+{
+  "$schema": "../../schemas/skill.schema.json",
+  "name": "to-paper",
+  "status": "draft",
+  "description": "Code to Paper: replicate a running page as a pixel-accurate, editable static layout in Paper from extracted DOM and computed styles.",
+
+  "chain": {
+    "from": ["design"],
+    "to": [
+      { "target": "prot-paper", "type": "gate" },
+      { "target": "from-paper", "type": "gate" }
+    ]
+  },
+
+  "steps": [
+    {
+      "id": "session-init",
+      "name": "Session init (once per session)",
+      "references": ["steps/session-init.json", "../from-paper/reference/project-conventions.md"],
+      "instruction": "Before any mutation: load the Paper guide, file info and tokens, resolve {prefix}, {token_files}, {framework} and {font}, and confirm the font. Paper disconnected: stop with setup steps, no fallback canvas.",
+      "checklist": ["Paper connected, tokens cached", "Project conventions resolved, each with its source", "Font confirmed with get_font_family_info"]
+    },
+    {
+      "id": "source-audit",
+      "name": "Source audit (once per page)",
+      "references": ["steps/source-audit.json"],
+      "instruction": "Run the page, take the full-page reference screenshot, read the rendered DOM and computed styles in a browser, and inventory every image.",
+      "checklist": ["Reference screenshot captured", "Image inventory complete"]
+    },
+    {
+      "id": "token-map",
+      "name": "Token mapping",
+      "references": ["steps/token-map.json"],
+      "instruction": "Map every extracted value to a Paper token; record values with no token.",
+      "checklist": ["Every color, size and radius mapped or flagged"]
+    },
+    {
+      "id": "canvas-layout",
+      "name": "Canvas layout",
+      "references": ["steps/canvas-layout.json"],
+      "instruction": "Place the artboard on the target page without overlapping existing artboards.",
+      "checklist": ["Artboard placed and named"]
+    },
+    {
+      "id": "build",
+      "name": "Build",
+      "references": ["steps/build.json"],
+      "instruction": "Write HTML one visual group per call from the extracted DOM. Images via paper-asset:// paths. Resting states only; motion as frame strips.",
+      "checklist": ["Every section built from extracted DOM", "Every source image present", "No transition or animation written"]
+    },
+    {
+      "id": "verify",
+      "name": "Verify",
+      "references": ["steps/verify.json"],
+      "instruction": "Compare the artboard screenshot with the reference screenshot, fix divergences, run the font sweep, then finish_working_on_nodes.",
+      "checklist": ["Visual match against the reference", "Font sweep done", "finish_working_on_nodes called"]
+    }
+  ],
+
+  "capabilities": {
+    "scope_protection": false,
+    "safety_rails": false,
+    "convention_enforcement": false,
+    "enterprise_context": false,
+    "catalogue_grill": false
+  },
+
+  "engagement": {
+    "emits": ["concerns"],
+    "writes": [],
+    "manifest": true,
+    "chain_dispatch": true
+  },
+
+  "tone": "Precise. Every pixel value comes from the source. No creative interpretation."
+}

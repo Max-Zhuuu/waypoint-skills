@@ -1,0 +1,64 @@
+{
+  "id": "add-interactions",
+  "name": "Add Interactions",
+  "gate": "after build CSS (static render must match Paper first)",
+  "frequency": "once per section",
+  "instruction": "Wire interactive behaviors and motion. Paper is static and drops CSS transition and animation, so it shows resting states plus, where motion matters, a frame strip. Behaviors (hover, click, expand, keyboard) come from {spec}. Motion comes from the frame strip drawn for the element, else from {spec}.",
+  "process": [
+    {
+      "step": "I1 - Read the interaction table",
+      "instruction": "Read the section's interactions from {spec} (a spec file under the project's doc root, or the tracking issue). Each row has: Trigger, Behavior, Reduced motion fallback. If {spec} has no interaction table, ask once for the source rather than inventing behavior."
+    },
+    {
+      "step": "I2 - Read the motion frame strips",
+      "instruction": "Look on the artboard (and the page's motion area, if any) for a frame strip next to each interactive element: Start, Mid and End frames captioned with duration, curve and motion token names, sometimes with a curve plot. Extract the frames' styles with get_computed_styles like any other node. The differences between Start and End are the properties that animate; the captions give duration and easing.",
+      "rules": [
+        "Use the project's motion tokens for duration and easing when the caption names one; otherwise add a token.",
+        "If an element animates in code but has no strip and no spec row, ask once; do not invent motion.",
+        "Never write transition, animation or @keyframes back into Paper (write_html or update_styles); Paper drops them. If Paper needs a motion change, draw or update the frame strip instead."
+      ]
+    },
+    {
+      "step": "I3 - Add state management",
+      "instruction": "For each interaction that changes visible content (expand/collapse, tab switch, filter, toggle), add the minimal local state in the {framework} idiom (see the Framework branches table in ../reference/project-conventions.md). One state variable per independent toggle."
+    },
+    {
+      "step": "I4 - Wire event handlers",
+      "instruction": "Add click and keydown handlers in the {framework} idiom. Every interactive element must be a button (or the project's button component, or have role='button' + tabindex). Keyboard support: Enter/Space to activate, Escape to close expanded content, Tab to traverse.",
+      "keyboard_rules": [
+        "Every clickable element is a <button> with type='button', or the project's button component",
+        "Expanded content collapses on Escape and returns focus to the trigger",
+        "aria-expanded on toggle buttons",
+        "The focus ring uses the project's focus token ({prefix}focus-ring or its equivalent)"
+      ]
+    },
+    {
+      "step": "I5 - CSS interactions and motion",
+      "instruction": "Add :hover, :focus-visible and state-driven class toggles to the CSS, with the motion from I2.",
+      "hover_rules": [
+        "Hover effects from the spec's interaction table (shadow intensify, lift, background change)",
+        "transition lists the specific properties that differ between the strip's Start and End frames, with the strip's duration and curve tokens",
+        "Never transition ALL properties"
+      ],
+      "reduced_motion_rules": [
+        "Wrap transform-based effects in @media (prefers-reduced-motion: no-preference)",
+        "Or override them in @media (prefers-reduced-motion: reduce) to remove transform, keep opacity",
+        "If the project has a shared reduced-motion stylesheet or utility, use it instead of repeating rules"
+      ]
+    },
+    {
+      "step": "I6 - Entrance motion",
+      "instruction": "If the strip or {spec} shows the section or its children entering (fade, slide, stagger), use the project's existing entrance mechanism (a reveal component, directive or utility class) if it has one; find it in {component_dir}. Otherwise implement it with CSS and an IntersectionObserver in the {framework} idiom, with a reduced-motion fallback. Skip this step when nothing enters."
+    }
+  ],
+  "interaction_checklist": {
+    "instruction": "After wiring all interactions, verify against the spec table and the strips. For each row:",
+    "checks": [
+      "Trigger: is the element interactive (button, not div)?",
+      "Behavior: does the state change produce the described visual change?",
+      "Motion: do duration, curve and animated properties match the frame strip captions?",
+      "Reduced motion: is there a fallback that removes animation but preserves the state change?",
+      "Keyboard: can the interaction be triggered with keyboard alone?"
+    ]
+  }
+}

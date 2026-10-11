@@ -1,0 +1,46 @@
+{
+  "id": "canvas-layout",
+  "name": "Canvas Layout",
+  "gate": "before create_artboard",
+  "frequency": "every extraction (create grid on first, slot on subsequent)",
+  "axes": {
+    "horizontal": { "encodes": "domain (feature area of source app)", "direction": "columns left to right" },
+    "vertical": { "encodes": "view tier (viewport / sub-view hierarchy)", "direction": "rows top to bottom within column" }
+  },
+  "domain_columns": {
+    "instruction": "Define per project on first extraction. Base on source app navigation order. Record in companion ref.",
+    "example": [
+      { "col": 0, "domain": "Design System", "contents": "token refs, styles, colors, elevation" },
+      { "col": 1, "domain": "Auth", "contents": "login, signup, approval" },
+      { "col": 2, "domain": "Home", "contents": "desktop, mobile, onboarding" },
+      { "col": 3, "domain": "Dashboard", "contents": "roster, overview, admin" },
+      { "col": "4+", "domain": "Feature areas", "contents": "ordered by nav or user flow" }
+    ]
+  },
+  "view_tiers": [
+    { "tier": "A", "what": "Desktop full page", "width": "1440px" },
+    { "tier": "B", "what": "Desktop sub-view / sheet / modal", "width": "1440px or narrower" },
+    { "tier": "C", "what": "Tablet", "width": "768px" },
+    { "tier": "D", "what": "Mobile", "width": "390px" }
+  ],
+  "spacing": {
+    "same_domain_same_tier": "80px horizontal",
+    "between_tiers": "120px vertical",
+    "between_domains": "320px horizontal",
+    "label_to_artboard": "40px above"
+  },
+  "placement_procedure": [
+    "Check existing artboard positions via get_basic_info",
+    "Find the target domain column (or create it)",
+    "Find the correct tier row within the column",
+    "Calculate worldX = column_origin + (n * (artboard_width + 80))",
+    "Calculate worldY = tier_origin",
+    "Create artboard, then position with update_styles({ top, left })",
+    "Add domain label text node above column if first artboard in column"
+  ],
+  "group_labels": {
+    "position": "40px above topmost artboard in column",
+    "style": { "text-transform": "uppercase", "fontSize": "12px", "fontWeight": 600, "color": "the muted text token from get_tokens", "letterSpacing": "0.1em" },
+    "frequency": "once per column, not per artboard"
+  }
+}

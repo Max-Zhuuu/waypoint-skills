@@ -6,7 +6,9 @@
 
   "chain": {
     "from": [],
-    "to": []
+    "to": [
+      { "target": "prot-paper", "type": "gate" }
+    ]
   },
 
   "steps": [

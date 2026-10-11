@@ -1,0 +1,67 @@
+{
+  "id": "session-init",
+  "name": "Session Init",
+  "gate": "before any extraction",
+  "frequency": "once per session",
+  "actions": [
+    {
+      "call": "get_guide",
+      "args": {
+        "topic": "paper-mcp-instructions"
+      },
+      "note": "Load Paper MCP instructions. Mandatory."
+    },
+    {
+      "call": "get_basic_info",
+      "args": {
+        "fileId": "from_input"
+      },
+      "note": "Learn artboard IDs, dimensions, font families, page structure."
+    },
+    {
+      "call": "get_tokens",
+      "args": {
+        "fileId": "from_input"
+      },
+      "note": "Cache full Paper token set. Every var(--token) in extracted styles must resolve."
+    },
+    {
+      "call": "get_font_family_info",
+      "args": {
+        "familyNames": [
+          "from_basic_info"
+        ]
+      },
+      "note": "Confirm font weights and styles available for every font family in the file."
+    }
+  ],
+  "project_audit": {
+    "instruction": "Before extracting anything, resolve the project's conventions with ../reference/project-conventions.md (CLAUDE.md ## Conventions, else detect, else ask once and record). Then read the resolved files to learn the mapping target.",
+    "resolve": [
+      "{prefix}",
+      "{token_files}",
+      "{framework}",
+      "{font}",
+      "{class_prefix}",
+      "{component_dir}",
+      "{typecheck}",
+      "{spec}"
+    ],
+    "read": [
+      "{token_files} - learn every {prefix}* custom property and its value",
+      "The project's main stylesheet(s) and {component_dir} - learn existing class naming patterns",
+      "The project's font setup (root font-family, font loader) - confirm which families of {font} are loaded",
+      "The project's prohibited and required patterns (CLAUDE.md, lint config, design-guard tests) - they override this skill"
+    ],
+    "build_token_map_skeleton": {
+      "instruction": "Create an in-memory mapping from Paper token names to project token names. Paper files may use the project's {prefix} or generic names (--color-*, --spacing-*, --radius-*). Record the mapping before extraction begins.",
+      "example_mappings": [
+        "Paper var({prefix}surface) -> project var({prefix}surface) [same]",
+        "Paper var({prefix}shadow-card) -> project var({prefix}shadow-card) [same]",
+        "Paper var(--color-neutral-400) -> project var({prefix}neutral-400) [rename]",
+        "Paper #FFFFFF8C -> project var({prefix}overlay-bg) [new token needed]"
+      ]
+    },
+    "report": "List each resolved value with its source (CLAUDE.md path, detected file, or user answer) before continuing."
+  }
+}

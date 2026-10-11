@@ -23,7 +23,7 @@ A third layer - **process docs** (`process/*.md`) - holds tool-agnostic methodol
 ```
 task/           # Skills that do work (triage, spec, breakdown, tdd, diagnose, review, etc.)
 project/        # Skills that manage projects (setup, check-in, wrapup)
-design/         # Skills that design on a canvas (design, prototype)
+design/         # Skills that design on a canvas (design, prototype, to/prot/from-paper)
 in-progress/    # Skills in active development
 third-party/    # Wrappers around external skills (no skill.json)
 skill-categories.txt  # The one list of skill categories
@@ -199,13 +199,14 @@ All scripts live in `tests/` and use `json_query.py` (Python stdlib, no external
 | `test-categories.sh` | `skill-categories.txt` is the only category list; plugin.json and CI match the tree |
 | `test-skill-json.sh` | Every skill dir has skill.json, required fields present, name/status match SKILL.md |
 | `test-links.sh` | All reference paths in skill.json resolve in repo layout |
-| `test-chain.sh` | Graph assembled from skill.json is connected, targets exist, no clean-edge cycles |
+| `test-chain.sh` | Graph assembled from skill.json is connected, targets exist, every `chain.from` has a matching `chain.to`, no clean-edge cycles |
 | `test-line-budget.sh` | SKILL.md: fail >80; SKILL.md + skill.json: warn >120, fail >150; max 8 steps |
 | `test-engagement.sh` | SKILL.md engagement block present, manifest/chain citations when declared |
 | `test-enterprise.sh` | Capability=true implies enterprise steps exist with reads |
 | `test-process-docs.sh` | All process doc refs in skill.json resolve on disk |
 | `test-doc-root.sh` | No hard-coded `docs/specs` or `docs/design`; `resolve-doc-root.sh` picks the right branch in fixture trees |
 | `test-project-state.sh` | `discover-project-state.sh` finds workspace roots, matches the old single-repo output, and never writes into the project tree |
+| `test-paper-literals.sh` | Paper skills: no project literals, JSON parses, links resolve, shared resolution block, motion only as frame strips |
 
 Run locally: `for t in tests/test-*.sh; do bash "$t"; done`
 CI: `.github/workflows/test-skills.yml` triggers on PRs touching skill/schema/test/process files.

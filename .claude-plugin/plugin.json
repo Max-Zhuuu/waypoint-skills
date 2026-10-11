@@ -18,7 +18,8 @@
     "spec-writing",
     "enterprise",
     "convention-enforcement",
-    "design-system"
+    "design-system",
+    "paper"
   ],
   "skills": [
     "./task/triage",
@@ -42,6 +43,9 @@
     "./project/wrapup",
     "./design/design",
     "./design/prototype",
+    "./design/to-paper",
+    "./design/from-paper",
+    "./design/prot-paper",
     "./in-progress/find-skills",
     "./third-party/chrome-devtools-axi"
   ]

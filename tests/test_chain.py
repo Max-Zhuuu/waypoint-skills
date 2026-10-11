@@ -37,6 +37,17 @@ def main():
                 print(f"FAIL: {name} chains to '{target}' which is not a known skill")
                 errors += 1
 
+    # Check: every chain.from entry is backed by a chain.to edge in that skill.
+    # (chain.to may list targets whose chain.from omits the source; from is the expected-caller list.)
+    for name, data in skills.items():
+        for source in data.get("chain", {}).get("from", []):
+            if source not in skills:
+                print(f"FAIL: {name} lists '{source}' in chain.from, which is not a known skill")
+                errors += 1
+            elif not any(e["target"] == name for e in skills[source].get("chain", {}).get("to", [])):
+                print(f"FAIL: {name} lists '{source}' in chain.from, but {source} has no chain.to edge to {name}")
+                errors += 1
+
     # Check: core path connected (triage -> spec -> breakdown -> tdd -> review)
     core = [("triage", "spec"), ("spec", "breakdown"), ("breakdown", "tdd"), ("tdd", "review")]
     edge_set = {(src, tgt) for src, tgt, _ in all_edges}
