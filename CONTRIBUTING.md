@@ -23,9 +23,13 @@ A third layer - **process docs** (`process/*.md`) - holds tool-agnostic methodol
 ```
 task/           # Skills that do work (triage, spec, breakdown, tdd, diagnose, review, etc.)
 project/        # Skills that manage projects (setup, check-in, wrapup)
+design/         # Skills that design on a canvas (design, prototype)
+in-progress/    # Skills in active development
+third-party/    # Wrappers around external skills (no skill.json)
+skill-categories.txt  # The one list of skill categories
 process/        # Tool-agnostic methodology documents
 schemas/        # JSON schemas (skill validation, output formats, safety rails)
-tests/          # Test suite (7 scripts + helpers)
+tests/          # Test suite (scripts + helpers)
 templates/      # Shared file templates (feature specs, logic docs, glossary)
 internals/      # System design docs (engagement model, chain dispatcher, concepts)
 adapters/       # Platform-specific adapters (cursor, opencode, codex)
@@ -187,14 +191,16 @@ Neither restates the other. Tests enforce the match.
 
 ## Test suite
 
-Replaces `lint-skills.sh`. All scripts in `tests/`, use `json_query.py` (Python stdlib, no external deps).
+It replaces the retired `lint-skills.sh`.
+All scripts live in `tests/` and use `json_query.py` (Python stdlib, no external deps).
 
 | Script | What it checks |
 |--------|---------------|
+| `test-categories.sh` | `skill-categories.txt` is the only category list; plugin.json and CI match the tree |
 | `test-skill-json.sh` | Every skill dir has skill.json, required fields present, name/status match SKILL.md |
 | `test-links.sh` | All reference paths in skill.json resolve in repo layout |
 | `test-chain.sh` | Graph assembled from skill.json is connected, targets exist, no clean-edge cycles |
-| `test-line-budget.sh` | SKILL.md: warn >80, fail >100 |
+| `test-line-budget.sh` | SKILL.md: fail >80; SKILL.md + skill.json: warn >120, fail >150; max 8 steps |
 | `test-engagement.sh` | SKILL.md engagement block present, manifest/chain citations when declared |
 | `test-enterprise.sh` | Capability=true implies enterprise steps exist with reads |
 | `test-process-docs.sh` | All process doc refs in skill.json resolve on disk |
@@ -253,11 +259,16 @@ Defined in `internals/engagement/review-safety.md`. Every skill touching review 
 
 ```bash
 git clone git@github.com:max-zhu-bv/waypoint-skills.git
-.\sync-skills.ps1    # deploy to ~/.claude/
+.\sync-skills.ps1       # Windows: deploy to ~/.claude/ via junctions
+bash sync-skills.sh      # macOS/Linux: deploy to ~/.claude/ via copies
 for t in tests/test-*.sh; do bash "$t"; done  # run test suite
 ```
 
-The sync script copies skills (flattened from `task/`, `project/`, `in-progress/` into `~/.claude/skills/`), shared infrastructure (`internals/`, `templates/`, `process/`, `schemas/` into `~/.claude/`), and root files into `~/.claude/skills/`.
+Skill categories are listed once, in `skill-categories.txt` (`task/`, `project/`, `design/`, `in-progress/`).
+Tests, both sync scripts and CI read that file, and `tests/test-categories.sh` fails if a hard-coded copy appears or `plugin.json` drifts from the tree.
+To add a category, add a line there and a `paths` entry in `.github/workflows/test-skills.yml`.
+
+The sync scripts flatten skills from every category and `third-party/` into `~/.claude/skills/`, link or copy shared infrastructure (`internals/`, `templates/`, `process/`, `schemas/`, `tests/`, `scripts/`) into `~/.claude/`, and copy root files into `~/.claude/skills/`.
 
 ### The flatten invariant
 

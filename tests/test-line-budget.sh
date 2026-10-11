@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Verify every skill stays within line and step budgets.
+# SKILL.md alone: fail >80 (it is a bootloader; detail belongs in skill.json, phases/ or reference/).
 # Combined SKILL.md + skill.json: fail >150. Max steps: 8.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$REPO_ROOT/tests/lib-categories.sh"
 JQ="python $REPO_ROOT/tests/json_query.py"
 ERRORS=0
 WARNINGS=0
@@ -39,11 +41,16 @@ while IFS= read -r skill_json; do
     echo "OK: $name ($combined lines)"
   fi
 
+  if [[ $md_lines -gt 80 ]]; then
+    echo "FAIL: $name (SKILL.md $md_lines lines, max 80)"
+    ERRORS=$((ERRORS + 1))
+  fi
+
   if [[ $steps -gt 8 ]]; then
     echo "FAIL: $name ($steps steps, max 8)"
     ERRORS=$((ERRORS + 1))
   fi
-done < <(find "$REPO_ROOT/task" "$REPO_ROOT/project" "$REPO_ROOT/in-progress" -name "skill.json" 2>/dev/null)
+done < <(find $(category_dirs) -name "skill.json" 2>/dev/null)
 
 echo ""
 if [[ $ERRORS -gt 0 ]]; then

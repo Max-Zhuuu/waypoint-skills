@@ -8,12 +8,18 @@ def main():
     repo = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(".")
     errors = 0
 
+    categories = {
+        line.strip()
+        for line in (repo / "skill-categories.txt").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+
     skills = {}  # name -> skill.json data
     for skill_json in sorted(repo.rglob("skill.json")):
         # Only look in skill directories
         rel = skill_json.relative_to(repo)
         parts = rel.parts
-        if parts[0] not in ("task", "project", "in-progress"):
+        if parts[0] not in categories:
             continue
         with open(skill_json, encoding="utf-8") as f:
             data = json.load(f)

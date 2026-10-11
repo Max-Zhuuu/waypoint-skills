@@ -17,7 +17,8 @@
     "project-management",
     "spec-writing",
     "enterprise",
-    "convention-enforcement"
+    "convention-enforcement",
+    "design-system"
   ],
   "skills": [
     "./task/triage",
@@ -29,18 +30,18 @@
     "./task/how-to-start",
     "./task/improve-codebase-architecture",
     "./task/learn",
-    "./task/prototype",
     "./task/spec",
     "./task/review",
     "./task/tdd",
     "./project/buildout",
     "./project/check-in",
-    "./project/design",
     "./project/migrate",
     "./project/reorient",
     "./project/setup",
     "./project/ship",
     "./project/wrapup",
+    "./design/design",
+    "./design/prototype",
     "./in-progress/find-skills",
     "./third-party/chrome-devtools-axi"
   ]

@@ -185,7 +185,10 @@ They are the complete methodology without any tool-specific instructions.
 
 - **[tdd](task/tdd/SKILL.md)** - Build features or fix bugs with red-green-refactor. Convention enforcement test creation in the refactor step.
 - **[diagnose](task/diagnose/SKILL.md)** - Run a disciplined diagnosis loop for hard bugs: reproduce, hypothesize, instrument, fix, regression-test.
-- **[prototype](task/prototype/SKILL.md)** - Build throwaway prototypes. Duplicates existing components and wires to a variant switcher for side-by-side comparison.
+### Design
+
+- **[design](design/design/SKILL.md)** - Create and evolve a design system through three waves: Soul, Tokens, Proof.
+- **[prototype](design/prototype/SKILL.md)** - Build throwaway prototypes. Duplicates existing components and wires to a variant switcher for side-by-side comparison.
 
 ### Sustain
 
@@ -251,7 +254,7 @@ mindmap
 
 | Version | Change |
 |---------|--------|
-| 3.0.0 | JSON-first architecture. Every skill gets `skill.json` (steps, checklists, chain edges, capabilities). SKILL.md reduced to ~20-line bootloader. 7-script test suite replaces lint-skills.sh. Enterprise auto-detect: rule catalogues, endpoint registries, parity systems, scope protection. New: /triage (backlog reader). /check-in repurposed as context loader (absorbs /reorient --deep). /setup absorbs /migrate. /prototype enforces variant switcher. Convention enforcement test creation in /setup + /tdd. Catalogue-driven architecture grill in setup Phase 1. 8 JSON schemas. Breaking: /create, /buildout, /reorient, /migrate deprecated. |
+| 3.0.0 | JSON-first architecture. Every skill gets `skill.json` (steps, checklists, chain edges, capabilities). SKILL.md reduced to ~20-line bootloader. test suite replaces lint-skills.sh. Enterprise auto-detect: rule catalogues, endpoint registries, parity systems, scope protection. New: /triage (backlog reader). /check-in repurposed as context loader (absorbs /reorient --deep). /setup absorbs /migrate. /prototype enforces variant switcher. Convention enforcement test creation in /setup + /tdd. Catalogue-driven architecture grill in setup Phase 1. 8 JSON schemas. Breaking: /create, /buildout, /reorient, /migrate deprecated. |
 | 2.1.0 | Handoff mode in /wrapup (continuity doc + boot prompt for next agent). /port demoted to reference checklist under /migrate. Exit wording sharpened across tdd, review, wrapup. Check-in reads handoff docs. Chain graph labels corrected. Breaking: `/port` no longer invocable by name - use `/migrate` + `/tdd` with the port checklist. |
 | 2.0.0 | The quality loop. New skills: /review (persona-based code critic), /ship (outbound PR seam). Chain dispatcher for skill-to-skill handoff. Settings surface with trusted-config model. Engagement reference split into `internals/engagement/` directory. Artifacts manifest emission. Autonomy axis. Persona trust gate (two-tier, user-global only). Prototype skill: taste profile grounding, shell-swap default, HTML artifact output, worktree-scoped design panel with archival. Plugin manifest for marketplace install. |
 | 1.0.0 | Initial plugin release. 21 skills. Reference tree restructure (SKILL.md 50-80 lines, CI enforced at 100). Three-tier doc layout. Concerns tracking. Engagement model. Process/adapter split. Structural rules in CONTRIBUTING.md. |
@@ -262,7 +265,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how the system works internally: the 
 
 ## Skill structure
 
-Each skill is a directory under `task/` or `project/` with two files:
+Each skill is a directory under one of the categories in [skill-categories.txt](skill-categories.txt) (`task/`, `project/`, `design/`, `in-progress/`) with two files:
 
 - **`skill.json`** - Machine-readable source of truth: steps with checklists, chain edges, capabilities, engagement declarations. Validated by `schemas/skill.schema.json` and the test suite.
 - **`SKILL.md`** - ~20-line bootloader that Claude Code auto-loads on invocation. Points to skill.json, declares engagement/exit/tone.
@@ -278,7 +281,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full structural rules and test su
 ## Reference
 
 - [schemas/](schemas/) - JSON schemas for skill validation and output formats
-- [tests/](tests/) - 7-script test suite (run: `for t in tests/test-*.sh; do bash "$t"; done`)
+- [tests/](tests/) - test suite (run: `for t in tests/test-*.sh; do bash "$t"; done`)
 - [CONCERNS-FORMAT.md](CONCERNS-FORMAT.md) - Tracking format specification
 - [process/](process/) - Standalone methodology documents (no AI required)
 - [templates/](templates/) - Shared file templates

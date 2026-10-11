@@ -1,0 +1,9 @@
+# Skill categories in waypoint format (skill.json + SKILL.md).
+# One directory per line. Tests, sync scripts and CI read this list;
+# tests/test-categories.sh fails when a hard-coded copy drifts from it.
+# third-party/ holds external wrappers without skill.json: it is synced and
+# listed in plugin.json, but not run through the skill.json tests.
+task
+project
+design
+in-progress

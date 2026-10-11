@@ -3,6 +3,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$REPO_ROOT/tests/lib-categories.sh"
 JQ="python $REPO_ROOT/tests/json_query.py"
 ERRORS=0
 
@@ -72,7 +73,7 @@ while IFS= read -r skill_md; do
   # Check every step has required fields
   step_count=$($JQ count "$json" steps)
   echo "OK: $json ($step_count steps)"
-done < <(find "$REPO_ROOT/task" "$REPO_ROOT/project" "$REPO_ROOT/in-progress" -name "SKILL.md" 2>/dev/null)
+done < <(find $(category_dirs) -name "SKILL.md" 2>/dev/null)
 
 if [[ $ERRORS -gt 0 ]]; then
   echo ""

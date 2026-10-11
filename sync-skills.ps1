@@ -1,7 +1,7 @@
 # Sync waypoint skills to ~/.claude/skills/ via directory junctions (zero-copy).
 # Also syncs shared infrastructure: internals/, templates/, process/, schemas/, tests/.
 #
-# The repo organizes skills under task/ and project/ for readability.
+# The repo organizes skills under the categories in skill-categories.txt, plus third-party/.
 # Claude Code discovers skills one level deep in ~/.claude/skills/.
 # This script bridges the gap: create a junction from ~/.claude/skills/{name}/
 # pointing to repo/{category}/{name}/. Edits in either location hit the same files.
@@ -64,7 +64,9 @@ function Make-Junction($link, $target) {
 
 # --- Skills (junctioned from category dirs) ---
 
-$skillDirs = @("task", "project", "in-progress", "third-party")
+$skillDirs = @(Get-Content (Join-Path $RepoPath "skill-categories.txt") |
+    Where-Object { $_ -notmatch '^\s*(#|$)' } |
+    ForEach-Object { $_.Trim() }) + "third-party"
 $linked = 0
 $unchanged = 0
 $skipped = 0

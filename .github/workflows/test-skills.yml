@@ -5,6 +5,8 @@ on:
     paths:
       - 'task/**'
       - 'project/**'
+      - 'design/**'
+      - 'skill-categories.txt'
       - 'in-progress/**'
       - 'process/**'
       - 'internals/**'
@@ -21,6 +23,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
+
+      - name: Check skill categories
+        run: bash tests/test-categories.sh
 
       - name: Validate skill.json files
         run: bash tests/test-skill-json.sh

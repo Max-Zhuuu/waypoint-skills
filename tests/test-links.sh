@@ -3,6 +3,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$REPO_ROOT/tests/lib-categories.sh"
 ERRORS=0
 WARNINGS=0
 
@@ -47,7 +48,7 @@ while IFS= read -r json; do
     fi
   done < <(jq -r '.steps[]?.process? // empty' "$json" 2>/dev/null)
 
-done < <(find "$REPO_ROOT/task" "$REPO_ROOT/project" "$REPO_ROOT/in-progress" -name "skill.json" 2>/dev/null)
+done < <(find $(category_dirs) -name "skill.json" 2>/dev/null)
 
 echo ""
 if [[ $ERRORS -gt 0 ]]; then
