@@ -16,8 +16,8 @@
     {
       "id": "detect-state",
       "name": "Detect project state",
-      "reads": [".claude/project-state.json", "CLAUDE.md"],
-      "instruction": "Run ~/.claude/scripts/discover-project-state.sh, read .claude/project-state.json. Detect mode: fresh (no CLAUDE.md) -> phase-0-grill. Resuming (CLAUDE.md exists but missing sections) -> pick up first incomplete. Restructuring (user asks) -> reference/restructuring.md. Reviewing (CLAUDE.md has all sections) -> reference/resume-path.md. Migrating (source system referenced) -> phase-0-grill with migration questions. Legacy separate files (SCOPE.md, CONVENTIONS.json, etc.) exist -> offer consolidation into CLAUDE.md.",
+      "reads": ["CLAUDE.md"],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh and read the JSON it prints (also saved outside the repo, under ~/.claude/projects/). workspace: true -> a multi-repo workspace root: the root CLAUDE.md describes the repos (## Repos, ## How they connect, ## Docs); offer to write or complete it, and run per-repo setup inside each repo. Otherwise detect mode: fresh (no CLAUDE.md) -> phase-0-grill. Resuming (CLAUDE.md exists but missing sections) -> pick up first incomplete. Restructuring (user asks) -> reference/restructuring.md. Reviewing (CLAUDE.md has all sections) -> reference/resume-path.md. Migrating (source system referenced) -> phase-0-grill with migration questions. Legacy separate files (SCOPE.md, CONVENTIONS.json, etc.) exist -> offer consolidation into CLAUDE.md.",
       "references": ["reference/restructuring.md", "reference/resume-path.md"],
       "checklist": ["Mode detected and routed"]
     },

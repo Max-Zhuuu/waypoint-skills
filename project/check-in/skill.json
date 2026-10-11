@@ -13,8 +13,8 @@
     {
       "id": "load-state",
       "name": "Load workflow state",
-      "reads": [".claude/project-state.json"],
-      "instruction": "Run ~/.claude/scripts/discover-project-state.sh to refresh project state. Read Active Workflow from CLAUDE.md. No workflow: detect project type, recommend /triage or /setup. Workflow exists: note active skill, phase, date. Surface unsatisfied obligations from prior cycles.",
+      "reads": [],
+      "instruction": "Run ~/.claude/scripts/discover-project-state.sh and read the JSON it prints. workspace: true -> report repos[] (path, framework) and read the root CLAUDE.md ## Repos; Active Workflow lives in each repo. Read Active Workflow from CLAUDE.md. No workflow: detect project type, recommend /triage or /setup. Workflow exists: note active skill, phase, date. Surface unsatisfied obligations from prior cycles.",
       "checklist": ["State loaded and mode detected", "Obligations surfaced if present"]
     },
     {

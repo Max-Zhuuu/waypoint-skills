@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-# Analyze the current repo and write .claude/project-state.json.
-# Idempotent, read-only except for .claude/project-state.json.
-# Works on Windows Git Bash and POSIX systems.
+# Analyze the current directory and write its project state to
+#   ${CLAUDE_CONFIG_DIR:-~/.claude}/projects/<slug>/project-state.json
+# where <slug> is the physical path with every non-alphanumeric character replaced
+# by "-" (Claude Code's project folder name). It never writes inside the project tree.
+#
+# A workspace root (not inside a git repo, 2+ child repos up to 2 levels down) gets
+#   { generated_at, workspace: true, repos: [{path, framework, package_manager}], project_docs }.
+# Anything else gets the single-project fields. Worktree checkouts (.git is a file) are skipped.
+# Prints the JSON. Idempotent. Works on Windows Git Bash and POSIX systems.
 set -euo pipefail
 
 # -- Helpers --
@@ -12,8 +18,24 @@ file_exists() { [ -f "$1" ] && echo "true" || echo "false"; }
 
 dir_exists() { [ -d "$1" ] && echo "true" || echo "false"; }
 
-# -- Framework detection --
+is_dotnet() {
+  [ -f "global.json" ] || [ -n "$(find . -maxdepth 1 \( -name '*.sln' -o -name '*.slnx' -o -name '*.csproj' \) -print 2>/dev/null | head -1)" ]
+}
 
+json_escape() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
+
+write_state() {
+  local slug state_dir
+  slug=$(pwd -P | sed 's/[^A-Za-z0-9]/-/g')
+  state_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects/$slug"
+  mkdir -p "$state_dir"
+  echo "$1" > "$state_dir/project-state.json"
+  echo "$1"
+}
+
+# -- Framework detection (current directory) --
+
+detect_framework() {
 framework="unknown"
 if [ -f "package.json" ]; then
   deps=$(cat package.json)
@@ -39,10 +61,14 @@ elif [ -f "go.mod" ]; then
   framework="go"
 elif [ -f "Cargo.toml" ]; then
   framework="rust"
+elif is_dotnet; then
+  framework="dotnet"
 fi
+}
 
-# -- Package manager --
+# -- Package manager (current directory) --
 
+detect_pkg_manager() {
 pkg_manager="unknown"
 if [ -f "pnpm-lock.yaml" ]; then pkg_manager="pnpm"
 elif [ -f "yarn.lock" ]; then pkg_manager="yarn"
@@ -52,7 +78,50 @@ elif [ -f "uv.lock" ]; then pkg_manager="uv"
 elif [ -f "Pipfile.lock" ]; then pkg_manager="pipenv"
 elif [ -f "poetry.lock" ]; then pkg_manager="poetry"
 elif [ -f "requirements.txt" ]; then pkg_manager="pip"
+elif is_dotnet; then pkg_manager="nuget"
 fi
+}
+
+# -- Workspace root: not inside git, 2+ child repos --
+
+child_repos=""
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  child_repos=$(find . -mindepth 2 -maxdepth 3 -name .git -type d -not -path '*/node_modules/*' 2>/dev/null \
+    | sed -e 's|^\./||' -e 's|/\.git$||' | LC_ALL=C sort)
+fi
+repo_count=0
+[ -n "$child_repos" ] && repo_count=$(printf '%s\n' "$child_repos" | wc -l | tr -d ' ')
+
+if [ "$repo_count" -ge 2 ]; then
+  repos=""
+  while IFS= read -r repo; do
+    read -r framework pkg_manager < <(cd "$repo" && detect_framework && detect_pkg_manager && echo "$framework $pkg_manager")
+    entry="{ \"path\": \"$(json_escape "$repo")\", \"framework\": \"$framework\", \"package_manager\": \"$pkg_manager\" }"
+    if [ -z "$repos" ]; then repos="    $entry"; else repos="$repos,
+    $entry"; fi
+  done <<< "$child_repos"
+
+  write_state "$(cat <<ENDJSON
+{
+  "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "workspace": true,
+  "repos": [
+$repos
+  ],
+  "project_docs": {
+    "CLAUDE.md": $(file_exists "CLAUDE.md"),
+    "CONCERNS.md": $(file_exists "CONCERNS.md")
+  }
+}
+ENDJSON
+)"
+  exit 0
+fi
+
+# -- Single project --
+
+detect_framework
+detect_pkg_manager
 
 # -- Test runner --
 
@@ -71,7 +140,7 @@ linter="unknown"
 if [ -f "eslint.config.js" ] || [ -f "eslint.config.mjs" ] || [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ]; then linter="eslint"
 elif [ -f "biome.json" ] || [ -f "biome.jsonc" ]; then linter="biome"
 elif [ -f "pyproject.toml" ] && grep -q "ruff" pyproject.toml 2>/dev/null; then linter="ruff"
-elif [ -f ".flake8" ] || [ -f "setup.cfg" ] && grep -q "flake8" setup.cfg 2>/dev/null; then linter="flake8"
+elif [ -f ".flake8" ] || { [ -f "setup.cfg" ] && grep -q "flake8" setup.cfg 2>/dev/null; }; then linter="flake8"
 fi
 
 # -- File count (source files only, skip node_modules/.git/dist) --
@@ -85,7 +154,8 @@ git_commits=0
 git_age_days=0
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git_commits=$(git rev-list --count HEAD 2>/dev/null || echo 0)
-  first_commit=$(git log --reverse --format="%at" 2>/dev/null | head -1)
+  # || true: a repo without commits makes git log fail, which pipefail would turn fatal.
+  first_commit=$(git log --reverse --format="%at" 2>/dev/null | head -1 || true)
   if [ -n "$first_commit" ]; then
     now=$(date +%s)
     git_age_days=$(( (now - first_commit) / 86400 ))
@@ -193,8 +263,6 @@ json=$(cat <<ENDJSON
 ENDJSON
 )
 
-# -- Write output --
+# -- Write output (outside the project tree) --
 
-mkdir -p .claude
-echo "$json" > .claude/project-state.json
-echo "$json"
+write_state "$json"

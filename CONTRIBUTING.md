@@ -205,6 +205,7 @@ All scripts live in `tests/` and use `json_query.py` (Python stdlib, no external
 | `test-enterprise.sh` | Capability=true implies enterprise steps exist with reads |
 | `test-process-docs.sh` | All process doc refs in skill.json resolve on disk |
 | `test-doc-root.sh` | No hard-coded `docs/specs` or `docs/design`; `resolve-doc-root.sh` picks the right branch in fixture trees |
+| `test-project-state.sh` | `discover-project-state.sh` finds workspace roots, matches the old single-repo output, and never writes into the project tree |
 
 Run locally: `for t in tests/test-*.sh; do bash "$t"; done`
 CI: `.github/workflows/test-skills.yml` triggers on PRs touching skill/schema/test/process files.

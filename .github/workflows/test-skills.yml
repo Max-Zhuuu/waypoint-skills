@@ -51,3 +51,6 @@ jobs:
 
       - name: Check doc root resolution
         run: bash tests/test-doc-root.sh
+
+      - name: Check project state discovery
+        run: bash tests/test-project-state.sh
